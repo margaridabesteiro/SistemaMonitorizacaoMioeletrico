@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Editar Rota</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+    <main class="content container mt-4">
+      <h1 class="mb-4">Editar Rota</h1>
+
+      <!-- Formulário de Edição de Rota -->
+      <form id="formEditarRota" class="row g-3" novalidate>
+        <!-- 1. ID da Rota (readonly) -->
+        <div class="col-md-2 form-group">
+          <label for="inputIdRota" class="form-label">ID Rota</label>
+          <input type="text" class="form-control readonly-input" id="inputIdRota" readonly />
+        </div>
+
+        <!-- 2. Origem (SELECT) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectOrigem" class="form-label">
+            Origem<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectOrigem" required>
+            <option value="">-- Selecionar Origem --</option>
+            <!-- Será preenchido via JavaScript -->
+          </select>
+          <div class="invalid-feedback">
+            Por favor, selecione a origem.
+          </div>
+        </div>
+
+        <!-- 3. Destino (SELECT) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectDestino" class="form-label">
+            Destino<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectDestino" required>
+            <option value="">-- Selecionar Destino --</option>
+            <!-- Será preenchido via JavaScript -->
+          </select>
+          <div class="invalid-feedback">
+            Por favor, selecione o destino.
+          </div>
+        </div>
+
+        <!-- 4. Distância (FLOAT) em km * -->
+        <div class="col-md-3 form-group">
+          <label for="inputDistancia" class="form-label">
+            Distância (Km)<span class="obrigatorio">*</span>
+          </label>
+          <input type="number" step="0.01" class="form-control" id="inputDistancia" placeholder="Ex: 300.50" min="0.01"
+            required />
+          <div class="invalid-feedback">
+            Por favor, informe a distância (maior que 0).
+          </div>
+        </div>
+
+        <!-- 5. Tempo Estimado (INT) em minutos * -->
+        <div class="col-md-3 form-group">
+          <label for="inputTempoEstimado" class="form-label">
+            Tempo Estimado (min)<span class="obrigatorio">*</span>
+          </label>
+          <input type="number" class="form-control" id="inputTempoEstimado" placeholder="Ex: 180" min="1" required />
+          <div class="invalid-feedback">
+            Por favor, informe o tempo estimado (maior que 0).
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" id="btnCancelarRota">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" id="btnSalvarRota">
+            Atualizar Rota
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Scripts JS no fim do body -->
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/1221419.js"></script>
+
+  <script>
+    // 1) Ler parâmetro idRota da URL (query string)
+    function getParametroIdRota() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get("idRota"), 10);
+    }
+
+    // 2) Dados simulados:
+    //    - rotas: lista de rotas registradas
+    //    - origensPosiveis e destinosPosiveis: todas as origens e destinos possíveis
+    const rotas = [
+      { idRota: 1, origem: "Lisboa", destino: "Porto", distancia: 300.50, tempoEstimado: 180 },
+      { idRota: 2, origem: "Porto", destino: "Coimbra", distancia: 50.25, tempoEstimado: 45 },
+      { idRota: 3, origem: "Coimbra", destino: "Algarve", distancia: 70.80, tempoEstimado: 60 },
+      { idRota: 4, origem: "Faro", destino: "Lisboa", distancia: 280.00, tempoEstimado: 210 },
+      { idRota: 5, origem: "Lisboa", destino: "Central", distancia: 45.30, tempoEstimado: 35 }
+    ];
+
+    // Em produção, substitua estes arrays pelo resultado de um fetch ao seu backend:
+    const origensPosiveis = ["Lisboa", "Porto", "Coimbra", "Faro", "Algarve", "Central"];
+    const destinosPosiveis = ["Lisboa", "Porto", "Coimbra", "Faro", "Algarve", "Central"];
+
+    // 3) Preenche os <select> de Origem e Destino com as opções disponíveis
+    function popularSelects() {
+      const selOrig = document.getElementById("selectOrigem");
+      const selDest = document.getElementById("selectDestino");
+
+      // Limpar opções existentes (mantendo somente o placeholder)
+      selOrig.length = 1;
+      selDest.length = 1;
+
+      // Inserir cada origem
+      origensPosiveis.forEach((o) => {
+        const opt = document.createElement("option");
+        opt.value = o;
+        opt.textContent = o;
+        selOrig.appendChild(opt);
+      });
+
+      // Inserir cada destino
+      destinosPosiveis.forEach((d) => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        selDest.appendChild(opt);
+      });
+    }
+
+    // 4) Preenche campos do formulário com os dados da rota encontrada
+    function preencherFormularioRota(rota) {
+      document.getElementById("inputIdRota").value = rota.idRota;
+      document.getElementById("selectOrigem").value = rota.origem;
+      document.getElementById("selectDestino").value = rota.destino;
+      document.getElementById("inputDistancia").value = rota.distancia;
+      document.getElementById("inputTempoEstimado").value = rota.tempoEstimado;
+    }
+
+    // 5) Inicialização ao carregar a página
+    document.addEventListener("DOMContentLoaded", () => {
+      const idRota = getParametroIdRota();
+      const rota = rotas.find(r => r.idRota === idRota);
+
+      if (!rota) {
+        alert("Rota não encontrada.");
+        window.location.href = "monitorizacaoTransportes.html";
+        return;
+      }
+
+      // Popular os selects antes de preencher
+      popularSelects();
+      preencherFormularioRota(rota);
+
+      // Botão Cancelar → Voltar à tela principal
+      document.getElementById("btnCancelarRota").addEventListener("click", () => {
+        window.location.href = "monitorizacaoTransportes.html";
+      });
+
+      // Submissão do formulário
+      const form = document.getElementById("formEditarRota");
+      form.addEventListener("submit", (evt) => {
+        evt.preventDefault();
+
+        // Verificar campos obrigatórios
+        const selOrig = document.getElementById("selectOrigem");
+        const selDest = document.getElementById("selectDestino");
+        const inpDist = document.getElementById("inputDistancia");
+        const inpTempo = document.getElementById("inputTempoEstimado");
+
+        if (!selOrig.value || !selDest.value || !inpDist.value || !inpTempo.value) {
+          alert("Por favor, preencha todos os campos obrigatórios.");
+          return;
+        }
+
+        // Recolher valores atualizados
+        const atualizado = {
+          idRota: rota.idRota,
+          origem: selOrig.value,
+          destino: selDest.value,
+          distancia: parseFloat(inpDist.value),
+          tempoEstimado: parseInt(inpTempo.value, 10)
+        };
+
+        // Em produção, substituir por fetch PUT
+        console.log("Rota atualizada:", atualizado);
+        alert("Rota atualizada com sucesso!");
+        window.location.href = "monitorizacaoTransportes.html";
+      });
+    });
+  </script>
+</body>
+
+</html>

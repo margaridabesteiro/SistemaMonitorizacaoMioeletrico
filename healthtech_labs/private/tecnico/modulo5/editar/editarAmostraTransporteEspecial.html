@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs – Editar Transporte de Amostra Especial</title>
+    <link rel="shortcut icon" href="../../../assets/img/logo.jpg" type="image/jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+    <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+    <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../../index_T.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-gear"></i> Técnico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li>
+                    <a class="dropdown-item" href="../../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i> Alterar password
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../../public/index.html">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper d-flex">
+
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="../../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+                previstos</a>
+            <a href="../../modulo8/auditoria_tecnico.html" class="nav-link"><i
+                    class="fa-solid fa-clipboard-check me-2"></i> Auditoria de
+                testes e exames</a>
+            <a href="../../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+                Equipamento</a>
+            <a href="../../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+                Validação Amostra</a>
+            <a href="../../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i>
+                Resultados
+            </a>
+            <a href="../../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+                Reagentes e Consumíveis </a>
+            <a href="../../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+                Exames
+                previstos</a>
+            <a href="../../modulo4/colheita/lista_colheitas.html" class="nav-link"><i
+                    class="fa-solid fa-flask-vial"></i>
+                Colheitas</a>
+            <a href="../../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+                Amostras</a>
+            <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+        </nav>
+
+        <main class="content container mt-4">
+            <h1 class="mb-4">Editar Transporte de Amostra Especial</h1>
+
+            <form id="formEditarTransporteEspecial" class="row g-3" novalidate>
+                <div class="col-md-2 form-group">
+                    <label for="inputIdTransporteEspecial" class="form-label">ID Transporte</label>
+                    <input type="text" class="form-control readonly-input" id="inputIdTransporteEspecial" readonly />
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectLaboratorio" class="form-label">Laboratório<span
+                            class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectLaboratorio" required>
+                        <option value="">-- Selecionar Laboratório --</option>
+                        <option value="1">HealthTech Solutions (Porto)</option>
+                        <option value="2">HealthTech Clinical Labs Norte (Porto)</option>
+                        <option value="3">HealthTech Clinical Lab Lisboa (Lisboa)</option>
+                        <option value="4">HealthTech Clinical Lab Coimbra (Coimbra)</option>
+                        <option value="5">HealthTech Clinical Lab Algarve (Portimão)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectTecnico" class="form-label">Técnico<span class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectTecnico" required>
+                        <option value="">-- Selecionar Técnico --</option>
+                        <option value="201">Técnico 201</option>
+                        <option value="202">Técnico 202</option>
+                        <option value="203">Técnico 203</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectRota" class="form-label">Rota<span class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectRota" required>
+                        <option value="">-- Selecionar Rota --</option>
+                        <option value="1">Lisboa → Faro</option>
+                        <option value="2">Porto → Lisboa</option>
+                        <option value="3">Coimbra → Braga</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectVeiculo" class="form-label">Veículo<span class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectVeiculo" required>
+                        <option value="">-- Selecionar Veículo --</option>
+                        <option value="1">AA-99-88 (Lab 4)</option>
+                        <option value="2">BB-77-66 (Lab 3)</option>
+                        <option value="3">CC-55-44 (Lab 2)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectMotorista" class="form-label">Motorista<span class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectMotorista" required>
+                        <option value="">-- Selecionar Motorista --</option>
+                        <option value="1">José Pinto</option>
+                        <option value="2">Ana Freitas</option>
+                        <option value="3">Paulo Gomes</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="selectEstado" class="form-label">Estado<span class="obrigatorio">*</span></label>
+                    <select class="form-select" id="selectEstado" required>
+                        <option value="">-- Selecionar --</option>
+                        <option value="entregue">Entregue</option>
+                        <option value="em transito">Em trânsito</option>
+                        <option value="atrasado">Atrasado</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="inputDataEnvio" class="form-label">Data de Envio<span
+                            class="obrigatorio">*</span></label>
+                    <input type="date" class="form-control" id="inputDataEnvio" required />
+                </div>
+
+                <div class="col-md-2 form-group">
+                    <label for="inputHoraSaida" class="form-label">Hora de Saída</label>
+                    <input type="time" class="form-control" id="inputHoraSaida" />
+                </div>
+
+                <div class="col-md-2 form-group">
+                    <label for="inputHoraChegada" class="form-label">Hora de Chegada</label>
+                    <input type="time" class="form-control" id="inputHoraChegada" />
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <label for="inputTemperatura" class="form-label">Temperatura (°C)</label>
+                    <input type="number" step="0.1" class="form-control" id="inputTemperatura" min="0" max="10" />
+                </div>
+
+                <div class="col-12 form-group">
+                    <label for="textareaObservacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="textareaObservacoes" rows="4"
+                        placeholder="Descrever observações…"></textarea>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnSalvar">Atualizar Transporte Especial</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function getParametroId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("idTransporte") || params.get("id");
+        }
+
+
+        const transportesEspeciais = [
+            {
+                id: "E1",
+                idLaboratorio: 4,
+                idTecnico: 201,
+                idRota: 1,
+                idVeiculo: 1,
+                idMotorista: 1,
+                estado: "entregue",
+                dataEnvio: "2025-06-04",
+                horaSaida: "07:30:00",
+                horaChegada: "11:15:00",
+                temperatura: 4.3,
+                observacoes: "Sem intercorrências"
+            },
+            {
+                id: "E2",
+                idLaboratorio: 3,
+                idTecnico: 202,
+                idRota: 2,
+                idVeiculo: 2,
+                idMotorista: 2,
+                estado: "em transito",
+                dataEnvio: "2025-06-05",
+                horaSaida: "09:45:00",
+                horaChegada: "",
+                temperatura: 4.1,
+                observacoes: "Temperatura sob vigilância"
+            },
+            {
+                id: "E3",
+                idLaboratorio: 2,
+                idTecnico: 203,
+                idRota: 3,
+                idVeiculo: 3,
+                idMotorista: 3,
+                estado: "atrasado",
+                dataEnvio: "2025-06-06",
+                horaSaida: "08:00:00",
+                horaChegada: "12:00:00",
+                temperatura: 5.0,
+                observacoes: "Atraso na saída"
+            }
+        ];
+
+        function preencherFormulario(dados) {
+            document.getElementById("inputIdTransporteEspecial").value = dados.id;
+            document.getElementById("selectLaboratorio").value = dados.idLaboratorio;
+            document.getElementById("selectTecnico").value = dados.idTecnico;
+            document.getElementById("selectRota").value = dados.idRota;
+            document.getElementById("selectVeiculo").value = dados.idVeiculo;
+            document.getElementById("selectMotorista").value = dados.idMotorista;
+            document.getElementById("selectEstado").value = dados.estado;
+            document.getElementById("inputDataEnvio").value = dados.dataEnvio;
+            document.getElementById("inputHoraSaida").value = dados.horaSaida || "";
+            document.getElementById("inputHoraChegada").value = dados.horaChegada || "";
+            document.getElementById("inputTemperatura").value = dados.temperatura;
+            document.getElementById("textareaObservacoes").value = dados.observacoes;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const id = getParametroId();
+            const dados = transportesEspeciais.find(t => t.id === id);
+
+            if (!dados) {
+                alert("Transporte Especial não encontrado.");
+                window.location.href = "../transporteT.html";
+                return;
+            }
+
+            preencherFormulario(dados);
+
+            document.getElementById("btnCancelar").addEventListener("click", () => {
+                window.location.href = "../transporteT.html";
+            });
+
+            document.getElementById("formEditarTransporteEspecial").addEventListener("submit", (evt) => {
+                evt.preventDefault();
+                alert("Transporte Especial atualizado com sucesso!");
+                window.location.href = "../transporteT.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

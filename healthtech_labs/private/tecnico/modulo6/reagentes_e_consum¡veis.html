@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTech Clinical Labs</title>
+    <!--favicon-->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="../https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+    <!-- estilos da página -->
+    <link rel="stylesheet" href="../../assets/css/1221051.css">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" id="dropdownUserButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-nurse"></i>Técnico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>
+                        Alterar
+                        password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i>
+                        Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Wrapper -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+                previstos</a>
+            <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i
+                    class="fa-solid fa-clipboard-check me-2"></i> Auditoria de
+                testes e exames</a>
+            
+            <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+                Equipamento</a>
+            <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+                Validação Amostra</a>
+            <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados
+            </a>
+            <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+                Reagentes e Consumíveis </a>
+            <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+                Exames
+                previstos</a>
+            <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+                Colheitas</a>
+            <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+                Amostras</a>
+            <a href="../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="mb-0"><strong>Gestão de Reagentes e Consumíveis</strong></h1>
+                <a href="registar_novo_reagente_consumivel.html" class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i> Novo Reagente/Consumível
+                </a>
+            </div>
+            <!-- Campo de pesquisa -->
+            <div class="mb-3">
+                <input type="text" id="filtroReagente" class="form-control" placeholder="Pesquisar por nome...">
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center" id="tabelaReagentes">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Quantidade</th>
+                            <th>Nº de Embalagens</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EDTA</td>
+                            <td>250</td>
+                            <td>10</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Álcool Etílico 70%</td>
+                            <td>500</td>
+                            <td>5</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Luvas de Nitrilo</td>
+                            <td>80</td>
+                            <td>4</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Reagente PCR</td>
+                            <td>75</td>
+                            <td>2</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tampas para Tubos</td>
+                            <td>700</td>
+                            <td>14</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exemplo de aviso</td>
+                            <td>70</td>
+                            <td>1</td>
+                            <td></td>
+                            <td>
+                                <a href="editar_reagente.html" class="btn btn-outline-primary btn-sm me-1">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </a>
+                                <a href="apagar_reagente.html" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+</body>
+<script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../../js/1221051.js"></script>
+
+</html>

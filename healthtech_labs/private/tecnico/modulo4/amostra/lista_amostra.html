@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Amostras – HealthTech Clinical Labs</title>
+  <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css">
+  <link rel="stylesheet" href="../../../assets/css/1211150.css">
+  <link rel="stylesheet" href="../../../assets/css/common.css">
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css">
+</head>
+
+<body class="menu-user">
+  <header class="topbar d-flex justify-content-between px-3 py-2">
+    <div class="sistema-nome"><i class="fa-solid fa-vials"></i> HealthTech Clinical Labs</div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-user-nurse"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="../../../login/login.html">Alterar Password</a></li>
+        <li><a class="dropdown-item" href="../../../../public/index.html">Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames previstos</a>
+      <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+        Equipamento</a>
+      <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+        Validação Amostra</a>
+      <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados
+      </a>
+      <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+        Reagentes e Consumíveis </a>
+      <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+        Exames
+        previstos</a>
+      <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <main class="col-md-9 col-lg-10 p-4">
+
+      <div class="dashboard-tabs">
+        <a href="lista_amostra.html" class="tab active">Lista Colheitas</a>
+        <a href="nova_amostra.html" class="tab">Nova Amostra</a>
+        <a href="gestao_utente_amostra.html" class="tab ">Gestão Utente</a>
+      </div>
+
+      <div class="card shadow p-4">
+        <h2 class="mb-4"><i class="fa-solid fa-vials me-2 mt-2 mb-4"></i>Lista de Amostras</h2>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <input type="text" id="filtroTexto" class="form-control" placeholder="Pesquisar por texto...">
+          </div>
+          <div class="col-md-3">
+            <select id="filtroTubo" class="form-select">
+              <option value="">Todos os Tipos de Tubo</option>
+              <option value="Soro">Soro</option>
+              <option value="EDTA">EDTA</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select id="filtroMaterial" class="form-select">
+              <option value="">Todos os Materiais</option>
+              <option value="Sangue">Sangue</option>
+              <option value="Urina">Urina</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="table table-striped align-middle">
+          <thead class="table-info">
+            <tr>
+              <th>ID Amostra</th>
+              <th>Utente</th>
+              <th>Exame</th>
+              <th>Tipo de Tubo</th>
+              <th>Material</th>
+              <th>Volume</th>
+              <th>Temperatura</th>
+              <th>Colheita</th>
+              <th>Observações</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A001</td>
+              <td>João Silva</td>
+              <td>Glicose</td>
+              <td>Soro</td>
+              <td>Sangue</td>
+              <td>5,0 ml</td>
+              <td>5°C</td>
+              <td>2025-06-06</td>
+              <td>Jejum cumprido</td>
+
+              </td>
+            </tr>
+            <tr>
+              <td>A002</td>
+              <td>Maria Costa</td>
+              <td>Colesterol Total</td>
+              <td>EDTA</td>
+              <td>Sangue</td>
+              <td>4,5 ml</td>
+              <td>Temperatura ambiente</td>
+              <td>2025-06-07</td>
+              <td>N/A</td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </main>
+  </div>
+  <Script src="../../../js/1211150.js"></Script>
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

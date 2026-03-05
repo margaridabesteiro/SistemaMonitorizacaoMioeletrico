@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthTech Clinical Labs</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../assets/css/1230404.css">
+  <link rel="stylesheet" href="../../assets/css/1221051.css">
+  <link rel="stylesheet" href="../../assets/css/common.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-nurse"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login/login.html"><i class="fa-solid fa-key me-2"></i>
+            Alterar password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i> Equipamento</a>
+      <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Validação
+        Amostra</a>
+      <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados </a>
+      <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis </a>
+      <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i> Exames
+        previstos</a>
+      <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <main class="content p-4">
+      <!-- Resultado de Exame -->
+      <div class="card mt-5 shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Registar Resultado de Exame</h4>
+        </div>
+        <div class="card-body">
+          <form class="row g-3" id="form-resultado-saude">
+            <div class="col-md-6">
+              <label for="idItemSolicitado" class="form-label">ID Item Solicitado</label>
+              <input type="text" class="form-control" id="idItemSolicitado" required />
+            </div>
+            <div class="col-md-6">
+              <label for="valor" class="form-label">Valor</label>
+              <input type="number" step="0.01" class="form-control" id="valor" required />
+            </div>
+            <div class="col-md-6">
+              <label for="dataProcessamento" class="form-label">Data de Processamento</label>
+              <input type="date" class="form-control" id="dataProcessamento" required />
+            </div>
+            <div class="col-md-6">
+              <label for="observacoes" class="form-label">Observações (opcional)</label>
+              <textarea class="form-control" id="observacoes" rows="2" maxlength="200"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label for="assinaturaResponsavel" class="form-label">Assinatura do Responsável</label>
+              <input type="text" class="form-control" id="assinaturaResponsavel" maxlength="100" required />
+            </div>
+            <div class="col-md-6">
+              <label for="metodologiaUtilizada" class="form-label">Metodologia Utilizada</label>
+              <input type="text" class="form-control" id="metodologiaUtilizada" maxlength="100" required />
+            </div>
+            <div class="col-md-6">
+              <label for="statusResultado" class="form-label">Status do Resultado</label>
+              <select class="form-select" id="statusResultado" required>
+                <option value="">Selecione</option>
+                <option value="pre-eliminar">Pré-eliminar</option>
+                <option value="confirmacao">Confirmação</option>
+                <option value="rejeitado">Rejeitado</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="dataCriacao" class="form-label">Data de Criação</label>
+              <input type="date" class="form-control" id="dataCriacao" required />
+            </div>
+            <div class="col-md-6">
+              <label for="dataConfirmacao" class="form-label">Data de Confirmação</label>
+              <input type="date" class="form-control" id="dataConfirmacao" />
+            </div>
+            <div class="col-md-6">
+              <label for="assinaturaDigital" class="form-label">Assinatura Digital</label>
+              <input type="text" class="form-control" id="assinaturaDigital" maxlength="100" required />
+            </div>
+            <div class="col-md-6">
+              <label for="passAssinaturaDigital" class="form-label">Password da Assinatura Digital</label>
+              <input type="password" class="form-control" id="passAssinaturaDigital" required />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Metodologia -->
+      <div class="card mt-5 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Registar Metodologia</h4>
+        </div>
+        <div class="card-body">
+          <form id="formMetodo" class="mb-5 mt-4 row g-3">
+            <div class="col-md-6">
+              <label for="nomeMetodo" class="form-label">Nome do Método</label>
+              <input type="text" class="form-control" id="nomeMetodo" maxlength="50" required>
+            </div>
+            <div class="col-md-6">
+              <label for="idExameMetodo" class="form-label">ID Exame</label>
+              <input type="text" class="form-control" id="idExameMetodo" required>
+            </div>
+            <div class="col-12">
+              <label for="descricaoMetodo" class="form-label">Descrição do Método</label>
+              <textarea class="form-control" id="descricaoMetodo" rows="3" maxlength="200" required></textarea>
+            </div>
+            <div class="col-12">
+              <label for="observacoesMetodo" class="form-label">Observações</label>
+              <input type="text" class="form-control" id="observacoesMetodo">
+            </div>
+            <div class="col-md-3">
+              <label for="dataMetodo" class="form-label">Data</label>
+              <input type="date" class="form-control" id="dataMetodo" required>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Materiais -->
+      <div class="card mt-5 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="mb-0">Registar Materiais</h4>
+        </div>
+        <div class="card-body">
+          <form id="formMaterial" class="mb-5 mt-4 row g-3">
+            <div class="col-md-6">
+              <label for="idEquipamento" class="form-label">Nome do Equipamento</label>
+              <input type="text" class="form-control" id="idEquipamento" required>
+            </div>
+            <div class="col-md-6">
+              <label for="idReagente" class="form-label">Nome do Reagentes/Consumíveis</label>
+              <input type="text" class="form-control" id="idReagente" required>
+            </div>
+            <div class="col-md-6">
+              <label for="dataMaterial" class="form-label">Data</label>
+              <input type="date" class="form-control" id="dataMaterial" required>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Botões finais -->
+      <div class="col-12 d-flex justify-content-start gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-check me-2"></i> Guardar Resultado
+        </button>
+        <a href="../modulo6/resultados.html" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left me-2"></i> Voltar Atrás
+        </a>
+      </div>
+
+      <!-- Banner de erro -->
+      <div class="alert mt-4 text-danger" style="background-color: #f8d7da; border: 1px solid #f5c2c7;">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+        <strong>Erro na submissão dos dados.</strong> Resultado de teste não guardado.
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../js/1230404.js"></script>
+</body>
+
+</html>

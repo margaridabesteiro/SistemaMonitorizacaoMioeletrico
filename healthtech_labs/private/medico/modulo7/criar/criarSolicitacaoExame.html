@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Nova Solicitação de Exame</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../../index_M.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-doctor"></i> Médico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i>
+        Testes previstos</a>
+      <a href="../../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de testes e
+        exames</a>
+      <a href="../../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-table-list"></i>
+        Prescrições</a>
+      <a href="../../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i>
+        Gestão Utente</a>
+      <a href="../../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+        Exames Disponiveis</a>
+      <a href="../../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+      <a href="../../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+        Exames </a>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content container mt-4">
+      <h2 class="text-center mb-4 text-primary">
+        <i class="fa-solid fa-notes-medical me-2"></i> Criar Nova Solicitação de Exame
+      </h2>
+
+      <form id="formCriarSolicitacao" class="row g-3 needs-validation" novalidate>
+        <div class="col-md-6">
+          <label for="inputIdUtente" class="form-label">ID Utente</label>
+          <input type="number" class="form-control readonly-input" id="inputIdUtente" name="ID_Utente" value="1"
+            readonly />
+        </div>
+        <div class="col-md-6">
+          <label for="inputIdMedico" class="form-label">ID Médico<span class="obrigatorio">*</span></label>
+          <input type="number" class="form-control" id="inputIdMedico" name="ID_Medico" required />
+          <div class="invalid-feedback">Por favor, insira o ID do médico.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputDataSolicitacao" class="form-label">Data/Hora Solicitação<span
+              class="obrigatorio">*</span></label>
+          <input type="datetime-local" class="form-control" id="inputDataSolicitacao" name="dataSolicitacao" required />
+          <div class="invalid-feedback">Por favor, informe a data/hora.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="selectPrioridade" class="form-label">Prioridade<span class="obrigatorio">*</span></label>
+          <select class="form-select" id="selectPrioridade" name="prioridade" required>
+            <option selected disabled value="">Escolher...</option>
+            <option value="rotina">Rotina</option>
+            <option value="urgente">Urgente</option>
+            <option value="emergencia">Emergência</option>
+          </select>
+          <div class="invalid-feedback">Escolha uma prioridade.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="selectStatusSolic" class="form-label">Status da Solicitação<span
+              class="obrigatorio">*</span></label>
+          <select class="form-select" id="selectStatusSolic" name="statusSolicitacao" required>
+            <option selected disabled value="">Escolher...</option>
+            <option value="pendente">Pendente</option>
+            <option value="coletado">Coletado</option>
+            <option value="processado">Processado</option>
+            <option value="entregue">Entregue</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+          <div class="invalid-feedback">Escolha um status.</div>
+        </div>
+        <div class="col-md-12">
+          <label for="textareaSolicObservacoes" class="form-label">Observações</label>
+          <textarea class="form-control" id="textareaSolicObservacoes" name="observacoes" rows="2"
+            placeholder="Ex: Paciente com suspeita de infecção."></textarea>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" id="btnCancelarSolicitacao">
+            <i class="fa-solid fa-arrow-left"></i> Cancelar
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Criar Solicitação
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Scripts JS -->
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../assets/js/1221419.js" defer></script>
+  <script>
+    document.getElementById("btnCancelarSolicitacao").addEventListener("click", () => {
+      window.location.href = "../emissaoExamesM.html";
+    });
+
+    (() => {
+      'use strict';
+      const form = document.getElementById('formCriarSolicitacao');
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          alert("Solicitação criada com sucesso!");
+          window.location.href = "../emissaoExamesM.html";
+          event.preventDefault(); // Remover em produção
+        }
+        form.classList.add('was-validated');
+      }, false);
+    })();
+  </script>
+</body>
+
+</html>

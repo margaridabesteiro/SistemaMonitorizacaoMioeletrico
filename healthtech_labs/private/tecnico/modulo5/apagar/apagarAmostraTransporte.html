@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs – Apagar Amostra Transporte</title>
+    <link rel="shortcut icon" href="../../../assets/img/logo.jpg" type="image/jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+    <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+    <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../../index_T.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-gear"></i> Técnico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li>
+                    <a class="dropdown-item" href="../../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>Alterar password
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../../public/index.html">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Wrapper (Sidebar + Conteúdo) -->
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="../../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames previstos</a>
+            <a href="../../modulo8/auditoria_tecnico.html" class="nav-link"><i
+                    class="fa-solid fa-clipboard-check me-2"></i> Auditoria de
+                testes e exames</a>
+            <a href="../../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+                Equipamento</a>
+            <a href="../../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+                Validação Amostra</a>
+            <a href="../../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados
+            </a>
+            <a href="../../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+                Reagentes e Consumíveis </a>
+            <a href="../../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+                Exames
+                previstos</a>
+            <a href="../../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+                Colheitas</a>
+            <a href="../../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+                Amostras</a>
+            <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+        </nav>
+
+
+        <main class="content d-flex flex-column align-items-center justify-content-center text-center py-5 w-100">
+            <h1 class="text-danger">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                Confirmar Eliminação de Amostra Transporte
+            </h1>
+            <p class="mt-3 fs-5">
+                Tem a certeza que pretende eliminar a amostra com ID
+                <span id="idAmostraSpan" class="fw-bold text-danger"></span>
+                (Transporte ID <span id="idTransporteAmoSpan" class="fw-bold text-danger"></span>)?
+            </p>
+            <p class="text-muted mb-4">Esta ação não pode ser desfeita.</p>
+
+            <div id="detalhesAmostra" class="alert-danger text-start" style="max-width: 500px;">
+                <!-- Será preenchido via JavaScript -->
+            </div>
+
+            <div class="mt-3">
+                <button id="btnCancelar" class="btn btn-secondary me-3">
+                    <i class="fa-solid fa-arrow-left"></i> Cancelar
+                </button>
+                <button id="btnConfirmar" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Confirmar Eliminação
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts JS no fim do body -->
+    <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../../js/1221419.js"></script>
+
+    <script>
+        // 1) Obter “idAmostra” e “idTransporte” da URL
+        function getParametrosAmostra() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                idAmostra: parseInt(params.get("idAmostra")),
+                idTransporte: parseInt(params.get("idTransporte"))
+            };
+        }
+
+        // 2) Dados simulados da tabela AmostraTransporte
+        const amostras = [
+            {
+                idAmostra: 1,
+                idTransporte: 1,
+                idLaboratorio: 2,
+                temperaturaInicial: 4.0,
+                temperaturaFinal: 4.5,
+                status: "ok"
+            },
+            {
+                idAmostra: 2,
+                idTransporte: 2,
+                idLaboratorio: 2,
+                temperaturaInicial: 4.0,
+                temperaturaFinal: 4.3,
+                status: "ok"
+            },
+            {
+                idAmostra: 3,
+                idTransporte: 3,
+                idLaboratorio: 3,
+                temperaturaInicial: 4.0,
+                temperaturaFinal: 5.0,
+                status: "temperatura"
+            },
+            {
+                idAmostra: 4,
+                idTransporte: 4,
+                idLaboratorio: 4,
+                temperaturaInicial: 5.0,
+                temperaturaFinal: null,
+                status: "perdida"
+            },
+            {
+                idAmostra: 5,
+                idTransporte: 5,
+                idLaboratorio: 5,
+                temperaturaInicial: 5.0,
+                temperaturaFinal: null,
+                status: "danificada"
+            }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const { idAmostra, idTransporte } = getParametrosAmostra();
+            const amostra = amostras.find(
+                x => x.idAmostra === idAmostra && x.idTransporte === idTransporte
+            );
+
+            if (!amostra) {
+                alert("Amostra não encontrada.");
+                window.location.href = "../transporteT.html";
+                return;
+            }
+
+            document.getElementById("idAmostraSpan").textContent = amostra.idAmostra;
+            document.getElementById("idTransporteAmoSpan").textContent = amostra.idTransporte;
+            document.getElementById("detalhesAmostra").innerHTML = `
+        <strong>Laboratório ID:</strong> ${amostra.idLaboratorio}<br>
+        <strong>Temperatura Inicial:</strong> ${amostra.temperaturaInicial}°C<br>
+        <strong>Temperatura Final:</strong> ${amostra.temperaturaFinal != null ? amostra.temperaturaFinal + "°C" : "—"}<br>
+        <strong>Status:</strong> ${amostra.status}
+      `;
+
+            // Cancelar → volta para monitorização
+            document.getElementById("btnCancelar").addEventListener("click", () => {
+                window.location.href = "../transporteT.html";
+            });
+
+            // Confirmar eliminação
+            document.getElementById("btnConfirmar").addEventListener("click", () => {
+                // Em produção, faríamos:
+                // fetch(`/api/amostrasTransporte/${idAmostra}/${idTransporte}`, { method: "DELETE" })
+                console.log("Amostra removida:", amostra);
+                alert("Amostra de Transporte eliminada com sucesso!");
+                window.location.href = "../transporteT.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

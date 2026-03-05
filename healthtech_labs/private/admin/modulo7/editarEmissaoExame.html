@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs – Editar Intervalo de Referência</title>
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+    <link rel="stylesheet" href="../../assets/css/1221419.css" />
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-gear"></i> Administrador
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li>
+                    <a class="dropdown-item" href="../../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i> Alterar password
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../../public/index.html">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+        <main class="content container mt-4">
+            <div class="wrapper d-flex">
+                <main class="content">
+                    <h1 class="text-center mb-4">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Editar Intervalo de Referência
+                    </h1>
+
+                    <form id="formEditarIntervalo" class="bg-light p-4 rounded shadow-sm">
+                        <div class="row g-3">
+                            <div class="col-md-2 form-group">
+                                <label for="inputIdIntervalo" class="form-label">ID</label>
+                                <input type="text" class="form-control readonly-input" id="inputIdIntervalo" readonly />
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="inputExame" class="form-label">
+                                    Exame<span class="obrigatorio">*</span>
+                                </label>
+                                <select class="form-select" id="inputExame" required>
+                                    <option value="">--Selecionar Exame--</option>
+                                    <option value="1">Hemograma</option>
+                                    <option value="2">Glicemia</option>
+                                    <option value="3">Colesterol</option>
+                                    <option value="4">Creatinina</option>
+                                    <option value="5">TSH</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="inputValorMin" class="form-label">
+                                    Valor Mínimo<span class="obrigatorio">*</span>
+                                </label>
+                                <input type="number" step="0.01" class="form-control" id="inputValorMin" required />
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="inputValorMax" class="form-label">
+                                    Valor Máximo<span class="obrigatorio">*</span>
+                                </label>
+                                <input type="number" step="0.01" class="form-control" id="inputValorMax" required />
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="inputUnidade" class="form-label">Unidade</label>
+                                <input type="text" class="form-control" id="inputUnidade" />
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="inputDescricao" class="form-label">Descrição</label>
+                                <input type="text" class="form-control" id="inputDescricao" />
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="inputSexo" class="form-label">
+                                    Sexo<span class="obrigatorio">*</span>
+                                </label>
+                                <select class="form-select" id="inputSexo" required>
+                                    <option value="A">Ambos</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="inputFaixa" class="form-label">
+                                    Faixa Etária<span class="obrigatorio">*</span>
+                                </label>
+                                <select class="form-select" id="inputFaixa" required>
+                                    <option value="0-1">0-1 ano</option>
+                                    <option value="1-12">1-12 anos</option>
+                                    <option value="13-17">13-17 anos</option>
+                                    <option value="18-30">18-30 anos</option>
+                                    <option value="31-59">31-59 anos</option>
+                                    <option value="60+">60+ anos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="button" class="btn btn-secondary me-3" id="btnCancelar">
+                                <i class="fa-solid fa-arrow-left"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk"></i> Atualizar
+                            </button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </main>
+
+        <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+        <script>
+            // Dados simulados de intervalos
+
+            const intervalosReferencia = [
+                {
+                    id: 1,
+                    idExame: 2,
+                    valorMin: 70,
+                    valorMax: 110,
+                    unidade: 'mg/dL',
+                    descricao: 'Glicose em jejum (adultos)',
+                    sexo: 'A',
+                    faixa: '18-30'
+                },
+                {
+                    id: 2,
+                    idExame: 1,
+                    valorMin: 13.5,
+                    valorMax: 17.5,
+                    unidade: 'g/dL',
+                    descricao: 'Hemoglobina (homens adultos)',
+                    sexo: 'M',
+                    faixa: '18-30'
+                },
+                {
+                    id: 3,
+                    idExame: 3,
+                    valorMin: 0,
+                    valorMax: 200,
+                    unidade: 'mg/dL',
+                    descricao: 'Colesterol Total (adultos)',
+                    sexo: 'A',
+                    faixa: '18-30'
+                }
+            ];
+
+            // 1) Função para obter parâmetro da URL (agora 'idEmissao' em vez de 'idIntervalo')
+            function getParametroIdEmissao() {
+                const params = new URLSearchParams(window.location.search);
+                const idParam = params.get("idEmissao"); // <--- Altere para "idEmissao"
+
+                if (!idParam || isNaN(idParam)) {
+                    alert("ID do intervalo inválido ou não fornecido.");
+                    // Redireciona para a página de listagem ao confirmar
+                    window.location.href = "monitorizacaoEmissaoExames.html";
+                    return null;
+                }
+
+                return parseInt(idParam, 10);
+            }
+
+            // 2) Preencher formulário com dados do intervalo
+            function preencherFormularioIntervalo(intervalo) {
+                document.getElementById("inputIdIntervalo").value = intervalo.id;
+                document.getElementById("inputExame").value = intervalo.idExame;
+                document.getElementById("inputValorMin").value = intervalo.valorMin;
+                document.getElementById("inputValorMax").value = intervalo.valorMax;
+                document.getElementById("inputUnidade").value = intervalo.unidade;
+                document.getElementById("inputDescricao").value = intervalo.descricao;
+                document.getElementById("inputSexo").value = intervalo.sexo;
+                document.getElementById("inputFaixa").value = intervalo.faixa;
+            }
+
+            // 3) Inicialização após carregar o DOM
+            document.addEventListener("DOMContentLoaded", () => {
+                // Tenta ler o 'idEmissao' da URL
+                const idEmissao = getParametroIdEmissao();
+                if (!idEmissao) return;  // Se for null, sai da inicialização
+
+                // Procura no array de dados simulados
+                const intervalo = intervalosReferencia.find(intv => intv.id === idEmissao);
+
+                if (!intervalo) {
+                    alert("Intervalo de referência não encontrado.");
+                    window.location.href = "monitorizacaoEmissaoExames.html";
+                    return;
+                }
+
+                // Se encontrou, preenche o formulário
+                preencherFormularioIntervalo(intervalo);
+
+                // Botão “Cancelar” volta para listagem
+                document.getElementById("btnCancelar").addEventListener("click", () => {
+                    window.location.href = "monitorizacaoEmissaoExames.html";
+                });
+
+                // Ao submeter, faz validação simples e exibe alerta de sucesso
+                document.getElementById("formEditarIntervalo")
+                    .addEventListener("submit", (e) => {
+                        e.preventDefault();
+
+                        // Validação básica: mínimo < máximo
+                        const valorMin = parseFloat(document.getElementById("inputValorMin").value);
+                        const valorMax = parseFloat(document.getElementById("inputValorMax").value);
+
+                        if (isNaN(valorMin) || isNaN(valorMax) || valorMin >= valorMax) {
+                            alert("O valor mínimo deve ser menor que o valor máximo.");
+                            return;
+                        }
+
+                        // Aqui você colocaria a chamada real à API (PUT/PATCH) para atualizar no servidor.
+                        // Exemplo simulando via console.log:
+                        console.log("Intervalo atualizado:", {
+                            id: idEmissao,
+                            idExame: document.getElementById("inputExame").value,
+                            valorMin: valorMin,
+                            valorMax: valorMax,
+                            unidade: document.getElementById("inputUnidade").value,
+                            descricao: document.getElementById("inputDescricao").value,
+                            sexo: document.getElementById("inputSexo").value,
+                            faixa: document.getElementById("inputFaixa").value
+                        });
+
+                        alert("Intervalo de referência atualizado com sucesso!");
+                        window.location.href = "monitorizacaoEmissaoExames.html";
+                    });
+            });
+        </script>
+</body>
+
+</html>

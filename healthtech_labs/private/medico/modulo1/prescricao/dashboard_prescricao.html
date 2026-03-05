@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Prescrições - HealthTech Clinical Labs</title>
+  <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../../assets/css/1211150.css" />
+  <link rel="stylesheet" href="../../../assets/css/common.css" />
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> Médico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../login/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
+            password</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/testes_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Testes
+        previstos</a>
+      <a href="../../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de testes e
+        exames</a>
+      <a href="../prescricao/lista_prescricoes.html" class="nav-link active"><i class="fa-solid fa-table-list"></i>
+        Prescrições</a>
+      <a href="../../modulo1/gestaoUtente.html" class="nav-link"><i class="fa-solid fa-user"></i> Gestão Utente</a>
+      <a href="../../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+        Exames Disponiveis</a>
+      <a href="../../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+      <a href="../../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+        Exames </a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="content">
+      <div class="dashboard-tabs">
+        <a href="../../modulo2/dashboard_medico_agendamentos.html" class="tab">Agendamentos</a>
+        <a href="../prescricao/dashboard_prescricao.html" class="tab active">Dashboard de Prescrições</a>
+      </div>
+      <div class="card shadow p-4">
+        <h2 class="mb-4"><i class="fa-solid fa-chart-pie me-2"></i>Dashboard de Prescrições</h2>
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="card text-white bg-primary shadow p-3">
+              <h5>Total de Prescrições</h5>
+              <p id="totalPrescricoes" class="fs-3 mb-0">0</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-danger shadow p-3">
+              <h5>Urgentes</h5>
+              <p id="urgentesPrescricoes" class="fs-3 mb-0">0</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-success shadow p-3">
+              <h5>SNS</h5>
+              <p id="snsPrescricoes" class="fs-3 mb-0">0</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-warning shadow p-3">
+              <h5>Privado</h5>
+              <p id="privadoPrescricoes" class="fs-3 mb-0">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4 shadow p-4">
+          <h5 class="mb-3">Distribuição por Tipo de Prescrição</h5>
+          <canvas id="graficoPrescricoes" height="120"></canvas>
+        </div>
+      </div>
+  </div>
+  </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../js/1211150.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
+</html>

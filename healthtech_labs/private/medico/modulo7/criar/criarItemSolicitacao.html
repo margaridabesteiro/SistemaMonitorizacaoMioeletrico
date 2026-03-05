@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Novo Item de Solicitação</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../../index_M.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-doctor"></i> Médico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
+            password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i>
+        Testes previstos</a>
+      <a href="../../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de testes e
+        exames</a>
+      <a href="../../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-table-list"></i>
+        Prescrições</a>
+      <a href="../../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i>
+        Gestão Utente</a>
+      <a href="../../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+        Exames Disponiveis</a>
+      <a href="../../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+      <a href="../../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+        Exames </a>
+    </nav>
+
+    <main class="content container mt-4">
+      <h2 class="text-center mb-4 text-primary">
+        <i class="fa-solid fa-vial me-2"></i> Novo Item de Solicitação
+      </h2>
+      <form class="row g-3 needs-validation" id="formNovoItemSolicitacao" novalidate>
+        <div class="col-md-6">
+          <label for="inputIdSolicitacao" class="form-label">ID Solicitação<span class="obrigatorio">*</span></label>
+          <input type="number" class="form-control" id="inputIdSolicitacao" name="idSolicitacao" required />
+          <div class="invalid-feedback">Informe o ID da solicitação.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputIdExame" class="form-label">ID Exame<span class="obrigatorio">*</span></label>
+          <input type="number" class="form-control" id="inputIdExame" name="idExame" required />
+          <div class="invalid-feedback">Informe o ID do exame.</div>
+        </div>
+        <div class="col-md-12">
+          <label for="inputInstrucoes" class="form-label">Instruções Especiais</label>
+          <input type="text" class="form-control" id="inputInstrucoes" name="instrucoesEspeciais" />
+        </div>
+        <div class="col-md-6">
+          <label for="inputIdAmostra" class="form-label">ID Amostra<span class="obrigatorio">*</span></label>
+          <input type="number" class="form-control" id="inputIdAmostra" name="idAmostra" required />
+          <div class="invalid-feedback">Informe o ID da amostra.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="selectStatus" class="form-label">Status<span class="obrigatorio">*</span></label>
+          <select class="form-select" id="selectStatus" name="status" required>
+            <option disabled selected value="">Escolher...</option>
+            <option value="pendente">Pendente</option>
+            <option value="coletado">Coletado</option>
+            <option value="processado">Processado</option>
+            <option value="entregue">Entregue</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+          <div class="invalid-feedback">Selecione o status do item.</div>
+        </div>
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='../emissaoExamesM.html'">
+            <i class="fa-solid fa-arrow-left"></i> Cancelar
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Adicionar Item
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../assets/js/1221419.js" defer></script>
+  <script>
+    (() => {
+      'use strict';
+      const form = document.getElementById('formNovoItemSolicitacao');
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          alert("Item de solicitação criado com sucesso!");
+          window.location.href = "../emissaoExamesM.html";
+          event.preventDefault();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    })();
+  </script>
+</body>
+
+</html>

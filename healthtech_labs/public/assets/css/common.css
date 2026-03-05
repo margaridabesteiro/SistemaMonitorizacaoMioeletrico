@@ -1,0 +1,218 @@
+/* Seletor Universal - Remove margens e preenchimentos padrão */
+* {
+    margin: 0;
+    /* Remove margens padrão */
+    padding: 0;
+    /* Remove preenchimento padrão */
+    box-sizing: border-box;
+    /* Inclui a borda e o preenchimento no cálculo do tamanho */
+    font-family: 'Titillium Web', Arial, Helvetica, sans-serif;
+    /* Define a fonte padrão */
+}
+
+/* Estilo da barra de navegação principal */
+.bng-navbar {
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 120px;
+}
+
+/* Estilo para os <div> internos da barra de navegação */
+.bng-navbar div {
+    display: flex;
+    /* Coloca os elementos lado a lado */
+    align-items: center;
+    /* Alinha-os verticalmente ao centro */
+}
+
+/* Estilo do logótipo na barra de navegação */
+.bng-navbar img {
+    height: 120px;
+    /* Define a altura do logótipo */
+}
+
+/* Estilos para os links centrais da navegação */
+.container-navegacao {
+    text-align: center;
+    padding: 0 20px;
+    /* Mantém só espaçamento lateral */
+    height: 120px;
+    /* Igual ao logotipo */
+    display: flex;
+    align-items: center;
+}
+
+
+.container-navegacao a {
+    font-size: 1.4em;
+    /* Aumenta o tamanho da fonte dos links */
+    margin: 0px 17px;
+    /* Espaçamento horizontal entre os links */
+    text-decoration: none;
+    /* Remove o sublinhado */
+    color: #dddddd;
+    /* Define a cor dos links */
+}
+
+.container-navegacao a:hover {
+    color: #ffffff;
+    /* Muda a cor ao passar o mouse */
+}
+
+/* Estilos para o botão da Área Cliente */
+.nav-cliente a {
+    color: #dddddd;
+    /* Cor do texto */
+    text-decoration: none;
+    /* Remove sublinhado */
+    font-size: 1.4em;
+    /* Tamanho da fonte */
+    padding: 10px;
+    /* Espaçamento interno */
+    border-radius: 5px;
+    /* Bordas arredondadas */
+    transition: background 0.3s;
+    /* Efeito suave na transição */
+    margin-right: 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Efeito ao passar o mouse no botão da Área Cliente */
+.nav-cliente a:hover {
+    background-color: #d4d4d4;
+    /* Cor de fundo ao passar o mouse */
+}
+
+/* Estilos para o Rodapé */
+.footer-container {
+    background-color: #2c3e50;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 10px;
+    font-size: 0.9em;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+.footer-section {
+    text-align: center;
+    flex: 1;
+    margin: 10px;
+    min-width: 180px;
+}
+
+.footer-section h4 {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.footer-section a {
+    color: #ecf0f1;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.links-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    text-align: left;
+}
+
+.links-grid ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.footer-bottom {
+    background-color: #243342;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 0.8em;
+    color: #bdc3c7;
+}
+.footer-bottom p {
+    margin: 0;
+}
+
+.container-texto-generico {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 100px 40px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+html {
+  scroll-padding-top: 100px;
+}
+
+section {
+    padding: 100px 40px;
+    /* Espaçamento interno nas secções (superior/inferior e laterais) */
+    text-align: center;
+    /* Centraliza todo o conteúdo textual por padrão */
+    min-height: 100vh;
+    /* Garante que cada secção tenha pelo menos a altura de uma janela inteira */
+    background-color: #f5f5f5;
+}
+
+
+.seguros-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.seguro {
+  background: #e4e3e3;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.seguro h3 {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+.carousel-seguros {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+.carousel-seguros img {
+  max-height: 50px;
+  object-fit: contain;
+  opacity: 0.85;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.carousel-seguros img:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}

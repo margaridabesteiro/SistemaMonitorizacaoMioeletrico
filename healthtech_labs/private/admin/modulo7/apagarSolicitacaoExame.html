@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Apagar Solicitação de Exame</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content">
+      <h1 class="text-danger">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>Confirmar Eliminação
+      </h1>
+      <p class="mt-3 fs-5">
+        Tem certeza de que deseja excluir a solicitação com ID
+        <span id="idSolicSpan" class="fw-bold text-danger"></span>?
+      </p>
+      <p class="text-muted mb-4">Esta ação não pode ser desfeita.</p>
+
+      <div id="detalhesSolic" class="bg-light p-3 rounded shadow-sm">
+        <!-- Detalhes preenchidos via JS -->
+      </div>
+
+      <div class="mt-3">
+        <button class="btn btn-secondary me-3" id="btnCancelarDelSolic">
+          <i class="fa-solid fa-arrow-left"></i> Cancelar
+        </button>
+        <button class="btn btn-danger" id="btnConfirmarDelSolic">
+          <i class="fa-solid fa-trash"></i> Confirmar Eliminação
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts JS no fim do body -->
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/1221419.js" defer></script>
+  <script>
+    // 1) Ler parâmetro idSolicitacao da URL
+    function getParametroIdSolic() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get("idSolicitacao"));
+    }
+
+    // 2) Dados simulados da tabela solicitacoesExame
+    const solicitacoesExame = [
+      {
+        idSolicitacao: 1,
+        ID_Utente: 1,
+        ID_Medico: 5,
+        dataSolicitacao: "2023-11-15T09:00",
+        observacoes: "Paciente diabético - controle trimestral",
+        prioridade: "rotina",
+        statusSolicitacao: "entregue"
+      },
+      {
+        idSolicitacao: 2,
+        ID_Utente: 2,
+        ID_Medico: 4,
+        dataSolicitacao: "2023-11-16T14:30",
+        observacoes: "Pré-operatório - cirurgia cardíaca amanhã",
+        prioridade: "urgente",
+        statusSolicitacao: "processado"
+      },
+      {
+        idSolicitacao: 3,
+        ID_Utente: 3,
+        ID_Medico: 3,
+        dataSolicitacao: "2023-11-17T08:45",
+        observacoes: "Paciente com suspeita de infarto",
+        prioridade: "emergencia",
+        statusSolicitacao: "coletado"
+      },
+      {
+        idSolicitacao: 4,
+        ID_Utente: 4,
+        ID_Medico: 2,
+        dataSolicitacao: "2023-11-18T11:20",
+        observacoes: "Paciente desistiu da coleta",
+        prioridade: "rotina",
+        statusSolicitacao: "cancelado"
+      },
+      {
+        idSolicitacao: 5,
+        ID_Utente: 5,
+        ID_Medico: 1,
+        dataSolicitacao: "2023-11-19T16:10",
+        observacoes: "Check-up anual",
+        prioridade: "rotina",
+        statusSolicitacao: "pendente"
+      }
+    ];
+
+    // 3) Mostrar detalhes antes de excluir
+    function mostrarDetalhesSolic(sol) {
+      document.getElementById("idSolicSpan").textContent = sol.idSolicitacao;
+      const cont = document.getElementById("detalhesSolic");
+      cont.innerHTML = `
+        <p><strong>Utente (ID):</strong> ${sol.ID_Utente}</p>
+        <p><strong>Médico (ID):</strong> ${sol.ID_Medico}</p>
+        <p><strong>Data/Hora Solicitação:</strong> ${sol.dataSolicitacao.replace("T", " ")}</p>
+        <p><strong>Observações:</strong> ${sol.observacoes}</p>
+        <p><strong>Prioridade:</strong> ${sol.prioridade}</p>
+        <p><strong>Status:</strong> ${sol.statusSolicitacao}</p>
+      `;
+    }
+
+    // 4) Inicialização
+    document.addEventListener("DOMContentLoaded", () => {
+      const idSolic = getParametroIdSolic();
+      const sol = solicitacoesExame.find((s) => s.idSolicitacao === idSolic);
+
+      if (!sol) {
+        alert("Solicitação não encontrada.");
+        window.location.href = "../modulo7/monitorizacaoEmissaoExames.html";
+        return;
+      }
+
+      mostrarDetalhesSolic(sol);
+
+      // Cancelar → voltar
+      document.getElementById("btnCancelarDelSolic").addEventListener("click", () => {
+        window.location.href = "../modulo7/monitorizacaoEmissaoExames.html";
+      });
+
+      // Confirmar eliminação
+      document.getElementById("btnConfirmarDelSolic").addEventListener("click", () => {
+        // Em produção, chamar fetch DELETE → /api/solicitacoesExame/{idSolicitacao}
+        console.log("Solicitação excluída: ID", sol.idSolicitacao);
+        alert("Solicitação excluída com sucesso!");
+        window.location.href = "../modulo7/monitorizacaoEmissaoExames.html";
+      });
+    });
+  </script>
+</body>
+
+</html>

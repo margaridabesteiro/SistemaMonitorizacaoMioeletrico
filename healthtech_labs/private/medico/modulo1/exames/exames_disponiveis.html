@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão de Utentes - HealthTech Clinical Labs</title>
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css">
+  <!-- Estilos da página -->
+  <link rel="stylesheet" href="../../../assets/css/common.css">
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../assets/css/1211150.css">
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <!-- Dropdown Bootstrap -->
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> Médico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../login/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/testes_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Testes
+        previstos</a>
+      <a href="../../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de testes e
+        exames</a>
+      <a href="../../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-table-list"></i>
+        Prescrições</a>
+      <a href="../../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i> Gestão
+        Utente</a>
+      <a href="../exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i> Exames
+        Disponiveis</a>
+      <a href="../../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+      <a href="../../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+        Exames </a>
+    </nav>
+
+
+    <!-- Conteúdo principal -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="dashboard-tabs">
+        <a href="exames_disponiveis.html" class="tab active">Exames Disponiveis</a>
+      </div>
+      <div class="card shadow p-4">
+        <h2 class="mb-4"><i class="fa-solid fa-vial me-2"></i>Exames Disponíveis</h2>
+
+        <hr>
+
+        <table class="table table-bordered align-middle">
+          <thead class="table-info">
+            <tr>
+              <th>ID Exame</th>
+              <th>Nome do Exame</th>
+              <th>Grupo</th>
+              <th>Tipo</th>
+              <th>Instrução</th>
+              <th>Leitura Sugerida</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>6</td>
+              <td>Glicose</td>
+              <td>Bioquímica</td>
+              <td>Clínico</td>
+              <td>501 - Jejum 4h</td>
+              <td>Avaliação de hipoglicemia/diabetes. Interpretar com jejum ≥ 8h.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Colesterol Total</td>
+              <td>Bioquímica</td>
+              <td>Clínico</td>
+              <td>503 - Evitar medicação</td>
+              <td>Útil no rastreio de dislipidemias. Recomendado jejum de 12h.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Hemograma Completo</td>
+              <td>Hematologia</td>
+              <td>Clínico</td>
+              <td>-</td>
+              <td>Verifica anemia, infeções ou distúrbios hematológicos.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Creatinina</td>
+              <td>Bioquímica</td>
+              <td>Clínico</td>
+              <td>-</td>
+              <td>Monitorização da função renal. Interpretação com taxa de filtração.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>TSH (Hormona Tiroideia)</td>
+              <td>Hormonal</td>
+              <td>Clínico</td>
+              <td>-</td>
+              <td>Rastreio de hipo/hipertiroidismo. Colheita preferencial em jejum.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+          <a href="../../index_M.html" class="btn btn-outline-secondary mt-3">
+            <i class="fa-solid fa-arrow-left me-2"></i> Voltar
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Bootstrap JS and custom JS -->
+  <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../js/1211150.js"></script>
+</body>
+
+</html>

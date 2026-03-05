@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registo de Colheitas – HealthTech Clinical Labs</title>
+  <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css">
+  <link rel="stylesheet" href="../../../assets/css/1211150.css">
+  <link rel="stylesheet" href="../../../assets/css/common.css">
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css">
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../login/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
+            password</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo4/colheita/dashboard_colheita.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i> Equipamento</a>
+      <a href="../../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+        Validação
+        Amostra</a>
+      <a href="../../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados </a>
+      <a href="../../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis </a>
+      <a href="exames_previstos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Exames previstos</a>
+
+      <a href="lista_colheitas.html" class="nav-link active"><i class="fa-solid fa-flask-vial"></i> Colheitas</a>
+      <a href="../amostra/lista_amostra.html" class="nav-link"><i class="fa-solid fa-vials"></i> Amostras</a>
+      <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="dashboard-tabs">
+        <a href="lista_colheitas.html" class="tab">Lista Colheitas</a>
+        <a href="nova_colheita.html" class="tab active">Nova Colheita</a>
+
+      </div>
+
+      <div class="card shadow p-4">
+        <h2 class="mb-4"><i class="fa-solid fa-syringe me-2"></i>Nova Colheita</h2>
+
+        <form>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="ID_Utente" class="form-label">Utente</label>
+              <select class="form-select" id="ID_Utente">
+                <option value="">Selecione</option>
+                <option value="1">João Manuel da Silva</option>
+                <option value="2">Ana Maria Costa</option>
+                <option value="3">Carlos Eduardo Mendes</option>
+                <option value="4">Filipa Joana Rocha</option>
+                <option value="5">Ricardo Jorge Lopes</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="ID_PostoColheita" class="form-label">Posto de Colheita</label>
+              <select class="form-select" id="ID_PostoColheita">
+                <option value="">Selecione</option>
+                <option value="201">Unidade Central do Porto</option>
+                <option value="202">Posto de Braga</option>
+                <option value="203">Unidade de Viana do Castelo</option>
+                <option value="204">Posto Aveitro </option>
+                <option value="205">Unidade Gaia</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="Data_Colheita" class="form-label">Data</label>
+              <input type="date" class="form-control" id="Data_Colheita">
+            </div>
+            <div class="col-md-4">
+              <label for="Hora_Colheita" class="form-label">Hora</label>
+              <input type="time" class="form-control" id="Hora_Colheita">
+            </div>
+            <div class="col-md-4">
+              <label for="ID_Tecnico" class="form-label">Técnico</label>
+              <select class="form-select" id="ID_Tecnico">
+                <option value="">Selecione</option>
+                <option value="201">Bruno Oliveira</option>
+                <option value="202">Sofia Nunes</option>
+                <option value="203">Luís Ramos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Condições da Colheita OK?</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="Condicoes_colheita_OK" id="Condicoes_OK_1" value="1">
+              <label class="form-check-label" for="Condicoes_OK_1">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="Condicoes_colheita_OK" id="Condicoes_OK_0" value="0">
+              <label class="form-check-label" for="Condicoes_OK_0">Não</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="Notas" class="form-label">Notas / Observações</label>
+            <textarea class="form-control" id="Notas" rows="3"
+              placeholder="Ex: paciente em jejum, sinais vitais normais..."></textarea>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="Garrote_Excedido" value="1">
+            <label class="form-check-label" for="Garrote_Excedido">
+              Garrote excedido (mais de 1 minuto)?
+            </label>
+          </div>
+
+          <div id="alertErroColheita" class="alert alert-danger d-none" role="alert">
+            Por favor, preencha todos os campos obrigatórios e valide as condições.
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="lista_colheitas.html" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-arrow-left me-2"></i> Voltar
+            </a>
+            <button type="button" class="btn btn-primary">
+              <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Colheita
+            </button>
+
+          </div>
+        </form>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../js/1211150.js"></script>
+</body>
+
+</html>

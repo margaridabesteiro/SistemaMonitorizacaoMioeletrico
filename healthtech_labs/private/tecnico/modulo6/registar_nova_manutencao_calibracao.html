@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthTech Clinical Labs</title>
+
+  <!--favicon-->
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+
+  <!-- Estilos da página -->
+  <link rel="stylesheet" href="../../assets/css/1221051.css">
+  <link rel="stylesheet" href="../../assets/css/1230404.css">
+  <link rel="stylesheet" href="../../assets/css/common.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-nurse"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login/login.html"><i class="fa-solid fa-key me-2"></i>
+            Alterar password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i> Equipamento</a>
+      <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Validação
+        Amostra</a>
+      <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados </a>
+      <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis </a>
+      <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i> Exames
+        previstos</a>
+      <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="content">
+      <div class="container" style="max-width: 1100px;">
+        <div class="card shadow-sm mt-4">
+          <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Registar Equipamento</h4>
+          </div>
+
+          <div class="card-body">
+            <form class="row g-3" id="form-manutencao">
+              <!-- Linha 1: IDs e Tipo -->
+              <div class="col-md-4">
+                <label for="id_equipamento" class="form-label">ID Equipamento</label>
+                <input type="number" class="form-control" id="id_equipamento" name="id_equipamento" required />
+              </div>
+
+              <div class="col-md-4">
+                <label for="id_tecnico" class="form-label">ID Técnico</label>
+                <input type="number" class="form-control" id="id_tecnico" name="id_tecnico" required />
+              </div>
+
+              <div class="col-md-4">
+                <label for="tipo_manutencao" class="form-label">Tipo</label>
+                <select class="form-select" id="tipo_manutencao" name="tipo_manutencao" required>
+                  <option value="">Selecione uma opção</option>
+                  <option value="Manutenção">Manutenção</option>
+                  <option value="Calibração">Calibração</option>
+                  <option value="Equipamento Avariado">Equipamento Avariado</option>
+                </select>
+              </div>
+
+              <!-- Plano -->
+              <div class="col-12">
+                <label for="plano_manutencao" class="form-label">Plano de Manutenção</label>
+                <textarea class="form-control" id="plano_manutencao" name="plano_manutencao" rows="3" maxlength="200"
+                  required></textarea>
+              </div>
+
+              <!-- Observações -->
+              <div class="col-12">
+                <label for="observacao" class="form-label">Observações</label>
+                <textarea class="form-control" id="observacao" name="observacao" rows="3" maxlength="200"
+                  required></textarea>
+              </div>
+
+              <!-- Data -->
+              <div class="col-md-4">
+                <label for="data" class="form-label">Data</label>
+                <input type="date" class="form-control" id="data" name="data" readonly />
+              </div>
+
+              <!-- Botões -->
+              <div class="col-12 d-flex justify-content-start gap-2 mt-3">
+                <button type="submit" class="btn btn-primary">Guardar Manutenção/Calibração</button>
+                <a href="../modulo6/manutencao_calibracao.html" class="btn btn-secondary">
+                  <i class="fa-solid fa-arrow-left fa-sm me-1"></i> Voltar Atrás
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Banner de erro -->
+        <div class="alert mt-4 text-danger" style="background-color: #f8d7da; border: 1px solid #f5c2c7;">
+          <i class="fa-solid fa-triangle-exclamation me-2"></i>
+          <strong>Erro na submissão dos dados.</strong> Manutenção/Calibração não guardada.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../js/1230404.js"></script>
+</body>
+
+</html>

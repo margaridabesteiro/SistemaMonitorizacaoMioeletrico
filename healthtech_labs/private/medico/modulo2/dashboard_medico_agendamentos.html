@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTech Clinical Labs</title>
+    <!--favicon-->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+    <!-- estilos da página -->
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="../../assets/css/1221051.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_M.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+
+        <!-- Dropdown Bootstrap -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-doctor"></i>Médico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>
+                        Alterar
+                        password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i>
+                        Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sidebar + Conteúdo -->
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="testes_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Testes previstos</a>
+            <a href="../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+                Auditoria de testes e
+                exames</a>
+            <a href="../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i
+                    class="fa-solid fa-table-list"></i> Prescrições</a>
+            <a href="../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i>
+                Gestão Utente</a>
+            <a href="../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+                Exames Disponiveis</a>
+            <a href="../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+            <a href="../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+                Exames </a>
+        </nav>
+        <main class="content">
+            <div class="dashboard-tabs">
+                <a href="dashboard_medico_agendamentos.html" class="tab active">Agendamentos</a>
+                <a href="../modulo1/prescricao/dashboard_prescricao.html" class="tab">Dashboard de Prescrições</a>
+            </div>
+            <h1><strong>Dashboard de Agendamentos</strong></h1>
+            <div class="container-fluid">
+                <div class="filtros-container mb-4 mt-3">
+                    <select id="tipoMarcacao" class="form-select">
+                        <option value="Exame">Exames</option>
+                        <option value="TestesEspeciais">Testes Especiais</option>
+                    </select>
+                    <select id="filtroMes" class="form-select">
+                        <option value="2024-12">Dezembro 2024</option>
+                        <option value="2025-01">Janeiro 2025</option>
+                        <option value="2025-02">Fevereiro 2025</option>
+                        <option value="2025-03">Março 2025</option>
+                        <option value="2025-04">Abril 2025</option>
+                        <option value="2025-05" selected>Maio 2025</option>
+                    </select>
+                    <select id="filtro-posto" class="form-select">
+                        <option value="todos">Todos os Postos</option>
+                        <option value="Unidade Central Porto">Unidade Central Porto</option>
+                        <option value="Unidade Gaia">Unidade Gaia</option>
+                        <option value="Posto de Braga">Posto de Braga</option>
+                        <option value="Clínica Matosinhos">Clínica Matosinhos</option>
+                        <option value="Posto Aveiro">Posto Aveiro</option>
+                        <option value="Unidade de Viana do Castelo">Unidade de Viana do Castelo</option>
+                        <option value="Unidade Saúde Coimbra">Unidade Saúde Coimbra</option>
+                        <option value="Clínica do Norte – Famalicão">Clínica do Norte – Famalicão</option>
+                        <option value="Posto do São João">Posto do São João</option>
+                        <option value="Posto de Colheita Lisboa - Oriente">Posto de Colheita Lisboa - Oriente
+                        </option>
+                    </select>
+                </div>
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm p-3 h-100">
+                            <h5 class="text-center">Agendamentos por Semana</h5>
+                            <div class="chart-container">
+                                <canvas id="chartSemanal"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex flex-column gap-3">
+                        <div class="card shadow-sm p-3">
+                            <h5 class="text-center">Agendamentos Semanais</h5>
+                            <div class="value" id="valorSemanal">672</div>
+                        </div>
+                        <div class="card shadow-sm p-4">
+                            <h5 class="text-center">Forma de Agendamento Mais Comum</h5>
+                            <div class="value" id="valorForma">Online</div>
+                        </div>
+                        <div class="card shadow-sm p-4">
+                            <h5 class="text-center">Posto Mais Ativo</h5>
+                            <div class="value" id="valorPosto">Unidade Central Porto</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm p-6">
+                            <h5 class="text-center mt-4">Formas de Agendamento</h5>
+                            <div>
+                                <canvas id="chartForma""></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-lg-6">
+                                    <div class="card shadow-sm p-6">
+                                        <h5 class="text-center mt-4">Agendamentos por Posto</h5>
+                                        <div>
+                                            <canvas id="chartPosto"></canvas>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+        </main>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../../js/1221051.js"></script>
+
+</html>

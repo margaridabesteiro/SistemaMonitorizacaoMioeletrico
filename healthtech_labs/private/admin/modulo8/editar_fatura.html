@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthTech Clinical Labs</title>
+  <!--favicon-->
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="../https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+  <!-- estilos da página -->
+  <link rel="stylesheet" href="../../assets/css/1221051.css">
+  <link rel="stylesheet" href="../../assets/css/common.css">
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+  <style>
+
+  </style>
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
+            password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i>
+            Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+        Office</a>
+      <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+        Acessos</a>
+      <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i>
+        Controlo de
+        Faturação</a>
+      <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis</a>
+      <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+        de
+        Saúde</a>
+      <a href="../modulo5/transporte.html" class="nav-link">
+        <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+      </a>
+      <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+        <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+      </a>
+      <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+        <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+      </a>
+      <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+        <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+      </a>
+    </nav>
+
+    <!-- Conteúdo -->
+    <main class="content">
+      <h1><strong>Editar Fatura</strong></h1>
+      <form class="row g-3 mt-3">
+
+        <!-- Nome do Utente -->
+        <div class="col-md-6">
+          <label for="nomeUtente" class="form-label">Nome do Utente</label>
+          <input type="text" class="form-control" id="nomeUtente" required>
+        </div>
+
+        <!-- NIF -->
+        <div class="col-md-6">
+          <label for="nif" class="form-label">NIF</label>
+          <input type="text" class="form-control" id="nif" maxlength="9" required>
+        </div>
+
+        <!-- Seguradora/SNS -->
+        <div class="col-md-6">
+          <label for="seguradora" class="form-label">Seguradora/SNS</label>
+          <input type="text" class="form-control" id="seguradora" required>
+        </div>
+
+        <!-- Exame -->
+        <div class="col-md-6">
+          <label for="exame" class="form-label">Exame</label>
+          <input type="text" class="form-control" id="exame" required>
+        </div>
+
+        <!-- Teste Especial -->
+        <div class="col-md-6">
+          <label for="testeEspecial" class="form-label">Teste Especial</label>
+          <input type="text" class="form-control" id="testeEspecial">
+        </div>
+
+        <!-- Valor -->
+        <div class="col-md-3">
+          <label for="valor" class="form-label">Valor (€)</label>
+          <input type="number" class="form-control" id="valor" required>
+        </div>
+
+        <!-- Data -->
+        <div class="col-md-3">
+          <label for="dataPagamento" class="form-label">Data</label>
+          <input type="date" class="form-control" id="dataPagamento" required>
+        </div>
+
+        <!-- Método de Pagamento -->
+        <div class="col-md-6">
+          <label for="metodoPagamento" class="form-label">Método de Pagamento</label>
+          <select class="form-select" id="metodoPagamento" required>
+            <option disabled selected value="">Escolha...</option>
+            <option>Dinheiro</option>
+            <option>Cartão bancário</option>
+            <option>MbWay</option>
+            <option>Cheque</option>
+          </select>
+        </div>
+
+        <!-- Estado -->
+        <div class="col-md-6">
+          <label for="estadoPagamento" class="form-label">Estado</label>
+          <select class="form-select" id="estadoPagamento" required>
+            <option disabled selected value="">Escolha...</option>
+            <option>Pago</option>
+            <option>Pendente</option>
+            <option>Cancelado</option>
+          </select>
+        </div>
+
+        <!-- Botões -->
+        <div class="col-12 d-flex gap-2 mt-3">
+          <a href="controlo_faturacao.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i>
+            Cancelar</a>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Guardar Alterações</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</body>
+<script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../../js/1221051.js"></script>
+
+</html>

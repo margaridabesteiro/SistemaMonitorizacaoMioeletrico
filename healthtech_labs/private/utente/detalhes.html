@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes Utente - HealthTech Clinical Labs</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <!-- Estilos da página -->
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/1211150.css">
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+        </div>
+        <!-- Dropdown Bootstrap -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user"></i> Médico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../login/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
+                        password</a></li>
+                <li><a class="dropdown-item" href="../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sidebar + Conteúdo -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Exames previstos</a>
+            <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> Auditoria de exames</a>
+            <a href="../medico/modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i
+                    class="fa-solid fa-table-list"></i> Prescrições</a>
+            <a href="../medico/modulo1/gestaoUtente.html" class="nav-link"><i class="fa-solid fa-user"></i> Gestão
+                Utente</a>
+            <a href="modulo7/emissaoExamesU.html" class="nav-link"><i class="fa-solid fa-file me-2"></i> Os meus
+                Exames</a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="col-md-9 col-lg-10 p-4">
+
+            <div class="d-flex justify-content-center mt-4">
+                <div class="card w-100 shadow rounded" style="max-width: 900px;">
+                    <div class="card-body">
+
+                        <h2 class="mb-4">
+                            <strong><i class="fa-solid fa-user me-2"></i> Ficha do Utente</strong>
+                        </h2>
+                        <hr>
+
+                        <!-- Aqui mostramos mensagens de erro (ex.: “ID não foi passado”) -->
+                        <div id="utenteInfo"></div>
+
+                        <!-- Este container ficará hidden até encontrarmos o utente no localStorage -->
+                        <div id="detalhesContainerUtente" style="display: none;">
+
+                            <!-- ID do Utente (o JS preenche com o valor recebido na URL) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">ID Utente</label>
+                                <p class="form-control-plaintext" id="idUtente"></p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Nome Completo</label>
+                                <p class="form-control-plaintext" id="nomeUtente"></p>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Data de Nascimento</label>
+                                    <p class="form-control-plaintext" id="dataNascimento"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">NIF</label>
+
+                                    <p class="form-control-plaintext" id="nifUtente"></p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Sexo</label>
+
+                                    <p class="form-control-plaintext" id="sexoUtente"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Contacto</label>
+
+                                    <p class="form-control-plaintext" id="contactoUtente"></p>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email</label>
+
+                                <p class="form-control-plaintext" id="emailUtente"></p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Morada</label>
+
+                                <p class="form-control-plaintext" id="moradaUtente"></p>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Número SNS</label>
+
+                                    <p class="form-control-plaintext" id="snsUtente"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Subsistema de Saúde</label>
+
+                                    <p class="form-control-plaintext" id="subsistemaUtente"></p>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4>Prescrições deste Utente</h4>
+                            <!--tabela de prescrições que este utente já fez -->
+                            <div id="listaPrescricoesUtente"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <a href="../medico/modulo1/gestaoUtente.html" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Voltar
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/1211150.js"></script>
+</body>
+
+</html>

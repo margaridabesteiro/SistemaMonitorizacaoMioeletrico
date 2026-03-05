@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthTech Clinical Labs</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+  <!-- estilos da página -->
+  <link rel="stylesheet" href="../../assets/css/1230404.css">
+  <link rel="stylesheet" href="../../assets/css/1221051.css">
+  <link rel="stylesheet" href="../../assets/css/common.css">
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+
+    <!-- Dropdown Bootstrap -->
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-nurse"></i>Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login/login.html"><i class="fa-solid fa-key me-2"></i>
+            Alterar password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i> Equipamento</a>
+      <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Validação
+        Amostra</a>
+      <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados </a>
+      <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis </a>
+      <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i> Exames
+        previstos</a>
+      <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="content p-4">
+      <h2>Validação de Amostras</h2>
+
+      <!-- Modal de Escolha -->
+      <div class="modal fade" id="modalEscolha" tabindex="-1" aria-labelledby="modalEscolhaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title">Tipo de Validação</h5>
+            </div>
+            <div class="modal-body text-center">
+              <p>Que tipo de amostra deseja validar?</p>
+              <button id="btnNormal" class="btn btn-success m-2">Amostra Normal</button>
+              <button id="btnEspecial" class="btn btn-warning m-2">Amostra Especial</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Normal -->
+      <div id="tabelaNormal" class="mt-5 d-none">
+        <h4>Amostras Normais</h4>
+        <table id="tabelasTecnico" class="table table-bordered align-middle tabela-personalizada">
+          <thead class="table-dark">
+            <tr>
+              <th>ID Validação</th>
+              <th>ID Amostra</th>
+              <th>Resultado</th>
+              <th>Motivo Rejeição</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">1</td>
+              <td class="text-center">101</td>
+              <td>Resultado negativo</td>
+              <td></td>
+              <td class="text-center">2025-06-03</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tabela Especial -->
+      <div id="tabelaEspecial" class="mt-5 d-none">
+        <h4>Amostras Especiais</h4>
+        <table id="tabelasTecnicoespecial" class="table table-bordered align-middle tabela-personalizada">
+          <thead class="table-dark">
+            <tr>
+              <th>ID Validação</th>
+              <th>ID Amostra</th>
+              <th>Resultado</th>
+              <th>Motivo Rejeição</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">1</td>
+              <td class="text-center">E-204</td>
+              <td>Inconclusivo - Repetir</td>
+              <td>Equipamento apresentou falha de leitura.</td>
+              <td class="text-center">2025-06-03</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Botões -->
+      <div class="mt-4 d-flex justify-content-start gap-2">
+        <a href="../../tecnico/index_T.html" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left me-2"></i> Voltar Atrás
+        </a>
+        <a href="../modulo6/registar_nova_validacao_amostra.html" class="btn btn-success">
+          <i class="fa-solid fa-plus me-2"></i> Registar Nova Validação
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <!-- jQuery e DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <!-- Bootstrap JS and custom JS -->
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../js/1230404.js"></script>
+</body>
+
+</html>

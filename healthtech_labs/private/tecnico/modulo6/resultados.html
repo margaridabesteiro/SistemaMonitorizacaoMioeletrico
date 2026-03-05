@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthTech Clinical Labs</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../assets/css/1221051.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="../../assets/css/common.css">
+  <link rel="stylesheet" href="../../assets/css/1230404.css">
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-nurse"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li><a class="dropdown-item" href="../../../public/login/login.html"><i class="fa-solid fa-key me-2"></i>
+            Alterar password</a></li>
+        <li><a class="dropdown-item" href="../../../public/index.html"><i
+              class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar + Conteúdo -->
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i> Equipamento</a>
+      <a href="../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Validação
+        Amostra</a>
+      <a href="../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados </a>
+      <a href="../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+        Consumíveis </a>
+      <a href="../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i> Exames
+        previstos</a>
+      <a href="../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="content p-4">
+      <h2 class="mb-4">Resultados de Teste de Saúde</h2>
+      <div class="table-responsive mb-4">
+        <table id="tabelasTecnico" class="table table-striped table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Valor Obtido</th>
+              <th>Grupo Sanguíneo</th>
+              <th>Descrição</th>
+              <th>Fator RH</th>
+              <th>Infeções</th>
+              <th>Status</th>
+              <th>Observações</th>
+              <th>Data Processamento</th>
+              <th>Data Criação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>90,2</td>
+              <td>A</td>
+              <td>Glicemia em jejum normal.</td>
+              <td>+</td>
+              <td>positivo</td>
+              <td>saudável</td>
+              <td>Sem observações.</td>
+              <td>2025-05-01</td>
+              <td>2025-05-01 19:34</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary btn-editar-teste"><i
+                      class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-sm btn-outline-danger btn-eliminar-teste"><i
+                      class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>115,5</td>
+              <td>B</td>
+              <td>Colesterol elevado.</td>
+              <td>-</td>
+              <td>negativo</td>
+              <td>doente</td>
+              <td>Paciente com histórico familiar.</td>
+              <td>2025-05-01</td>
+              <td>2025-05-01 19:35</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary btn-editar-teste"><i
+                      class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-sm btn-outline-danger btn-eliminar-teste"><i
+                      class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>98,4</td>
+              <td>O</td>
+              <td>Exame finalizado com resultados normais.</td>
+              <td>+</td>
+              <td>negativo</td>
+              <td>saudável</td>
+              <td>Recomenda-se controle anual.</td>
+              <td>2025-05-02</td>
+              <td>2025-05-01 19:47</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary btn-editar-teste"><i
+                      class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-sm btn-outline-danger btn-eliminar-teste"><i
+                      class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-start gap-3">
+          <a href="../modulo6/registar_novo_resultado_te.html" class="btn btn-success mt-3">
+            <i class="fa-solid fa-plus me-2"></i> Registar Novo Resultado Amostra Especial
+          </a>
+        </div>
+      </div>
+
+      <h2 class="mb-4">Resultados de Exames</h2>
+      <div class="table-responsive mb-4">
+        <table id="tabelasTecnicoespecial" class="table table-striped table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Paciente</th>
+              <th>Exame</th>
+              <th>Valor</th>
+              <th>Referência</th>
+              <th>Interpretação</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>27</td>
+              <td>João Silva</td>
+              <td>Hemograma Completo</td>
+              <td>12.5 g/dL</td>
+              <td>13.5 - 17.5 g/dL</td>
+              <td><span class="badge bg-success">Hemoglobina normal</span></td>
+              <td><span class="badge bg-success">Confirmado</span></td>
+              <td>15/11/2023 11:30</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>28</td>
+              <td>João Silva</td>
+              <td>Glicose</td>
+              <td>92 mg/dL</td>
+              <td>70 - 99 mg/dL</td>
+              <td><span class="badge bg-success">Glicemia controlada</span></td>
+              <td><span class="badge bg-success">Confirmado</span></td>
+              <td>15/11/2023 11:35</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>29</td>
+              <td>Maria Santos</td>
+              <td>Colesterol Total</td>
+              <td>6.7 mg/dL</td>
+              <td>0 - 200 mg/dL</td>
+              <td><span class="badge bg-danger">Valor crítico</span></td>
+              <td><span class="badge bg-success">Confirmado</span></td>
+              <td>16/11/2023 16:45</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>Maria Santos</td>
+              <td>Colesterol Total</td>
+              <td>145 mg/dL</td>
+              <td>0 - 200 mg/dL</td>
+              <td><span class="badge bg-success">Normal</span></td>
+              <td><span class="badge bg-success">Confirmado</span></td>
+              <td>16/11/2023 16:50</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>31</td>
+              <td>Carlos Oliveira</td>
+              <td>Creatinina</td>
+              <td>35 mg/dL</td>
+              <td>0.7 - 1.3 mg/dL</td>
+              <td><span class="badge bg-warning text-dark">Preliminar</span></td>
+              <td><span class="badge bg-danger">Crítico</span></td>
+              <td>17/11/2023 10:15</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>32</td>
+              <td>Ana Pereira</td>
+              <td>Hemograma Completo</td>
+              <td>N/A</td>
+              <td>13.5 - 17.5 g/dL</td>
+              <td><span class="badge bg-danger">Rejeitado</span></td>
+              <td><span class="badge bg-danger">Rejeitado</span></td>
+              <td>17/11/2023 10:20</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mb-3">
+          <a href="../modulo6/registar_novo_resultado_normal.html" class="btn btn-success">
+            <i class="fa-solid fa-plus me-2"></i> Registar Novo Resultado Amostra Normal
+          </a>
+        </div>
+        <div class="mt-3">
+          <a href="../../tecnico/index_T.html" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i> Voltar Atrás
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Eliminar -->
+  <div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-labelledby="modalConfirmacaoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background-color: #f8d7da;">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-danger" id="modalConfirmacaoLabel">Confirmar Eliminação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-dark">
+          Tem a certeza que pretende eliminar este resultado?
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição - Resultados de Teste de Saúde -->
+  <div class="modal fade" id="modalEditarTesteSaude" tabindex="-1" aria-labelledby="modalEditarTesteLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarTesteLabel">Editar Resultado de Teste de Saúde</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarTeste">
+            <div class="mb-3">
+              <label for="editarIdTeste" class="form-label">ID</label>
+              <input type="text" class="form-control" id="editarIdTeste" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="editarValorObtido" class="form-label">Valor Obtido</label>
+              <input type="text" class="form-control" id="editarValorObtido">
+            </div>
+            <div class="mb-3">
+              <label for="editarGrupoSanguineo" class="form-label">Grupo Sanguíneo</label>
+              <input type="text" class="form-control" id="editarGrupoSanguineo">
+            </div>
+            <div class="mb-3">
+              <label for="editarDescricao" class="form-label">Descrição</label>
+              <textarea class="form-control" id="editarDescricao"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="editarFatorRH" class="form-label">Fator RH</label>
+              <input type="text" class="form-control" id="editarFatorRH">
+            </div>
+            <div class="mb-3">
+              <label for="editarInfecoes" class="form-label">Infeções</label>
+              <input type="text" class="form-control" id="editarInfecoes">
+            </div>
+            <div class="mb-3">
+              <label for="editarStatusTeste" class="form-label">Status</label>
+              <input type="text" class="form-control" id="editarStatusTeste">
+            </div>
+            <div class="mb-3">
+              <label for="editarObservacoes" class="form-label">Observações</label>
+              <textarea class="form-control" id="editarObservacoes"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="editarDataProcessamento" class="form-label">Data de Processamento</label>
+              <input type="date" class="form-control" id="editarDataProcessamento">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarAlteracoesTesteSaude">Guardar Alterações</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição - Resultados de Exames Normais -->
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarLabel">Editar Resultado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditar">
+            <div class="mb-3">
+              <label for="editarId" class="form-label">ID</label>
+              <input type="text" class="form-control" id="editarId" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="editarPaciente" class="form-label">Paciente</label>
+              <input type="text" class="form-control" id="editarPaciente" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="editarExame" class="form-label">Exame</label>
+              <input type="text" class="form-control" id="editarExame">
+            </div>
+            <div class="mb-3">
+              <label for="editarValor" class="form-label">Valor</label>
+              <input type="text" class="form-control" id="editarValor">
+            </div>
+            <div class="mb-3">
+              <label for="editarReferencia" class="form-label">Referência</label>
+              <input type="text" class="form-control" id="editarReferencia">
+            </div>
+            <div class="mb-3">
+              <label for="editarInterpretacao" class="form-label">Interpretação</label>
+              <input type="text" class="form-control" id="editarInterpretacao">
+            </div>
+            <div class="mb-3">
+              <label for="editarStatus" class="form-label">Status</label>
+              <input type="text" class="form-control" id="editarStatus">
+            </div>
+            <div class="mb-3">
+              <label for="editarData" class="form-label">Data</label>
+              <input type="datetime-local" class="form-control" id="editarData">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarAlteracoes">Guardar Alterações</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../js/1230404.js"></script>
+</body>
+
+</html>

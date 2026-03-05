@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Editar Transporte</title>
+  <link rel="shortcut icon" href="../../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../../index_T.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Técnico
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Wrapper -->
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+          class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+        previstos</a>
+      <a href="../../modulo8/auditoria_tecnico.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de
+        testes e exames</a>
+      <a href="../../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+        Equipamento</a>
+      <a href="../../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+        Validação Amostra</a>
+      <a href="../../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i> Resultados
+      </a>
+      <a href="../../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+        Reagentes e Consumíveis </a>
+      <a href="../../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+        Exames
+        previstos</a>
+      <a href="../../modulo4/colheita/lista_colheitas.html" class="nav-link"><i class="fa-solid fa-flask-vial"></i>
+        Colheitas</a>
+      <a href="../../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+        Amostras</a>
+      <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content container mt-4">
+      <h1 class="mb-4">Editar Transporte</h1>
+
+      <!-- Formulário de Edição -->
+      <form id="formEditarTransporte" class="row g-3" novalidate>
+        <!-- 1. ID do Transporte (readonly) -->
+        <div class="col-md-2 form-group">
+          <label for="inputIdTransporte" class="form-label">ID Transporte</label>
+          <input type="text" class="form-control readonly-input" id="inputIdTransporte" readonly />
+        </div>
+
+        <!-- 2. Selecionar Laboratório (FK) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectLaboratorio" class="form-label">
+            Laboratório<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectLaboratorio" required>
+            <option value="">-- Selecionar Laboratório --</option>
+            <!-- Estes valores vêm dos inserts de Laboratorio em Inserts.sql -->
+            <option value="1">HealthTech Solutions (Porto)</option>
+            <option value="2">HealthTech Clinical Labs Norte (Porto)</option>
+            <option value="3">HealthTech Clinical Lab Lisboa (Lisboa)</option>
+            <option value="4">HealthTech Clinical Lab Coimbra (Coimbra)</option>
+            <option value="5">HealthTech Clinical Lab Algarve (Portimão)</option>
+          </select>
+        </div>
+
+        <!-- 3. Selecionar Técnico (FK) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectTecnico" class="form-label">
+            Técnico<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectTecnico" required>
+            <option value="">-- Selecionar Técnico --</option>
+            <!-- Exemplo de Técnicos (valores) -->
+            <option value="101">Técnico 101</option>
+            <option value="102">Técnico 102</option>
+            <option value="103">Técnico 103</option>
+            <option value="104">Técnico 104</option>
+            <option value="105">Técnico 105</option>
+          </select>
+        </div>
+
+        <!-- 4. Selecionar Rota (FK) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectRota" class="form-label">
+            Rota<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectRota" required>
+            <option value="">-- Selecionar Rota --</option>
+            <!-- Inserts para Rotas (Inserts.sql): origem / destino -->
+            <option value="1">Lisboa → Porto</option>
+            <option value="2">Porto → Coimbra</option>
+            <option value="3">Coimbra → Algarve</option>
+            <option value="4">Faro → Lisboa</option>
+            <option value="5">Lisboa → Central</option>
+          </select>
+        </div>
+
+        <!-- 5. Selecionar Veículo (FK) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectVeiculo" class="form-label">
+            Veículo<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectVeiculo" required>
+            <option value="">-- Selecionar Veículo --</option>
+            <!-- Inserts para Veiculo (Inserts.sql): matrícula e laboratório -->
+            <option value="1">AB-12-34 (Lab 2)</option>
+            <option value="2">CD-56-78 (Lab 2)</option>
+            <option value="3">EF-90-12 (Lab 3)</option>
+            <option value="4">GH-34-56 (Lab 4)</option>
+            <option value="5">IJ-78-90 (Lab 5)</option>
+          </select>
+        </div>
+
+        <!-- 6. Selecionar Motorista (FK) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectMotorista" class="form-label">
+            Motorista<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectMotorista" required>
+            <option value="">-- Selecionar Motorista --</option>
+            <!-- Inserts para Motorista (Inserts.sql): nome e laboratório -->
+            <option value="1">João Silva (Lab 2)</option>
+            <option value="2">Maria Santos (Lab 1)</option>
+            <option value="3">Carlos Oliveira (Lab 1)</option>
+            <option value="4">Ana Costa (Lab 1)</option>
+            <option value="5">Pedro Martins (Lab 3)</option>
+            <option value="6">Luísa Fernandes (Lab 4)</option>
+            <option value="7">Miguel Alves (Lab 2)</option>
+            <option value="8">Sofia Pereira (Lab 5)</option>
+          </select>
+        </div>
+
+        <!-- 7. Estado do Transporte (ENUM) * -->
+        <div class="col-md-4 form-group">
+          <label for="selectEstado" class="form-label">
+            Estado<span class="obrigatorio">*</span>
+          </label>
+          <select class="form-select" id="selectEstado" required>
+            <option value="">-- Selecionar --</option>
+            <option value="entregue">Entregue</option>
+            <option value="em transito">Em trânsito</option>
+            <option value="atrasado">Atrasado</option>
+          </select>
+        </div>
+
+        <!-- 8. Data de Envio (dataEnvio) * -->
+        <div class="col-md-4 form-group">
+          <label for="inputDataEnvio" class="form-label">
+            Data de Envio<span class="obrigatorio">*</span>
+          </label>
+          <input type="date" class="form-control" id="inputDataEnvio" required />
+        </div>
+
+        <!-- 9. Hora de Saída (horaSaida) -->
+        <div class="col-md-2 form-group">
+          <label for="inputHoraSaida" class="form-label">Hora de Saída</label>
+          <input type="time" class="form-control" id="inputHoraSaida" />
+        </div>
+
+        <!-- 10. Hora de Chegada (horaChegada) -->
+        <div class="col-md-2 form-group">
+          <label for="inputHoraChegada" class="form-label">Hora de Chegada</label>
+          <input type="time" class="form-control" id="inputHoraChegada" />
+        </div>
+
+        <!-- 11. Temperatura (FLOAT) -->
+        <div class="col-md-3 form-group">
+          <label for="inputTemperatura" class="form-label">Temperatura (°C)</label>
+          <input type="number" step="0.1" class="form-control" id="inputTemperatura" min="-80" max="30" />
+        </div>
+
+        <!-- 12. Observações (TEXT) -->
+        <div class="col-12 form-group">
+          <label for="textareaObservacoes" class="form-label">Observações</label>
+          <textarea class="form-control" id="textareaObservacoes" rows="4"
+            placeholder="Descrever observações…"></textarea>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" id="btnCancelar">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" id="btnSalvar">
+            Atualizar Transporte
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Scripts JS no fim do body -->
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../js/1221419.js"></script>
+
+  <script>
+    // 1) Ler parâmetro idTransporte da URL
+    function getParametroIdTransporte() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get("idTransporte"), 10);
+    }
+
+    // 2) Dados simulados da tabela Transporte, conforme Inserts.sql
+    const transportes = [
+      {
+        idTransporte: 1,
+        idLaboratorio: 2,
+        idTecnico: 101,
+        idRota: 1,
+        idVeiculo: 1,
+        idMotorista: 1,
+        estado: "entregue",
+        dataEnvio: "2023-08-10",
+        horaSaida: "08:00:00",
+        horaChegada: "11:30:00",
+        temperatura: 4.2,
+        observacoes: "Transporte sem incidentes"
+      },
+      {
+        idTransporte: 2,
+        idLaboratorio: 2,
+        idTecnico: 102,
+        idRota: 2,
+        idVeiculo: 2,
+        idMotorista: 2,
+        estado: "em transito",
+        dataEnvio: "2023-08-12",
+        horaSaida: "09:15:00",
+        horaChegada: "",
+        temperatura: 3.8,
+        observacoes: "Monitorizar temperatura"
+      },
+      {
+        idTransporte: 3,
+        idLaboratorio: 3,
+        idTecnico: 103,
+        idRota: 3,
+        idVeiculo: 3,
+        idMotorista: 3,
+        estado: "atrasado",
+        dataEnvio: "2023-08-08",
+        horaSaida: "10:30:00",
+        horaChegada: "15:45:00",
+        temperatura: 4.5,
+        observacoes: "Atraso devido a trânsito"
+      },
+      {
+        idTransporte: 4,
+        idLaboratorio: 4,
+        idTecnico: 101,
+        idRota: 4,
+        idVeiculo: 4,
+        idMotorista: 4,
+        estado: "entregue",
+        dataEnvio: "2023-08-09",
+        horaSaida: "07:45:00",
+        horaChegada: "10:15:00",
+        temperatura: 4.0,
+        observacoes: "Entrega dentro do prazo"
+      },
+      {
+        idTransporte: 5,
+        idLaboratorio: 1,
+        idTecnico: 102,
+        idRota: 1,
+        idVeiculo: 5,
+        idMotorista: 1,
+        estado: "em transito",
+        dataEnvio: "2023-08-15",
+        horaSaida: "08:30:00",
+        horaChegada: "",
+        temperatura: 3.9,
+        observacoes: "Carga sensível"
+      },
+      {
+        idTransporte: 6,
+        idLaboratorio: 5,
+        idTecnico: 103,
+        idRota: 2,
+        idVeiculo: 1,
+        idMotorista: 1,
+        estado: "entregue",
+        dataEnvio: "2023-08-11",
+        horaSaida: "09:00:00",
+        horaChegada: "12:20:00",
+        temperatura: 4.1,
+        observacoes: "Pequena variação de temperatura"
+      }
+    ];
+
+    // 3) Função para preencher o formulário com os dados do transporte
+    function preencherFormulario(transporte) {
+      document.getElementById("inputIdTransporte").value = transporte.idTransporte;
+      document.getElementById("selectLaboratorio").value = transporte.idLaboratorio;
+      document.getElementById("selectTecnico").value = transporte.idTecnico;
+      document.getElementById("selectRota").value = transporte.idRota;
+      document.getElementById("selectVeiculo").value = transporte.idVeiculo;
+      document.getElementById("selectMotorista").value = transporte.idMotorista;
+      document.getElementById("selectEstado").value = transporte.estado;
+      document.getElementById("inputDataEnvio").value = transporte.dataEnvio;
+      document.getElementById("inputHoraSaida").value = transporte.horaSaida || "";
+      document.getElementById("inputHoraChegada").value = transporte.horaChegada || "";
+      document.getElementById("inputTemperatura").value = transporte.temperatura;
+      document.getElementById("textareaObservacoes").value = transporte.observacoes;
+    }
+
+    // 4) Inicialização ao carregar a página
+    document.addEventListener("DOMContentLoaded", () => {
+      const idTransporte = getParametroIdTransporte();
+      const transporte = transportes.find(t => t.idTransporte === idTransporte);
+
+      if (!transporte) {
+        alert("Transporte não encontrado.");
+        window.location.href = "../transporte.html";
+        return;
+      }
+
+      preencherFormulario(transporte);
+
+      // Cancelar → volta para a lista de transportes
+      document.getElementById("btnCancelar").addEventListener("click", () => {
+        window.location.href = "../transporteT.html";
+      });
+
+      // Submeter (Atualizar)
+      document.getElementById("formEditarTransporte").addEventListener("submit", (evt) => {
+        evt.preventDefault();
+
+        // Recolhe os valores do formulário
+        const atualizado = {
+          idTransporte: transporte.idTransporte,
+          idLaboratorio: parseInt(document.getElementById("selectLaboratorio").value),
+          idTecnico: parseInt(document.getElementById("selectTecnico").value),
+          idRota: parseInt(document.getElementById("selectRota").value),
+          idVeiculo: parseInt(document.getElementById("selectVeiculo").value),
+          idMotorista: parseInt(document.getElementById("selectMotorista").value),
+          estado: document.getElementById("selectEstado").value,
+          dataEnvio: document.getElementById("inputDataEnvio").value,
+          horaSaida: document.getElementById("inputHoraSaida").value || null,
+          horaChegada: document.getElementById("inputHoraChegada").value || null,
+          temperatura: parseFloat(document.getElementById("inputTemperatura").value) || null,
+          observacoes: document.getElementById("textareaObservacoes").value.trim()
+        };
+
+        // Em produção, faria aqui um fetch PUT para o backend:
+        // fetch(`/api/transportes/${atualizado.idTransporte}`, { ... })
+
+        console.log("Transporte atualizado:", atualizado);
+        alert("Transporte atualizado com sucesso!");
+        window.location.href = "../transporte.html";
+      });
+    });
+  </script>
+</body>
+
+</html>

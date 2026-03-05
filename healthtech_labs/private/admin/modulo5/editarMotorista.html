@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs – Editar Motorista</title>
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+    <link rel="stylesheet" href="../../assets/css/1221419.css" />
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-gear"></i> Administrador
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li>
+                    <a class="dropdown-item" href="../../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i> Alterar password
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../../public/index.html">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+        <main class="content container mt-4">
+            <h1 class="mb-4">Editar Motorista</h1>
+
+            <!-- Formulário de Edição de Motorista -->
+            <form id="formEditarMotorista" class="row g-3" novalidate>
+                <!-- 1. ID Motorista (readonly) -->
+                <div class="col-md-2 form-group">
+                    <label for="inputIdMotorista" class="form-label">ID Motorista</label>
+                    <input type="text" class="form-control readonly-input" id="inputIdMotorista" readonly />
+                </div>
+
+                <!-- 2. Nome (VARCHAR) * -->
+                <div class="col-md-6 form-group">
+                    <label for="inputNomeMotorista" class="form-label">
+                        Nome<span class="obrigatorio">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="inputNomeMotorista" placeholder="Ex: João Silva"
+                        required />
+                    <div class="invalid-feedback">
+                        Por favor, informe o nome.
+                    </div>
+                </div>
+
+                <!-- 3. Certificado (BOOLEAN) * -->
+                <div class="col-md-3 form-group">
+                    <label for="selectCertificado" class="form-label">
+                        Certificado<span class="obrigatorio">*</span>
+                    </label>
+                    <select class="form-select" id="selectCertificado" required>
+                        <option value="">-- Selecionar --</option>
+                        <option value="1">Sim</option>
+                        <option value="0">Não</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Por favor, selecione se possui certificado.
+                    </div>
+                </div>
+
+                <!-- 4. Laboratório (FK) * -->
+                <div class="col-md-4 form-group">
+                    <label for="selectLabMotorista" class="form-label">
+                        Laboratório<span class="obrigatorio">*</span>
+                    </label>
+                    <select class="form-select" id="selectLabMotorista" required>
+                        <option value="">-- Selecionar Laboratório --</option>
+                        <!-- Valores dos Inserts.sql (Laboratorio) -->
+                        <option value="1">HealthTech Solutions (Porto)</option>
+                        <option value="2">HealthTech Clinical Labs Norte (Porto)</option>
+                        <option value="3">HealthTech Clinical Lab Lisboa (Lisboa)</option>
+                        <option value="4">HealthTech Clinical Lab Coimbra (Coimbra)</option>
+                        <option value="5">HealthTech Clinical Lab Algarve (Portimão)</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Por favor, selecione o laboratório.
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-secondary" id="btnCancelarMotorista">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btnSalvarMotorista">
+                        Atualizar Motorista
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // 1) Ler parâmetro idMotorista da URL
+        function getParametroIdMotorista() {
+            const params = new URLSearchParams(window.location.search);
+            return parseInt(params.get("idMotorista"), 10);
+        }
+
+        // 2) Dados simulados da tabela “Motorista”
+        const motoristas = [
+            { idMotorista: 1, nome: "João Silva", certificado: true, idLaboratorio: 2 },
+            { idMotorista: 2, nome: "Maria Santos", certificado: true, idLaboratorio: 1 },
+            { idMotorista: 3, nome: "Carlos Oliveira", certificado: false, idLaboratorio: 1 },
+            { idMotorista: 4, nome: "Ana Costa", certificado: true, idLaboratorio: 1 },
+            { idMotorista: 5, nome: "Pedro Martins", certificado: false, idLaboratorio: 3 },
+            { idMotorista: 6, nome: "Luísa Fernandes", certificado: true, idLaboratorio: 4 },
+            { idMotorista: 7, nome: "Miguel Alves", certificado: false, idLaboratorio: 2 },
+            { idMotorista: 8, nome: "Sofia Pereira", certificado: true, idLaboratorio: 5 }
+        ];
+
+        // 3) Preenche campos do formulário com dados do motorista
+        function preencherFormularioMotorista(m) {
+            document.getElementById("inputIdMotorista").value = m.idMotorista;
+            document.getElementById("inputNomeMotorista").value = m.nome;
+            document.getElementById("selectCertificado").value = m.certificado ? "1" : "0";
+            document.getElementById("selectLabMotorista").value = m.idLaboratorio;
+        }
+
+        // 4) Inicialização ao carregar a página
+        document.addEventListener("DOMContentLoaded", () => {
+            const idMotorista = getParametroIdMotorista();
+            const motorista = motoristas.find(m => m.idMotorista === idMotorista);
+
+            if (!motorista) {
+                alert("Motorista não encontrado.");
+                window.location.href = "monitorizacaoTransportes.html";
+                return;
+            }
+
+            preencherFormularioMotorista(motorista);
+
+            // Cancelar → volta para monitorizacaoTransportes.html
+            document.getElementById("btnCancelarMotorista").addEventListener("click", () => {
+                window.location.href = "monitorizacaoTransportes.html";
+            });
+
+            // Validação e submit
+            const form = document.getElementById("formEditarMotorista");
+            form.addEventListener("submit", (evt) => {
+                if (!form.checkValidity()) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    form.classList.add("was-validated");
+                    return;
+                }
+                evt.preventDefault();
+
+                // Recolhe valores atualizados
+                const atualizado = {
+                    idMotorista: motorista.idMotorista,
+                    nome: document.getElementById("inputNomeMotorista").value.trim(),
+                    certificado: document.getElementById("selectCertificado").value === "1",
+                    idLaboratorio: parseInt(document.getElementById("selectLabMotorista").value, 10)
+                };
+
+                // Em produção, substituir por fetch PUT
+                console.log("Motorista atualizado:", atualizado);
+                alert("Motorista atualizado com sucesso!");
+                window.location.href = "monitorizacaoTransportes.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

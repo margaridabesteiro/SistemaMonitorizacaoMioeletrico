@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Excluir Item de Solicitação</title>
+  <link rel="shortcut icon" href="../../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../../index_M.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2"
+        type="button"
+        id="dropdownUserButton"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>Menu</h2>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i>
+        Dashboard</a>
+      <a href="../../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i>
+        Testes previstos</a>
+      <a href="../../modulo8/auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>
+        Auditoria de testes e
+        exames</a>
+      <a href="../../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-table-list"></i>
+        Prescrições</a>
+      <a href="../../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i>
+        Gestão Utente</a>
+      <a href="../../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+        Exames Disponiveis</a>
+      <a href="../../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+        Transporte da Amostra</a>
+      <a href="../../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+        Exames </a>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content">
+      <div class="container-confirm">
+        <h2 class="text-danger text-center mb-4">
+          <i class="fa-solid fa-exclamation-triangle"></i> Confirmar Eliminação
+        </h2>
+
+        <p class="text-center fs-5">
+          Tem certeza de que deseja excluir o item de solicitação com ID
+          <strong id="itemIdSpan"></strong>?
+        </p>
+        <p class="text-center text-muted mb-4">Esta ação não pode ser desfeita.</p>
+
+        <!-- Detalhes do item -->
+        <div id="detalhesItem"></div>
+        <input type="hidden" id="idItem" />
+
+        <div class="text-center mt-4">
+          <button id="btnCancelar" class="btn btn-secondary btn-cancelar">
+            <i class="fa-solid fa-arrow-left"></i> Cancelar
+          </button>
+          <button id="btnConfirmar" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i> Confirmar Eliminação
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts JS no fim do body -->
+  <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../../assets/js/1221419.js" defer></script>
+  <script>
+    /********************************************************************
+     * Vai buscar ao URL o parâmetro “idItem”. Se não existir ou não for
+     * um número válido, devolve null.
+     ********************************************************************/
+    function obterParametroUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const valor = params.get("idItem");
+      if (!valor) return null;
+      const num = parseInt(valor, 10);
+      return isNaN(num) ? null : num;
+    }
+
+    /********************************************************************
+     * Simulação estática dos “itensSolicitacao”. Num cenário real, faria
+     * fetch() a uma API. Aqui mantemos um array em memória.
+     ********************************************************************/
+    const itensSolicitacao = [
+      {
+        idItemSolicitacao: 1,
+        idSolicitacao: 1,
+        ID_Exame: 6,
+        instrucoesEspeciais: "Jejum de 8h obrigatório",
+        status: "processado"
+      },
+      {
+        idItemSolicitacao: 2,
+        idSolicitacao: 2,
+        ID_Exame: 7,
+        instrucoesEspeciais: "Processar com urgência",
+        status: "processado"
+      },
+      {
+        idItemSolicitacao: 3,
+        idSolicitacao: 3,
+        ID_Exame: 9,
+        instrucoesEspeciais: "Prioridade máxima - suspeita de infarto",
+        status: "coletado"
+      },
+      {
+        idItemSolicitacao: 4,
+        idSolicitacao: 4,
+        ID_Exame: 8,
+        instrucoesEspeciais: null,
+        status: "pendente"
+      },
+      {
+        idItemSolicitacao: 5,
+        idSolicitacao: 5,
+        ID_Exame: 7,
+        instrucoesEspeciais: "Jejum de 8 horas",
+        status: "pendente"
+      }
+    ];
+
+    /********************************************************************
+     * Preenche “#detalhesItem” com as informações completas do item
+     * (ID_Solicitacao, ID_Exame, instruções e status).
+     ********************************************************************/
+    function mostrarDetalhesItem(item) {
+      document.getElementById("itemIdSpan").textContent = item.idItemSolicitacao;
+      const cont = document.getElementById("detalhesItem");
+      const instrucoes = item.instrucoesEspeciais ? item.instrucoesEspeciais : "—";
+      cont.innerHTML = `
+        <p><strong>ID da Solicitação:</strong> ${item.idSolicitacao}</p>
+        <p><strong>ID do Exame:</strong> ${item.ID_Exame}</p>
+        <p><strong>Instruções:</strong> ${instrucoes}</p>
+        <p><strong>Status:</strong> ${item.status}</p>
+      `;
+    }
+
+    /********************************************************************
+     * Na carga da página:
+     * 1) Tenta obter “idItem” da query string
+     * 2) Se não existir ou for inválido, alerta + redireciona
+     * 3) Senão, procura em “itensSolicitacao”
+     * 4) Se não encontrar, alerta + redireciona
+     * 5) Se encontrar, mostra detalhes e aguarda “Confirmar”
+     ********************************************************************/
+    document.addEventListener("DOMContentLoaded", function () {
+      const idNum = obterParametroUrl();
+
+      if (idNum === null) {
+        alert("Item de solicitação não encontrado.");
+        window.location.href = "../emissaoExamesM.html";
+        return;
+      }
+
+      const item = itensSolicitacao.find(it => it.idItemSolicitacao === idNum);
+      if (!item) {
+        alert("Item de solicitação não encontrado.");
+        window.location.href = "../emissaoExamesM.html";
+        return;
+      }
+
+      document.getElementById("idItem").value = item.idItemSolicitacao;
+      mostrarDetalhesItem(item);
+
+      document.getElementById("btnCancelar").addEventListener("click", function () {
+        window.location.href = "../emissaoExamesM.html";
+      });
+
+      document.getElementById("btnConfirmar").addEventListener("click", function () {
+        alert("Item de solicitação com ID " + item.idItemSolicitacao + " excluído com sucesso.");
+        window.location.href = "../emissaoExamesM.html";
+      });
+    });
+  </script>
+</body>
+</html>

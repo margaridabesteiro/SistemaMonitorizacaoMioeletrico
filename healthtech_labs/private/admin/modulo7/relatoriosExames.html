@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs</title>
+  <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+  <link rel="stylesheet" href="../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i>Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Wrapper (Sidebar + Conteúdo) -->
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content p-4 flex-grow-1">
+      <!-- Apenas Aba Dashboard -->
+      <h1 class="mb-4">Dashboard Emissão de Exames</h1>
+
+      <!-- Cards de KPI -->
+      <div class="container-fluid">
+        <div class="row g-3">
+          <div class="col-12 col-md-3">
+            <div class="info-card bg-primary">
+              <h3 id="totalPendentes">2</h3>
+              <p class="small-text-white">Exames Pendentes de Emissão</p>
+              <small class="small-text-white">Últimos 30 dias</small>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="info-card bg-warning">
+              <h3 id="totalCriticos">2</h3>
+              <p class="small-text-white">Exames Críticos a Comunicar</p>
+              <small class="small-text-white">Urgência elevada</small>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="info-card bg-success">
+              <h3 id="totalEmitidos">2</h3>
+              <p class="small-text-white">Exames Emitidos</p>
+              <small class="small-text-white">Últimos 7 dias</small>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="info-card bg-danger">
+              <h3 class="small-text-white" id="comunicacoesAtrasadas">1</h3>
+              <p class="small-text-white">Comunicações Atrasadas</p>
+              <small class="small-text-white">Fora do tempo recomendado</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficos do Dashboard -->
+      <div class="container-fluid">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fa-solid fa-chart-bar me-1"></i>Exames Emitidos por Prioridade</span>
+              </div>
+              <div class="card-body">
+                <canvas id="prioridadeChart" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fa-solid fa-stopwatch me-1"></i>Tempo Médio de Processamento</span>
+              </div>
+              <div class="card-body">
+                <canvas id="tempoProcessamentoChart" height="250"></canvas>
+                <div class="mt-2 text-center text-muted small">Tempo médio desde a solicitação até a emissão
+                  (horas)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header"><i class="fa-solid fa-pie-chart me-1"></i>Distribuição de Resultados</div>
+              <div class="card-body">
+                <canvas id="distribuicaoResultadosChart" height="250"></canvas>
+                <div class="mt-2 text-center text-muted small">Proporção de resultados normais, abaixo e acima do
+                  esperado</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fa-solid fa-bell-exclamation me-1"></i>Comunicações Críticas</span>
+              </div>
+              <div class="card-body">
+                <canvas id="comunicacoesChart" height="250"></canvas>
+                <div class="mt-2 text-center text-muted small">Tempo de resposta para valores críticos
+                  (minutos)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela: Exames com Maior Incidência de Valores Críticos -->
+      <div class="card mt-4">
+        <div class="card-header"><i class="fa-solid fa-vial me-1"></i>Exames com Maior Incidência de Valores Críticos
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="tabelaExamesCriticos" class="table table-bordered display nowrap" style="width:100%">
+              <thead class="table-dark">
+                <tr>
+                  <th>Tipo de Exame</th>
+                  <th>Total de Ocorrências</th>
+                  <th>% do Total</th>
+                  <th>Urgência Mais Comum</th>
+                  <th>Tempo Médio de Comunicação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Glicose</td>
+                  <td>2</td>
+                  <td>33%</td>
+                  <td><span class="badge bg-danger">Emergência</span></td>
+                  <td>15 min</td>
+                </tr>
+                <tr>
+                  <td>Colesterol</td>
+                  <td>1</td>
+                  <td>17%</td>
+                  <td><span class="badge bg-warning text-dark">Alerta</span></td>
+                  <td>45 min</td>
+                </tr>
+                <tr>
+                  <td>Hemograma</td>
+                  <td>1</td>
+                  <td>17%</td>
+                  <td><span class="badge bg-warning text-dark">Urgente</span></td>
+                  <td>20 min</td>
+                </tr>
+                <tr>
+                  <td>Creatinina</td>
+                  <td>1</td>
+                  <td>17%</td>
+                  <td><span class="badge bg-warning text-dark">Urgente</span></td>
+                  <td>60 min</td>
+                </tr>
+                <tr>
+                  <td>TSH</td>
+                  <td>1</td>
+                  <td>17%</td>
+                  <td><span class="badge bg-warning text-dark">Urgente</span></td>
+                  <td>30 min</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt.js"></script>
+  <script src="../../js/1221419.js"></script>
+
+  <script>
+    // Inicializar DataTable apenas para tabela de exames críticos
+    $(document).ready(function () {
+      $('#tabelaExamesCriticos').DataTable({
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Portuguese-Brasil.json'
+        },
+        responsive: true
+      });
+    });
+
+    // ========= Funções do Dashboard ========= //
+    document.addEventListener("DOMContentLoaded", function () {
+      inicializarDashboard();
+    });
+
+    function inicializarDashboard() {
+      document.getElementById('totalPendentes').textContent = '2';
+      document.getElementById('totalCriticos').textContent = '2';
+      document.getElementById('totalEmitidos').textContent = '2';
+      document.getElementById('comunicacoesAtrasadas').textContent = '1';
+
+      // Gráfico Exames por Prioridade
+      const ctxPrioridade = document.getElementById('prioridadeChart').getContext('2d');
+      new Chart(ctxPrioridade, {
+        type: 'bar',
+        data: {
+          labels: ['Rotina', 'Urgente', 'Emergência'],
+          datasets: [{
+            label: 'Nº de Exames',
+            data: [2, 1, 1],
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(220, 53, 69, 0.7)'
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(220, 53, 69, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return context.parsed.y + ' exames';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Nº de Exames' }
+            }
+          }
+        }
+      });
+
+      // Gráfico Tempo Médio de Processamento
+      const ctxTempo = document.getElementById('tempoProcessamentoChart').getContext('2d');
+      new Chart(ctxTempo, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+          datasets: [
+            {
+              label: 'Rotina',
+              data: [48, 42, 45, 40, 38, 36],
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Urgente',
+              data: [24, 22, 20, 18, 16, 15],
+              borderColor: 'rgba(255, 206, 86, 1)',
+              backgroundColor: 'rgba(255, 206, 86, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Emergência',
+              data: [12, 10, 9, 8, 7, 6],
+              borderColor: 'rgba(220, 53, 69, 1)',
+              backgroundColor: 'rgba(220, 53, 69, 0.1)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return context.dataset.label + ': ' + context.parsed.y + ' horas';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Tempo (horas)' }
+            }
+          }
+        }
+      });
+
+      // Gráfico Distribuição de Resultados
+      const ctxDistribuicao = document.getElementById('distribuicaoResultadosChart').getContext('2d');
+      new Chart(ctxDistribuicao, {
+        type: 'doughnut',
+        data: {
+          labels: ['Normal', 'Abaixo do Normal', 'Acima do Normal'],
+          datasets: [{
+            data: [2, 1, 1],
+            backgroundColor: [
+              'rgba(40, 167, 69, 0.7)',
+              'rgba(108, 117, 125, 0.7)',
+              'rgba(220, 53, 69, 0.7)'
+            ],
+            borderColor: [
+              'rgba(40, 167, 69, 1)',
+              'rgba(108, 117, 125, 1)',
+              'rgba(220, 53, 69, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                  const value = context.parsed;
+                  const percentage = Math.round((value / total) * 100);
+                  return `${context.label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Gráfico Comunicações Críticas (mantêm-se no dashboard)
+      const ctxComunicacoes = document.getElementById('comunicacoesChart').getContext('2d');
+      new Chart(ctxComunicacoes, {
+        type: 'bar',
+        data: {
+          labels: ['Glicose', 'Colesterol', 'Hemograma', 'Creatinina', 'TSH'],
+          datasets: [{
+            label: 'Tempo Médio de Resposta (min)',
+            data: [15, 45, 20, 60, 30],
+            backgroundColor: 'rgba(13, 110, 253, 0.7)',
+            borderColor: 'rgba(13, 110, 253, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return context.parsed.y + ' minutos';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Tempo (minutos)' }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

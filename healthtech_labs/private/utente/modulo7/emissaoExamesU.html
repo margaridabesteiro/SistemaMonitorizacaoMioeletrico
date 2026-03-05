@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs</title>
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+    <link rel="stylesheet" href="../../assets/css/1221419.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_utente.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+
+        <!-- Dropdown Bootstrap -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user"></i> Utente
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>
+                        Alterar
+                        password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i>
+                        Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sidebar + Conteúdo -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/agendamento.html" class="nav-link"><i class="fa-solid fa-calendar-plus me-2"></i> Efetuar
+                Marcação</a>
+            <a href="../modulo2/previsao.html" class="nav-link"><i class="fa-solid fa-calendar-check me-2"></i> Marcações
+                previstas</a>
+            <a href="../modulo8/marcacoes.html" class="nav-link"><i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de
+                Marcações</a>
+            <a href="../modulo8/pagamentos.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de
+                Pagamentos</a>
+            <a href="../modulo7/emissaoExamesU.html" class="nav-link"><i class="fa-solid fa-file me-2"></i> Os meus
+                Exames</a>
+        </nav>
+
+
+
+        <main class="flex-grow-1 p-4">
+            <div class="consulta-container">
+                <h2 class="mb-4"><i class="fa-solid fa-flask"></i> Os Meus Exames </h2>
+                <p>Consulte o histórico completo dos seus exames laboratoriais abaixo.</p>
+
+                <div class="exames-section">
+                    <h4><i class="fa-solid fa-clipboard-list"></i> Solicitações de Exames</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Prioridade</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2023-11-15</td>
+                                <td><span class="badge bg-secondary">Rotina</span></td>
+                                <td><span class="badge bg-success">Entregue</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-11-16</td>
+                                <td><span class="badge bg-warning text-dark">Urgente</span></td>
+                                <td><span class="badge bg-info text-dark">Processado</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-11-17</td>
+                                <td><span class="badge bg-danger">Emergência</span></td>
+                                <td><span class="badge bg-primary">Coletado</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="exames-section">
+                    <h4><i class="fa-solid fa-microscope"></i> Resultados de Exames</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Exame</th>
+                                <th>Valor</th>
+                                <th>Intervalo Ref.</th>
+                                <th>Interpretação</th>
+                                <th>Crítico?</th>
+                                <th>Data Emissão</th>
+                                <th>Via</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Glicose</td>
+                                <td>92 mg/dL</td>
+                                <td>70 - 99 mg/dL</td>
+                                <td><span class="text-success">Normal</span></td>
+                                <td><i class="fa-solid fa-check text-success"></i></td>
+                                <td>2023-06-01</td>
+                                <td><span class="badge bg-primary">Digital</span></td>
+                            </tr>
+                            <tr>
+                                <td>Colesterol Total</td>
+                                <td>320 mg/dL</td>
+                                <td>0 - 200 mg/dL</td>
+                                <td><span class="text-danger">Acima do normal</span></td>
+                                <td><i class="fa-solid fa-triangle-exclamation text-danger"></i></td>
+                                <td>2023-06-03</td>
+                                <td><span class="badge bg-success">Ambas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../js/1221419.js"></script>
+</body>
+
+</html>

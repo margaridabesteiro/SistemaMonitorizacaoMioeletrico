@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTech Clinical Labs</title>
+    <!--favicon-->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+
+    <!-- estilos da página -->
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="../../assets/css/1221051.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../index_M.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+
+        <!-- Dropdown Bootstrap -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-doctor"></i>Médico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>
+                        Alterar
+                        password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i>
+                        Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sidebar + Conteúdo -->
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_medico_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="../modulo2/testes_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Testes
+                previstos</a>
+            <a href="auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i> Auditoria
+                de testes e
+                exames</a>
+            <a href="../modulo1/prescricao/lista_prescricoes.html" class="nav-link"><i
+                    class="fa-solid fa-table-list"></i> Prescrições</a>
+            <a href="../modulo1/gestaoUtente.html" class="nav-link active"><i class="fa-solid fa-user"></i>
+                Gestão Utente</a>
+            <a href="../modulo1/exames/exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
+                Exames Disponiveis</a>
+            <a href="../modulo5/transporteM.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+            <a href="../modulo7/emissaoExamesM.html" class="nav-link"><i class="fa-solid fa-file"></i> Emissão dos
+                Exames </a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="mb-0"><strong>Auditoria de Exames</strong></h1>
+            </div>
+
+            <div class="table-responsive">
+                <table id="auditoria_medico" class="table table-bordered table-hover table-striped align-middle w-100">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nº Teste</th>
+                            <th>Nº Exame</th>
+                            <th>Utilizador</th>
+                            <th>Campo Alterado</th>
+                            <th>Valor Antigo</th>
+                            <th>Valor Novo</th>
+                            <th>Data de Alteração</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>24</td>
+                            <td>Médico 1</td>
+                            <td>statusResultado</td>
+                            <td>rejeitado</td>
+                            <td>confirmado</td>
+                            <td>2025-05-01 22:00:55</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>24</td>
+                            <td>Médico 1</td>
+                            <td>observações</td>
+                            <td>Amostra hemolisada - recolher nova</td>
+                            <td>Amostra em condições de análise</td>
+                            <td>2025-05-01 22:00:55</td>
+                        </tr>
+                        <td></td>
+                        <td>21</td>
+                        <td>Técnico 2</td>
+                        <td>valor</td>
+                        <td>6.7</td>
+                        <td>6.6</td>
+                        <td>2025-05-01 22:00:55</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td></td>
+                            <td>Técnico 2</td>
+                            <td>infeções</td>
+                            <td>negativo</td>
+                            <td>positivo</td>
+                            <td>2025-05-01 22:00:55</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+</body>
+<!-- Bootstrap JS and custom JS -->
+<script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../../js/1221051.js"></script>
+<script>
+    $(document).ready(function () {
+        // datatable
+        $('#auditoria_medico').DataTable({
+            pageLength: 5,
+            pagingType: "full_numbers",
+            language: {
+                decimal: "",
+                emptyTable: "Sem dados disponíveis na tabela.",
+                info: "Mostrando _START_ até _END_ de _TOTAL_ registos",
+                infoEmpty: "Mostrando 0 até 0 de 0 registos",
+                infoFiltered: "(Filtrando _MAX_ total de registos)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Mostrando _MENU_ registos por página.",
+                loadingRecords: "Carregando...",
+                processing: "Processando...",
+                search: "Filtrar:",
+                zeroRecords: "Nenhum registro encontrado.",
+                paginate: {
+                    first: "Primeira",
+                    last: "Última",
+                    next: "Seguinte",
+                    previous: "Anterior"
+                },
+                aria: {
+                    sortAscending: ": ative para classificar a coluna em ordem crescente.",
+                    sortDescending: ": ative para classificar a coluna em ordem decrescente."
+                }
+            }
+        });
+    })
+</script>
+
+</html>

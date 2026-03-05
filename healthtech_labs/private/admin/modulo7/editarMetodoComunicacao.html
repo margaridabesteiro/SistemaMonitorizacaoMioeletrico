@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Editar Método de Comunicação</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content container mt-4">
+      <h1 class="mb-4">Editar Método de Comunicação</h1>
+      <form id="formEditarMetodo" class="row g-3 needs-validation" novalidate>
+        <!-- ID Método (readonly) -->
+        <div class="col-md-2 form-group">
+          <label for="inputIdMetodo" class="form-label">ID Método</label>
+          <input type="text" class="form-control readonly-input" id="inputIdMetodo" readonly />
+        </div>
+
+        <!-- Nome (text) -->
+        <div class="col-md-4 form-group">
+          <label for="inputNomeMetodo" class="form-label">
+            Nome<span class="obrigatorio">*</span>
+          </label>
+          <input type="text" class="form-control" id="inputNomeMetodo" required />
+          <div class="invalid-feedback">
+            Por favor, informe o nome do método.
+          </div>
+        </div>
+
+        <!-- Descrição (text) -->
+        <div class="col-md-4 form-group">
+          <label for="inputDescricaoMetodo" class="form-label">Descrição</label>
+          <input type="text" class="form-control" id="inputDescricaoMetodo" />
+        </div>
+
+        <!-- Requer Confirmação (select) -->
+        <div class="col-md-2 form-group">
+          <label for="selectRequerConfirmacao" class="form-label">
+            Requer Confirmação
+          </label>
+          <select class="form-select" id="selectRequerConfirmacao">
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+          </select>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Atualizar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Scripts JS -->
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/1221419.js" defer></script>
+  <script>
+    // Simulação de dados de métodos de comunicação
+    const metodosComunicacao = [
+      { id: 1, nome: "Telefone", descricao: "Ligação de chamada direta", requerConfirmacao: true },
+      { id: 2, nome: "E-mail", descricao: "E-mail institucional", requerConfirmacao: true },
+      { id: 3, nome: "WhatsApp", descricao: "Mensagem via WhatsApp", requerConfirmacao: false }
+    ];
+
+    function getParametroId() {
+      const params = new URLSearchParams(window.location.search);
+      const idParam = params.get("idMetodo");
+      if (!idParam || isNaN(idParam)) {
+        alert("ID do método inválido ou não fornecido.");
+        window.location.href = "metodosComunicacao.html";
+        return null;
+      }
+      return parseInt(idParam, 10);
+    }
+
+    function preencherFormulario(obj, id) {
+      document.getElementById("inputIdMetodo").value = id;
+      document.getElementById("inputNomeMetodo").value = obj.nome || "";
+      document.getElementById("inputDescricaoMetodo").value = obj.descricao || "";
+      document.getElementById("selectRequerConfirmacao").value = obj.requerConfirmacao ? "1" : "0";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const id = getParametroId();
+      if (!id) return;
+
+      let encontrado = metodosComunicacao.find(m => m.id === id);
+      if (!encontrado) {
+        encontrado = { nome: "", descricao: "", requerConfirmacao: false };
+      }
+      preencherFormulario(encontrado, id);
+
+      document.getElementById("btnCancelar").onclick = () => {
+        window.location.href = "monitorizacaoEmissaoExames.html";
+      };
+
+      document.getElementById("formEditarMetodo").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nome = document.getElementById("inputNomeMetodo").value.trim();
+        if (!nome) {
+          alert("O campo Nome é obrigatório.");
+          return;
+        }
+
+        // Em produção, substituir por chamada API PUT/PATCH
+        console.log("Método atualizado:", {
+          id: id,
+          nome: nome,
+          descricao: document.getElementById("inputDescricaoMetodo").value.trim(),
+          requerConfirmacao: document.getElementById("selectRequerConfirmacao").value === "1"
+        });
+
+        alert("Método de comunicação atualizado com sucesso!");
+        window.location.href = "monitorizacaoEmissaoExames.html";
+      });
+    });
+  </script>
+</body>
+
+</html>

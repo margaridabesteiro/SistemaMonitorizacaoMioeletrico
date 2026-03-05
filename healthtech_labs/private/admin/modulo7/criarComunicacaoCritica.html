@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthTech Clinical Labs – Nova Comunicação Crítica</title>
+  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../../assets/css/1221419.css" />
+  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+  <!-- Topbar -->
+  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+    <div class="sistema-nome d-flex align-items-center gap-2">
+      <a
+        href="../index_admin.html"
+        class="text-white text-decoration-none d-flex align-items-center gap-2"
+      >
+        <i class="fa-solid fa-flask-vial logo-icon"></i>
+        <span>HealthTech Clinical Labs</span>
+      </a>
+    </div>
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2"
+        type="button"
+        id="dropdownUserButton"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-user-gear"></i> Administrador
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+        <li>
+          <a class="dropdown-item" href="../../../public/login.html">
+            <i class="fa-solid fa-key me-2"></i> Alterar password
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="../../../public/index.html">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
+                Office</a>
+            <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
+                Acessos</a>
+            <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i
+                    class="fa-solid fa-file-invoice-dollar"></i>
+                Controlo de
+                Faturação</a>
+            <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e
+                Consumíveis</a>
+            <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais
+                de
+                Saúde</a>
+            <a href="../modulo5/transporte.html" class="nav-link">
+                <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
+            </a>
+            <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
+                <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
+            </a>
+            <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
+                <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
+            </a>
+            <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
+                <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
+            </a>
+        </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content container mt-4">
+      <h1 class="mb-4">Nova Comunicação Crítica</h1>
+
+      <form id="formCriarComCritica" class="row g-3 needs-validation" novalidate>
+        <!-- ID Resultado (INT) * -->
+        <div class="col-md-3 form-group">
+          <label for="inputIdResultadoCC" class="form-label">
+            ID Resultado<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputIdResultadoCC"
+            name="idResultado"
+            placeholder="Ex: 19"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe o ID do resultado.
+          </div>
+        </div>
+
+        <!-- ID Método (INT) * -->
+        <div class="col-md-3 form-group">
+          <label for="inputIdMetodoCC" class="form-label">
+            ID Método<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputIdMetodoCC"
+            name="idMetodo"
+            placeholder="Ex: 3"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe o ID do método.
+          </div>
+        </div>
+
+        <!-- Data/Hora Comunicação (datetime-local) * -->
+        <div class="col-md-4 form-group">
+          <label for="inputDataHoraComunicacao" class="form-label">
+            Data/Hora Comunicação<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="inputDataHoraComunicacao"
+            name="dataHoraComunicacao"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe a data/hora da comunicação.
+          </div>
+        </div>
+
+        <!-- Pessoa Contactada (VARCHAR) * -->
+        <div class="col-md-4 form-group">
+          <label for="inputPessoaContactada" class="form-label">
+            Pessoa Contactada<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputPessoaContactada"
+            name="pessoaContactada"
+            placeholder="Ex: Dr. Silva"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe a pessoa contactada.
+          </div>
+        </div>
+
+        <!-- ID Cargo (INT) * -->
+        <div class="col-md-3 form-group">
+          <label for="inputIdCargoCC" class="form-label">
+            ID Cargo<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputIdCargoCC"
+            name="idCargo"
+            placeholder="Ex: 1"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe o ID do cargo.
+          </div>
+        </div>
+
+        <!-- Confirmação Recebimento (BOOLEAN) * -->
+        <div class="col-md-3 form-group">
+          <label class="form-label d-block">
+            Confirmação Recebimento<span class="obrigatorio">*</span>
+          </label>
+          <select
+            class="form-select"
+            id="selectConfirmacao"
+            name="confirmacaoRecebimento"
+            required
+          >
+            <option selected disabled value="">Escolher...</option>
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+          </select>
+          <div class="invalid-feedback">
+            Por favor, indique se houve confirmação.
+          </div>
+        </div>
+
+        <!-- Tempo Resposta (INT) * -->
+        <div class="col-md-3 form-group">
+          <label for="inputTempoResposta" class="form-label">
+            Tempo de Resposta (min)<span class="obrigatorio">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputTempoResposta"
+            name="tempoResposta"
+            step="1"
+            min="0"
+            placeholder="Ex: 15"
+            required
+          />
+          <div class="invalid-feedback">
+            Por favor, informe o tempo de resposta (>=0).
+          </div>
+        </div>
+
+        <!-- Ação Tomada (TEXT) * -->
+        <div class="col-md-8 form-group">
+          <label for="textareaAcaoTomada" class="form-label">
+            Ação Tomada<span class="obrigatorio">*</span>
+          </label>
+          <textarea
+            class="form-control"
+            id="textareaAcaoTomada"
+            name="acaoTomada"
+            rows="2"
+            placeholder="Ex: Administração de glicose IV"
+            required
+          ></textarea>
+          <div class="invalid-feedback">
+            Por favor, informe a ação tomada.
+          </div>
+        </div>
+
+        <!-- Observações (TEXT) -->
+        <div class="col-md-12 form-group">
+          <label for="textareaObsCC" class="form-label">Observações</label>
+          <textarea
+            class="form-control"
+            id="textareaObsCC"
+            name="observacoes"
+            rows="2"
+            placeholder="Ex: Paciente com hipoglicemia grave (35 mg/dL)"
+          ></textarea>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="btnCancelarCC"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Criar Comunicação
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Scripts JS no fim do body -->
+  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/1221419.js" defer></script>
+  <script>
+    // Cancelar → redireciona para monitorizacaoEmissaoExames.html
+    document.getElementById("btnCancelarCC").addEventListener("click", () => {
+      window.location.href = "monitorizacaoEmissaoExames.html";
+    });
+
+    // Validação básica de BS5
+    (function () {
+      "use strict";
+      const form = document.getElementById("formCriarComCritica");
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          } else {
+            // Em produção, enviar via fetch POST para /api/comunicacoesCriticas
+            alert("Comunicação crítica criada com sucesso!");
+            window.location.href = "monitorizacaoEmissaoExames.html";
+            event.preventDefault(); // Remover em produção
+          }
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    })();
+  </script>
+</body>
+
+</html>

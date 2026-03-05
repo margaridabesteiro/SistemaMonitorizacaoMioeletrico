@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTech Clinical Labs – Apagar Transporte Especial</title>
+    <link rel="shortcut icon" href="../../../assets/img/logo.jpg" type="image/jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <!-- FontAwesome (ícones) -->
+    <link rel="stylesheet" href="../../../assets/fontawesome/all.min.css" />
+    <!-- CSS Comum -->
+    <link rel="stylesheet" href="../../../assets/css/1221419.css" />
+    <link rel="stylesheet" href="../../../assets/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="menu-user">
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sistema-nome d-flex align-items-center gap-2">
+            <a href="../../index_T.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flask-vial logo-icon"></i>
+                <span>HealthTech Clinical Labs</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
+                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-gear"></i> Técnico
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>
+                        Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i> Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="../../tecnico/modulo4/colheita/dashboard_colheita.html" class="nav-link"><i
+                    class="fa-solid fa-chart-line"></i>
+                Dashboard</a>
+            <a href="../../modulo2/exames_previstos.html" class="nav-link"><i class="fa-solid fa-vial me-2"></i> Exames
+                previstos</a>
+            <a href="../../modulo8/auditoria_tecnico.html" class="nav-link"><i
+                    class="fa-solid fa-clipboard-check me-2"></i> Auditoria de
+                testes e exames</a>
+            <a href="../../modulo6/equipamento.html" class="nav-link"><i class="fa-solid fa-microscope"></i>
+                Equipamento</a>
+            <a href="../../modulo6/validacao_amostra.html" class="nav-link"><i class="fa-solid fa-clipboard-check"></i>
+                Validação Amostra</a>
+            <a href="../../modulo6/resultados.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i>
+                Resultados
+            </a>
+            <a href="../../modulo6/reagentes_e_consumíveis.html" class="nav-link"><i class="fa-solid fa-vial"></i>
+                Reagentes e Consumíveis </a>
+            <a href="../../modulo4/colheita/exames_previstos.html" class="nav-link"><i class="fa-solid fa-list-ul"></i>
+                Exames
+                previstos</a>
+            <a href="../../modulo4/colheita/lista_colheitas.html" class="nav-link"><i
+                    class="fa-solid fa-flask-vial"></i>
+                Colheitas</a>
+            <a href="../../modulo4/amostra/lista_amostra.html" class="nav-link active"><i class="fa-solid fa-vials"></i>
+                Amostras</a>
+            <a href="../../modulo5/transporteT.html" class="nav-link"><i class="fa-solid fa-truck"></i> Estado do
+                Transporte da Amostra</a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content d-flex flex-column align-items-center justify-content-center text-center py-5 w-100">
+            <h1 class="text-danger-em-alerta">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>Confirmar Eliminação
+            </h1>
+
+            <p class="mt-3 fs-5">
+                Tem certeza que deseja eliminar o transporte com ID
+                <span id="spanIdTransporte" class="fw-bold text-danger-em-alerta"></span>?
+            </p>
+            <p class="text-muted mb-4">Esta ação não poderá ser desfeita.</p>
+
+            <p class="mt-4 fw-bold">Este transporte tem as seguintes informações:</p>
+            <div id="detalhesTransporte" class="detalhes-card mb-4 text-start"></div>
+
+            <div class="mt-3">
+                <button id="btnCancelarApagar" class="btn btn-secondary me-3">
+                    <i class="fa-solid fa-arrow-left"></i> Cancelar
+                </button>
+                <button id="btnConfirmarApagar" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Confirmar Eliminação
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS Comum -->
+    <script src="../../../js/1221419.js"></script>
+    <!-- Bootstrap Bundle -->
+    <script src="../../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function getParametroIdTransporte() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("idTransporte") || params.get("id");
+        }
+
+
+        const transportes = [
+            { id: "E1", laboratorio: "HealthTech Porto", tecnico: "Técnico 201", rota: "Lisboa → Faro", veiculo: "AA-99-88", motorista: "José Pinto", estado: "entregue", dataEnvio: "2025-06-04", horaSaida: "07:30", horaChegada: "11:15", temperatura: 4.3, observacoes: "Sem intercorrências" },
+            { id: "E2", laboratorio: "HealthTech Lisboa", tecnico: "Técnico 202", rota: "Porto → Lisboa", veiculo: "BB-77-66", motorista: "Ana Freitas", estado: "em transito", dataEnvio: "2025-06-05", horaSaida: "09:45", horaChegada: "", temperatura: 4.1, observacoes: "Temperatura sob vigilância" }
+        ];
+
+        function mostrarDetalhesTransporte(transporte) {
+            const div = document.getElementById("detalhesTransporte");
+            div.innerHTML = `
+                <p><strong>Laboratório:</strong> ${transporte.laboratorio}</p>
+                <p><strong>Técnico:</strong> ${transporte.tecnico}</p>
+                <p><strong>Rota:</strong> ${transporte.rota}</p>
+                <p><strong>Veículo:</strong> ${transporte.veiculo}</p>
+                <p><strong>Motorista:</strong> ${transporte.motorista}</p>
+                <p><strong>Estado:</strong> ${transporte.estado}</p>
+                <p><strong>Data Envio:</strong> ${transporte.dataEnvio}</p>
+                <p><strong>Hora de Saída:</strong> ${transporte.horaSaida}</p>
+                <p><strong>Hora de Chegada:</strong> ${transporte.horaChegada || "-"}</p>
+                <p><strong>Temperatura (°C):</strong> ${transporte.temperatura}</p>
+                <p><strong>Observações:</strong> ${transporte.observacoes}</p>
+            `;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const id = getParametroIdTransporte();
+            const transporte = transportes.find(t => t.id === id);
+
+            if (!transporte) {
+                alert("Transporte não encontrado.");
+                window.location.href = "../transporteT.html";
+                return;
+            }
+
+            document.getElementById("spanIdTransporte").textContent = transporte.id;
+            mostrarDetalhesTransporte(transporte);
+
+            document.getElementById("btnCancelarApagar").addEventListener("click", () => {
+                window.location.href = "../transporteT.html";
+            });
+
+            document.getElementById("btnConfirmarApagar").addEventListener("click", () => {
+                alert("Transporte apagado com sucesso!");
+                window.location.href = "../transporteT.html";
+            });
+        });
+    </script>
+</body>
+
+</html>
