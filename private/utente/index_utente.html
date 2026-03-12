@@ -4,106 +4,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthTech Clinical Labs</title>
-    <!--favicon-->
+    <title>RehabLink | Dashboard Utente</title>
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
-    <!-- Google Fonts -->
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
-
-    <!-- estilos da página -->
-    <link rel="stylesheet" href="../assets/css/common.css">
-    <link rel="stylesheet" href="../assets/css/1221051.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
 </head>
 
-<body class="menu-user">
-    <!-- Topbar -->
-    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
-        <div class="sistema-nome d-flex align-items-center gap-2">
-            <a href="index_utente.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
-                <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
+<body>
+    <!-- Topbar Moderno -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
             </a>
         </div>
 
-        <!-- Dropdown Bootstrap -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
-                id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i> Utente
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Utente</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
-                <li><a class="dropdown-item" href="../../public/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
-                        password</a></li>
-                <li><a class="dropdown-item" href="../../public/index.html"><i
-                            class="fa-solid fa-right-from-bracket me-2"></i>
-                        Sair</a></li>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Alterar password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../public/index.html">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                        Sair
+                    </a>
+                </li>
             </ul>
         </div>
     </header>
 
-    <!-- Sidebar + Conteúdo -->
     <div class="wrapper">
         <!-- Sidebar -->
         <nav class="sidebar">
-            <h2>Menu</h2>
-            <a href="modulo2/agendamento.html" class="nav-link"><i class="fa-solid fa-calendar-plus me-2"></i> Efetuar
-                Marcação</a>
-            <a href="modulo2/previsao.html" class="nav-link"><i class="fa-solid fa-calendar-check me-2"></i> Marcações
-                previstas</a>
-            <a href="modulo8/marcacoes.html" class="nav-link"><i class="fa-solid fa-clock-rotate-left me-2"></i>
-                Histórico de
-                Marcações</a>
-            <a href="modulo8/pagamentos.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link active">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link ">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>
                 Histórico de
                 Pagamentos</a>
-            <a href="modulo7/emissaoExamesU.html" class="nav-link"><i class="fa-solid fa-file me-2"></i> Os meus
-                Exames</a>
+            <a href="mensagens.html" class="nav-link">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+            </a>
         </nav>
 
-        <!-- Conteúdo principal -->
+        <!-- Conteúdo Principal -->
         <main class="content">
-            <h1><strong>Painel do Utente</strong></h1>
-            <p>Escolha uma opção no menu lateral para continuar.</p>
+            <!-- Mensagem de Boas-vindas -->
+            <div class="welcome-message">
+                <div class="welcome-text">
+                    <h2>Bem-vindo de volta, João! 👋</h2>
+                    <p>Continue o bom trabalho na sua reabilitação. Temos 2 sessões esta semana.</p>
+                </div>
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-hand-peace"></i>
+                </div>
+            </div>
+
+            <!-- Cards de Estatísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Sessões esta semana</h3>
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">próximas sessões</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Progresso total</h3>
+                        <div class="stat-value">75%</div>
+                        <div class="stat-label">+12% esta semana</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Sessões realizadas</h3>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">total até agora</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Força máxima</h3>
+                        <div class="stat-value">15N</div>
+                        <div class="stat-label">novo recorde!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Principal -->
+            <div class="dashboard-grid">
+                <!-- Coluna Esquerda -->
+                <div>
+                    <!-- Gráfico de Progresso -->
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+
+                    <!-- Próximas Sessões -->
+                    <div class="progress-card">
+                        <div class="card-header">
+                            <h3><i class="fa-regular fa-calendar me-2" style="color: #667eea;"></i>Próximas Sessões</h3>
+                            <a href="sessoes_agendadas.html">Ver todas <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                        </div>
+
+                        <div class="sessao-item">
+                            <div class="sessao-data">
+                                <div class="dia">02</div>
+                                <div class="mes">ABR</div>
+                            </div>
+                            <div class="sessao-info">
+                                <h4>Treino de força de pinça</h4>
+                                <p><i class="fa-regular fa-clock"></i>10:30 - 15 min · Fisio. Ana Silva</p>
+                            </div>
+                            <div class="sessao-badge">Hoje</div>
+                        </div>
+
+                        <div class="sessao-item">
+                            <div class="sessao-data">
+                                <div class="dia">05</div>
+                                <div class="mes">ABR</div>
+                            </div>
+                            <div class="sessao-info">
+                                <h4>Treino de precisão</h4>
+                                <p><i class="fa-regular fa-clock"></i>14:00 - 10 min · Fisio. Bruno Ferreira</p>
+                            </div>
+                            <div class="sessao-badge">Próximo</div>
+                        </div>
+
+                        <div class="sessao-item">
+                            <div class="sessao-data">
+                                <div class="dia">08</div>
+                                <div class="mes">ABR</div>
+                            </div>
+                            <div class="sessao-info">
+                                <h4>Avaliação funcional</h4>
+                                <p><i class="fa-regular fa-clock"></i>09:30 - 30 min · Fisio. Ana Silva</p>
+                            </div>
+                            <div class="sessao-badge">Agendado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita -->
+                <div>
+                    <!-- Progresso por Área -->
+                    <div class="progress-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-pie me-2" style="color: #667eea;"></i>Progresso por Área</h3>
+                        </div>
+
+                        <div class="progresso-item">
+                            <div class="progresso-header">
+                                <span>Força de pinça</span>
+                                <span class="percentual">80%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div class="progresso-item">
+                            <div class="progresso-header">
+                                <span>Precisão</span>
+                                <span class="percentual">65%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+
+                        <div class="progresso-item">
+                            <div class="progresso-header">
+                                <span>Controlo motor</span>
+                                <span class="percentual">70%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="progresso-item">
+                            <div class="progresso-header">
+                                <span>Resistência</span>
+                                <span class="percentual">90%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Atividades Recentes -->
+                    <div class="progress-card">
+                        <div class="card-header">
+                            <h3><i class="fa-regular fa-clock me-2" style="color: #667eea;"></i>Atividades Recentes</h3>
+                        </div>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">Hoje, 10:30</div>
+                                <div class="timeline-content">
+                                    <h4>Sessão de treino concluída</h4>
+                                    <p>Força de pinça - 15 min · Progresso: +5%</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-time">Ontem, 14:00</div>
+                                <div class="timeline-content">
+                                    <h4>Novo recorde de força</h4>
+                                    <p>15N alcançado no treino de precisão</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-time">26 Mar, 09:30</div>
+                                <div class="timeline-content">
+                                    <h4>Mensagem do fisioterapeuta</h4>
+                                    <p>Feedback positivo sobre o progresso</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-time">24 Mar, 11:00</div>
+                                <div class="timeline-content">
+                                    <h4>Jogo de reabilitação</h4>
+                                    <p>Completou nível 5 com pontuação 850</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
-    <!-- Botão do chatbot -->
-    <div id="chatbot-button" class="chatbot-button">💬</div>
 
-    <!-- Janela do chatbot -->
+    <!-- Chatbot Flutuante -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
     <div id="chatbot" class="chatbot-container d-none">
         <div class="chat-header">
-            Assistente Virtual
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
             <span id="close-chat" class="close-btn">&times;</span>
         </div>
         <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Como posso ajudar hoje?</p>
+            </div>
         </div>
         <div class="chat-input-area">
-            <div class="carousel-wrapper">
-                <button class="carousel-btn left-btn">‹</button>
-                <div class="suggestions">
-                    <button class="faq-btn" data-id="1">Preciso de jejum para todos os exames?</button>
-                    <button class="faq-btn" data-id="2">Como posso marcar um exame?</button>
-                    <button class="faq-btn" data-id="3">Quando estarão prontos os resultados?</button>
-                    <button class="faq-btn" data-id="4">Como posso levantar os meus resultados?</button>
-                    <button class="faq-btn" data-id="5">Posso alterar a data do meu exame?</button>
-                    <button class="faq-btn" data-id="6">Quais são os métodos de pagamento aceites?</button>
-                    <button class="faq-btn" data-id="7">Como posso verificar se estou apta para fazer um exame?</button>
-                    <button class="faq-btn" data-id="8">Como posso realizar uma marcação de um teste especial?</button>
-                    <button class="faq-btn" data-id="9">O que significa o resultado do meu teste especial?</button>
-                </div>
-                <button class="carousel-btn right-btn">›</button>
+            <div class="suggestions">
+                <button class="faq-btn">Como ver progresso</button>
+                <button class="faq-btn">Próxima sessão</button>
+                <button class="faq-btn">Agendar treino</button>
+                <button class="faq-btn">Dúvidas frequentes</button>
+                <button class="faq-btn">Contactar fisio</button>
             </div>
         </div>
     </div>
-</body>
 
-<!-- Bootstrap JS and custom JS -->
-<script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="../js/1221051.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+    <script>
+        // Script específico do dashboard (não está no utente.js)
+        $(document).ready(function () {
+            // Inicializar gráfico
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                    datasets: [{
+                        label: 'Força (N)',
+                        data: [8, 9, 10, 12, 13, 15],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chatbot functionality (complementar ao que está no utente.js)
+            $('#chatbot-button').click(function() {
+                $('#chatbot').removeClass('d-none');
+                $(this).hide();
+            });
+
+            $('#close-chat').click(function() {
+                $('#chatbot').addClass('d-none');
+                $('#chatbot-button').show();
+            });
+
+            // FAQ buttons functionality
+            $('.faq-btn').click(function() {
+                const question = $(this).text();
+                alert('Funcionalidade de chat em desenvolvimento. Pergunta: ' + question);
+            });
+        });
+    </script>
+</body>
 
 </html>

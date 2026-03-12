@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Sessões de Treino</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+    
+</head>
+
+<body>
+    <!-- Topbar Moderno -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Utente</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Alterar password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../public/index.html">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                        Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar Moderno -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link active">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de
+                Pagamentos</a>
+            <a href="mensagens.html" class="nav-link">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+            </a>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Próximas Sessões</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <label for="tipo" class="fw-semibold text-muted">Filtrar:</label>
+                    <select class="form-select w-auto" id="tipo">
+                        <option value="forca">Treino de força</option>
+                        <option value="precisao">Treino de precisão</option>
+                        <option value="avaliacao">Avaliação funcional</option>
+                        <option value="gamificado">Sessão gamificada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tabela_sessoes" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th>Fisioterapeuta</th>
+                            <th>Tipo de exercício</th>
+                            <th>Zona alvo</th>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Duração</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-md" style="color: #667eea;"></i>
+                                    Ana Silva
+                                </div>
+                            </td>
+                            <td>Treino de força de pinça</td>
+                            <td><span class="badge bg-info">8N – 12N</span></td>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-04-02</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>10:30</td>
+                            <td><span class="badge bg-light text-dark">15 min</span></td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fa-regular fa-clock me-1"></i>Agendada
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-play me-1"></i>
+                                        Iniciar
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa-regular fa-file-lines me-1"></i>
+                                        Instruções
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-md" style="color: #667eea;"></i>
+                                    Bruno Ferreira
+                                </div>
+                            </td>
+                            <td>Treino de precisão</td>
+                            <td><span class="badge bg-info">4N – 6N</span></td>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-04-05</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>14:00</td>
+                            <td><span class="badge bg-light text-dark">10 min</span></td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fa-regular fa-clock me-1"></i>Agendada
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-play me-1"></i>
+                                        Iniciar
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa-regular fa-file-lines me-1"></i>
+                                        Instruções
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Flutuante -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Como posso ajudar?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Como realizar força</button>
+                <button class="faq-btn">Zona alvo</button>
+                <button class="faq-btn">Força na zona verde</button>
+                <button class="faq-btn">Controlo da prótese</button>
+                <button class="faq-btn">Próxima sessão</button>
+                <button class="faq-btn">Sensor não responde</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+
+</body>
+
+</html>

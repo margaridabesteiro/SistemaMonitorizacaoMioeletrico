@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Mensagens</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+    
+    <style>
+        /* Estilos específicos para página de mensagens */
+        .messages-container {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 200px);
+            min-height: 600px;
+        }
+
+        /* Sidebar de Conversas */
+        .conversations-sidebar {
+            width: 350px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .conversations-header {
+            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .conversations-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .search-conversations {
+            position: relative;
+        }
+
+        .search-conversations i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+
+        .search-conversations input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-conversations input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .conversation-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .conversation-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .conversation-item.active .conversation-info h4,
+        .conversation-item.active .conversation-info p,
+        .conversation-item.active .conversation-time {
+            color: white;
+        }
+
+        .conversation-item.active .conversation-time {
+            opacity: 0.9;
+        }
+
+        .conversation-avatar {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .conversation-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #48bb78;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .offline-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #a0aec0;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .conversation-info h4 i {
+            font-size: 0.8rem;
+            color: #667eea;
+        }
+
+        .conversation-info p {
+            font-size: 0.85rem;
+            color: #718096;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .conversation-time {
+            font-size: 0.7rem;
+            color: #a0aec0;
+        }
+
+        .unread-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+        }
+
+        /* Área de Chat */
+        .chat-area {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-contact-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chat-contact-details h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+
+        .chat-contact-details .status {
+            font-size: 0.8rem;
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-contact-details .status.offline {
+            color: #a0aec0;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+
+        .chat-action-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .chat-messages-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f7fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-date-divider {
+            text-align: center;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .message-date-divider span {
+            background: #e2e8f0;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .message-wrapper {
+            display: flex;
+            gap: 10px;
+            max-width: 70%;
+        }
+
+        .message-wrapper.sent {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 18px;
+            border-top-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .message-wrapper.sent .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 4px;
+        }
+
+        .message-sender {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 3px;
+        }
+
+        .message-wrapper.sent .message-sender {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .message-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            color: #a0aec0;
+            text-align: right;
+        }
+
+        .message-wrapper.sent .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message-attachment {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .message-wrapper.sent .message-attachment {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message-attachment i {
+            color: #667eea;
+        }
+
+        .message-wrapper.sent .message-attachment i {
+            color: white;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 2px solid #e2e8f0;
+            background: white;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input-wrapper textarea {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input-wrapper textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .chat-input-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-input-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .chat-input-btn.send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+
+        .chat-input-btn.send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Quick Responses */
+        .quick-responses {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .quick-response-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 6px 15px;
+            font-size: 0.85rem;
+            color: #4a5568;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-response-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Notificações */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Mensagens importantes */
+        .important-message {
+            border-left: 4px solid #fbbf24;
+        }
+
+        .message-pinned {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .messages-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .conversations-sidebar {
+                width: 100%;
+            }
+
+            .message-wrapper {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Topbar Moderno -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Utente</span>
+                <span class="notification-badge" style="position: relative; top: 0; right: 0;">3</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Alterar password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../public/index.html">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                        Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar Moderno -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de Pagamentos
+            </a>
+            <a href="mensagens.html" class="nav-link active">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+                <span class="notification-badge" style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
+            </a>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <h1 class="mb-4">Mensagens</h1>
+
+            <!-- Container Principal de Mensagens -->
+            <div class="messages-container">
+                <!-- Sidebar de Conversas -->
+                <div class="conversations-sidebar">
+                    <div class="conversations-header">
+                        <h3>Conversas</h3>
+                        <div class="search-conversations">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Pesquisar conversas...">
+                        </div>
+                    </div>
+
+                    <div class="conversations-list">
+                        <!-- Conversa 1 - Não lida -->
+                        <div class="conversation-item active">
+                            <div class="conversation-avatar">
+                                <span>AS</span>
+                                <span class="online-indicator"></span>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>
+                                    Ana Silva
+                                    <i class="fa-regular fa-circle-check" title="Fisioterapeuta responsável"></i>
+                                </h4>
+                                <p>Ok, então agendamos para quinta às 10h...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">10:30</span>
+                                <span class="unread-badge">2</span>
+                            </div>
+                        </div>
+
+                        <!-- Conversa 2 -->
+                        <div class="conversation-item">
+                            <div class="conversation-avatar">
+                                <img src="../assets/img/fisio1.jpg" alt="Bruno Ferreira" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <span style="display: none;">BF</span>
+                                <span class="offline-indicator"></span>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>Bruno Ferreira</h4>
+                                <p>Lembrete: Amanhã temos sessão de precisão. Traga...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">Ontem</span>
+                            </div>
+                        </div>
+
+                        <!-- Conversa 3 - Importante -->
+                        <div class="conversation-item">
+                            <div class="conversation-avatar">
+                                <span>CL</span>
+                                <span class="online-indicator"></span>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>
+                                    Carla Lima
+                                    <i class="fa-regular fa-star" style="color: #fbbf24;" title="Administração"></i>
+                                </h4>
+                                <p>Atualização do seu plano de pagamentos...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">Ontem</span>
+                                <span class="unread-badge">1</span>
+                            </div>
+                        </div>
+
+                        <!-- Conversa 4 -->
+                        <div class="conversation-item">
+                            <div class="conversation-avatar">
+                                <span>MS</span>
+                                <span class="offline-indicator"></span>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>Dr. Miguel Santos</h4>
+                                <p>Resultados da avaliação estão disponíveis...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">12/03</span>
+                            </div>
+                        </div>
+
+                        <!-- Conversa 5 -->
+                        <div class="conversation-item">
+                            <div class="conversation-avatar">
+                                <span>SP</span>
+                                <span class="offline-indicator"></span>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>Sofia Pereira</h4>
+                                <p>Instruções para os novos exercícios...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">10/03</span>
+                            </div>
+                        </div>
+
+                        <!-- Conversa 6 - Grupo -->
+                        <div class="conversation-item">
+                            <div class="conversation-avatar" style="background: #48bb78;">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="conversation-info">
+                                <h4>Grupo de Força</h4>
+                                <p>João: Alguém vai à sessão de grupo amanhã?...</p>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="conversation-time">09/03</span>
+                                <span class="unread-badge">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área de Chat -->
+                <div class="chat-area">
+                    <!-- Header do Chat -->
+                    <div class="chat-header">
+                        <div class="chat-contact-info">
+                            <div class="chat-avatar">
+                                <span>AS</span>
+                            </div>
+                            <div class="chat-contact-details">
+                                <h3>Ana Silva</h3>
+                                <div class="status">
+                                    <i class="fa-solid fa-circle"></i>
+                                    Online
+                                </div>
+                                <small class="text-muted">Fisioterapeuta Responsável</small>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="chat-action-btn">
+                                <i class="fa-solid fa-phone"></i>
+                            </button>
+                            <button class="chat-action-btn">
+                                <i class="fa-solid fa-video"></i>
+                            </button>
+                            <button class="chat-action-btn">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Área de Mensagens -->
+                    <div class="chat-messages-area" id="chatMessages">
+                        <!-- Divisor de Data -->
+                        <div class="message-date-divider">
+                            <span>Hoje</span>
+                        </div>
+
+                        <!-- Mensagem Recebida -->
+                        <div class="message-wrapper">
+                            <div class="message-avatar">AS</div>
+                            <div class="message-content">
+                                <div class="message-sender">Ana Silva</div>
+                                <div class="message-text">
+                                    Bom dia! Como está a recuperação da última sessão?
+                                </div>
+                                <div class="message-time">09:15</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Enviada -->
+                        <div class="message-wrapper sent">
+                            <div class="message-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Bom dia! Estou bem, obrigado. Já consigo fazer mais força com a pinça.
+                                </div>
+                                <div class="message-time">09:17</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Recebida com Anexo -->
+                        <div class="message-wrapper">
+                            <div class="message-avatar">AS</div>
+                            <div class="message-content">
+                                <div class="message-sender">Ana Silva</div>
+                                <div class="message-text">
+                                    Que ótima notícia! Já viu os novos exercícios que preparei para si?
+                                </div>
+                                <div class="message-attachment">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    <span>Exercícios_Fase_3.pdf</span>
+                                    <small>(2.4 MB)</small>
+                                    <i class="fa-solid fa-download ms-auto" style="cursor: pointer;"></i>
+                                </div>
+                                <div class="message-time">09:18</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Enviada -->
+                        <div class="message-wrapper sent">
+                            <div class="message-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Ainda não vi. Vou ver agora mesmo. Obrigado!
+                                </div>
+                                <div class="message-time">09:20</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Recebida -->
+                        <div class="message-wrapper">
+                            <div class="message-avatar">AS</div>
+                            <div class="message-content">
+                                <div class="message-sender">Ana Silva</div>
+                                <div class="message-text">
+                                    Qualquer dúvida é só perguntar. Ah, e não se esqueça da nossa sessão de quinta às 10h!
+                                </div>
+                                <div class="message-time">09:22</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Importante -->
+                        <div class="message-wrapper important-message">
+                            <div class="message-avatar">AS</div>
+                            <div class="message-content">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <span class="message-pinned">
+                                        <i class="fa-regular fa-bell"></i>
+                                        Importante
+                                    </span>
+                                </div>
+                                <div class="message-sender">Ana Silva</div>
+                                <div class="message-text">
+                                    <strong>Lembrete:</strong> Traga o relatório do médico na próxima sessão para atualizarmos o plano.
+                                </div>
+                                <div class="message-time">09:23</div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem Enviada -->
+                        <div class="message-wrapper sent">
+                            <div class="message-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Combinado! Já tenho o relatório. Até quinta!
+                                </div>
+                                <div class="message-time">09:25</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="chat-input-area">
+                        <!-- Quick Responses -->
+                        <div class="quick-responses">
+                            <span class="quick-response-btn">Ok, combinado</span>
+                            <span class="quick-response-btn">Vou verificar</span>
+                            <span class="quick-response-btn">Obrigado!</span>
+                            <span class="quick-response-btn">Até lá</span>
+                            <span class="quick-response-btn">Tenho uma dúvida</span>
+                        </div>
+
+                        <!-- Input Wrapper -->
+                        <div class="chat-input-wrapper">
+                            <textarea placeholder="Escreva a sua mensagem..." rows="1"></textarea>
+                            <div class="chat-input-actions">
+                                <button class="chat-input-btn">
+                                    <i class="fa-regular fa-face-smile"></i>
+                                </button>
+                                <button class="chat-input-btn">
+                                    <i class="fa-regular fa-paperclip"></i>
+                                </button>
+                                <button class="chat-input-btn send-btn">
+                                    <i class="fa-regular fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações Adicionais -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon" style="width: 45px; height: 45px;">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Tempo médio de resposta</h6>
+                                    <h4 class="mb-0">2.5 horas</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon" style="width: 45px; height: 45px;">
+                                    <i class="fa-regular fa-message"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Mensagens não lidas</h6>
+                                    <h4 class="mb-0 text-primary">3</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon" style="width: 45px; height: 45px;">
+                                    <i class="fa-regular fa-file"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Documentos partilhados</h6>
+                                    <h4 class="mb-0">12</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Flutuante -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Precisa de ajuda com as mensagens?</p>
+                <p class="small">Pergunte-me sobre:</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+                    <span class="badge bg-light text-dark p-2">Como enviar mensagem</span>
+                    <span class="badge bg-light text-dark p-2">Partilhar documentos</span>
+                    <span class="badge bg-light text-dark p-2">Notificações</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Como enviar mensagem?</button>
+                <button class="faq-btn">Partilhar ficheiros</button>
+                <button class="faq-btn">Notificações</button>
+                <button class="faq-btn">Contactar fisioterapeuta</button>
+                <button class="faq-btn">Mensagens importantes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Selecionar conversa
+            $('.conversation-item').click(function() {
+                $('.conversation-item').removeClass('active');
+                $(this).addClass('active');
+                // Aqui carregaria as mensagens da conversa selecionada
+            });
+
+            // Auto-resize textarea
+            $('textarea').on('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // Enviar mensagem (Enter)
+            $('textarea').keypress(function(e) {
+                if (e.which == 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    enviarMensagem();
+                }
+            });
+
+            // Botão enviar
+            $('.send-btn').click(function() {
+                enviarMensagem();
+            });
+
+            // Quick responses
+            $('.quick-response-btn').click(function() {
+                let texto = $(this).text();
+                $('textarea').val(texto);
+                $('textarea').trigger('input');
+            });
+
+            function enviarMensagem() {
+                let msg = $('textarea').val().trim();
+                if (msg) {
+                    // Simular envio de mensagem
+                    console.log('Enviando:', msg);
+                    
+                    // Adicionar mensagem à conversa (exemplo)
+                    let novaMsg = `
+                        <div class="message-wrapper sent">
+                            <div class="message-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">${msg}</div>
+                                <div class="message-time">Agora</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    $('#chatMessages').append(novaMsg);
+                    $('textarea').val('').css('height', 'auto');
+                    
+                    // Scroll para a nova mensagem
+                    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+                }
+            }
+
+            // Download de anexos
+            $('.fa-download').click(function() {
+                alert('A preparar download do ficheiro...');
+            });
+
+            // Ações de chamada
+            $('.fa-phone').parent().click(function() {
+                alert('A iniciar chamada de voz...');
+            });
+
+            $('.fa-video').parent().click(function() {
+                alert('A iniciar videochamada...');
+            });
+
+            // Scroll automático para o fim
+            $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+        });
+    </script>
+</body>
+</html>

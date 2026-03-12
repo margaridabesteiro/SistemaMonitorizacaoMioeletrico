@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Histórico de Sessões</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    
+    
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="index_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Utente</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Alterar password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../public/index.html">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                        Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link active">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de
+                Pagamentos</a>
+            <a href="mensagens.html" class="nav-link">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+            </a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Histórico de Sessões</h1>
+                <button class="btn-filter" onclick="exportarHistorico()">
+                    <i class="fa-solid fa-download me-2"></i>
+                    Exportar Histórico
+                </button>
+            </div>
+
+            <!-- Cards de estatísticas -->
+            <div class="history-stats">
+                <div class="history-stat-card">
+                    <div class="history-stat-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="history-stat-info">
+                        <h4>Total de sessões</h4>
+                        <div class="value">24</div>
+                    </div>
+                </div>
+
+                <div class="history-stat-card">
+                    <div class="history-stat-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #48bb78;"></i>
+                    </div>
+                    <div class="history-stat-info">
+                        <h4>Realizadas</h4>
+                        <div class="value">22</div>
+                    </div>
+                </div>
+
+                <div class="history-stat-card">
+                    <div class="history-stat-icon">
+                        <i class="fa-solid fa-times-circle" style="color: #f56565;"></i>
+                    </div>
+                    <div class="history-stat-info">
+                        <h4>Canceladas</h4>
+                        <div class="value">2</div>
+                    </div>
+                </div>
+
+                <div class="history-stat-card">
+                    <div class="history-stat-icon">
+                        <i class="fa-solid fa-clock" style="color: #ed8936;"></i>
+                    </div>
+                    <div class="history-stat-info">
+                        <h4>Tempo total</h4>
+                        <div class="value">6.5h</div>
+                    </div>
+                </div>
+
+                <div class="history-stat-card">
+                    <div class="history-stat-icon">
+                        <i class="fa-solid fa-chart-line" style="color: #9f7aea;"></i>
+                    </div>
+                    <div class="history-stat-info">
+                        <h4>Média força</h4>
+                        <div class="value">11.2N</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i>
+                    Filtrar histórico
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select id="filtroPeriodo">
+                            <option value="todos">Todos</option>
+                            <option value="30">Últimos 30 dias</option>
+                            <option value="90">Últimos 90 dias</option>
+                            <option value="180">Últimos 6 meses</option>
+                            <option value="365">Último ano</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo de sessão</label>
+                        <select id="filtroTipo">
+                            <option value="todos">Todos</option>
+                            <option value="forca">Treino de força</option>
+                            <option value="precisao">Treino de precisão</option>
+                            <option value="avaliacao">Avaliação funcional</option>
+                            <option value="gamificado">Sessão gamificada</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select id="filtroEstado">
+                            <option value="todos">Todos</option>
+                            <option value="realizada">Realizada</option>
+                            <option value="cancelada">Cancelada</option>
+                            <option value="falta">Falta</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Fisioterapeuta</label>
+                        <select id="filtroFisio">
+                            <option value="todos">Todos</option>
+                            <option value="ana">Ana Silva</option>
+                            <option value="bruno">Bruno Ferreira</option>
+                            <option value="carla">Carla Santos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-reset" onclick="limparFiltros()">
+                        <i class="fa-solid fa-undo me-2"></i>
+                        Limpar filtros
+                    </button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>
+                        Aplicar filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabela de histórico -->
+            <div class="table-container">
+                <table id="tabela_historico" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Fisioterapeuta</th>
+                            <th>Tipo de exercício</th>
+                            <th>Zona alvo</th>
+                            <th>Duração</th>
+                            
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-28</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>10:30</td>
+                            <td>Ana Silva</td>
+                            <td>Força de pinça</td>
+                            <td><span class="forca-badge">8N – 12N</span></td>
+                            <td>15 min</td>
+                            
+                            <td><span class="badge-realizada">Realizada</span></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-25</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>14:00</td>
+                            <td>Bruno Ferreira</td>
+                            <td>Precisão</td>
+                            <td><span class="forca-badge">4N – 6N</span></td>
+                            <td>10 min</td>
+                            
+                            <td><span class="badge-realizada">Realizada</span></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-22</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>09:30</td>
+                            <td>Ana Silva</td>
+                            <td>Avaliação funcional</td>
+                            <td><span class="forca-badge">Todos</span></td>
+                            <td>30 min</td>
+                            
+                            <td><span class="badge-realizada">Realizada</span></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-18</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>11:00</td>
+                            <td>Carla Santos</td>
+                            <td>Sessão gamificada</td>
+                            <td><span class="forca-badge">5N – 8N</span></td>
+                            <td>20 min</td>
+                            
+                            <td><span class="badge-realizada">Realizada</span></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-15</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>15:30</td>
+                            <td>Bruno Ferreira</td>
+                            <td>Força de pinça</td>
+                            <td><span class="forca-badge">8N – 12N</span></td>
+                            <td>15 min</td>
+                            
+                            <td><span class="badge-realizada">Realizada</span></td>
+                            
+                        </tr>
+                        <tr>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-03-10</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>09:00</td>
+                            <td>Ana Silva</td>
+                            <td>Precisão</td>
+                            <td><span class="forca-badge">4N – 6N</span></td>
+                            <td>10 min</td>
+                            
+                            <td><span class="badge-cancelada">Cancelada</span></td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Precisa de ajuda com o histórico de sessões?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Ver estatísticas</button>
+                <button class="faq-btn">Exportar histórico</button>
+                <button class="faq-btn">Interpretar resultados</button>
+      
+                <button class="faq-btn">Dúvidas frequentes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Inicializar DataTable
+            const table = $('#tabela_historico').DataTable({
+                pageLength: 10,
+                pagingType: "full_numbers",
+                order: [[0, 'desc']], // Ordenar por data decrescente
+                language: {
+                    decimal: "",
+                    emptyTable: "Nenhuma sessão encontrada no histórico",
+                    info: "Mostrando _START_ até _END_ de _TOTAL_ sessões",
+                    infoEmpty: "Mostrando 0 até 0 de 0 sessões",
+                    infoFiltered: "(filtrado de _MAX_ sessões no total)",
+                    lengthMenu: "Mostrar _MENU_ sessões",
+                    loadingRecords: "A carregar...",
+                    processing: "A processar...",
+                    search: "Pesquisar:",
+                    zeroRecords: "Nenhuma sessão encontrada com os filtros aplicados",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                },
+                
+            });
+
+            // Inicializar chatbot
+            $('#chatbot-button').click(function() {
+                $('#chatbot').removeClass('d-none');
+                $(this).hide();
+            });
+
+            $('#close-chat').click(function() {
+                $('#chatbot').addClass('d-none');
+                $('#chatbot-button').show();
+            });
+
+            // FAQ buttons
+            $('.faq-btn').click(function() {
+                const question = $(this).text();
+                $('#chat-messages').append(`
+                    <div class="user-message text-end mb-2">
+                        <span class="bg-primary text-white p-2 rounded-3 d-inline-block">${question}</span>
+                    </div>
+                `);
+                
+                setTimeout(() => {
+                    $('#chat-messages').append(`
+                        <div class="bot-message mb-2">
+                            <span class="bg-light p-2 rounded-3 d-inline-block">Para informações detalhadas sobre o histórico, utilize os filtros ou contacte o seu fisioterapeuta.</span>
+                        </div>
+                    `);
+                    $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                }, 1000);
+            });
+        });
+
+        // Funções de filtro
+        function aplicarFiltros() {
+            const periodo = $('#filtroPeriodo').val();
+            const tipo = $('#filtroTipo').val();
+            const estado = $('#filtroEstado').val();
+            const fisio = $('#filtroFisio').val();
+            
+            // Aqui implementaria a lógica de filtro
+            alert('Filtros aplicados!\nPeríodo: ' + periodo + '\nTipo: ' + tipo + '\nEstado: ' + estado + '\nFisioterapeuta: ' + fisio);
+        }
+
+        function limparFiltros() {
+            $('#filtroPeriodo').val('todos');
+            $('#filtroTipo').val('todos');
+            $('#filtroEstado').val('todos');
+            $('#filtroFisio').val('todos');
+        }
+
+        function exportarHistorico() {
+            alert('A gerar relatório do histórico... Esta funcionalidade estará disponível em breve.');
+        }
+
+        function verDetalhes(id) {
+            alert('A abrir detalhes da sessão #' + id);
+        }
+
+        function verRelatorio(id) {
+            alert('A gerar relatório detalhado da sessão #' + id);
+        }
+    </script>
+
+    <style>
+        .user-message span, .bot-message span {
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            text-align: right;
+        }
+
+        .bot-message {
+            text-align: left;
+        }
+    </style>
+</body>
+
+</html>

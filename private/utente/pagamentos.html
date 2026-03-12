@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Histórico de Pagamentos</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+
+</head>
+
+<body>
+    <!-- Topbar Moderno -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Utente</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="../../public/login.html">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Alterar password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="../../public/index.html">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                        Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar Moderno -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link active">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de Pagamentos
+            </a>
+            <a href="mensagens.html" class="nav-link">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+            </a>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <!-- Header com título e ações -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Histórico de Pagamentos</h1>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fa-solid fa-print me-2"></i>
+                    Imprimir Extrato
+                </button>
+            </div>
+
+            <!-- Resumo Financeiro -->
+            <div class="payment-summary">
+                <div class="payment-stat">
+                    <div class="payment-stat-label">
+                        <i class="fa-solid fa-euro-sign"></i>
+                        Total Pago
+                    </div>
+                    <div class="payment-stat-value">€ 235,00</div>
+                    <div class="payment-stat-sub">Últimos 12 meses</div>
+                </div>
+                <div class="payment-stat">
+                    <div class="payment-stat-label">
+                        <i class="fa-regular fa-clock"></i>
+                        Pendente
+                    </div>
+                    <div class="payment-stat-value">€ 45,00</div>
+                    <div class="payment-stat-sub">2 faturas em aberto</div>
+                </div>
+                <div class="payment-stat">
+                    <div class="payment-stat-label">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        Próximo Pagamento
+                    </div>
+                    <div class="payment-stat-value">€ 30,00</div>
+                    <div class="payment-stat-sub">Vence em 15/04/2026</div>
+                </div>
+                <div class="payment-stat">
+                    <div class="payment-stat-label">
+                        <i class="fa-solid fa-percent"></i>
+                        Comparticipação
+                    </div>
+                    <div class="payment-stat-value">85%</div>
+                    <div class="payment-stat-sub">Média de cobertura</div>
+                </div>
+            </div>
+
+            <!-- Filtros de Período -->
+            <div class="filter-period">
+                <span class="period-option active">Últimos 30 dias</span>
+                <span class="period-option">Últimos 3 meses</span>
+                <span class="period-option">Últimos 6 meses</span>
+                <span class="period-option">Último ano</span>
+                <span class="period-option">2026</span>
+                <span class="period-option">2025</span>
+                <div class="ms-auto">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-0">
+                            <i class="fa-regular fa-calendar text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0" placeholder="Período personalizado" style="background: #f7fafc;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs de Pagamento -->
+            <div class="payment-tabs">
+                <div class="payment-tab active">
+                    <i class="fa-solid fa-list"></i>
+                    Todos (12)
+                </div>
+                <div class="payment-tab">
+                    <i class="fa-solid fa-check-circle"></i>
+                    Pagos (10)
+                </div>
+                <div class="payment-tab">
+                    <i class="fa-regular fa-clock"></i>
+                    Pendentes (2)
+                </div>
+                <div class="payment-tab">
+                    <i class="fa-solid fa-ban"></i>
+                    Cancelados (1)
+                </div>
+            </div>
+
+            <!-- Lista de Faturas -->
+            <div class="invoice-list">
+                <!-- Fatura 1 - Pendente -->
+                <div class="invoice-card">
+                    <div class="invoice-header">
+                        <div>
+                            <span class="invoice-id">Fatura #INV-2026-0042</span>
+                            <span class="payment-pending ms-3">
+                                <i class="fa-regular fa-clock me-1"></i>
+                                Pendente
+                            </span>
+                        </div>
+                        <span class="invoice-date">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            05/04/2026
+                        </span>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Sessão</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-dumbbell me-2"></i>
+                                Treino de força de pinça
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Fisioterapeuta</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-user-md me-2"></i>
+                                Ana Silva
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Valor Base</span>
+                            <span class="detail-value">€ 45,00</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Comparticipação</span>
+                            <span class="detail-value text-success">- € 36,00 (80%)</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Total a Pagar</span>
+                            <span class="detail-value fw-bold text-primary">€ 9,00</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Método</span>
+                            <span class="payment-method-badge payment-method-mbway">
+                                <i class="fa-brands fa-mbway"></i>
+                                MB Way
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-actions">
+                        <button class="btn-invoice btn-invoice-view">
+                            <i class="fa-regular fa-file-lines me-2"></i>
+                            Ver Detalhes
+                        </button>
+                        <button class="btn-invoice btn-invoice-download">
+                            <i class="fa-regular fa-file-pdf me-2"></i>
+                            Download Fatura
+                        </button>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-credit-card me-2"></i>
+                            Pagar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fatura 2 - Paga -->
+                <div class="invoice-card">
+                    <div class="invoice-header">
+                        <div>
+                            <span class="invoice-id">Fatura #INV-2026-0038</span>
+                            <span class="payment-paid ms-3">
+                                <i class="fa-solid fa-check-circle me-1"></i>
+                                Pago
+                            </span>
+                        </div>
+                        <span class="invoice-date">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            28/03/2026
+                        </span>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Sessão</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-gamepad me-2"></i>
+                                Sessão gamificada - Precisão
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Fisioterapeuta</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-user-md me-2"></i>
+                                Bruno Ferreira
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Valor Base</span>
+                            <span class="detail-value">€ 55,00</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Comparticipação</span>
+                            <span class="detail-value text-success">- € 46,75 (85%)</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Total Pago</span>
+                            <span class="detail-value fw-bold text-primary">€ 8,25</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Método</span>
+                            <span class="payment-method-badge payment-method-multibanco">
+                                <i class="fa-solid fa-barcode"></i>
+                                Multibanco
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-actions">
+                        <button class="btn-invoice btn-invoice-view">
+                            <i class="fa-regular fa-file-lines me-2"></i>
+                            Ver Detalhes
+                        </button>
+                        <button class="btn-invoice btn-invoice-download">
+                            <i class="fa-regular fa-file-pdf me-2"></i>
+                            Download Recibo
+                        </button>
+                        <span class="badge bg-light text-dark p-2">
+                            <i class="fa-regular fa-circle-check text-success me-1"></i>
+                            Pago em 28/03/2026
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Fatura 3 - Cancelada -->
+                <div class="invoice-card">
+                    <div class="invoice-header">
+                        <div>
+                            <span class="invoice-id">Fatura #INV-2026-0025</span>
+                            <span class="payment-cancelled ms-3">
+                                <i class="fa-solid fa-ban me-1"></i>
+                                Cancelado
+                            </span>
+                        </div>
+                        <span class="invoice-date">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            15/03/2026
+                        </span>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Sessão</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-heart-pulse me-2"></i>
+                                Avaliação funcional
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Fisioterapeuta</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-user-md me-2"></i>
+                                Carla Mendes
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Valor Base</span>
+                            <span class="detail-value">€ 65,00</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Comparticipação</span>
+                            <span class="detail-value text-success">- € 55,25 (85%)</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Total</span>
+                            <span class="detail-value fw-bold text-danger">€ 9,75</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Motivo</span>
+                            <span class="detail-value text-muted">Sessão cancelada pelo utente</span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-actions">
+                        <button class="btn-invoice btn-invoice-view">
+                            <i class="fa-regular fa-file-lines me-2"></i>
+                            Ver Detalhes
+                        </button>
+                        <span class="badge bg-light text-dark p-2">
+                            <i class="fa-regular fa-circle-xmark text-danger me-1"></i>
+                            Cancelado em 14/03/2026
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Fatura 4 - Paga (Pacote de sessões) -->
+                <div class="invoice-card">
+                    <div class="invoice-header">
+                        <div>
+                            <span class="invoice-id">Fatura #INV-2026-0012</span>
+                            <span class="payment-paid ms-3">
+                                <i class="fa-solid fa-check-circle me-1"></i>
+                                Pago
+                            </span>
+                        </div>
+                        <span class="invoice-date">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            10/02/2026
+                        </span>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Pacote</span>
+                            <span class="detail-value">
+                                <i class="fa-solid fa-layer-group me-2"></i>
+                                Pacote 10 Sessões - Força
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Sessões restantes</span>
+                            <span class="detail-value">
+                                <span class="badge bg-info">3/10 utilizadas</span>
+                            </span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Valor Base</span>
+                            <span class="detail-value">€ 350,00</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Comparticipação</span>
+                            <span class="detail-value text-success">- € 297,50 (85%)</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Total Pago</span>
+                            <span class="detail-value fw-bold text-primary">€ 52,50</span>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <span class="detail-label">Método</span>
+                            <span class="payment-method-badge payment-method-cartao">
+                                <i class="fa-regular fa-credit-card"></i>
+                                Cartão Crédito
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-actions">
+                        <button class="btn-invoice btn-invoice-view">
+                            <i class="fa-regular fa-file-lines me-2"></i>
+                            Ver Detalhes
+                        </button>
+                        <button class="btn-invoice btn-invoice-download">
+                            <i class="fa-regular fa-file-pdf me-2"></i>
+                            Download Recibo
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="fa-solid fa-chart-line me-1"></i>
+                            Ver utilização
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total e Resumo -->
+            <div class="total-section">
+                <div>
+                    <span class="total-label">Total do período (Últimos 30 dias):</span>
+                    <span class="total-value ms-3">€ 17,25</span>
+                </div>
+                <div>
+                    <span class="badge bg-light text-dark p-2 me-2">
+                        <i class="fa-regular fa-clock text-warning me-1"></i>
+                        1 pendente
+                    </span>
+                    <span class="badge bg-light text-dark p-2">
+                        <i class="fa-regular fa-circle-check text-success me-1"></i>
+                        3 pagas
+                    </span>
+                </div>
+            </div>
+
+            <!-- Nota informativa -->
+            <div class="alert alert-info mt-4 d-flex align-items-center" role="alert">
+                <i class="fa-solid fa-circle-info fa-2x me-3"></i>
+                <div>
+                    <strong>Comparticipação SNS / Seguradora:</strong> Os valores apresentados já incluem a comparticipação aplicável. 
+                    Para mais informações sobre a cobertura do seu seguro, consulte a seção "Detalhes" de cada fatura.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Flutuante -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Precisa de ajuda com pagamentos?</p>
+                <p class="small">Posso ajudar com:</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+                    <span class="badge bg-light text-dark p-2">Faturas</span>
+                    <span class="badge bg-light text-dark p-2">Métodos pagamento</span>
+                    <span class="badge bg-light text-dark p-2">Comparticipações</span>
+                    <span class="badge bg-light text-dark p-2">Pacotes</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Como pagar fatura?</button>
+                <button class="faq-btn">Métodos de pagamento</button>
+                <button class="faq-btn">Comparticipação SNS</button>
+                <button class="faq-btn">Pacotes de sessões</button>
+                <button class="faq-btn">Extrato anual</button>
+                <button class="faq-btn">Fatura não apareceu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Interatividade das tabs
+            $('.payment-tab').click(function() {
+                $('.payment-tab').removeClass('active');
+                $(this).addClass('active');
+                // Aqui você pode filtrar as faturas baseado na tab selecionada
+            });
+
+            // Interatividade dos períodos
+            $('.period-option').click(function() {
+                $('.period-option').removeClass('active');
+                $(this).addClass('active');
+                // Aqui você pode filtrar as faturas por período
+            });
+
+            // Botões de pagamento
+            $('.btn-primary:contains("Pagar Agora")').click(function() {
+                // Simular processo de pagamento
+                alert('Redirecionando para gateway de pagamento...');
+            });
+
+            // Download de faturas
+            $('.btn-invoice-download').click(function() {
+                // Simular download
+                alert('A gerar PDF da fatura...');
+            });
+        });
+    </script>
+</body>
+</html>
