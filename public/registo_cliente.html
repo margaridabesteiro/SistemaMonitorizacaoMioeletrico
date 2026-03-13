@@ -3,243 +3,289 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registo Utente – HealthTech Clinical Labs</title>
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-    rel="stylesheet"
-  />
+  <title>RehabLink | Registo de Utente</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../public/assets/fontawesome/all.min.css" />
+  <link rel="shortcut icon" href="assets/img/logo.jpg">
 
-  <!-- Bootstrap e CSS Comum -->
-  
-  <link rel="stylesheet" href="../public/assets/bootstrap/bootstrap.min.css" />
-  <link rel="stylesheet" href="../public/assets/css/1211150.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/common.css">
+
 </head>
 
-<body class="menu-user">
-  
-  <header class="topbar d-flex justify-content-between align-items-center px-4 py-4">
-    <div class="sistema-nome d-flex align-items-center gap-2">
-      <i class="fa-solid fa-flask-vial logo-icon"></i> <strong>HealthTech Clinical Labs</strong>
+<body>
+
+  <header class="topbar d-flex justify-content-between align-items-center">
+
+    <div class="sistema-nome">
+      <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+      <strong>RehabLink</strong>
     </div>
+
     <a href="index.html" class="nav-link">
-        <i class="fa-solid fa-right-to-bracket"></i> <strong>Página inicial</strong>
-      </a>
+      <i class="fa-solid fa-arrow-left"></i>
+      <strong>Página inicial</strong>
+    </a>
+
   </header>
 
-  <!-- Sidebar + Conteúdo -->
-   <div class="registo">
-     <div class="wrapper">
-    <!-- Card de Registo -->
-    <div class="card register-card">
-      <div class="card-header">
-        <i class="fa-solid fa-user-plus"></i> Registar Utente
-      </div>
-      <div class="card-body">
-        <form id="formRegistarUtente" action="#" method="post" novalidate>
-          <!-- Nome Completo -->
-          <div class="row mb-3">
-            <div class="col-12">
-              <label for="inputNome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputNome"
-                name="nome"
-                placeholder="Ex.: João da Silva"
-                required
-              />
-            </div>
-          </div>
+  <div class="registo">
 
-          <!-- Morada (Rua, nº, complemento) -->
-          <div class="row mb-3">
-            <div class="col-12">
-              <label for="inputMorada" class="form-label">Morada</label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputMorada"
-                name="morada"
-                placeholder="Rua das Flores, 123, 2º DTO"
-              />
-            </div>
-          </div>
+    <div class="wrapper">
 
-          <!-- Código Postal, Cidade, Contacto, Email -->
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label for="inputCodPostal" class="form-label">Código Postal <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputCodPostal"
-                name="cod_postal"
-                placeholder="1000-001"
-                required
-              />
-              <div class="form-text">Formato: 1234-567</div>
-            </div>
-            <div class="col-md-3">
-              <label for="inputCidade" class="form-label">Cidade <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputCidade"
-                name="cidade"
-                placeholder="Lisboa"
-                required
-              />
-            </div>
-            <div class="col-md-3">
-              <label for="inputContacto" class="form-label">Contacto (Tel.) <span class="text-danger">*</span></label>
-              <input
-                type="tel"
-                class="form-control"
-                id="inputContacto"
-                name="contacto"
-                placeholder="912345678"
-                required
-              />
-            </div>
-            <div class="col-md-3">
-              <label for="inputEmail" class="form-label">Email <span class="text-danger">*</span></label>
-              <input
-                type="email"
-                class="form-control"
-                id="inputEmail"
-                name="email"
-                placeholder="utente@exemplo.com"
-                required
-              />
-            </div>
-          </div>
+      <div class="register-card">
 
-          <!-- Sexo e Data de Nascimento -->
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Sexo <span class="text-danger">*</span></label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="sexo"
-                    id="radioMasculino"
-                    value="M"
-                    checked
-                  />
-                  <label class="form-check-label" for="radioMasculino">Masculino</label>
+        <div class="card-header">
+          <i class="fa-solid fa-user-plus"></i>
+          Criar nova conta de utente
+        </div>
+
+        <div class="card-body">
+
+          <form id="formRegistoUtente" novalidate>
+
+            <div class="alert alert-info d-flex align-items-center mb-4">
+
+              <i class="fa-solid fa-circle-info me-3"></i>
+
+              <strong>Campos com <span class="text-danger">*</span> são obrigatórios</strong>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-12">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-user me-2"></i>
+                  Nome Completo <span class="text-danger">*</span>
+                </label>
+
+                <div class="input-with-icon">
+
+                  <input type="text" class="form-control" id="inputNome" placeholder="Ex.: João da Silva" required>
+
+                  <i class="fa-solid fa-user"></i>
+
                 </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="sexo"
-                    id="radioFeminino"
-                    value="F"
-                  />
-                  <label class="form-check-label" for="radioFeminino">Feminino</label>
+
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-12">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-location-dot me-2"></i>
+                  Morada
+                </label>
+
+                <div class="input-with-icon">
+
+                  <input type="text" class="form-control" id="inputMorada" placeholder="Rua das Flores, 123">
+
+                  <i class="fa-solid fa-location-dot"></i>
+
                 </div>
+
               </div>
-            </div>
-            <div class="col-md-6">
-              <label for="inputDataNasc" class="form-label">Data de Nascimento <span class="text-danger">*</span></label>
-              <input
-                type="date"
-                class="form-control"
-                id="inputDataNasc"
-                name="data_nascimento"
-                placeholder="dd/mm/aaaa"
-                required
-              />
-            </div>
-          </div>
 
-          <!-- NIF e Número SNS -->
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="inputNIF" class="form-label">NIF <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputNIF"
-                name="nif"
-                placeholder="123456789"
-                maxlength="9"
-                required
-              />
-              <div class="form-text">9 dígitos numéricos</div>
             </div>
-            <div class="col-md-6">
-              <label for="inputSNS" class="form-label">Número SNS</label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputSNS"
-                name="numero_sns"
-                placeholder="123456789012"
-                disabled
-              />
-              <div class="form-text" id="textoAjudaSNS1">Selecione o subsistema de saúde</div>
-              <div class="form-text text-muted d-none" id="textoAjudaSNS">
-                Número SNS só é obrigatório se subsistema for “SNS”
+
+            <div class="row mb-4">
+
+              <div class="col-md-3">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-map-pin me-2"></i>
+                  Código Postal <span class="text-danger">*</span>
+                </label>
+
+                <input type="text" class="form-control" id="inputCodPostal" placeholder="1000-001" required>
+
               </div>
+
+              <div class="col-md-3">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-city me-2"></i>
+                  Cidade <span class="text-danger">*</span>
+                </label>
+
+                <input type="text" class="form-control" id="inputCidade" placeholder="Lisboa" required>
+
+              </div>
+
+              <div class="col-md-3">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-phone me-2"></i>
+                  Contacto <span class="text-danger">*</span>
+                </label>
+
+                <input type="tel" class="form-control" id="inputContacto" placeholder="912345678" required>
+
+              </div>
+
+              <div class="col-md-3">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-envelope me-2"></i>
+                  Email <span class="text-danger">*</span>
+                </label>
+
+                <input type="email" class="form-control" id="inputEmail" placeholder="utente@email.com" required>
+
+              </div>
+
             </div>
-          </div>
 
-          <!-- Subsistema de Saúde -->
-          <div class="row mb-4">
-            <div class="col-md-6">
-              <label for="selectSubsistema" class="form-label">Subsistema de Saúde <span class="text-danger">*</span></label>
-              <select
-                class="form-select"
-                id="selectSubsistema"
-                name="subsistema_saude"
-                required
-              >
-                <option value="" selected>Escolha um</option>
-                <option value="SNS">SNS</option>
-                <option value="ADSE">ADSE</option>
-                <option value="Particular">Particular</option>
-                
-              </select>
+            <div class="row mb-4">
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-venus-mars me-2"></i>
+                  Sexo
+                </label>
+
+                <div>
+
+                  <input type="radio" name="sexo" checked>
+                  <i class="fa-solid fa-mars"></i> Masculino
+
+                  <input type="radio" name="sexo" class="ms-3">
+                  <i class="fa-solid fa-venus"></i> Feminino
+
+                </div>
+
+              </div>
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-cake-candles me-2"></i>
+                  Data de Nascimento
+                </label>
+
+                <input type="date" class="form-control" id="inputDataNasc">
+
+              </div>
+
             </div>
-          </div>
 
-          <div class="d-flex flex-wrap justify-content-end gap-2 mb-4">
-            <a href="login.html" class="btn btn-outline-secondary">
-              <i class="fa-solid fa-arrow-left me-1"></i> Voltar
-            </a>
-            <button type="submit" class="btn btn-primary">
-              <i class="fa-regular fa-floppy-disk me-1"></i> Guardar Utente
-            </button>
-          </div>
+            <div class="row mb-4">
 
-          <!-- Alerta de Erro -->
-          <div
-            class="alert alert-danger text-center d-none"
-            id="alertErro"
-            role="alert"
-          >
-            Por favor, preencha todos os campos obrigatórios corretamente.
-          </div>
-        </form>
+              <div class="col-md-6">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-id-card me-2"></i>
+                  NIF
+                </label>
+
+                <input type="text" class="form-control" id="inputNIF" placeholder="123456789">
+
+              </div>
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-hospital me-2"></i>
+                  Número SNS
+                </label>
+
+                <input type="text" class="form-control" id="inputSNS" placeholder="123456789012">
+
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+                  <i class="fa-solid fa-shield-heart me-2"></i>
+                  Subsistema de Saúde
+                </label>
+
+                <select class="form-select">
+
+                  <option selected disabled>Escolha uma opção</option>
+
+                  <option>SNS</option>
+                  <option>ADSE</option>
+                  <option>Multicare</option>
+                  <option>Médis</option>
+                  <option>AdvanceCare</option>
+                  <option>Particular</option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-12">
+
+                <div class="form-check">
+
+                  <input class="form-check-input" type="checkbox" required>
+
+                  <label class="form-check-label">
+
+                    Li e aceito os Termos e Condições
+
+                  </label>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-3">
+
+              <a href="login.html" class="btn btn-outline-secondary">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Voltar
+
+              </a>
+
+              <button class="btn btn-primary">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+                Criar Conta
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
       </div>
+
     </div>
-  </div>
-</div>
 
-  <script src="../public/assets/bootstrap/bootstrap.bundle.min.js"></script>
-  <script src="../public/js/1211150.js"></script>
+  </div>
+
+  <script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

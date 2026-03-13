@@ -4,40 +4,301 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!--favicon-->
+    <title>RehabLink | Selecionar Utilizador</title>
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="assets/img/logo.jpg" type="image/jpg">
-    <!-- Google Fonts -->
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="assets/fontawesome/all.min.css">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-    <!-- estilos da página -->
-    <link rel="stylesheet" href="assets/css/common.css">
-    <link rel="stylesheet" href="assets/css/1221051.css">
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
 
-<body class="utilizadores">
-    <a href="../public/login.html" class="btn-voltar" title="Voltar à página inicial">
+        /* Botão Voltar */
+        .btn-voltar {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .btn-voltar:hover {
+            background: white;
+            color: #667eea;
+            transform: translateX(-5px);
+        }
+
+        /* Container Principal */
+        .selection-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Header */
+        .selection-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .selection-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .selection-header p {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        /* Grid de Opções */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+
+        .option-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .option-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .option-card p {
+            color: #718096;
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Cores específicas para cada tipo */
+        .option-card.admin .option-icon {
+            background: linear-gradient(135deg, #f56565 0%, #ed8936 100%);
+        }
+
+        .option-card.medico .option-icon {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .option-card.tecnico .option-icon {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        }
+
+        .option-card.utente .option-icon {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+        }
+
+        /* Footer */
+        .selection-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .selection-footer p {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .support-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .support-link {
+            color: #718096;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .support-link:hover {
+            color: #667eea;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .selection-container {
+                padding: 30px 20px;
+            }
+
+            .btn-voltar {
+                top: 20px;
+                left: 20px;
+            }
+
+            .support-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Botão Voltar -->
+    <a href="../public/login.html" class="btn-voltar" title="Voltar">
         <i class="fa-solid fa-arrow-left"></i>
     </a>
-    <div class="opcoes-container">
-        <h2>Escolha o Tipo de Utilizador</h2>
-        <a href='admin/index_admin.html' class="opcao-btn">
-            <i class="fa-solid fa-user-gear"></i> Administrador
-        </a>
-        <a href='medico/index_M.html' class="opcao-btn">
-            <i class="fa-solid fa-user-doctor"></i> Médico
-        </a>
-        <a href='tecnico/index_T.html' class="opcao-btn">
-            <i class="fa-solid fa-user-nurse"></i> Técnico
-        </a>
-        <a href='utente/index_utente.html' class="opcao-btn">
-            <i class="fa-solid fa-user"></i> Utente
-        </a>
+
+    <!-- Container Principal -->
+    <div class="selection-container">
+        <!-- Header -->
+        <div class="selection-header">
+            <h1>RehabLink</h1>
+            <p>Selecione o seu perfil para aceder ao sistema</p>
+        </div>
+
+        <!-- Grid de Opções -->
+        <div class="options-grid">
+            <!-- Administrador -->
+            <a href='admin/index_admin.html' class="option-card admin">
+                <div class="option-icon">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <h3>Administrador</h3>
+                
+            </a>
+
+            <!-- Médico -->
+            <a href='medico/index_M.html' class="option-card medico">
+                <div class="option-icon">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <h3>Médico</h3>
+                
+            </a>
+
+            <!-- Técnico -->
+            <a href='tecnico/index_T.html' class="option-card tecnico">
+                <div class="option-icon">
+                    <i class="fa-solid fa-user-nurse"></i>
+                </div>
+                <h3>Fisioterapeuta</h3>
+                
+            </a>
+
+            <!-- Utente -->
+            <a href='utente/index_utente.html' class="option-card utente">
+                <div class="option-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3>Utente</h3>
+                
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="selection-footer">
+            <p>Área reservada a profissionais de saúde e utentes</p>
+            <div class="support-links">
+                <a href="#" class="support-link">
+                    <i class="fa-regular fa-circle-question"></i>
+                    Ajuda
+                </a>
+                <a href="#" class="support-link">
+                    <i class="fa-regular fa-envelope"></i>
+                    Suporte
+                </a>
+                <a href="#" class="support-link">
+                    <i class="fa-regular fa-file-lines"></i>
+                    Termos
+                </a>
+            </div>
+        </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
 </body>
-<script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
 
 </html>

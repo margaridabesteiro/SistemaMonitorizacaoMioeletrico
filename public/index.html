@@ -4,337 +4,590 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthTech Clinical Labs</title>
-    <!--favicon-->
+    <title>RehabLink</title>
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="assets/img/logo.jpg" type="image/jpg">
-    <!-- Google Fonts -->
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="assets/fontawesome/all.min.css">
-    <link rel="stylesheet" href="assets/css/common.css">
-    <link rel="stylesheet" href="assets/css/1221419.css">
     <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
-
+    <link rel="stylesheet" href="assets/css/common.css">
+    
+    
 </head>
 
 <body>
-    <!-- Navegação -->
-    <nav class="bng-navbar">
-        <!-- Logo -->
-        <div>
-            <a href="#quem-somos">
-                <img src="assets/img/logo.jpg" alt="Logo da Empresa">
-            </a>
+    <!-- Navbar Moderna -->
+    <nav class="navbar-rehab">
+        <div class="navbar-logo">
+            <img src="assets/img/logo.jpg" alt="RehabLink Logo">
+            <span>RehabLink</span>
         </div>
-        <!-- Links centrais -->
-        <div class="container-navegacao">
+        <div class="navbar-links">
             <a href="#quem-somos">Quem Somos</a>
-            <a href="#nossa-equipa">Nossa Equipa</a>
+            <a href="#nossa-equipa">Equipa</a>
             <a href="#servicos">Serviços</a>
             <a href="#unidades">Unidades</a>
-            <a href="#seguros">Acordos e Seguros</a>
+            <a href="#seguros">Acordos</a>
             <a href="#contacto">Contactos</a>
-        </div>
-
-
-        <div class="nav-cliente">
-            <a href="login.html" target="_blank">Área Restrita</a>
+            <a href="login.html" class="navbar-btn">Área Privada</a>
         </div>
     </nav>
 
-
-    <!-- Seção "Conteudo da pagina - Quem Somos" - Margarida Besteiro" -->
-    <section id="quem-somos" class="quem-somos-container">
-        <div class="quem-somos-destaque destaque-1 floating"></div>
-        <div class="quem-somos-destaque destaque-2 floating" style="animation-delay: 0.5s;"></div>
-        <h2 class="titulo-quem-somos">
-            Quem Somos
-        </h2>
-        <p class="subtitulo-quem-somos">
-            Inovação, qualidade e compromisso com a saúde – conheça o laboratório por trás dos resultados.
-        </p>
-        <div class="quem-somos-card-container">
-            <div class="quem-somos-card">
-                <div class="quem-somos-imagem">
-                    <img src="assets/img/healthtechlabssede.jpg" alt="Instalações HealthTech Clinical Labs">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-pattern"></div>
+        <div class="hero-content">
+            <span class="hero-badge">
+                <i class="fa-regular fa-hand"></i>
+                Inovação em Reabilitação
+            </span>
+            <h1>
+                Tecnologia e Humanização
+                <span>para a sua recuperação</span>
+            </h1>
+            <p>
+                Na RehabLink, combinamos fisioterapia tradicional com jogos de reabilitação e monitorização contínua para resultados mais rápidos e eficazes.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="number">+5000</span>
+                    <span class="label">Utentes tratados</span>
                 </div>
-                <div class="quem-somos-info">
-                    <h3>HealthTech Clinical Labs</h3>
-                    <p class="descricao-quem-somos">
-                        Somos um laboratório certificado, dedicado à excelência no diagnóstico laboratorial e ao apoio à
-                        saúde da comunidade. Apostamos na inovação, segurança e qualidade em todas as fases — desde o
-                        transporte das amostras, ao processamento até à emissão dos exames laboratoriais.
-                    </p>
-                    <ul class="valores-lista">
-                        <li><i class="fas fa-shield-alt"></i> Rigor científico</li>
-                        <li><i class="fas fa-user-md"></i> Equipa qualificada</li>
-                        <li><i class="fas fa-truck"></i> Transporte seguro de amostras</li>
-                        <li><i class="fas fa-award"></i> Certificação e qualidade</li>
-                        <li><i class="fas fa-lightbulb"></i> Inovação tecnológica</li>
-                    </ul>
-                    <a href="#contacto" class="button btn-azul">Marcar Análises</a>
+                <div class="hero-stat">
+                    <span class="number">98%</span>
+                    <span class="label">Taxa de sucesso</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">15</span>
+                    <span class="label">Unidades</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image floating">
+            <img src="assets/img/logo.jpg" alt="Reabilitação com tecnologia" onerror="this.src='https://via.placeholder.com/600x400/667eea/ffffff?text=RehabLink'">
+        </div>
+    </section>
+
+    <!-- Quem Somos -->
+    <section id="quem-somos">
+        <div class="section-title">
+            <h2>Quem Somos</h2>
+            <p>Conheça a RehabLink, a clínica que está a revolucionar a reabilitação em Portugal</p>
+        </div>
+        <div class="about-container">
+            <div class="about-image">
+                <img src="assets/img/healthtechlabssede.jpg" alt="Instalações RehabLink" onerror="this.src='https://via.placeholder.com/600x400/667eea/ffffff?text=Nossas+Instalações'">
+            </div>
+            <div class="about-content">
+                <h3>Inovação, qualidade e compromisso com a sua saúde</h3>
+                <p>
+                    A RehabLink nasceu da convicção de que a reabilitação pode ser mais eficaz quando aliada à tecnologia. 
+                    Desde 2020, temos ajudado milhares de utentes a recuperar a sua qualidade de vida através de métodos inovadores e personalizados.
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <i class="fa-solid fa-shield-alt"></i>
+                        <span>Rigor científico</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fa-solid fa-user-md"></i>
+                        <span>Equipa qualificada</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Jogos terapêuticos</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Monitorização contínua</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Certificação ISO</span>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Inovação tecnológica</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-
-
-
-    <!-- Seção "Conteudo da pagina - Nossa Equipa - Margarida Besteiro" -->
+    <!-- Nossa Equipa Médica -->
     <section id="nossa-equipa">
-        <div class="destaque-equipa destaque-1 floating"></div>
-        <div class="destaque-equipa destaque-2 floating" style="animation-delay: 0.5s;"></div>
-
-        <h2>A Nossa Equipa Médica</h2>
-        <p class="subtitulo-equipa">Profissionais qualificados para garantir confiança, rigor e rapidez</p>
-
-        <div class="equipa-container">
-            <div class="membro-equipa">
-                <div class="membro-imagem">
-                    <img src="assets/img/medico.jpg" alt="Dr. António Ribeiro">
+        <div class="section-title">
+            <h2>Equipa Médica</h2>
+            <p>Profissionais especializados dedicados à sua recuperação</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="assets/img/medico.jpg" alt="Dr. António Ribeiro" onerror="this.src='https://via.placeholder.com/300x400/667eea/ffffff?text=Dr.+António'">
                 </div>
-                <div class="membro-info">
+                <div class="team-info">
                     <h3>Dr. António Ribeiro</h3>
-                    <p class="cargo">Clínica Geral</p>
-                    <p class="descricao">Especialista em Clínica Geral com foco em medicina preventiva, acompanhamento
-                        de doenças crónicas e promoção da saúde global.</p>
-                    <div class="redes-sociais">
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Aqui iria ser inserido o LinkedIn do profissional">
-                            <i class="fas fa-user-md fa-lg"></i>
-                        </a>
+                    <p class="cargo">Fisiatria</p>
+                    <p class="descricao">Especialista em Medicina Física e Reabilitação com 15 anos de experiência em lesões desportivas.</p>
+                    <div class="team-social">
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
-
-            <div class="membro-equipa">
-                <div class="membro-imagem">
-                    <img src="assets/img/medico4.jpg" alt="Dra. Marta Fernandes">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="assets/img/medico4.jpg" alt="Dra. Marta Fernandes" onerror="this.src='https://via.placeholder.com/300x400/667eea/ffffff?text=Dra.+Marta'">
                 </div>
-                <div class="membro-info">
+                <div class="team-info">
                     <h3>Dra. Marta Fernandes</h3>
-                    <p class="cargo">Pediatria</p>
-                    <p class="descricao">Médica pediatra dedicada ao acompanhamento do desenvolvimento infantil e à
-                        saúde preventiva desde o nascimento.</p>
-                    <div class="redes-sociais">
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Aqui iria ser inserido o LinkedIn do profissional">
-                            <i class="fas fa-flask fa-lg"></i>
-                        </a>
+                    <p class="cargo">Fisioterapia Neurológica</p>
+                    <p class="descricao">Especialista em reabilitação neurológica, AVC e lesões medulares. Doutorada em Neurociências.</p>
+                    <div class="team-social">
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
-
-            <div class="membro-equipa">
-                <div class="membro-imagem">
-                    <img src="assets/img/medico2.jpg" alt="Dr. Ricardo Silva">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="assets/img/medico2.jpg" alt="Dr. Ricardo Silva" onerror="this.src='https://via.placeholder.com/300x400/667eea/ffffff?text=Dr.+Ricardo'">
                 </div>
-                <div class="membro-info">
+                <div class="team-info">
                     <h3>Dr. Ricardo Silva</h3>
-                    <p class="cargo">Endocrinologia</p>
-                    <p class="descricao">Experiente em distúrbios hormonais, focado no tratamento de diabetes, obesidade
-                        e doenças da tiroide.</p>
-                    <div class="redes-sociais">
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Aqui iria ser inserido o LinkedIn do profissional">
-                            <i class="fas fa-microscope fa-lg"></i>
-                        </a>
+                    <p class="cargo">Fisioterapia Ortopédica</p>
+                    <p class="descricao">Especialista em reabilitação ortopédica e pós-cirúrgica, com formação internacional em terapia manual.</p>
+                    <div class="team-social">
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
-
-            <div class="membro-equipa">
-                <div class="membro-imagem">
-                    <img src="assets/img/medico3.jpg" alt="Dra. Ana Almeida">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="assets/img/medico3.jpg" alt="Dra. Ana Almeida" onerror="this.src='https://via.placeholder.com/300x400/667eea/ffffff?text=Dra.+Ana'">
                 </div>
-                <div class="membro-info">
+                <div class="team-info">
                     <h3>Dra. Ana Almeida</h3>
-                    <p class="cargo">Ginecologia</p>
-                    <p class="descricao">Ginecologista com experiência em saúde da mulher, planeamento familiar,
-                        fertilidade e cuidados obstétricos completos.</p>
-                    <div class="redes-sociais">
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Aqui iria ser inserido o LinkedIn do profissional">
-                            <i class="fas fa-notes-medical fa-lg"></i>
-                        </a>
+                    <p class="cargo">Fisioterapia Respiratória</p>
+                    <p class="descricao">Especialista em reabilitação respiratória e doenças crónicas, com experiência em cuidados intensivos.</p>
+                    <div class="team-social">
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
-
-            <div class="membro-equipa">
-                <div class="membro-imagem">
-                    <img src="assets/img/medico5.jpg" alt="Dr. João Lopes">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="assets/img/medico5.jpg" alt="Dr. João Lopes" onerror="this.src='https://via.placeholder.com/300x400/667eea/ffffff?text=Dr.+João'">
                 </div>
-                <div class="membro-info">
+                <div class="team-info">
                     <h3>Dr. João Lopes</h3>
-                    <p class="cargo">Cardiologia</p>
-                    <p class="descricao">Cardiologista especializado em diagnóstico, reabilitação e prevenção de doenças
-                        cardiovasculares e hipertensão.</p>
-                    <div class="redes-sociais">
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Aqui iria ser inserido o LinkedIn do profissional">
-                            <i class="fas fa-heartbeat fa-lg"></i>
-                        </a>
+                    <p class="cargo">Fisioterapia Desportiva</p>
+                    <p class="descricao">Especialista em reabilitação desportiva e prevenção de lesões, trabalhou com atletas de alta competição.</p>
+                    <div class="team-social">
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!--  EQUIPA TÉCNICA/LABORATORIAL -->
+    <!-- Equipa Técnica -->
+    <section class="tech-team-section">
+        <div class="section-title">
+            <h2>Equipa Técnica</h2>
+            <p>Profissionais qualificados para garantir o melhor acompanhamento</p>
+        </div>
+        <div class="tech-team-grid">
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnica1.png" alt="Ana Silva" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=AS'">
+                </div>
+                <h4>Ana Silva</h4>
+                <p>Técnica de Reabilitação</p>
+                <p class="laboratorio">Unidade Central</p>
+            </div>
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnico1.jpeg" alt="Bruno Ferreira" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=BF'">
+                </div>
+                <h4>Bruno Ferreira</h4>
+                <p>Técnico de Reabilitação</p>
+                <p class="laboratorio">Unidade Norte</p>
+            </div>
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnica2.webp" alt="Carla Santos" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=CS'">
+                </div>
+                <h4>Carla Santos</h4>
+                <p>Técnica de Reabilitação</p>
+                <p class="laboratorio">Unidade Sul</p>
+            </div>
+            <div class="tech-card">
+                <span class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnico2.jpg" alt="Daniel Costa" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=DC'">
+                </div>
+                <h4>Daniel Costa</h4>
+                <p>Auxiliar Reabilitação</p>
+                <p class="laboratorio">Unidade Central</p>
+            </div>
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnica3.jpg" alt="Eduarda Martins" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=EM'">
+                </div>
+                <h4>Eduarda Martins</h4>
+                <p>Técnica de Reabilitação</p>
+                <p class="laboratorio">Unidade Coimbra</p>
+            </div>
+            <div class="tech-card">
+                <span class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnico3.avif" alt="Filipe Gomes" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=FG'">
+                </div>
+                <h4>Filipe Gomes</h4>
+                <p>Técnico Reabilitação</p>
+                <p class="laboratorio">Unidade Lisboa</p>
+            </div>
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnica4.jpg" alt="Gabriela Rocha" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=GR'">
+                </div>
+                <h4>Gabriela Rocha</h4>
+                <p>Técnica Reabilitação</p>
+                <p class="laboratorio">Unidade Central</p>
+            </div>
+            <div class="tech-card">
+                <span class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnico4.jpg" alt="Hugo Pereira" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=HP'">
+                </div>
+                <h4>Hugo Pereira</h4>
+                <p>Auxiliar Reabilitação</p>
+                <p class="laboratorio">Unidade Norte</p>
+            </div>
+            <div class="tech-card">
+                <span class="certificado-badge"><i class="fas fa-certificate"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnica5.jpg" alt="Inês Almeida" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=IA'">
+                </div>
+                <h4>Inês Almeida</h4>
+                <p>Técnica Reabilitação</p>
+                <p class="laboratorio">Unidade Algarve</p>
+            </div>
+            <div class="tech-card">
+                <span class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span>
+                <div class="tech-image">
+                    <img src="assets/img/tecnico5.webp" alt="João Rodrigues" onerror="this.src='https://via.placeholder.com/120x120/667eea/ffffff?text=JR'">
+                </div>
+                <h4>João Rodrigues</h4>
+                <p>Técnico Reabilitação</p>
+                <p class="laboratorio">Unidade Central</p>
+            </div>
+        </div>
+    </section>
 
-        <div class="equipa-tecnica-container">
-            <h2 class="titulo-equipa-tecnica">A Nossa Equipa Técnica e Laboratorial</h2>
-            <p class="subtitulo-equipa">Profissionais qualificados para garantir confiança, rigor e rapidez no
-                transporte e avaliação das vossas amostras!</p>
-            <div class="equipa-tecnica-grid">
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnica1.png" alt="Ana Silva"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Ana Silva</h4>
-                        <p>Técnica Laboratorial</p>
-                        <p class="laboratorio">Laboratório Central</p>
+    <!-- Serviços -->
+    <section id="servicos">
+        <div class="section-title">
+            <h2>Os Nossos Serviços</h2>
+            <p>Soluções completas para a sua reabilitação</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <h3>Fisioterapia Tradicional</h3>
+                <p>Sessões personalizadas com fisioterapeutas especializados para recuperação de lesões e melhoria da mobilidade.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <h3>Jogos de Reabilitação</h3>
+                <p>Terapia gamificada com jogos interativos que tornam o processo de recuperação mais envolvente e motivador.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3>Monitorização Contínua</h3>
+                <p>Acompanhamento remoto do seu progresso com relatórios detalhados para si e para o seu fisioterapeuta.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h3>Reabilitação Cardíaca</h3>
+                <p>Programas especializados para recuperação de eventos cardíacos, com monitorização constante e exercícios adaptados.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3>Reabilitação Neurológica</h3>
+                <p>Tratamento especializado para AVC, lesões medulares e doenças neurodegenerativas com técnicas avançadas.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-hand"></i>
+                </div>
+                <h3>Reabilitação da Mão</h3>
+                <p>Terapia especializada para recuperação da força e destreza da mão, ideal para lesões profissionais ou pós-cirúrgicas.</p>
+                <a href="#" class="service-link">Saber mais <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unidades -->
+    <section id="unidades" class="units-section">
+        <div class="section-title">
+            <h2>As Nossas Unidades</h2>
+            <p>Espalhadas por todo o país para estar sempre perto de si</p>
+        </div>
+        <div class="units-grid">
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Central</h3>
+                <p>Av. da República, 1000<br>Lisboa</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>21 345 6789</p>
+            </div>
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Norte</h3>
+                <p>Rua de Santa Catarina, 500<br>Porto</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>22 456 7890</p>
+            </div>
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Sul</h3>
+                <p>Av. 25 de Abril, 200<br>Faro</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>29 567 8901</p>
+            </div>
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Coimbra</h3>
+                <p>Rua da Sofia, 150<br>Coimbra</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>23 678 9012</p>
+            </div>
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Algarve</h3>
+                <p>Av. 5 de Outubro, 80<br>Albufeira</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>28 789 0123</p>
+            </div>
+            <div class="unit-card">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Unidade Madeira</h3>
+                <p>Rua dos Ferreiros, 120<br>Funchal</p>
+                <p class="unit-phone"><i class="fa-solid fa-phone me-2"></i>29 890 1234</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acordos e Seguros -->
+    <section id="seguros" class="partners-section">
+        <div class="section-title">
+            <h2>Acordos e Seguros</h2>
+            <p>Trabalhamos com as principais seguradoras e entidades</p>
+        </div>
+        <div class="partners-grid">
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Multicare</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> AdvanceCare</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Médis</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Allianz</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> SNS</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Fidelidade</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Lusitânia</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Ageas</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Real Vida</div>
+            <div class="partner-item"><i class="fa-solid fa-building"></i> Generali</div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="contact-section">
+        <div class="section-title">
+            <h2>Contacte-nos</h2>
+            <p>Estamos aqui para responder a todas as suas questões</p>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Informações de Contacto</h3>
+                <div class="contact-detail">
+                    <div class="contact-icon">
+                        <i class="fa-regular fa-map"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h4>Morada</h4>
+                        <p>Av. da República, 1000<br>1050-100 Lisboa</p>
                     </div>
                 </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnico1.jpeg" alt="Bruno Ferreira"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Bruno Ferreira</h4>
-                        <p>Técnico Laboratorial</p>
-                        <p class="laboratorio">Laboratório Norte</p>
+                <div class="contact-detail">
+                    <div class="contact-icon">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h4>Email</h4>
+                        <p>geral@rehablink.pt<br>apoio.cliente@rehablink.pt</p>
                     </div>
                 </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnica2.webp" alt="Carla Santos"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Carla Santos</h4>
-                        <p>Técnica de Laboratório</p>
-                        <p class="laboratorio">Laboratório Sul</p>
+                <div class="contact-detail">
+                    <div class="contact-icon">
+                        <i class="fa-regular fa-clock"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h4>Horário</h4>
+                        <p>2ª a 6ª: 8h - 20h<br>Sábado: 9h - 13h</p>
                     </div>
                 </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnico2.jpg" alt="Daniel Costa"><span
-                            class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Daniel Costa</h4>
-                        <p>Técnico de Apoio Laboratorial</p>
-                        <p class="laboratorio">Laboratório Central</p>
+                <div class="contact-detail">
+                    <div class="contact-icon">
+                        <i class="fa-regular fa-phone"></i>
                     </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnica3.jpg" alt="Eduarda Martins"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Eduarda Martins</h4>
-                        <p>Técnica de Laboratório</p>
-                        <p class="laboratorio">Laboratório Coimbra</p>
-                    </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnico3.avif" alt="Filipe Gomes"><span
-                            class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Filipe Gomes</h4>
-                        <p>Técnico Laboratorial</p>
-                        <p class="laboratorio">Laboratório Lisboa</p>
-                    </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnica4.jpg" alt="Gabriela Rocha"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Gabriela Rocha</h4>
-                        <p>Técnica de Laboratório</p>
-                        <p class="laboratorio">Laboratório Central</p>
-                    </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnico4.jpg" alt="Hugo Pereira"><span
-                            class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Hugo Pereira</h4>
-                        <p>Técnico de Apoio Laboratorial</p>
-                        <p class="laboratorio">Unidade Norte</p>
-                    </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnica5.jpg" alt="Inês Almeida"><span
-                            class="certificado-badge"><i class="fas fa-certificate"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>Inês Almeida</h4>
-                        <p>Técnica Laboratorial</p>
-                        <p class="laboratorio">Laboratório Algarve</p>
-                    </div>
-                </div>
-                <div class="tecnico-card">
-                    <div class="tecnico-imagem"><img src="assets/img/tecnico5.webp" alt="João Rodrigues"><span
-                            class="nao-certificado-badge"><i class="fas fa-times-circle"></i></span></div>
-                    <div class="tecnico-info">
-                        <h4>João Rodrigues</h4>
-                        <p>Técnico Laboratorial</p>
-                        <p class="laboratorio">Laboratório Central</p>
+                    <div class="contact-text">
+                        <h4>Telefone</h4>
+                        <p>21 345 6789<br>91 234 5678</p>
                     </div>
                 </div>
             </div>
-
-
-    </section>
-
-    <section class="container-texto-generico" id="servicos">
-
-
-    </section>
-
-    <section class="container-texto-generico" id="unidades">
-
-
-    </section>
-
-    <!-- Secção "Conteúdo da página - Acordos e Seguros - Alexandre Moura" -->
-    <section id="seguros">
-
-    </section>
-    <!-- Rodapé -->
-    <footer class="footer-container">
-        <div class="footer-section">
-            <h4><strong>Horário</strong></h4>
-            <div>2ª a 6ª Feira: 7h — 21h</div>
-            <div>Sábado: 8h — 19h</div>
-            <div>Domingos e Feriados: Encerrado</div>
-        </div>
-        <div class="footer-section">
-            <h4><strong>Contactos</strong></h4>
-            <div>healthtech_labs@gmail.com</div>
-            <div>+351 212 685 813</div>
-            <div>+351 912 345 678</div>
-        </div>
-        <div class="footer-section">
-            <h4><strong>Links Úteis</strong></h4>
-            <div class="links-grid">
-                <ul>
-                    <li><a href="#quem-somos">Quem Somos?</a></li>
-                    <li><a href="#nossa-equipa">Os nossos Colaboradores</a></li>
-                    <li><a href="#servicos">O que lhe oferecemos</a></li>
-                </ul>
-                <ul>
-                    <li><a href="#unidades">Encontre-nos</a></li>
-                    <li><a href="#seguros">Os nossos acordos</a></li>
-                    <li><a href="#contacto">Tem uma dúvida? Contacte-nos!</a></li>
-                </ul>
+            <div class="contact-form">
+                <h3>Envie-nos uma mensagem</h3>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="O seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="O seu email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" placeholder="O seu telefone">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option value="">Assunto</option>
+                            <option value="marcacao">Marcação de consulta</option>
+                            <option value="informacao">Pedido de informação</option>
+                            <option value="seguro">Questão sobre seguro</option>
+                            <option value="outro">Outro assunto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="A sua mensagem" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                </form>
             </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>RehabLink</h4>
+                <p>Inovação e humanização na reabilitação. A tecnologia ao serviço da sua recuperação.</p>
+                <div class="footer-social">
+                    <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Links Úteis</h4>
+                <a href="#quem-somos">Quem Somos</a>
+                <a href="#nossa-equipa">A Nossa Equipa</a>
+                <a href="#servicos">Serviços</a>
+                <a href="#unidades">Unidades</a>
+                <a href="#seguros">Acordos e Seguros</a>
+                <a href="#contacto">Contactos</a>
+            </div>
+            <div class="footer-col">
+                <h4>Horário</h4>
+                <p>2ª a 6ª Feira: 8h — 20h</p>
+                <p>Sábado: 9h — 13h</p>
+                <p>Domingos e Feriados: Encerrado</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contactos</h4>
+                <p><i class="fa-regular fa-envelope me-2"></i>geral@rehablink.pt</p>
+                <p><i class="fa-regular fa-phone me-2"></i>21 345 6789</p>
+                <p><i class="fa-regular fa-mobile me-2"></i>91 234 5678</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RehabLink. Todos os direitos reservados.</p>
         </div>
     </footer>
-    <div class="footer-bottom">
-        <p>&copy; 2025 HealthTech Clinical Labs. Todos os direitos reservados.</p>
-    </div>
-</body>
-<script src="js/1221419.js"></script>
-<script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
 
+    <!-- Scripts -->
+    <script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Formulário de contacto
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Mensagem enviada com sucesso! Entraremos em contacto brevemente.');
+            this.reset();
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-rehab');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
 </html>
