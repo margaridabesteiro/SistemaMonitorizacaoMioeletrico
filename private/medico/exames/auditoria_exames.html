@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Auditoria de Exames</title>
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/medico.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <!-- Topbar igual -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_M.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-stethoscope logo-icon"></i>
+                <span class="fw-bold">RehabLink · Médico</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-doctor"></i> Dr. António Silva
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar igual -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Clínico</h2>
+            <a href="../index_M.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../consultas/consulta.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Consultas</a>
+            <a href="../prescricoes/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-prescription me-2"></i>Prescrições</a>
+            <a href="../pacientes/gestaoUtente.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="exames_disponiveis.html" class="nav-link"><i class="fa-solid fa-flask me-2"></i>Exames</a>
+            <a href="auditoria_exames.html" class="nav-link active"><i class="fa-solid fa-clipboard-check me-2"></i>Auditoria</a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Auditoria de Exames</h1>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select">
+                            <option>Últimos 7 dias</option>
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Pendente</option>
+                            <option>Realizado</option>
+                            <option>Validado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela -->
+            <div class="table-container">
+                <table id="tabelaAuditoria" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Paciente</th>
+                            <th>Exame</th>
+                            <th>Médico</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>13 Mar 2026</td>
+                            <td>Carlos Monteiro</td>
+                            <td>Hemograma</td>
+                            <td>Dr. António Silva</td>
+                            <td><span class="status-badge status-pendente">Pendente</span></td>
+                            <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i> Validar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#tabelaAuditoria').DataTable({ pageLength: 10 });
+    </script>
+</body>
+</html>

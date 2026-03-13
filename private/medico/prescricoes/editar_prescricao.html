@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Editar Prescrição</title>
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/medico.css">
+</head>
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_M.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-stethoscope logo-icon"></i>
+                <span class="fw-bold">RehabLink · Médico</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-doctor"></i> Dr. António Silva
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Clínico</h2>
+            <a href="../index_M.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../consultas/consultas.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Consultas</a>
+            <a href="lista_prescricoes.html" class="nav-link active"><i class="fa-solid fa-prescription me-2"></i>Prescrições</a>
+            <a href="../pacientes/gestaoUtente.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Editar Prescrição #PR-001</h1>
+
+            <form class="progress-card">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Paciente</label>
+                        <select class="form-select" disabled>
+                            <option selected>Ana Ferreira</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Prescrição</label>
+                        <select class="form-select">
+                            <option selected>Força de pinça</option>
+                            <option>Treino de precisão</option>
+                            <option>Avaliação funcional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Nº de Sessões</label>
+                        <input type="number" class="form-control" value="12">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Frequência</label>
+                        <select class="form-select">
+                            <option selected>3x por semana</option>
+                            <option>2x por semana</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo</label>
+                        <input type="text" class="form-control" value="8-12N">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-control" rows="3">Paciente deve realizar aquecimento antes das sessões.</textarea>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn-reset" onclick="window.location.href='lista_prescricoes.html'">Cancelar</button>
+                    <button type="submit" class="btn-filter">Guardar Alterações</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+</html>

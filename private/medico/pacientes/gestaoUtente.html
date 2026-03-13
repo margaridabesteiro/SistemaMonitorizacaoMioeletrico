@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Gestão de Pacientes</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/medico.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_M.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-stethoscope logo-icon"></i>
+                <span class="fw-bold">RehabLink · Médico</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span>Dr. António Silva</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Clínico</h2>
+            <a href="../index_M.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../consultas/consultas.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Consultas
+            </a>
+            <a href="../prescricoes/lista_prescricoes.html" class="nav-link">
+                <i class="fa-solid fa-prescription me-2"></i>Prescrições
+            </a>
+            <a href="gestaoUtente.html" class="nav-link active">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../exames/exames_disponiveis.html" class="nav-link">
+                <i class="fa-solid fa-flask me-2"></i>Exames
+            </a>
+            <a href="../exames/auditoria_exames.html" class="nav-link">
+                <i class="fa-solid fa-clipboard-check me-2"></i>Auditoria
+            </a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            
+
+            <!-- Card principal -->
+            <div class="progress-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0" style="color: #0b4f3a;">
+                        <i class="fa-solid fa-users me-2" style="color: #1e7b4b;"></i>
+                        <strong>Listagem de Pacientes</strong>
+                    </h2>
+                    <button class="btn-acao" type="button" data-bs-toggle="collapse" data-bs-target="#filtros" aria-expanded="false">
+                        <i class="fa-solid fa-filter me-2"></i>
+                        Mostrar Filtros
+                    </button>
+                </div>
+
+                <!-- Filtros (collapse) -->
+                <div class="collapse mb-4" id="filtros">
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fa-solid fa-sliders me-2"></i>
+                            Filtros de Pesquisa
+                        </div>
+                        <div class="filter-grid">
+                            <div class="filter-item">
+                                <label>Pesquisar</label>
+                                <input type="text" id="filtroUtentesTexto" class="form-control" placeholder="Nome, email ou NIF...">
+                            </div>
+                            <div class="filter-item">
+                                <label>Subsistema de Saúde</label>
+                                <select id="filtroUtentesSubsistema" class="form-select">
+                                    <option value="">Todos os subsistemas</option>
+                                    <option value="sns">SNS</option>
+                                    <option value="adse">ADSE</option>
+                                    <option value="sams">SAMS</option>
+                                    <option value="medicare">Medicare</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label>Estado</label>
+                                <select class="form-select">
+                                    <option>Todos</option>
+                                    <option>Ativo</option>
+                                    <option>Inativo</option>
+                                    <option>Em tratamento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-actions mt-3">
+                            <button class="btn-reset" onclick="limparFiltros()">
+                                <i class="fa-solid fa-undo me-2"></i>
+                                Limpar
+                            </button>
+                            <button class="btn-filter" onclick="aplicarFiltros()">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i>
+                                Aplicar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estatísticas rápidas -->
+                <div class="metricas-grid mb-4" style="grid-template-columns: repeat(4,1fr);">
+                    <div class="metrica-card" style="padding: 15px;">
+                        <div class="metrica-valor" style="font-size: 1.5rem;">124</div>
+                        <div class="metrica-label">Total Pacientes</div>
+                    </div>
+                    <div class="metrica-card" style="padding: 15px;">
+                        <div class="metrica-valor" style="font-size: 1.5rem; color: #1e7b4b;">98</div>
+                        <div class="metrica-label">Ativos</div>
+                    </div>
+                    <div class="metrica-card" style="padding: 15px;">
+                        <div class="metrica-valor" style="font-size: 1.5rem; color: #f59e0b;">18</div>
+                        <div class="metrica-label">Em tratamento</div>
+                    </div>
+                    <div class="metrica-card" style="padding: 15px;">
+                        <div class="metrica-valor" style="font-size: 1.5rem; color: #3b82f6;">8</div>
+                        <div class="metrica-label">Novos (mês)</div>
+                    </div>
+                </div>
+
+                <!-- Tabela de pacientes -->
+                <div class="table-container">
+                    <table id="listaUtentes" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Paciente</th>
+                                <th>NIF</th>
+                                <th>Contacto</th>
+                                <th>Email</th>
+                                <th>Nº SNS</th>
+                                <th>Subsistema</th>
+                                <th>Última Consulta</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="paciente-avatar" style="width: 40px; height: 40px;">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Ana Ferreira</strong><br>
+                                            <small class="text-muted">38 anos · F</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>123456789</td>
+                                <td>912 345 678</td>
+                                <td>ana.ferreira@email.com</td>
+                                <td>1234567890</td>
+                                <td><span class="badge" style="background: #1e7b4b20; color: #1e7b4b;">SNS</span></td>
+                                <td>13 Mar 2026</td>
+                                <td class="text-center">
+                                    <button class="btn-acao btn-sm" onclick="verPaciente('ana-ferreira')" title="Ver ficha">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="editarPaciente('ana-ferreira')" title="Editar">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="agendarConsulta('ana-ferreira')" title="Agendar consulta">
+                                        <i class="fa-regular fa-calendar-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="paciente-avatar" style="width: 40px; height: 40px;">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>João Rodrigues</strong><br>
+                                            <small class="text-muted">52 anos · M</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>987654321</td>
+                                <td>923 456 789</td>
+                                <td>joao.rodrigues@email.com</td>
+                                <td>0987654321</td>
+                                <td><span class="badge" style="background: #1e7b4b20; color: #1e7b4b;">ADSE</span></td>
+                                <td>10 Mar 2026</td>
+                                <td class="text-center">
+                                    <button class="btn-acao btn-sm" onclick="verPaciente('joao-rodrigues')"><i class="fa-regular fa-file-lines"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarPaciente('joao-rodrigues')"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="agendarConsulta('joao-rodrigues')"><i class="fa-regular fa-calendar-plus"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="paciente-avatar" style="width: 40px; height: 40px;">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Carlos Monteiro</strong><br>
+                                            <small class="text-muted">71 anos · M</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>456789123</td>
+                                <td>934 567 891</td>
+                                <td>carlos.monteiro@email.com</td>
+                                <td>4567891230</td>
+                                <td><span class="badge" style="background: #1e7b4b20; color: #1e7b4b;">SAMS</span></td>
+                                <td>13 Mar 2026</td>
+                                <td class="text-center">
+                                    <button class="btn-acao btn-sm" onclick="verPaciente('carlos-monteiro')"><i class="fa-regular fa-file-lines"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarPaciente('carlos-monteiro')"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="agendarConsulta('carlos-monteiro')"><i class="fa-regular fa-calendar-plus"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="paciente-avatar" style="width: 40px; height: 40px;">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Maria Santos</strong><br>
+                                            <small class="text-muted">64 anos · F</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>321654987</td>
+                                <td>945 678 912</td>
+                                <td>maria.santos@email.com</td>
+                                <td>3216549870</td>
+                                <td><span class="badge" style="background: #1e7b4b20; color: #1e7b4b;">SNS</span></td>
+                                <td>12 Mar 2026</td>
+                                <td class="text-center">
+                                    <button class="btn-acao btn-sm" onclick="verPaciente('maria-santos')"><i class="fa-regular fa-file-lines"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarPaciente('maria-santos')"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="agendarConsulta('maria-santos')"><i class="fa-regular fa-calendar-plus"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="paciente-avatar" style="width: 40px; height: 40px;">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Sofia Costa</strong><br>
+                                            <small class="text-muted">45 anos · F</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>789123456</td>
+                                <td>956 789 123</td>
+                                <td>sofia.costa@email.com</td>
+                                <td>7891234560</td>
+                                <td><span class="badge" style="background: #1e7b4b20; color: #1e7b4b;">ADSE</span></td>
+                                <td>09 Mar 2026</td>
+                                <td class="text-center">
+                                    <button class="btn-acao btn-sm" onclick="verPaciente('sofia-costa')"><i class="fa-regular fa-file-lines"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarPaciente('sofia-costa')"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="agendarConsulta('sofia-costa')"><i class="fa-regular fa-calendar-plus"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Precisa de ajuda com a gestão de pacientes?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Novo paciente</button>
+                <button class="faq-btn">Pesquisar</button>
+                <button class="faq-btn">Agendar consulta</button>
+                <button class="faq-btn">Exportar lista</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../js/medico.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Inicializar DataTable
+            $('#listaUtentes').DataTable({
+                pageLength: 10,
+                pagingType: "full_numbers",
+                language: {
+                    decimal: "",
+                    emptyTable: "Nenhum paciente encontrado",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ pacientes",
+                    infoEmpty: "Mostrando 0 a 0 de 0 pacientes",
+                    infoFiltered: "(filtrado de _MAX_ pacientes)",
+                    lengthMenu: "Mostrar _MENU_ pacientes",
+                    search: "Pesquisar:",
+                    zeroRecords: "Nenhum paciente encontrado",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [7] } // Desabilitar ordenação na coluna de ações
+                ]
+            });
+
+            // Chatbot
+            $('#chatbot-button').click(function() {
+                $('#chatbot').removeClass('d-none');
+                $(this).hide();
+            });
+
+            $('#close-chat').click(function() {
+                $('#chatbot').addClass('d-none');
+                $('#chatbot-button').show();
+            });
+
+            // FAQ buttons
+            $('.faq-btn').click(function() {
+                const question = $(this).text();
+                if (question.includes('Novo')) {
+                    window.location.href = 'novo_paciente.html';
+                } else if (question.includes('Agendar')) {
+                    window.location.href = '../consultas/consultas.html?nova=true';
+                } else if (question.includes('Exportar')) {
+                    exportarLista();
+                } else {
+                    alert('Funcionalidade em desenvolvimento: ' + question);
+                }
+            });
+
+            // Filtros
+            $('#filtroUtentesTexto').on('keyup', function() {
+                $('#listaUtentes').DataTable().search(this.value).draw();
+            });
+
+            $('#filtroUtentesSubsistema').on('change', function() {
+                // Implementar filtro por subsistema
+                console.log('Filtrar por:', this.value);
+            });
+        });
+
+        // Funções de ação
+        function verPaciente(id) {
+            window.location.href = 'detalhes_paciente.html?id=' + id;
+        }
+
+        function editarPaciente(id) {
+            window.location.href = 'editar_paciente.html?id=' + id;
+        }
+
+        function agendarConsulta(paciente) {
+            window.location.href = '../consultas/consultas.html?novo=true&paciente=' + paciente;
+        }
+
+        function limparFiltros() {
+            $('#filtroUtentesTexto').val('');
+            $('#filtroUtentesSubsistema').val('');
+            $('#listaUtentes').DataTable().search('').draw();
+        }
+
+        function aplicarFiltros() {
+            const texto = $('#filtroUtentesTexto').val();
+            const subsistema = $('#filtroUtentesSubsistema').val();
+            
+            $('#listaUtentes').DataTable().search(texto).draw();
+            
+            if (subsistema) {
+                alert('Filtrar por subsistema: ' + subsistema);
+                // Implementar lógica de filtro por subsistema
+            }
+        }
+
+        function exportarLista() {
+            alert('A exportar lista de pacientes...');
+            // Implementar exportação para Excel/PDF
+        }
+    </script>
+</body>
+
+</html>

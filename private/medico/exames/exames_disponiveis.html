@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Exames Disponíveis</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/medico.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_M.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-stethoscope logo-icon"></i>
+                <span class="fw-bold">RehabLink · Médico</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-doctor"></i> Dr. António Silva
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Clínico</h2>
+            <a href="../index_M.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../consultas/consulta.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Consultas</a>
+            <a href="../prescricoes/lista_prescricoes.html" class="nav-link"><i class="fa-solid fa-prescription me-2"></i>Prescrições</a>
+            <a href="../pacientes/gestaoUtente.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="exames_disponiveis.html" class="nav-link active"><i class="fa-solid fa-flask me-2"></i>Exames</a>
+            <a href="auditoria_exames.html" class="nav-link"><i class="fa-solid fa-clipboard-check me-2"></i>Auditoria</a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Exames Disponíveis</h1>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="progress-card">
+                        <h4><i class="fa-solid fa-dna me-2" style="color: #1e7b4b;"></i>Análises Clínicas</h4>
+                        <p class="text-muted small">Hemograma, bioquímica, etc.</p>
+                        <button class="btn-filter btn-sm mt-2" onclick="selecionarExame(1)">Selecionar</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="progress-card">
+                        <h4><i class="fa-solid fa-xray me-2" style="color: #1e7b4b;"></i>Radiologia</h4>
+                        <p class="text-muted small">Raio-X, TAC, RMN</p>
+                        <button class="btn-filter btn-sm mt-2" onclick="selecionarExame(2)">Selecionar</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="progress-card">
+                        <h4><i class="fa-solid fa-heart-pulse me-2" style="color: #1e7b4b;"></i>Cardiologia</h4>
+                        <p class="text-muted small">ECG, Holter, teste de esforço</p>
+                        <button class="btn-filter btn-sm mt-2" onclick="selecionarExame(3)">Selecionar</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function selecionarExame(id) {
+            alert('Selecionar exame ' + id + ' - redirecionar para prescrição');
+            window.location.href = '../../prescricoes/nova_prescricao.html?exame=' + id;
+        }
+    </script>
+</body>
+</html>

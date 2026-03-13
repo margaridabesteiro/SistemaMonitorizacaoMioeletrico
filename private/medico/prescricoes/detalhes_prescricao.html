@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Detalhes da Prescrição</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/medico.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_M.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-stethoscope logo-icon"></i>
+                <span class="fw-bold">RehabLink · Médico</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span>Dr. António Silva</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Clínico</h2>
+            <a href="../index_M.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../consultas/consultas.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Consultas
+            </a>
+            <a href="lista_prescricoes.html" class="nav-link active">
+                <i class="fa-solid fa-prescription me-2"></i>Prescrições
+            </a>
+            <a href="../pacientes/gestaoUtente.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../consultas/exames/exames_disponiveis.html" class="nav-link">
+                <i class="fa-solid fa-flask me-2"></i>Exames
+            </a>
+            <a href="../consultas/exames/auditoria_exames.html" class="nav-link">
+                <i class="fa-solid fa-clipboard-check me-2"></i>Auditoria
+            </a>
+        </nav>
+
+        <main class="content">
+            
+
+            <!-- Card Principal -->
+            <div class="progress-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0" style="color: #0b4f3a;">
+                        <i class="fa-solid fa-file-medical me-2" style="color: #1e7b4b;"></i>
+                        <strong>Detalhes da Prescrição</strong>
+                    </h2>
+                    <span class="badge" style="background: #1e7b4b; color: white; padding: 8px 15px;">
+                        <i class="fa-regular fa-clock me-1"></i> Ativa
+                    </span>
+                </div>
+
+                <!-- Informação da Prescrição (carregada via JS) -->
+                <div id="prescricaoInfo" class="mb-4">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+
+                <!-- Detalhes completos -->
+                <div id="detalhesContainer">
+                    <!-- Linha 1 -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">ID da Prescrição</label>
+                            <p class="form-control-plaintext fw-semibold" id="idPrescricao">#PR-2026-0124</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Utente</label>
+                            <p class="form-control-plaintext fw-semibold" id="nomeUtente">Ana Ferreira</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Médico</label>
+                            <p class="form-control-plaintext fw-semibold" id="nomeMedico">Dr. António Silva</p>
+                        </div>
+                    </div>
+
+                    <!-- Linha 2 -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Data Prescrição</label>
+                            <p class="form-control-plaintext fw-semibold" id="dataPrescricao">12 Março 2026</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Data Validade</label>
+                            <p class="form-control-plaintext fw-semibold" id="dataValidade">12 Junho 2026</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Tipo Prescrição</label>
+                            <p class="form-control-plaintext fw-semibold" id="tipoPrescricao">Força de pinça</p>
+                        </div>
+                    </div>
+
+                    <!-- Linha 3 -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Nº Sessões</label>
+                            <p class="form-control-plaintext fw-semibold" id="numSessoes">12 sessões</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Frequência</label>
+                            <p class="form-control-plaintext fw-semibold" id="frequencia">3x por semana</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Zona Alvo</label>
+                            <p class="form-control-plaintext fw-semibold" id="zonaAlvo">8N - 12N</p>
+                        </div>
+                    </div>
+
+                    <!-- Linha 4 - Prioridade e Observações -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted">Prioridade</label>
+                            <p class="form-control-plaintext" id="prioridade">
+                                <span class="status-badge status-confirmado">Média</span>
+                            </p>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold text-muted">Observações</label>
+                            <p class="form-control-plaintext" id="observacoes">
+                                Paciente deve realizar aquecimento antes das sessões. Monitorizar fadiga.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso -->
+                    <div class="progress-card mb-4" style="background: #f8fafd;">
+                        <h5 class="mb-3"><i class="fa-solid fa-chart-line me-2" style="color: #1e7b4b;"></i>Progresso</h5>
+                        <div class="progresso-item">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Sessões realizadas</span>
+                                <span style="color: #0b4f3a; font-weight: 600;">3/12</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar" style="width: 25%; background: #1e7b4b;"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2 text-muted small">
+                                <span>Início: 15 Mar 2026</span>
+                                <span>Previsão término: 15 Abr 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Exames Associados -->
+                    <h4 class="mb-3" style="color: #0b4f3a;">
+                        <i class="fa-solid fa-stethoscope me-2" style="color: #1e7b4b;"></i>
+                        Exames Associados
+                    </h4>
+                    
+                    <div id="listaExamesAssociados">
+                        <div class="table-container">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Exame</th>
+                                        <th>Data</th>
+                                        <th>Estado</th>
+                                        <th>Resultado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Avaliação Força Pinça</td>
+                                        <td>15 Mar 2026</td>
+                                        <td><span class="status-badge status-confirmado">Realizado</span></td>
+                                        <td>9.2N</td>
+                                        <td>
+                                            <button class="btn-acao btn-sm" onclick="verExame(1)">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Avaliação Precisão</td>
+                                        <td>18 Mar 2026</td>
+                                        <td><span class="status-badge status-pendente">Agendado</span></td>
+                                        <td>—</td>
+                                        <td>
+                                            <button class="btn-acao btn-sm" onclick="verExame(2)">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="lista_prescricoes.html" class="btn-reset">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Voltar
+                        </a>
+                        
+                        <!-- NOTA: Apagar foi removido - usar cancelar/arquivar em vez de apagar -->
+                        <!-- <a href="apagar_prescricao.html" id="btnApagarLink" class="btn btn-outline-danger">...</a> -->
+                        
+                        <a href="editar_prescricao.html?id=PR-2026-0124" class="btn-acao">
+                            <i class="fa-regular fa-pen-to-square me-2"></i> Editar
+                        </a>
+                        
+                        <button id="btnExportarPDF" class="btn-filter" onclick="exportarPDF()">
+                            <i class="fa-regular fa-file-pdf me-2"></i> Exportar PDF
+                        </button>
+                        
+                        <!-- Opção de Cancelar/Arquivar (substitui o apagar) -->
+                        <button class="btn-acao" style="border-color: #dc2626; color: #dc2626;" onclick="cancelarPrescricao()">
+                            <i class="fa-regular fa-circle-xmark me-2"></i> Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Precisa de ajuda com esta prescrição?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Editar prescrição</button>
+                <button class="faq-btn">Adicionar exame</button>
+                <button class="faq-btn">Ver paciente</button>
+                <button class="faq-btn">Exportar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Carregar dados da prescrição baseado no ID da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const prescricaoId = urlParams.get('id');
+            
+            if (prescricaoId) {
+                carregarDadosPrescricao(prescricaoId);
+            }
+
+            // Chatbot
+            $('#chatbot-button').click(function() {
+                $('#chatbot').removeClass('d-none');
+                $(this).hide();
+            });
+
+            $('#close-chat').click(function() {
+                $('#chatbot').addClass('d-none');
+                $('#chatbot-button').show();
+            });
+
+            // FAQ buttons
+            $('.faq-btn').click(function() {
+                const question = $(this).text();
+                if (question.includes('Editar')) {
+                    window.location.href = 'editar_prescricao.html' + (prescricaoId ? '?id=' + prescricaoId : '');
+                } else if (question.includes('Exportar')) {
+                    exportarPDF();
+                } else if (question.includes('Ver paciente')) {
+                    window.location.href = '../pacientes/gestaoUtente.html?paciente=ana-ferreira';
+                } else if (question.includes('Adicionar')) {
+                    window.location.href = '../exames/selecionar_exames.html?prescricao=' + prescricaoId;
+                } else {
+                    alert('Funcionalidade em desenvolvimento: ' + question);
+                }
+            });
+        });
+
+        // Função para carregar dados (simulação)
+        function carregarDadosPrescricao(id) {
+            // Aqui faria uma chamada AJAX para buscar os dados
+            console.log('Carregar prescrição:', id);
+            
+            // Simulação de dados baseado no ID
+            if (id === 'PR-2026-0124') {
+                $('#idPrescricao').text(id);
+                $('#nomeUtente').text('Ana Ferreira');
+                $('#tipoPrescricao').text('Força de pinça');
+                $('#numSessoes').text('12 sessões');
+                // ... outros campos
+            }
+        }
+
+        // Funções de ação
+        function verExame(id) {
+            window.location.href = '../consultas/exames/auditoria_exames.html?exame=' + id;
+        }
+
+        function exportarPDF() {
+            alert('A gerar PDF da prescrição...');
+            // Implementar geração de PDF
+        }
+
+        function cancelarPrescricao() {
+            if (confirm('Tem certeza que deseja cancelar esta prescrição? Esta ação não pode ser desfeita.')) {
+                alert('Prescrição cancelada com sucesso!');
+                window.location.href = 'lista_prescricoes.html';
+            }
+        }
+
+        function editarPrescricao() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            window.location.href = 'editar_prescricao.html' + (id ? '?id=' + id : '');
+        }
+    </script>
+</body>
+
+</html>
