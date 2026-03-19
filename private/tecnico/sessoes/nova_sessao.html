@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Nova Sessão de Treino</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link active">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Nova Sessão de Treino</h1>
+
+            <form class="progress-card">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Paciente</label>
+                        <select class="form-select" required>
+                            <option value="">Selecionar paciente...</option>
+                            <option value="ana-ferreira" selected>Ana Ferreira</option>
+                            <option value="joao-rodrigues">João Rodrigues</option>
+                            <option value="carlos-monteiro">Carlos Monteiro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Exercício</label>
+                        <select class="form-select" required>
+                            <option value="forca">Treino de força</option>
+                            <option value="precisao">Treino de precisão</option>
+                            <option value="resistencia">Treino de resistência</option>
+                            <option value="gamificado">Sessão gamificada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Mínimo (N)</label>
+                        <input type="number" class="form-control" value="8" min="0" max="30">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Máximo (N)</label>
+                        <input type="number" class="form-control" value="12" min="0" max="30">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Duração (minutos)</label>
+                        <input type="number" class="form-control" value="15" min="5" max="60">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Número de Repetições</label>
+                        <input type="number" class="form-control" value="10" min="1" max="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data e Hora</label>
+                        <input type="datetime-local" class="form-control" value="2026-03-14T10:30">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observações / Instruções</label>
+                    <textarea class="form-control" rows="3" placeholder="Instruções específicas para esta sessão..."></textarea>
+                </div>
+
+                <!-- Gamificação (opcional) -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="gamificar">
+                    <label class="form-check-label" for="gamificar">
+                        Ativar gamificação (pontuação e desafios)
+                    </label>
+                </div>
+
+                <hr>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                    <button type="submit" class="btn-filter">Criar Sessão</button>
+                </div>
+            </form>
+
+            <!-- Calibração Rápida -->
+            <div class="progress-card mt-4">
+                <h5><i class="fa-solid fa-sliders me-2" style="color: #1a5f8a;"></i>Calibração do Sensor</h5>
+                <p class="text-muted small">Ajuste os limites de força para este paciente</p>
+                <div class="zona-alvo">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Força mínima: <strong>8N</strong></span>
+                        <span>Força máxima: <strong>12N</strong></span>
+                    </div>
+                    <div class="zona-alvo-bar">
+                        <div class="zona-alvo-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn-acao btn-sm" onclick="calibracaoAvancada()">
+                            <i class="fa-solid fa-gear me-1"></i>Calibração avançada
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function calibracaoAvancada() {
+            window.location.href = '../config/calibracao.html?paciente=' + document.querySelector('select').value;
+        }
+    </script>
+</body>
+</html>

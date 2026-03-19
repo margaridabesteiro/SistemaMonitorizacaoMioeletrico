@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Editar Sessão</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link active">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_sessoes.html">Sessões</a></li>
+                    <li class="breadcrumb-item active">Editar Sessão #S-2026-0124</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Editar Sessão de Treino</h1>
+
+            <form class="progress-card">
+                <!-- Informação Base (readonly) -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Paciente</label>
+                        <input type="text" class="form-control" value="Ana Ferreira" readonly disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">ID da Sessão</label>
+                        <input type="text" class="form-control" value="#S-2026-0124" readonly disabled>
+                    </div>
+                </div>
+
+                <!-- Campos Editáveis -->
+                <h5 class="mb-3"><i class="fa-regular fa-pen-to-square me-2" style="color: #1a5f8a;"></i>Dados da Sessão</h5>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Exercício</label>
+                        <select class="form-select">
+                            <option value="forca" selected>Treino de força</option>
+                            <option value="precisao">Treino de precisão</option>
+                            <option value="resistencia">Treino de resistência</option>
+                            <option value="gamificado">Sessão gamificada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data e Hora</label>
+                        <input type="datetime-local" class="form-control" value="2026-03-13T09:30">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Mínimo (N)</label>
+                        <input type="number" class="form-control" value="8" min="0" max="30" step="0.5" id="minForca">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Máximo (N)</label>
+                        <input type="number" class="form-control" value="12" min="0" max="30" step="0.5" id="maxForca">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Duração (minutos)</label>
+                        <input type="number" class="form-control" value="15" min="5" max="60">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Número de Repetições</label>
+                        <input type="number" class="form-control" value="10" min="1" max="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estado da Sessão</label>
+                        <select class="form-select">
+                            <option value="agendada">Agendada</option>
+                            <option value="realizada" selected>Realizada</option>
+                            <option value="cancelada">Cancelada</option>
+                            <option value="adiada">Adiada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Visualização da Zona Alvo -->
+                <div class="zona-alvo mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Pré-visualização da Zona Alvo</span>
+                        <span id="zonaDisplay">8N - 12N</span>
+                    </div>
+                    <div class="zona-alvo-bar">
+                        <div class="zona-alvo-fill" id="zonaFill" style="width: 50%;"></div>
+                    </div>
+                    <div class="zona-alvo-markers">
+                        <span>↓ 8N</span>
+                        <span>↓ 12N</span>
+                    </div>
+                </div>
+
+                <!-- Resultados (se já realizada) -->
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Resultados da Sessão</h5>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Força Máxima (N)</label>
+                            <input type="number" class="form-control" value="12.5" step="0.1">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Força Média (N)</label>
+                            <input type="number" class="form-control" value="8.2" step="0.1">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Tempo na Zona (%)</label>
+                            <input type="number" class="form-control" value="85" min="0" max="100">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Desempenho (%)</label>
+                            <input type="number" class="form-control" value="92" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div class="mb-4">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-control" rows="3">Paciente apresentou boa evolução na força de pinça. Conseguiu manter-se na zona alvo durante a maior parte da sessão. Nota-se melhoria na consistência do controlo da prótese.</textarea>
+                </div>
+
+                <!-- Feedback do Paciente -->
+                <div class="mb-4">
+                    <label class="form-label">Feedback do Paciente</label>
+                    <textarea class="form-control" rows="2">"Sinto-me mais confiante a controlar a prótese. O exercício de precisão está a ajudar muito."</textarea>
+                </div>
+
+                <!-- Recomendações -->
+                <div class="mb-4">
+                    <label class="form-label">Recomendações para Próxima Sessão</label>
+                    <textarea class="form-control" rows="2">Aumentar zona alvo para 9N-13N. Adicionar exercícios de precisão no final da sessão. Introduzir jogo de reabilitação para motivar.</textarea>
+                </div>
+
+                <hr>
+
+                <!-- Botões de Ação -->
+                <div class="d-flex gap-2 justify-content-between">
+                    <div>
+                        <button type="button" class="btn-acao" onclick="cancelarSessao()" style="border-color: #dc2626; color: #dc2626;">
+                            <i class="fa-regular fa-circle-xmark me-2"></i>Cancelar Sessão
+                        </button>
+                        <button type="button" class="btn-acao ms-2" onclick="duplicarSessao()">
+                            <i class="fa-regular fa-copy me-2"></i>Duplicar
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                        <button type="submit" class="btn-filter ms-2" onclick="guardarAlteracoes()">
+                            <i class="fa-regular fa-floppy-disk me-2"></i>Guardar Alterações
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Histórico de Alterações -->
+            <div class="progress-card mt-4">
+                <h5><i class="fa-regular fa-clock me-2" style="color: #1a5f8a;"></i>Histórico de Alterações</h5>
+                <div class="timeline-medico">
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">13 Mar 2026, 11:30</div>
+                        <div class="timeline-medico-content">
+                            <p class="mb-0">Zona alvo alterada: 7N-11N → 8N-12N</p>
+                            <small class="text-muted">Por: Dra. Carla Santos</small>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">12 Mar 2026, 15:45</div>
+                        <div class="timeline-medico-content">
+                            <p class="mb-0">Duração alterada: 12min → 15min</p>
+                            <small class="text-muted">Por: Dra. Carla Santos</small>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">10 Mar 2026, 09:15</div>
+                        <div class="timeline-medico-content">
+                            <p class="mb-0">Sessão criada</p>
+                            <small class="text-muted">Por: Dra. Carla Santos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Atualizar pré-visualização da zona alvo
+        const minInput = document.getElementById('minForca');
+        const maxInput = document.getElementById('maxForca');
+        const zonaDisplay = document.getElementById('zonaDisplay');
+        const zonaFill = document.getElementById('zonaFill');
+
+        function atualizarZona() {
+            const min = parseFloat(minInput.value);
+            const max = parseFloat(maxInput.value);
+            zonaDisplay.textContent = min + 'N - ' + max + 'N';
+            
+            const percentagem = (min / max) * 100;
+            zonaFill.style.width = percentagem + '%';
+        }
+
+        minInput.addEventListener('input', atualizarZona);
+        maxInput.addEventListener('input', atualizarZona);
+
+        function guardarAlteracoes() {
+            if (confirm('Guardar alterações à sessão?')) {
+                alert('Alterações guardadas com sucesso!');
+                window.location.href = 'detalhes_sessao.html?id=1';
+            }
+        }
+
+        function cancelarSessao() {
+            if (confirm('Tem certeza que deseja cancelar esta sessão? Esta ação não pode ser desfeita.')) {
+                alert('Sessão cancelada com sucesso!');
+                window.location.href = 'lista_sessoes.html';
+            }
+        }
+
+        function duplicarSessao() {
+            window.location.href = 'nova_sessao.html?copiar=1';
+        }
+    </script>
+</body>
+</html>

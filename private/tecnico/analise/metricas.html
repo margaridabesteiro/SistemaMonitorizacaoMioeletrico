@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Métricas Avançadas</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="analise/desempenho.html" class="nav-link active">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Métricas Avançadas</h1>
+                <button class="btn-filter" onclick="exportarMetricas()">
+                    <i class="fa-solid fa-download me-2"></i>Exportar Dados
+                </button>
+            </div>
+
+            <!-- Seletor de Paciente -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Paciente</label>
+                        <select class="form-select" id="selectPaciente">
+                            <option value="ana-ferreira">Ana Ferreira</option>
+                            <option value="joao-rodrigues">João Rodrigues</option>
+                            <option value="carlos-monteiro">Carlos Monteiro</option>
+                            <option value="todos">Todos os pacientes</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select">
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                            <option>Últimos 6 meses</option>
+                            <option>Todo o período</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo de Métrica</label>
+                        <select class="form-select">
+                            <option>Todas</option>
+                            <option>Força</option>
+                            <option>Precisão</option>
+                            <option>Resistência</option>
+                            <option>Consistência</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards de Métricas Principais -->
+            <div class="metricas-grid">
+                <div class="metrica-card">
+                    <div class="d-flex justify-content-between">
+                        <span class="metrica-label">Força Máx Média</span>
+                        <span class="badge" style="background: #1a5f8a20; color: #1a5f8a;">+12%</span>
+                    </div>
+                    <div class="metrica-valor">11.8N</div>
+                    <small class="text-muted">Média entre pacientes</small>
+                </div>
+                <div class="metrica-card">
+                    <div class="d-flex justify-content-between">
+                        <span class="metrica-label">Força Média Geral</span>
+                        <span class="badge" style="background: #48bb7820; color: #48bb78;">+8%</span>
+                    </div>
+                    <div class="metrica-valor">7.6N</div>
+                    <small class="text-muted">Média entre pacientes</small>
+                </div>
+                <div class="metrica-card">
+                    <div class="d-flex justify-content-between">
+                        <span class="metrica-label">Tempo na Zona</span>
+                        <span class="badge" style="background: #fbbf2420; color: #fbbf24;">+5%</span>
+                    </div>
+                    <div class="metrica-valor">78%</div>
+                    <small class="text-muted">Média de sucesso</small>
+                </div>
+                <div class="metrica-card">
+                    <div class="d-flex justify-content-between">
+                        <span class="metrica-label">Consistência</span>
+                        <span class="badge" style="background: #9f7aea20; color: #9f7aea;">Melhor</span>
+                    </div>
+                    <div class="metrica-valor">0.85</div>
+                    <small class="text-muted">Coeficiente de variação</small>
+                </div>
+            </div>
+
+            <!-- Gráficos Avançados -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Distribuição de Força</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="distribuicaoForcaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-pie me-2" style="color: #1a5f8a;"></i>Tipos de Sessão</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="tiposSessaoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-bar me-2" style="color: #1a5f8a;"></i>Evolução da Consistência</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="consistenciaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-scatter me-2" style="color: #1a5f8a;"></i>Correlação Força x Tempo</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="correlacaoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Métricas por Paciente -->
+            <div class="progress-card mt-4">
+                <h5 class="mb-3"><i class="fa-solid fa-table me-2" style="color: #1a5f8a;"></i>Comparativo entre Pacientes</h5>
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Paciente</th>
+                                <th>Força Máx</th>
+                                <th>Força Média</th>
+                                <th>Zona Alvo</th>
+                                <th>Consistência</th>
+                                <th>Progresso</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ana Ferreira</td>
+                                <td><strong>12.5N</strong> <small class="text-success">▲</small></td>
+                                <td>8.2N</td>
+                                <td>85%</td>
+                                <td>0.88</td>
+                                <td>
+                                    <div style="width: 80px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: 75%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge-progresso progresso-alto">Excelente</span></td>
+                            </tr>
+                            <tr>
+                                <td>João Rodrigues</td>
+                                <td><strong>8.7N</strong> <small class="text-warning">➡️</small></td>
+                                <td>6.1N</td>
+                                <td>72%</td>
+                                <td>0.75</td>
+                                <td>
+                                    <div style="width: 80px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" style="width: 45%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge-progresso progresso-medio">Médio</span></td>
+                            </tr>
+                            <tr>
+                                <td>Carlos Monteiro</td>
+                                <td><strong>10.2N</strong> <small class="text-success">▲</small></td>
+                                <td>7.5N</td>
+                                <td>78%</td>
+                                <td>0.82</td>
+                                <td>
+                                    <div style="width: 80px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge-progresso progresso-alto">Bom</span></td>
+                            </tr>
+                            <tr>
+                                <td>Maria Santos</td>
+                                <td><strong>9.1N</strong> <small class="text-danger">▼</small></td>
+                                <td>6.8N</td>
+                                <td>68%</td>
+                                <td>0.71</td>
+                                <td>
+                                    <div style="width: 80px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-danger" style="width: 30%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge-progresso progresso-baixo">Atenção</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Estatísticas Descritivas -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h6>Média Geral</h6>
+                        <div class="stat-value">9.8N</div>
+                        <small>Força máxima</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h6>Desvio Padrão</h6>
+                        <div class="stat-value">2.3N</div>
+                        <small>Variação entre pacientes</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h6>Percentil 90</h6>
+                        <div class="stat-value">12.1N</div>
+                        <small>Top 10% pacientes</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análise de Tendências -->
+            <div class="progress-card mt-4" style="background: #ebf8ff;">
+                <h5><i class="fa-regular fa-chart-line me-2" style="color: #1a5f8a;"></i>Insights e Tendências</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="mb-0">
+                            <li><strong>Tendência positiva:</strong> Força média aumentou 15% nos últimos 30 dias</li>
+                            <li><strong>Paciente destaque:</strong> Ana Ferreira com melhor evolução</li>
+                            <li><strong>Área de melhoria:</strong> Consistência em pacientes com prótese mecânica</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="mb-0">
+                            <li><strong>Recomendação:</strong> Aumentar frequência de sessões gamificadas</li>
+                            <li><strong>Alerta:</strong> 2 pacientes com tendência de queda</li>
+                            <li><strong>Meta:</strong> 85% de tempo na zona alvo até final do mês</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráfico de Distribuição de Força
+        new Chart(document.getElementById('distribuicaoForcaChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Ana', 'João', 'Carlos', 'Maria', 'Pedro', 'Sofia'],
+                datasets: [{
+                    label: 'Força Máxima (N)',
+                    data: [12.5, 8.7, 10.2, 9.1, 11.3, 8.9],
+                    backgroundColor: '#1a5f8a'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Gráfico de Tipos de Sessão
+        new Chart(document.getElementById('tiposSessaoChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Força', 'Precisão', 'Resistência', 'Gamificado'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#1a5f8a', '#48bb78', '#fbbf24', '#9f7aea']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Gráfico de Consistência
+        new Chart(document.getElementById('consistenciaChart'), {
+            type: 'line',
+            data: {
+                labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                datasets: [{
+                    label: 'Consistência (CV)',
+                    data: [1.2, 1.1, 1.0, 0.95, 0.88, 0.85],
+                    borderColor: '#1a5f8a',
+                    backgroundColor: 'rgba(26,95,138,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Gráfico de Correlação
+        new Chart(document.getElementById('correlacaoChart'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Relação Força x Tempo',
+                    data: [
+                        { x: 4, y: 6 }, { x: 6, y: 8 }, { x: 8, y: 9 }, { x: 10, y: 11 },
+                        { x: 12, y: 12 }, { x: 14, y: 11.5 }, { x: 16, y: 12 }, { x: 18, y: 12.5 }
+                    ],
+                    backgroundColor: '#1a5f8a'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { title: { display: true, text: 'Tempo (semanas)' } },
+                    y: { title: { display: true, text: 'Força (N)' } }
+                }
+            }
+        });
+
+        function exportarMetricas() {
+            alert('A exportar dados de métricas...');
+        }
+    </script>
+</body>
+</html>

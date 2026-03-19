@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Fisioterapeuta - Pacientes</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link active">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Gestão de Pacientes</h1>
+                <button class="btn-filter" onclick="novoPaciente()">
+                    <i class="fa-solid fa-user-plus me-2"></i>Novo Paciente
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrar Pacientes
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Ativo</option>
+                            <option>Em tratamento</option>
+                            <option>Pausa</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo de prótese</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Mioelétrica</option>
+                            <option>Mecânica</option>
+                            <option>Híbrida</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Pesquisar</label>
+                        <input type="text" class="form-control" placeholder="Nome do paciente...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Pacientes -->
+            <div class="table-container">
+                <table id="tabelaPacientes" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Tipo de Prótese</th>
+                            <th>Última Sessão</th>
+                            <th>Força Média</th>
+                            <th>Progresso</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="paciente-avatar" style="width: 35px; height: 35px;">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <strong>Ana Ferreira</strong>
+                                </div>
+                            </td>
+                            <td>Mioelétrica</td>
+                            <td>13 Mar 2026</td>
+                            <td>8.2N</td>
+                            <td>
+                                <div style="width: 100px;">
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar" style="width: 75%; background: #1a5f8a;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-progresso progresso-alto">Ativo</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-acao btn-sm" onclick="verPerfil('ana-ferreira')" title="Perfil">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="criarSessao('ana-ferreira')" title="Nova sessão">
+                                        <i class="fa-regular fa-calendar-plus"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="analisarDados('ana-ferreira')" title="Analisar">
+                                        <i class="fa-solid fa-chart-simple"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="enviarMensagem('ana-ferreira')" title="Mensagem">
+                                        <i class="fa-regular fa-envelope"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Mais linhas... -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#tabelaPacientes').DataTable({ pageLength: 10, language: { emptyTable: "Nenhum paciente encontrado" } });
+        
+        function novoPaciente() { window.location.href = 'novo_paciente.html'; }
+        function verPerfil(id) { window.location.href = 'perfil_paciente.html?paciente=' + id; }
+        function criarSessao(id) { window.location.href = '../sessoes/nova_sessao.html?paciente=' + id; }
+        function analisarDados(id) { window.location.href = '../analise/desempenho.html?paciente=' + id; }
+        function enviarMensagem(id) { window.location.href = '../mensagens/conversas.html?paciente=' + id; }
+    </script>
+</body>
+</html>

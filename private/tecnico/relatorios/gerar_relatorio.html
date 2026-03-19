@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Relatório do Paciente</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link active"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+            <a href="../mensagens/conversas.html" class="nav-link"><i class="fa-regular fa-envelope me-2"></i>Mensagens</a>
+            <a href="gerar_relatorio.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+        </nav>
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="gerar_relatorio.html">Relatórios</a></li>
+                    <li class="breadcrumb-item active">Relatório do Paciente</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Relatório Clínico</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn-filter" onclick="window.print()">
+                        <i class="fa-regular fa-file-pdf me-2"></i>PDF
+                    </button>
+                    <button class="btn-acao" onclick="window.location.href='gerar_relatorio.html'">
+                        <i class="fa-regular fa-envelope me-2"></i>Enviar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card do Relatório -->
+            <div class="progress-card">
+                <!-- Cabeçalho do Relatório -->
+                <div class="text-center mb-4">
+                    <div class="logo-icon" style="font-size: 3rem; margin-bottom: 10px;">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h2 class="mb-0" style="color: #0f3b5e;">RehabLink</h2>
+                    <p class="text-muted">Relatório Clínico - Fisioterapia</p>
+                    <hr class="my-3">
+                </div>
+
+                <!-- Informação do Relatório -->
+                <div class="d-flex justify-content-between mb-4">
+                    <div>
+                        <p class="mb-1"><strong>Relatório emitido em:</strong> 13 de Março de 2026</p>
+                        <p class="mb-0"><strong>Por:</strong> Dra. Carla Santos · Fisioterapeuta</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge" style="background: #1a5f8a; color: white; padding: 8px 15px;">
+                            <i class="fa-regular fa-file-lines me-1"></i>RPT-2026-0124
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card do Paciente -->
+                <div class="paciente-card mb-4">
+                    <div class="paciente-header">
+                        <div class="paciente-avatar">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="paciente-info">
+                            <h3>Ana Ferreira</h3>
+                            <p>NIF: 123456789 · 15/05/1988 (38 anos)</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p><i class="fa-solid fa-stethoscope me-2" style="color: #1a5f8a;"></i><strong>Amputação:</strong> Transradial esquerda</p>
+                            <p><i class="fa-solid fa-microchip me-2" style="color: #1a5f8a;"></i><strong>Prótese:</strong> Mioelétrica Ottobock</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="fa-regular fa-calendar me-2" style="color: #1a5f8a;"></i><strong>Início:</strong> 15 Janeiro 2026</p>
+                            <p><i class="fa-regular fa-clock me-2" style="color: #1a5f8a;"></i><strong>Tempo:</strong> 2 meses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métricas -->
+                <h5 class="mb-3" style="color: #0f3b5e;">Resumo de Métricas</h5>
+                <div class="metricas-grid mb-4">
+                    <div class="metrica-card">
+                        <div class="metrica-valor">24</div>
+                        <div class="metrica-label">Total de Sessões</div>
+                    </div>
+                    <div class="metrica-card">
+                        <div class="metrica-valor">12.5N</div>
+                        <div class="metrica-label">Força Máxima</div>
+                    </div>
+                    <div class="metrica-card">
+                        <div class="metrica-valor">8.2N</div>
+                        <div class="metrica-label">Força Média</div>
+                    </div>
+                    <div class="metrica-card">
+                        <div class="metrica-valor">85%</div>
+                        <div class="metrica-label">Tempo na Zona</div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Evolução -->
+                <h5 class="mb-3" style="color: #0f3b5e;">Evolução Mensal</h5>
+                <div class="table-container mb-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Força Média</th>
+                                <th>Força Máxima</th>
+                                <th>Sessões</th>
+                                <th>Progresso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Janeiro</td>
+                                <td>4.2N</td>
+                                <td>5.1N</td>
+                                <td>6</td>
+                                <td>
+                                    <div style="width: 100px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar" style="width: 30%; background: #1a5f8a;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fevereiro</td>
+                                <td>6.8N</td>
+                                <td>8.2N</td>
+                                <td>8</td>
+                                <td>
+                                    <div style="width: 100px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar" style="width: 60%; background: #1a5f8a;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Março</td>
+                                <td>8.2N</td>
+                                <td>12.5N</td>
+                                <td>10</td>
+                                <td>
+                                    <div style="width: 100px;">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar" style="width: 85%; background: #1a5f8a;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Últimas Sessões -->
+                <h5 class="mb-3" style="color: #0f3b5e;">Últimas Sessões</h5>
+                <div class="table-container mb-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Força Média</th>
+                                <th>Zona Alvo</th>
+                                <th>Desempenho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>13 Mar 2026</td>
+                                <td>Força de pinça</td>
+                                <td>8.2N</td>
+                                <td><span class="badge-forca">8-12N</span></td>
+                                <td><span class="badge-progresso progresso-alto">92%</span></td>
+                            </tr>
+                            <tr>
+                                <td>11 Mar 2026</td>
+                                <td>Precisão</td>
+                                <td>7.8N</td>
+                                <td><span class="badge-forca">8-12N</span></td>
+                                <td><span class="badge-progresso progresso-alto">88%</span></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 2026</td>
+                                <td>Resistência</td>
+                                <td>7.5N</td>
+                                <td><span class="badge-forca">8-12N</span></td>
+                                <td><span class="badge-progresso progresso-medio">75%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recomendações -->
+                <h5 class="mb-3" style="color: #0f3b5e;">Recomendações Clínicas</h5>
+                <div class="alerta-card info mb-4">
+                    <div class="alerta-icon info">
+                        <i class="fa-regular fa-lightbulb"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <ul class="mb-0">
+                            <li>Manter frequência de 3 sessões por semana</li>
+                            <li>Aumentar zona alvo para 9N-13N na próxima semana</li>
+                            <li>Introduzir exercícios de precisão mais complexos</li>
+                            <li>Continuar com sessões gamificadas para motivação</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <h5 class="mb-3" style="color: #0f3b5e;">Observações</h5>
+                <div class="paciente-card bg-light">
+                    <p class="mb-0">Paciente apresenta excelente evolução na reabilitação. Força de pinça aumentou significativamente nas últimas semanas. Consistência do controlo da prótese melhorou consideravelmente. Motivação elevada, boa adesão aos exercícios propostos.</p>
+                </div>
+
+                <!-- Assinaturas -->
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <hr class="w-75">
+                        <p class="mb-0"><strong>Dra. Carla Santos</strong></p>
+                        <small class="text-muted">Fisioterapeuta · Cédula: F-12345</small>
+                    </div>
+                    <div class="col-6 text-end">
+                        <hr class="w-75 ms-auto">
+                        <p class="mb-0"><strong>Ana Ferreira</strong></p>
+                        <small class="text-muted">Paciente</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+                </button>
+                <button class="btn-filter" onclick="window.print()">
+                    <i class="fa-regular fa-file-pdf me-2"></i>Guardar PDF
+                </button>
+                <button class="btn-acao" onclick="enviarEmail()">
+                    <i class="fa-regular fa-envelope me-2"></i>Enviar por Email
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Estilos para impressão -->
+    <style>
+        @media print {
+            .topbar, .sidebar, .btn-filter, .btn-acao, .btn-reset, nav { display: none !important; }
+            .wrapper { display: block; padding: 0; }
+            .content { box-shadow: none; border: none; padding: 20px; margin: 0; }
+            .progress-card { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function enviarEmail() {
+            alert('Funcionalidade de envio de email em desenvolvimento');
+        }
+    </script>
+</body>
+</html>

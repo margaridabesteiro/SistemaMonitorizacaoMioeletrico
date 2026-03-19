@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Iniciar Sessão</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link active">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Sessão em Curso</h1>
+                <div>
+                    <span class="badge" style="background: #1a5f8a; color: white; padding: 8px 15px;">
+                        <i class="fa-solid fa-circle me-2" style="color: #48bb78;"></i>Em tempo real
+                    </span>
+                </div>
+            </div>
+
+            <!-- Informação do Paciente -->
+            <div class="progress-card mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Ana Ferreira</h4>
+                        <p>Treino de força de pinça · Zona alvo: 8N - 12N</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h4 id="timer">00:00</h4>
+                        <p>Duração: 15 minutos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico em Tempo Real -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Força em Tempo Real</h5>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="tempoRealChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <h5>Força Atual</h5>
+                        <div class="stat-value" style="font-size: 3rem;" id="forcaAtual">10.2N</div>
+                        <div class="zona-alvo mt-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Zona Alvo</span>
+                                <span>8N - 12N</span>
+                            </div>
+                            <div class="zona-alvo-bar mt-2">
+                                <div class="zona-alvo-fill" style="width: 50%;" id="zonaFill"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="stat-label">Máx</div>
+                                    <div class="fw-bold" id="maxAtual">12.5N</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-label">Média</div>
+                                    <div class="fw-bold" id="mediaAtual">9.8N</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-card mt-3">
+                        <h5><i class="fa-solid fa-bullseye me-2" style="color: #1a5f8a;"></i>Progresso</h5>
+                        <div class="text-center">
+                            <div class="stat-value" id="progressoPercent">65%</div>
+                            <div class="progress mt-2" style="height: 8px;">
+                                <div class="progress-bar" style="width: 65%; background: #1a5f8a;" id="progressoBar"></div>
+                            </div>
+                            <p class="mt-2"><small>Repetição 7/10</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controlos da Sessão -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn-filter" onclick="pausarSessao()" id="btnPausa">
+                                    <i class="fa-solid fa-pause me-2"></i>Pausar
+                                </button>
+                                <button class="btn-acao ms-2" onclick="finalizarSessao()" id="btnFinalizar">
+                                    <i class="fa-solid fa-stop me-2"></i>Finalizar
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn-acao" onclick="registrarObservacao()">
+                                    <i class="fa-regular fa-note-sticky me-2"></i>Observação
+                                </button>
+                                <button class="btn-acao ms-2" onclick="ajustarZona()">
+                                    <i class="fa-solid fa-sliders me-2"></i>Ajustar Zona
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Rápido -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-regular fa-message me-2" style="color: #1a5f8a;"></i>Feedback Rápido</h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn-acao" onclick="feedbackPositivo()">
+                                <i class="fa-regular fa-face-smile me-2" style="color: #48bb78;"></i>Bom desempenho
+                            </button>
+                            <button class="btn-acao" onclick="feedbackAjuste()">
+                                <i class="fa-regular fa-face-meh me-2" style="color: #fbbf24;"></i>Precisa ajustar
+                            </button>
+                            <button class="btn-acao" onclick="feedbackNegativo()">
+                                <i class="fa-regular fa-face-frown me-2" style="color: #f56565;"></i>Difícil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        let timerInterval;
+        let seconds = 0;
+        let forcaAtual = 10.2;
+        const ctx = document.getElementById('tempoRealChart').getContext('2d');
+
+        // Gráfico em tempo real
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Força (N)',
+                    data: [],
+                    borderColor: '#1a5f8a',
+                    borderWidth: 2,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 20
+                    }
+                }
+            }
+        });
+
+        // Timer
+        function iniciarTimer() {
+            timerInterval = setInterval(function() {
+                seconds++;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                $('#timer').text(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
+                
+                // Simular variação da força
+                forcaAtual = 8 + Math.random() * 6;
+                $('#forcaAtual').text(forcaAtual.toFixed(1) + 'N');
+                
+                // Atualizar gráfico
+                chart.data.labels.push(seconds + 's');
+                chart.data.datasets[0].data.push(forcaAtual);
+                if (chart.data.labels.length > 20) {
+                    chart.data.labels.shift();
+                    chart.data.datasets[0].data.shift();
+                }
+                chart.update();
+
+                // Atualizar barra de zona
+                const percent = ((forcaAtual - 8) / 4) * 100;
+                $('#zonaFill').css('width', Math.min(100, Math.max(0, percent)) + '%');
+
+            }, 1000);
+        }
+
+        iniciarTimer();
+
+        function pausarSessao() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                $('#btnPausa').html('<i class="fa-solid fa-play me-2"></i>Continuar');
+            } else {
+                iniciarTimer();
+                $('#btnPausa').html('<i class="fa-solid fa-pause me-2"></i>Pausar');
+            }
+        }
+
+        function finalizarSessao() {
+            clearInterval(timerInterval);
+            if (confirm('Deseja finalizar a sessão?')) {
+                alert('Sessão finalizada com sucesso!');
+                window.location.href = 'detalhes_sessao.html?id=1';
+            }
+        }
+
+        function registrarObservacao() {
+            const obs = prompt('Registar observação:');
+            if (obs) alert('Observação guardada');
+        }
+
+        function ajustarZona() {
+            alert('Abrir ajuste de zona alvo');
+            window.location.href = '../config/calibracao.html?paciente=ana-ferreira';
+        }
+
+        function feedbackPositivo() {
+            alert('Feedback positivo registado');
+        }
+
+        function feedbackAjuste() {
+            alert('Feedback de ajuste registado');
+        }
+
+        function feedbackNegativo() {
+            alert('Feedback registado. Considere ajustar exercício.');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Análise de Desempenho</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="analise/desempenho.html" class="nav-link active">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Análise de Desempenho</h1>
+
+            <!-- Seletor de Paciente e Período -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Paciente</label>
+                        <select class="form-select" id="selectPaciente">
+                            <option value="ana-ferreira">Ana Ferreira</option>
+                            <option value="joao-rodrigues">João Rodrigues</option>
+                            <option value="carlos-monteiro">Carlos Monteiro</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select">
+                            <option>Últimos 7 dias</option>
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                            <option>Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Comparar com</label>
+                        <select class="form-select">
+                            <option>Período anterior</option>
+                            <option>Média do grupo</option>
+                            <option>Objetivo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas Principais -->
+            <div class="metricas-grid">
+                <div class="metrica-card">
+                    <div class="metrica-valor">12.5N</div>
+                    <div class="metrica-label">Força Máxima</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +1.2N vs período anterior</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">8.2N</div>
+                    <div class="metrica-label">Força Média</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +0.5N vs período anterior</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">85%</div>
+                    <div class="metrica-label">Tempo na Zona Alvo</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +5% vs período anterior</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">0.8</div>
+                    <div class="metrica-label">Estabilidade (CV)</div>
+                    <div class="metrica-trend down"><i class="fa-solid fa-arrow-down"></i> -0.2 vs período anterior</div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Força por Sessão</h5>
+                        <canvas id="forcaSessaoChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container chart-small">
+                        <h5 class="mb-3">Percentagem de Sucesso</h5>
+                        <canvas id="sucessoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="chart-container chart-small">
+                        <h5 class="mb-3">Tempo Médio de Execução</h5>
+                        <canvas id="tempoExecucaoChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container chart-small">
+                        <h5 class="mb-3">Evolução Semanal</h5>
+                        <canvas id="evolucaoSemanalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparação de Sessões -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Comparação de Sessões</h5>
+                    <button class="btn-acao btn-sm" onclick="compararSessoes()">
+                        <i class="fa-solid fa-arrow-right-arrow-left me-1"></i>Comparar períodos
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Métrica</th>
+                                <th>Período Anterior</th>
+                                <th>Período Atual</th>
+                                <th>Evolução</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Força Média</td>
+                                <td>7.8N</td>
+                                <td>8.2N</td>
+                                <td><span class="text-success">+0.4N (+5%)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tempo na Zona Alvo</td>
+                                <td>80%</td>
+                                <td>85%</td>
+                                <td><span class="text-success">+5%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sessões Realizadas</td>
+                                <td>8</td>
+                                <td>10</td>
+                                <td><span class="text-success">+2 sessões</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráficos
+        new Chart(document.getElementById('forcaSessaoChart'), {
+            type: 'bar',
+            data: {
+                labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10'],
+                datasets: [{
+                    label: 'Força (N)',
+                    data: [7.2, 7.8, 8.1, 7.9, 8.3, 8.5, 8.2, 8.7, 8.4, 8.9],
+                    backgroundColor: '#1a5f8a'
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('sucessoChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Sucesso', 'Falhou'],
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: ['#48bb78', '#f56565']
+                }]
+            }
+        });
+
+        function compararSessoes() {
+            window.location.href = 'comparacao.html?paciente=' + $('#selectPaciente').val();
+        }
+    </script>
+</body>
+</html>

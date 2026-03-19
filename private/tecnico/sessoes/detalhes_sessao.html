@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Detalhes da Sessão</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link active">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_sessoes.html">Sessões</a></li>
+                    <li class="breadcrumb-item active">Detalhes da Sessão #S-2026-0124</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <h1>Detalhes da Sessão</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn-acao" onclick="editarSessao()">
+                        <i class="fa-regular fa-pen-to-square me-2"></i>Editar
+                    </button>
+                    <button class="btn-filter" onclick="gerarRelatorio()">
+                        <i class="fa-regular fa-file-pdf me-2"></i>Relatório
+                    </button>
+                </div>
+            </div>
+
+            <!-- Informações Principais -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="progress-card">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Paciente:</strong> Ana Ferreira</p>
+                                <p><strong>Tipo de sessão:</strong> Treino de força de pinça</p>
+                                <p><strong>Data:</strong> 13 Março 2026 · 09:30</p>
+                                <p><strong>Duração:</strong> 15 minutos</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Zona alvo:</strong> 8N - 12N</p>
+                                <p><strong>Repetições:</strong> 10</p>
+                                <p><strong>Estado:</strong> <span class="badge-progresso progresso-alto">Realizada</span></p>
+                                <p><strong>Fisioterapeuta:</strong> Dra. Carla Santos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <h6 class="text-muted">Desempenho Global</h6>
+                        <div class="stat-value" style="font-size: 2.5rem;">92%</div>
+                        <div class="progress mt-2" style="height: 8px;">
+                            <div class="progress-bar" style="width: 92%; background: #48bb78;"></div>
+                        </div>
+                        <p class="mt-2 mb-0"><small class="text-success"><i class="fa-solid fa-arrow-up"></i> +5% vs última sessão</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dados de Força -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Força ao Longo da Sessão</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="forcaSessaoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-bullseye me-2" style="color: #1a5f8a;"></i>Tempo na Zona Alvo</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="zonaAlvoDetalheChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas Detalhadas -->
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="progress-card text-center">
+                        <div class="stat-value">12.5N</div>
+                        <div class="stat-label">Força Máxima</div>
+                        <small class="text-success">+0.8N vs anterior</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="progress-card text-center">
+                        <div class="stat-value">8.2N</div>
+                        <div class="stat-label">Força Média</div>
+                        <small class="text-success">+0.3N vs anterior</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="progress-card text-center">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Tempo na Zona</div>
+                        <small class="text-success">+5% vs anterior</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="progress-card text-center">
+                        <div class="stat-value">0.8</div>
+                        <div class="stat-label">Estabilidade</div>
+                        <small class="text-success">Melhor</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback e Observações -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-regular fa-note-sticky me-2" style="color: #1a5f8a;"></i>Observações</h5>
+                        <p>Paciente apresentou boa evolução na força de pinça. Conseguiu manter-se na zona alvo durante a maior parte da sessão. Nota-se melhoria na consistência do controlo da prótese.</p>
+                        <hr>
+                        <h5><i class="fa-regular fa-message me-2" style="color: #1a5f8a;"></i>Feedback do Paciente</h5>
+                        <p>"Sinto-me mais confiante a controlar a prótese. O exercício de precisão está a ajudar muito."</p>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-acao btn-sm" onclick="enviarFeedback()">
+                                <i class="fa-regular fa-paper-plane me-1"></i>Enviar Feedback
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recomendações -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card" style="background: #ebf8ff; border-left: 4px solid #1a5f8a;">
+                        <h5><i class="fa-regular fa-lightbulb me-2" style="color: #1a5f8a;"></i>Recomendações para Próxima Sessão</h5>
+                        <ul class="mb-0">
+                            <li>Aumentar zona alvo para 9N-13N</li>
+                            <li>Adicionar exercícios de precisão no final da sessão</li>
+                            <li>Introduzir jogo de reabilitação para motivar</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráfico de Força da Sessão
+        new Chart(document.getElementById('forcaSessaoChart'), {
+            type: 'line',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                datasets: [{
+                    label: 'Força (N)',
+                    data: [8.2, 9.1, 8.7, 10.2, 11.5, 10.8, 12.1, 11.8, 12.5, 12.2],
+                    borderColor: '#1a5f8a',
+                    backgroundColor: 'rgba(26,95,138,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Gráfico de Zona Alvo
+        new Chart(document.getElementById('zonaAlvoDetalheChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Na zona', 'Abaixo', 'Acima'],
+                datasets: [{
+                    data: [85, 10, 5],
+                    backgroundColor: ['#48bb78', '#fbbf24', '#f56565']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        function editarSessao() {
+            window.location.href = 'editar_sessao.html?id=1';
+        }
+
+        function gerarRelatorio() {
+            window.location.href = '../relatorios/relatorio_paciente.html?sessao=1';
+        }
+
+        function enviarFeedback() {
+            window.location.href = '../mensagens/nova_mensagem.html?paciente=ana-ferreira&contexto=sessao';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Calibração do Sensor</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="config/calibracao.html" class="nav-link active">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Calibração do Sensor</h1>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-user me-2" style="color: #1a5f8a;"></i>Selecionar Paciente</h5>
+                        <select class="form-select mb-3">
+                            <option value="ana-ferreira">Ana Ferreira</option>
+                            <option value="joao-rodrigues">João Rodrigues</option>
+                            <option value="carlos-monteiro">Carlos Monteiro</option>
+                        </select>
+
+                        <h5 class="mt-4">Limites de Força</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Força Mínima (N)</label>
+                            <input type="range" class="form-range" min="0" max="20" value="8" step="0.5" id="minForca">
+                            <div class="text-center"><span id="minValor">8N</span></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Força Máxima (N)</label>
+                            <input type="range" class="form-range" min="0" max="30" value="12" step="0.5" id="maxForca">
+                            <div class="text-center"><span id="maxValor">12N</span></div>
+                        </div>
+
+                        <div class="zona-alvo mt-4">
+                            <div class="d-flex justify-content-between">
+                                <span>Zona Alvo</span>
+                                <span id="zonaDisplay">8N - 12N</span>
+                            </div>
+                            <div class="zona-alvo-bar mt-2">
+                                <div class="zona-alvo-fill" id="zonaFill" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-history me-2" style="color: #1a5f8a;"></i>Histórico de Calibrações</h5>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Mínimo</th>
+                                        <th>Máximo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10 Mar 2026</td>
+                                        <td>8N</td>
+                                        <td>12N</td>
+                                    </tr>
+                                    <tr>
+                                        <td>01 Mar 2026</td>
+                                        <td>7N</td>
+                                        <td>11N</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="progress-card mt-3">
+                        <h5><i class="fa-solid fa-microchip me-2" style="color: #1a5f8a;"></i>Estado do Sensor</h5>
+                        <p><strong>Sensor:</strong> Conectado</p>
+                        <p><strong>Bateria:</strong> <span class="text-success">85%</span></p>
+                        <p><strong>Última calibração:</strong> 10 Mar 2026</p>
+                        <button class="btn-filter w-100" onclick="testarSensor()">
+                            <i class="fa-solid fa-play me-2"></i>Testar Sensor
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="history.back()">Cancelar</button>
+                <button class="btn-filter" onclick="guardarCalibracao()">Guardar Calibração</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        const minRange = document.getElementById('minForca');
+        const maxRange = document.getElementById('maxForca');
+        const minValor = document.getElementById('minValor');
+        const maxValor = document.getElementById('maxValor');
+        const zonaDisplay = document.getElementById('zonaDisplay');
+        const zonaFill = document.getElementById('zonaFill');
+
+        function atualizarZona() {
+            const min = parseFloat(minRange.value);
+            const max = parseFloat(maxRange.value);
+            minValor.textContent = min + 'N';
+            maxValor.textContent = max + 'N';
+            zonaDisplay.textContent = min + 'N - ' + max + 'N';
+            
+            const percentagem = (min / max) * 100;
+            zonaFill.style.width = percentagem + '%';
+        }
+
+        minRange.addEventListener('input', atualizarZona);
+        maxRange.addEventListener('input', atualizarZona);
+
+        function testarSensor() {
+            alert('Teste do sensor iniciado...');
+        }
+
+        function guardarCalibracao() {
+            alert('Calibração guardada com sucesso!');
+            window.location.href = '../index_F.html';
+        }
+    </script>
+</body>
+</html>

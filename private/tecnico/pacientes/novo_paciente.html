@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Novo Paciente</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link active">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Novo Paciente</h1>
+
+            <form class="progress-card">
+                <h5 class="mb-3"><i class="fa-regular fa-user me-2" style="color: #1a5f8a;"></i>Informação Pessoal</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Data de Nascimento</label>
+                        <input type="date" class="form-control" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Sexo</label>
+                        <select class="form-select">
+                            <option>Feminino</option>
+                            <option>Masculino</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">NIF</label>
+                        <input type="text" class="form-control" placeholder="123456789">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Contacto</label>
+                        <input type="tel" class="form-control" placeholder="912 345 678">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="paciente@email.com">
+                    </div>
+                </div>
+
+                <h5 class="mb-3 mt-4"><i class="fa-solid fa-stethoscope me-2" style="color: #1a5f8a;"></i>Informação Clínica</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Amputação</label>
+                        <select class="form-select">
+                            <option>Transradial esquerda</option>
+                            <option>Transradial direita</option>
+                            <option>Transumeral esquerda</option>
+                            <option>Transumeral direita</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Prótese</label>
+                        <select class="form-select">
+                            <option>Mioelétrica</option>
+                            <option>Mecânica</option>
+                            <option>Híbrida</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Início da Reabilitação</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Médico Responsável</label>
+                        <select class="form-select">
+                            <option>Dr. António Silva</option>
+                            <option>Dra. Maria Santos</option>
+                            <option>Dr. João Costa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observações Clínicas</label>
+                    <textarea class="form-control" rows="3" placeholder="Informações relevantes..."></textarea>
+                </div>
+
+                <h5 class="mb-3 mt-4"><i class="fa-solid fa-sliders me-2" style="color: #1a5f8a;"></i>Configuração Inicial</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Mínimo (N)</label>
+                        <input type="number" class="form-control" value="8" min="0" max="30">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Zona Alvo - Máximo (N)</label>
+                        <input type="number" class="form-control" value="12" min="0" max="30">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Duração Padrão (min)</label>
+                        <input type="number" class="form-control" value="15" min="5" max="60">
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="gamificarAtivo">
+                    <label class="form-check-label" for="gamificarAtivo">
+                        Ativar gamificação por defeito
+                    </label>
+                </div>
+
+                <hr>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                    <button type="submit" class="btn-filter" onclick="guardarPaciente()">Guardar Paciente</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function guardarPaciente() {
+            alert('Paciente guardado com sucesso!');
+            window.location.href = 'lista_pacientes.html';
+        }
+    </script>
+</body>
+</html>

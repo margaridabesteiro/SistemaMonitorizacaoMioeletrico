@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Fisioterapeuta - Dashboard</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/fisioterapeuta.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i>
+                <span>Dra. Carla Santos</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_F.html" class="nav-link active">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h2>Bem-vinda, Dra. Carla Santos</h2>
+                    <p>Segunda-feira, 13 de Março de 2026 · 8 sessões agendadas para hoje</p>
+                </div>
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+            </div>
+
+            <!-- Métricas Rápidas -->
+            <div class="metricas-grid">
+                <div class="metrica-card">
+                    <div class="metrica-valor">24</div>
+                    <div class="metrica-label">Pacientes ativos</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +3 esta semana</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">8</div>
+                    <div class="metrica-label">Sessões hoje</div>
+                    <div class="metrica-trend">5 realizadas · 3 pendentes</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">12.5N</div>
+                    <div class="metrica-label">Média de força</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +8% vs ontem</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">85%</div>
+                    <div class="metrica-label">Taxa de conclusão</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +5% esta semana</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">4</div>
+                    <div class="metrica-label">Sem treino recente</div>
+                    <div class="metrica-trend down"><i class="fa-solid fa-arrow-down"></i> +2 vs ontem</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">2</div>
+                    <div class="metrica-label">Alertas clínicos</div>
+                    <div class="metrica-trend down" style="color: #f56565;">Revisão necessária</div>
+                </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="alertas-grid">
+                <div class="alerta-card atencao">
+                    <div class="alerta-icon atencao">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <h4>João Rodrigues sem treino há 5 dias</h4>
+                        <p>Última sessão: 08 Mar 2026</p>
+                    </div>
+                    <span class="alerta-time">há 2h</span>
+                </div>
+                <div class="alerta-card urgente">
+                    <div class="alerta-icon urgente">
+                        <i class="fa-solid fa-exclamation"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <h4>Redução significativa de força - Ana Ferreira</h4>
+                        <p>Força caiu 30% na última sessão</p>
+                    </div>
+                    <span class="alerta-time">há 1h</span>
+                </div>
+                <div class="alerta-card info">
+                    <div class="alerta-icon info">
+                        <i class="fa-solid fa-info"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <h4>Execução incorreta repetida - Carlos Monteiro</h4>
+                        <p>3 sessões consecutivas com erro</p>
+                    </div>
+                    <span class="alerta-time">há 30min</span>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5 class="mb-3" style="color: #0f3b5e;">Evolução Média da Força de Pinça</h5>
+                        <canvas id="forcaChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container chart-small">
+                        <h5 class="mb-3" style="color: #0f3b5e;">Distribuição de Desempenho</h5>
+                        <canvas id="desempenhoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessões de Hoje -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-clock"></i> Sessões de Hoje</h3>
+                    <a href="sessoes/lista_sessoes.html">Ver todas</a>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Paciente</th>
+                                <th>Tipo</th>
+                                <th>Zona Alvo</th>
+                                <th>Estado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09:30</td>
+                                <td><strong>Ana Ferreira</strong></td>
+                                <td>Força de pinça</td>
+                                <td><span class="badge-forca">8N - 12N</span></td>
+                                <td><span class="badge-progresso progresso-alto">Realizada</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="verSessao(1)">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10:45</td>
+                                <td><strong>João Rodrigues</strong></td>
+                                <td>Precisão</td>
+                                <td><span class="badge-forca">4N - 6N</span></td>
+                                <td><span class="badge-progresso progresso-medio">Em curso</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="iniciarSessao(2)">
+                                        <i class="fa-solid fa-play"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>14:00</td>
+                                <td><strong>Carlos Monteiro</strong></td>
+                                <td>Resistência</td>
+                                <td><span class="badge-forca">6N - 10N</span></td>
+                                <td><span class="badge-progresso progresso-baixo">Atrasada</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="reagendarSessao(3)">
+                                        <i class="fa-regular fa-calendar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15:30</td>
+                                <td><strong>Maria Santos</strong></td>
+                                <td>Gamificada</td>
+                                <td><span class="badge-forca">5N - 9N</span></td>
+                                <td><span class="badge-progresso progresso-medio">Agendada</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="prepararSessao(4)">
+                                        <i class="fa-solid fa-gear"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pacientes com Progresso -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line"></i> Progresso dos Pacientes</h3>
+                    <a href="pacientes/lista_pacientes.html">Ver todos</a>
+                </div>
+                
+                <div class="paciente-card">
+                    <div class="paciente-header">
+                        <div class="paciente-avatar">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="paciente-info">
+                            <h3>Ana Ferreira</h3>
+                            <p>Prótese mioelétrica · Início: 15 Jan 2026</p>
+                        </div>
+                    </div>
+                    <div class="paciente-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">12.5N</div>
+                            <div class="stat-label">Força máx</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8.2N</div>
+                            <div class="stat-label">Força média</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Sessões</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">85%</div>
+                            <div class="stat-label">Zona alvo</div>
+                        </div>
+                    </div>
+                    <div class="paciente-acoes">
+                        <button class="btn-acao btn-sm" onclick="verPerfil('ana-ferreira')">
+                            <i class="fa-regular fa-file-lines"></i> Perfil
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="criarSessao('ana-ferreira')">
+                            <i class="fa-regular fa-calendar-plus"></i> Sessão
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="analisarDados('ana-ferreira')">
+                            <i class="fa-solid fa-chart-simple"></i> Dados
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="enviarMensagem('ana-ferreira')">
+                            <i class="fa-regular fa-envelope"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="paciente-card">
+                    <div class="paciente-header">
+                        <div class="paciente-avatar">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="paciente-info">
+                            <h3>João Rodrigues</h3>
+                            <p>Prótese mecânica · Início: 03 Fev 2026</p>
+                        </div>
+                    </div>
+                    <div class="paciente-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">8.7N</div>
+                            <div class="stat-label">Força máx</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6.1N</div>
+                            <div class="stat-label">Força média</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">Sessões</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">72%</div>
+                            <div class="stat-label">Zona alvo</div>
+                        </div>
+                    </div>
+                    <div class="paciente-acoes">
+                        <button class="btn-acao btn-sm" onclick="verPerfil('joao-rodrigues')">
+                            <i class="fa-regular fa-file-lines"></i> Perfil
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="criarSessao('joao-rodrigues')">
+                            <i class="fa-regular fa-calendar-plus"></i> Sessão
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="analisarDados('joao-rodrigues')">
+                            <i class="fa-solid fa-chart-simple"></i> Dados
+                        </button>
+                        <button class="btn-acao btn-sm" onclick="enviarMensagem('joao-rodrigues')">
+                            <i class="fa-regular fa-envelope"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Como posso ajudar na sua prática clínica?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Criar sessão</button>
+                <button class="faq-btn">Ver alertas</button>
+                <button class="faq-btn">Análise de dados</button>
+                <button class="faq-btn">Calibrar sensor</button>
+                <button class="faq-btn">Relatório</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Gráfico de Força
+            const ctxForca = document.getElementById('forcaChart').getContext('2d');
+            new Chart(ctxForca, {
+                type: 'line',
+                data: {
+                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                    datasets: [{
+                        label: 'Força Média (N)',
+                        data: [8.2, 9.1, 10.3, 11.2, 12.1, 12.5],
+                        borderColor: '#1a5f8a',
+                        backgroundColor: 'rgba(26, 95, 138, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#1a5f8a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Gráfico de Desempenho
+            const ctxDesempenho = document.getElementById('desempenhoChart').getContext('2d');
+            new Chart(ctxDesempenho, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Alto', 'Médio', 'Baixo'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#48bb78', '#fbbf24', '#f56565'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Chatbot
+            $('#chatbot-button').click(function() {
+                $('#chatbot').removeClass('d-none');
+                $(this).hide();
+            });
+
+            $('#close-chat').click(function() {
+                $('#chatbot').addClass('d-none');
+                $('#chatbot-button').show();
+            });
+
+            $('.faq-btn').click(function() {
+                const question = $(this).text();
+                alert('Funcionalidade em desenvolvimento: ' + question);
+            });
+        });
+
+        // Funções de navegação
+        function verSessao(id) { window.location.href = 'sessoes/detalhes_sessao.html?id=' + id; }
+        function iniciarSessao(id) { window.location.href = 'sessoes/iniciar_sessao.html?id=' + id; }
+        function reagendarSessao(id) { window.location.href = 'sessoes/editar_sessao.html?id=' + id; }
+        function prepararSessao(id) { window.location.href = 'sessoes/nova_sessao.html?paciente=' + id; }
+        function verPerfil(paciente) { window.location.href = 'pacientes/perfil_paciente.html?paciente=' + paciente; }
+        function criarSessao(paciente) { window.location.href = 'sessoes/nova_sessao.html?paciente=' + paciente; }
+        function analisarDados(paciente) { window.location.href = 'analise/desempenho.html?paciente=' + paciente; }
+        function enviarMensagem(paciente) { window.location.href = 'mensagens/conversas.html?paciente=' + paciente; }
+    </script>
+</body>
+
+</html>

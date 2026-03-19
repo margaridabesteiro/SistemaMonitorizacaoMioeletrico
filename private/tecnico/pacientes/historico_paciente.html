@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Histórico do Paciente</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link active">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_pacientes.html">Pacientes</a></li>
+                    <li class="breadcrumb-item"><a href="perfil_paciente.html?paciente=ana-ferreira">Ana Ferreira</a></li>
+                    <li class="breadcrumb-item active">Histórico Completo</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Histórico Completo - Ana Ferreira</h1>
+
+            <!-- Timeline de Eventos -->
+            <div class="progress-card mb-4">
+                <h5><i class="fa-regular fa-clock me-2" style="color: #1a5f8a;"></i>Linha do Tempo da Reabilitação</h5>
+                <div class="timeline-medico mt-4">
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">15 Janeiro 2026</div>
+                        <div class="timeline-medico-content">
+                            <h4>Início da Reabilitação</h4>
+                            <p>Primeira avaliação - Força inicial: 4.2N</p>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">22 Janeiro 2026</div>
+                        <div class="timeline-medico-content">
+                            <h4>Primeira Sessão de Treino</h4>
+                            <p>Treino de força básico - 6 sessões agendadas</p>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">05 Fevereiro 2026</div>
+                        <div class="timeline-medico-content">
+                            <h4>Atingiu 8N de Força</h4>
+                            <p>Marco importante - Zona alvo ajustada</p>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">20 Fevereiro 2026</div>
+                        <div class="timeline-medico-content">
+                            <h4>Início de Treino de Precisão</h4>
+                            <p>Introdução de exercícios de precisão</p>
+                        </div>
+                    </div>
+                    <div class="timeline-medico-item">
+                        <div class="timeline-medico-time">05 Março 2026</div>
+                        <div class="timeline-medico-content">
+                            <h4>Recorde de Força</h4>
+                            <p>Atingiu 12.5N - Novo recorde pessoal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estatísticas por Período -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Evolução por Mês</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="evolucaoMensalChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-pie me-2" style="color: #1a5f8a;"></i>Distribuição por Tipo</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="distribuicaoTipoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Histórico Completo -->
+            <div class="progress-card">
+                <div class="card-header">
+                    <h5><i class="fa-regular fa-file-lines me-2" style="color: #1a5f8a;"></i>Todas as Sessões</h5>
+                    <div>
+                        <button class="btn-acao btn-sm me-2" onclick="exportarHistorico()">
+                            <i class="fa-solid fa-download me-1"></i>Exportar
+                        </button>
+                        <button class="btn-filter btn-sm" onclick="filtrarHistorico()">
+                            <i class="fa-solid fa-filter me-1"></i>Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="tabelaHistorico" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Duração</th>
+                                <th>Força Máx</th>
+                                <th>Força Média</th>
+                                <th>Zona Alvo</th>
+                                <th>Desempenho</th>
+                                <th>Observações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>13 Mar 2026</td>
+                                <td>Força</td>
+                                <td>15 min</td>
+                                <td>12.5N</td>
+                                <td>8.2N</td>
+                                <td>8-12N</td>
+                                <td><span class="badge-progresso progresso-alto">92%</span></td>
+                                <td>Boa evolução</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(1)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>11 Mar 2026</td>
+                                <td>Precisão</td>
+                                <td>10 min</td>
+                                <td>7.8N</td>
+                                <td>6.2N</td>
+                                <td>4-6N</td>
+                                <td><span class="badge-progresso progresso-alto">88%</span></td>
+                                <td>Melhorou precisão</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(2)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 2026</td>
+                                <td>Resistência</td>
+                                <td>20 min</td>
+                                <td>8.1N</td>
+                                <td>7.5N</td>
+                                <td>6-10N</td>
+                                <td><span class="badge-progresso progresso-medio">75%</span></td>
+                                <td>Cansou no final</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(3)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>06 Mar 2026</td>
+                                <td>Gamificado</td>
+                                <td>15 min</td>
+                                <td>9.2N</td>
+                                <td>7.8N</td>
+                                <td>8-12N</td>
+                                <td><span class="badge-progresso progresso-alto">95%</span></td>
+                                <td>Adorou o jogo</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(4)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resumo de Metas -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <h6 class="text-muted">Meta de Força</h6>
+                        <div class="stat-value">12.5N / 15N</div>
+                        <div class="progress mt-2" style="height: 8px;">
+                            <div class="progress-bar" style="width: 83%; background: #1a5f8a;"></div>
+                        </div>
+                        <small class="text-muted">Faltam 2.5N para a meta</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <h6 class="text-muted">Sessões Realizadas</h6>
+                        <div class="stat-value">24 / 30</div>
+                        <div class="progress mt-2" style="height: 8px;">
+                            <div class="progress-bar" style="width: 80%; background: #1a5f8a;"></div>
+                        </div>
+                        <small class="text-muted">Faltam 6 sessões</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <h6 class="text-muted">Consistência</h6>
+                        <div class="stat-value">85%</div>
+                        <div class="progress mt-2" style="height: 8px;">
+                            <div class="progress-bar" style="width: 85%; background: #48bb78;"></div>
+                        </div>
+                        <small class="text-muted">Muito boa</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#tabelaHistorico').DataTable({
+                pageLength: 10,
+                order: [[0, 'desc']],
+                language: {
+                    emptyTable: "Nenhum registro encontrado",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ sessões",
+                    infoEmpty: "Mostrando 0 a 0 de 0 sessões",
+                    search: "Pesquisar:",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            // Gráfico de Evolução Mensal
+            new Chart(document.getElementById('evolucaoMensalChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Força Média (N)',
+                        data: [4.2, 6.1, 7.8, 8.5, 9.2, 10.1],
+                        borderColor: '#1a5f8a',
+                        backgroundColor: 'rgba(26,95,138,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Gráfico de Distribuição por Tipo
+            new Chart(document.getElementById('distribuicaoTipoChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Força', 'Precisão', 'Resistência', 'Gamificado'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: ['#1a5f8a', '#48bb78', '#fbbf24', '#9f7aea']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+
+        function verSessao(id) {
+            window.location.href = '../sessoes/detalhes_sessao.html?id=' + id;
+        }
+
+        function exportarHistorico() {
+            alert('A exportar histórico completo...');
+        }
+
+        function filtrarHistorico() {
+            alert('Abrir filtros avançados...');
+        }
+    </script>
+</body>
+</html>

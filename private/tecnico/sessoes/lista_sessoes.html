@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Sessões de Treino</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link active">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Gestão de Sessões</h1>
+                <button class="btn-filter" onclick="window.location.href='nova_sessao.html'">
+                    <i class="fa-regular fa-calendar-plus me-2"></i>Nova Sessão
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="payment-tabs mb-4">
+                <span class="payment-tab active" onclick="mudarTab('hoje')">Hoje</span>
+                <span class="payment-tab" onclick="mudarTab('amanha')">Amanhã</span>
+                <span class="payment-tab" onclick="mudarTab('semana')">Esta Semana</span>
+                <span class="payment-tab" onclick="mudarTab('pendentes')">Pendentes</span>
+                <span class="payment-tab" onclick="mudarTab('historico')">Histórico</span>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Paciente</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Ana Ferreira</option>
+                            <option>João Rodrigues</option>
+                            <option>Carlos Monteiro</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Força</option>
+                            <option>Precisão</option>
+                            <option>Resistência</option>
+                            <option>Gamificado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Agendada</option>
+                            <option>Realizada</option>
+                            <option>Cancelada</option>
+                            <option>Em curso</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Sessões -->
+            <div class="table-container">
+                <table id="tabelaSessoes" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Paciente</th>
+                            <th>Tipo</th>
+                            <th>Duração</th>
+                            <th>Zona Alvo</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>13 Mar 2026</strong><br>09:30</td>
+                            <td>Ana Ferreira</td>
+                            <td>Força de pinça</td>
+                            <td>15 min</td>
+                            <td><span class="badge-forca">8-12N</span></td>
+                            <td><span class="badge-progresso progresso-alto">Realizada</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-acao btn-sm" onclick="verSessao(1)" title="Ver detalhes">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="editarSessao(1)" title="Editar">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="analisarSessao(1)" title="Analisar">
+                                        <i class="fa-solid fa-chart-simple"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>13 Mar 2026</strong><br>10:45</td>
+                            <td>João Rodrigues</td>
+                            <td>Precisão</td>
+                            <td>10 min</td>
+                            <td><span class="badge-forca">4-6N</span></td>
+                            <td><span class="badge-progresso progresso-medio">Em curso</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-acao btn-sm" onclick="iniciarSessao(2)">
+                                        <i class="fa-solid fa-play"></i> Iniciar
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="editarSessao(2)">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>13 Mar 2026</strong><br>14:00</td>
+                            <td>Carlos Monteiro</td>
+                            <td>Resistência</td>
+                            <td>20 min</td>
+                            <td><span class="badge-forca">6-10N</span></td>
+                            <td><span class="badge-progresso progresso-baixo">Atrasada</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-acao btn-sm" onclick="reagendarSessao(3)">
+                                        <i class="fa-regular fa-calendar"></i> Reagendar
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="cancelarSessao(3)">
+                                        <i class="fa-regular fa-circle-xmark"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>14 Mar 2026</strong><br>11:00</td>
+                            <td>Ana Ferreira</td>
+                            <td>Gamificado</td>
+                            <td>15 min</td>
+                            <td><span class="badge-forca">8-12N</span></td>
+                            <td><span class="badge-progresso progresso-medio">Agendada</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-acao btn-sm" onclick="prepararSessao(4)">
+                                        <i class="fa-solid fa-gear"></i> Preparar
+                                    </button>
+                                    <button class="btn-acao btn-sm" onclick="editarSessao(4)">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Calendário Resumo -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-regular fa-calendar me-2" style="color: #1a5f8a;"></i>Resumo da Semana</h5>
+                        <div class="row text-center">
+                            <div class="col">
+                                <div class="p-2">
+                                    <div class="small text-muted">Seg</div>
+                                    <div class="fw-bold">4</div>
+                                    <small class="text-success">3 OK</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2">
+                                    <div class="small text-muted">Ter</div>
+                                    <div class="fw-bold">3</div>
+                                    <small class="text-success">2 OK</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2">
+                                    <div class="small text-muted">Qua</div>
+                                    <div class="fw-bold">5</div>
+                                    <small class="text-success">4 OK</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2">
+                                    <div class="small text-muted">Qui</div>
+                                    <div class="fw-bold">4</div>
+                                    <small class="text-warning">2 pend</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2">
+                                    <div class="small text-muted">Sex</div>
+                                    <div class="fw-bold">6</div>
+                                    <small class="text-primary">agend</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#tabelaSessoes').DataTable({
+            pageLength: 10,
+            order: [[0, 'asc']],
+            language: {
+                emptyTable: "Nenhuma sessão encontrada",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ sessões",
+                search: "Pesquisar:",
+                paginate: {
+                    first: "Primeira",
+                    last: "Última",
+                    next: "Seguinte",
+                    previous: "Anterior"
+                }
+            }
+        });
+
+        function mudarTab(tab) {
+            $('.payment-tab').removeClass('active');
+            $(event.target).addClass('active');
+            alert('Mudar para aba: ' + tab);
+        }
+
+        function verSessao(id) { window.location.href = 'detalhes_sessao.html?id=' + id; }
+        function editarSessao(id) { window.location.href = 'editar_sessao.html?id=' + id; }
+        function iniciarSessao(id) { window.location.href = 'iniciar_sessao.html?id=' + id; }
+        function analisarSessao(id) { window.location.href = '../analise/desempenho.html?sessao=' + id; }
+        function reagendarSessao(id) { window.location.href = 'editar_sessao.html?id=' + id + '&reagendar=true'; }
+        function cancelarSessao(id) { if(confirm('Tem certeza que deseja cancelar esta sessão?')) alert('Sessão cancelada'); }
+        function prepararSessao(id) { window.location.href = 'nova_sessao.html?copiar=' + id; }
+    </script>
+</body>
+</html>

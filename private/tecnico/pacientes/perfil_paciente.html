@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Perfil do Paciente</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link ">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link active">
+                <i class="fa-solid fa-users me-2"></i>Pacientes
+            </a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link">
+                <i class="fa-regular fa-calendar-check me-2"></i>Sessões de Treino
+            </a>
+            <a href="../analise/desempenho.html" class="nav-link">
+                <i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho
+            </a>
+            <a href="../mensagens/conversas.html" class="nav-link">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+            </a>
+            <a href="../relatorios/gerar_relatorio.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+            <a href="../config/calibracao.html" class="nav-link">
+                <i class="fa-solid fa-sliders me-2"></i>Calibração
+            </a>
+        </nav>
+
+        <main class="content">
+            <!-- Cabeçalho do Paciente -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="paciente-avatar" style="width: 70px; height: 70px; font-size: 2rem;">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div>
+                        <h1 class="mb-1">Ana Ferreira</h1>
+                        <p class="text-muted">Paciente desde 15 Jan 2026 · Nº Processo: P-2026-0124</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn-filter" onclick="criarSessao()">
+                        <i class="fa-regular fa-calendar-plus me-2"></i>Nova Sessão
+                    </button>
+                    <button class="btn-acao" onclick="enviarMensagem()">
+                        <i class="fa-regular fa-envelope me-2"></i>Mensagem
+                    </button>
+                </div>
+            </div>
+
+            <!-- Informação Clínica -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-stethoscope me-2" style="color: #1a5f8a;"></i>Informação Clínica</h5>
+                        <hr>
+                        <p><strong>Tipo de amputação:</strong> Transradial esquerda</p>
+                        <p><strong>Tipo de prótese:</strong> Mioelétrica · Ottobock</p>
+                        <p><strong>Data de início:</strong> 15 Janeiro 2026</p>
+                        <p><strong>Fisioterapeuta responsável:</strong> Dra. Carla Santos</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Dados de Treino</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3 text-center">
+                                <div class="stat-value">12.5N</div>
+                                <div class="stat-label">Força máxima</div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="stat-value">8.2N</div>
+                                <div class="stat-label">Força média</div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Sessões</div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="stat-value">85%</div>
+                                <div class="stat-label">Zona alvo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Evolução da Força</h5>
+                        <canvas id="forcaPacienteChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container chart-small">
+                        <h5 class="mb-3">Tempo na Zona Alvo</h5>
+                        <canvas id="zonaAlvoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona Alvo Atual -->
+            <div class="progress-card mt-4">
+                <h5><i class="fa-solid fa-bullseye me-2" style="color: #1a5f8a;"></i>Zona Alvo Configurada</h5>
+                <div class="zona-alvo">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Mínimo: 8N</span>
+                        <span>Máximo: 12N</span>
+                    </div>
+                    <div class="zona-alvo-bar">
+                        <div class="zona-alvo-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="zona-alvo-markers">
+                        <span>↓ 8N</span>
+                        <span>↓ 12N</span>
+                    </div>
+                </div>
+                <button class="btn-acao mt-3" onclick="calibrarSensor()">
+                    <i class="fa-solid fa-sliders me-2"></i>Calibrar Sensor
+                </button>
+            </div>
+
+            <!-- Últimas Sessões -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h5><i class="fa-regular fa-clock me-2" style="color: #1a5f8a;"></i>Últimas Sessões</h5>
+                    <a href="../sessoes/lista_sessoes.html?paciente=ana-ferreira">Ver todas</a>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Duração</th>
+                                <th>Força Média</th>
+                                <th>Desempenho</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>13 Mar 2026</td>
+                                <td>Força de pinça</td>
+                                <td>15 min</td>
+                                <td>8.2N</td>
+                                <td><span class="badge-progresso progresso-alto">92%</span></td>
+                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>11 Mar 2026</td>
+                                <td>Precisão</td>
+                                <td>10 min</td>
+                                <td>7.8N</td>
+                                <td><span class="badge-progresso progresso-alto">88%</span></td>
+                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráfico de Força do Paciente
+        new Chart(document.getElementById('forcaPacienteChart'), {
+            type: 'line',
+            data: {
+                labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                datasets: [{
+                    label: 'Força (N)',
+                    data: [6.2, 7.1, 7.8, 8.5, 8.2, 8.7],
+                    borderColor: '#1a5f8a',
+                    backgroundColor: 'rgba(26,95,138,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            }
+        });
+
+        // Gráfico de Zona Alvo
+        new Chart(document.getElementById('zonaAlvoChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Na zona', 'Abaixo', 'Acima'],
+                datasets: [{
+                    data: [75, 15, 10],
+                    backgroundColor: ['#48bb78', '#fbbf24', '#f56565']
+                }]
+            }
+        });
+
+        function criarSessao() { window.location.href = '../sessoes/nova_sessao.html?paciente=ana-ferreira'; }
+        function enviarMensagem() { window.location.href = '../mensagens/conversas.html?paciente=ana-ferreira'; }
+        function calibrarSensor() { window.location.href = '../config/calibracao.html?paciente=ana-ferreira'; }
+    </script>
+</body>
+</html>
