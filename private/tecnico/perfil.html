@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RehabLink | Meu Perfil</title>
-    
+
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
@@ -36,8 +36,8 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../public/login.html"><i
-                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar
+                        password</a></li>
                 <li><a class="dropdown-item" href="../../public/index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
@@ -48,11 +48,19 @@
         <nav class="sidebar">
             <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
             <a href="index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
-            <a href="pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
-            <a href="sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link"><i
+                    class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link"><i
+                    class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
             <a href="jogos/jogos_disponiveis.html" class="nav-link"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
             <a href="analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
             <a href="perfil.html" class="nav-link active"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+            <!-- Separador visual -->
+            <hr class="my-3" style="border-color: #e2e8f0;">
+
+            <!-- NOVOS LINKS -->
+            <a href="config/preferencias.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Preferências</a>
+            <a href="ajuda/faq.html" class="nav-link"><i class="fa-regular fa-circle-question me-2"></i>Ajuda</a>
         </nav>
 
         <main class="content">
@@ -62,7 +70,8 @@
                 <!-- Foto e Informação Básica -->
                 <div class="col-md-4">
                     <div class="progress-card text-center">
-                        <div class="paciente-avatar" style="width: 100px; height: 100px; margin: 0 auto 15px; font-size: 2.5rem;">
+                        <div class="paciente-avatar"
+                            style="width: 100px; height: 100px; margin: 0 auto 15px; font-size: 2.5rem;">
                             <i class="fa-solid fa-user-nurse"></i>
                         </div>
                         <h3 class="mb-1">Dra. Carla Santos</h3>
@@ -103,7 +112,8 @@
                             </div>
                         </div>
 
-                        <h5 class="mt-4"><i class="fa-regular fa-address-card me-2" style="color: #1a5f8a;"></i>Contacto</h5>
+                        <h5 class="mt-4"><i class="fa-regular fa-address-card me-2" style="color: #1a5f8a;"></i>Contacto
+                        </h5>
                         <hr>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -117,10 +127,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Morada</label>
-                            <input type="text" class="form-control" value="Rua da Boavista, 123, 4º Esq, 4050-115 Porto">
+                            <input type="text" class="form-control"
+                                value="Rua da Boavista, 123, 4º Esq, 4050-115 Porto">
                         </div>
 
-                        <h5 class="mt-4"><i class="fa-solid fa-briefcase me-2" style="color: #1a5f8a;"></i>Informação Profissional</h5>
+                        <h5 class="mt-4"><i class="fa-solid fa-briefcase me-2" style="color: #1a5f8a;"></i>Informação
+                            Profissional</h5>
                         <hr>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -154,18 +166,20 @@
 
                         <div class="mb-3">
                             <label class="form-label">Biografia</label>
-                            <textarea class="form-control" rows="3">Fisioterapeuta especializada em reabilitação de amputados e proteses. Mais de 10 anos de experiência em centros de reabilitação. Certificada em próteses mioelétricas.</textarea>
+                            <textarea class="form-control"
+                                rows="3">Fisioterapeuta especializada em reabilitação de amputados e proteses. Mais de 10 anos de experiência em centros de reabilitação. Certificada em próteses mioelétricas.</textarea>
                         </div>
 
                         <div class="d-flex gap-2 justify-content-end mt-4">
                             <button type="reset" class="btn-reset">Cancelar</button>
-                            <button type="submit" class="btn-filter" onclick="guardarPerfil()">Guardar Alterações</button>
+                            <button type="submit" class="btn-filter" onclick="guardarPerfil()">Guardar
+                                Alterações</button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            
+
         </main>
     </div>
 
@@ -180,4 +194,5 @@
         }
     </script>
 </body>
+
 </html>
