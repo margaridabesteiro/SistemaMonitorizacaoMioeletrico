@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Logs de Acesso</title>
+
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i
+                            class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+
+            <a href="../index_admin.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+            </a>
+
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Utilizadores
+            </a>
+
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link">
+                <i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde
+            </a>
+
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link">
+                <i class="fa-solid fa-microchip me-2"></i>Dispositivos
+            </a>
+
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação
+            </a>
+
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link">
+                <i class="fa-regular fa-file-lines me-2"></i>Relatórios
+            </a>
+
+            <a href="logs_acesso.html" class="nav-link active">
+                <i class="fa-solid fa-shield me-2"></i>Segurança
+            </a>
+
+            <a href="../configuracao/sistema.html" class="nav-link">
+                <i class="fa-solid fa-gear me-2"></i>Configuração
+            </a>
+
+            <hr class="my-3">
+
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Logs de Acesso e Atividade</h1>
+
+                <div>
+                    <button class="btn-filter" onclick="exportarLogsPDF()">
+                        <i class="fa-regular fa-file-pdf me-2"></i>Exportar PDF
+                    </button>
+
+                    <button class="btn-acao ms-2" onclick="exportarLogsCSV()">
+                        <i class="fa-solid fa-file-csv me-2"></i>Exportar CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+
+                <table id="tabelaLogs" class="table table-hover table-striped">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Utilizador</th>
+                            <th>Tipo</th>
+                            <th>Ação</th>
+                            <th>Detalhes</th>
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>20 Mar 2026 10:30:15</td>
+                            <td>Admin Sistema</td>
+                            <td><span class="badge bg-success">Login</span></td>
+                            <td>Acesso ao sistema</td>
+                            <td>-</td>
+                            <td>192.168.1.100</td>
+                        </tr>
+
+                        <tr>
+                            <td>20 Mar 2026 09:45:22</td>
+                            <td>Dra. Carla Santos</td>
+                            <td><span class="badge bg-success">Login</span></td>
+                            <td>Acesso ao sistema</td>
+                            <td>-</td>
+                            <td>192.168.1.105</td>
+                        </tr>
+
+                        <tr>
+                            <td>20 Mar 2026 09:30:05</td>
+                            <td>Dr. António Silva</td>
+                            <td><span class="badge bg-success">Login</span></td>
+                            <td>Acesso ao sistema</td>
+                            <td>-</td>
+                            <td>192.168.1.102</td>
+                        </tr>
+
+                        <tr>
+                            <td>19 Mar 2026 15:20:10</td>
+                            <td>Admin Sistema</td>
+                            <td><span class="badge bg-warning text-dark">Alteração</span></td>
+                            <td>Atualizou parâmetros de treino</td>
+                            <td>Limites força: 5-15N → 6-16N</td>
+                            <td>192.168.1.100</td>
+                        </tr>
+
+                        <tr>
+                            <td>19 Mar 2026 14:15:33</td>
+                            <td>Admin Sistema</td>
+                            <td><span class="badge bg-warning text-dark">Criação</span></td>
+                            <td>Criou novo utilizador</td>
+                            <td>João Rodrigues (Utente)</td>
+                            <td>192.168.1.100</td>
+                        </tr>
+
+                        <tr>
+                            <td>19 Mar 2026 11:05:47</td>
+                            <td>Ana Ferreira</td>
+                            <td><span class="badge bg-success">Login</span></td>
+                            <td>Acesso ao sistema</td>
+                            <td>-</td>
+                            <td>192.168.1.110</td>
+                        </tr>
+
+                        <tr>
+                            <td>18 Mar 2026 23:45:12</td>
+                            <td>Admin Sistema</td>
+                            <td><span class="badge bg-danger">Logout</span></td>
+                            <td>Saiu do sistema</td>
+                            <td>-</td>
+                            <td>192.168.1.100</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a href="../index_admin.html" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Voltar ao Dashboard
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        let dataTable;
+
+        $(document).ready(function () {
+
+            // Inicialização DataTable
+            dataTable = $('#tabelaLogs').DataTable({
+                pageLength: 10,
+                order: [[0, 'desc']],
+                language: {
+                    search: "Pesquisar:",
+                    emptyTable: "Nenhum log encontrado",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registos",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            // FILTRO REAL
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+
+                const utilizador = $('#filtroUtilizador').val();
+                const acao = $('#filtroAcao').val();
+
+                const colUtilizador = data[1];
+                const colTipo = data[2];
+
+                if (utilizador !== 'todos' && colUtilizador !== utilizador) {
+                    return false;
+                }
+
+                if (acao !== 'todas' && !colTipo.includes(acao)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+        });
+
+
+        // Aplicar filtros
+        function aplicarFiltros() {
+            dataTable.draw();
+        }
+
+
+        // Limpar filtros
+        function limparFiltros() {
+            $('#filtroUtilizador').val('todos');
+            $('#filtroAcao').val('todas');
+            $('#filtroPeriodo').val('30d');
+            dataTable.draw();
+        }
+
+
+        // EXPORTAR PDF (APENAS FILTRADOS)
+        function exportarLogsPDF() {
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.setTextColor(139, 0, 0);
+            doc.text("RehabLink - Logs de Segurança", 14, 15);
+
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Gerado em: ${new Date().toLocaleString('pt-PT')}`, 14, 22);
+
+            const rows = [];
+
+            dataTable.rows({ search: 'applied' }).every(function () {
+                let row = this.data();
+
+                // limpar HTML (badges)
+                row[2] = $(row[2]).text();
+
+                rows.push(row);
+            });
+
+            doc.autoTable({
+                head: [['Data/Hora', 'Utilizador', 'Tipo', 'Ação', 'Detalhes', 'IP']],
+                body: rows,
+                startY: 30,
+                styles: {
+                    fontSize: 8
+                },
+                headStyles: {
+                    fillColor: [139, 0, 0] // cor admin
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                }
+            });
+
+            doc.save("logs_rehablink.pdf");
+        }
+
+
+        // EXPORTAR CSV (APENAS FILTRADOS)
+        function exportarLogsCSV() {
+
+            let csv = [];
+
+            // Cabeçalho
+            let headers = [];
+            $('#tabelaLogs thead th').each(function () {
+                headers.push($(this).text().trim());
+            });
+            csv.push(headers.join(','));
+
+            // Dados filtrados
+            dataTable.rows({ search: 'applied' }).every(function () {
+                let row = this.data();
+
+                row[2] = $(row[2]).text(); // limpar HTML
+
+                csv.push(row.join(','));
+            });
+
+            let blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            let url = URL.createObjectURL(blob);
+
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'logs_rehablink.csv';
+            a.click();
+        }
+    </script>
+
+</body>
+
+</html>

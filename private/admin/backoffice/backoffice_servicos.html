@@ -2,129 +2,739 @@
 <html lang="pt">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HealthTech Clinical Labs</title>
-  <!--favicon-->
-  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="../https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-    rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
-
-  <!-- estilos da página -->
-  <link rel="stylesheet" href="../../assets/css/1221051.css">
-  <link rel="stylesheet" href="../../assets/css/common.css">
-  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
-
-  <style>
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Backoffice - Nossos Serviços</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+    <style>
+        /* Estilo para as abas profissionais */
+        .dashboard-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0;
+        }
+        
+        .dashboard-tab {
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            background: transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .dashboard-tab:hover {
+            color: #8B0000;
+            background: rgba(139, 0, 0, 0.05);
+            text-decoration: none;
+        }
+        
+        .dashboard-tab.active {
+            color: #8B0000;
+            background: white;
+        }
+        
+        .dashboard-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #8B0000;
+            border-radius: 2px;
+        }
+        
+        .dashboard-tab i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .form-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        
+        .form-control:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+        
+        .btn-warning {
+            background: #fbbf24;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #1a202c;
+        }
+        
+        .btn-warning:hover {
+            background: #f59e0b;
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline-danger {
+            background: white;
+            border: 1px solid #dc2626;
+            color: #dc2626;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-danger:hover {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .service-card, .unidade-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(139, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .service-card:hover, .unidade-card:hover {
+            transform: translateY(-3px);
+            border-color: #8B0000;
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            font-size: 2rem;
+            color: #8B0000;
+            margin-bottom: 15px;
+        }
+        
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .service-desc {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 15px;
+        }
+        
+        .unidade-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: #f8fafc;
+        }
+        
+        .unidade-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .unidade-info {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+        
+        .unidade-info i {
+            width: 20px;
+            color: #8B0000;
+        }
+        
+        .section-title {
+            color: #8B0000;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 25px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .form-hint {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 5px;
+        }
+        
+        .form-hint i {
+            margin-right: 5px;
+        }
+        
+        .btn-sm-custom {
+            padding: 5px 10px;
+            font-size: 0.75rem;
+        }
+        
+        .image-preview {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .preview-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .upload-btn {
+            background: #f8fafc;
+            border: 1px dashed #8B0000;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .upload-btn:hover {
+            background: rgba(139, 0, 0, 0.05);
+            border-color: #8B0000;
+        }
+    </style>
 </head>
 
-<body class="menu-user">
-  <!-- Topbar -->
-  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
-    <div class="sistema-nome d-flex align-items-center gap-2">
-      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
-        <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
-      </a>
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="backoffice_quem_somos.html" class="nav-link active">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <!-- Abas profissionais -->
+            <div class="dashboard-tabs">
+                <a href="backoffice_quem_somos.html" class="dashboard-tab">
+                    <i class="fa-solid fa-building"></i> Quem Somos
+                </a>
+                <a href="backoffice_equipa.html" class="dashboard-tab">
+                    <i class="fa-solid fa-users"></i> Nossa Equipa
+                </a>
+                <a href="backoffice_servicos.html" class="dashboard-tab active">
+                    <i class="fa-solid fa-stethoscope"></i> Nossos Serviços
+                </a>
+                <a href="backoffice_seguros.html" class="dashboard-tab">
+                    <i class="fa-solid fa-handshake"></i> Acordos e Seguros
+                </a>
+            </div>
+
+            <h1 class="mb-4" style="color: #8B0000;">Backoffice - Nossos Serviços</h1>
+
+            <!-- Gestão de Serviços -->
+            <section class="progress-card mb-5">
+                <h2 class="section-title"><i class="fa-solid fa-stethoscope"></i> Serviços Prestados</h2>
+                
+                <form id="form-servico" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="servicoTitulo" class="form-label">Título do Serviço</label>
+                            <input type="text" id="servicoTitulo" name="titulo" class="form-control" placeholder="ex: Análises Clínicas" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="servicoIcone" class="form-label">Ícone (classe FontAwesome)</label>
+                            <input type="text" id="servicoIcone" name="icone" class="form-control" placeholder="ex: fa-solid fa-flask" required>
+                            <div class="form-hint"><i class="fa-regular fa-lightbulb"></i> Exemplos: fa-solid fa-flask, fa-solid fa-microscope, fa-solid fa-heart-pulse</div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="servicoDescricao" class="form-label">Descrição</label>
+                            <textarea id="servicoDescricao" name="descricao" class="form-control" rows="2" placeholder="Descrição detalhada do serviço" required></textarea>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-plus me-2"></i> Adicionar Serviço
+                        </button>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Serviços Cadastrados</h5>
+                    <button onclick="mostrarGestaoServicos()" class="btn-danger btn-sm-custom">
+                        <i class="fa-solid fa-trash me-1"></i> Gerir Serviços
+                    </button>
+                </div>
+                <div id="gestao-servicos" class="row g-4 d-none"></div>
+                <div id="lista-servicos" class="row g-4">
+                    <!-- Serviços serão carregados aqui -->
+                </div>
+            </section>
+
+            <!-- Gestão de Unidades com Upload de Imagem -->
+            <section class="progress-card">
+                <h2 class="section-title"><i class="fa-solid fa-building"></i> Unidades de Atendimento</h2>
+                
+                <form id="form-unidade" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="unidadeNome" class="form-label">Nome da Unidade</label>
+                            <input type="text" id="unidadeNome" name="nome" class="form-control" placeholder="ex: Laboratório Central" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="unidadeMorada" class="form-label">Morada</label>
+                            <input type="text" id="unidadeMorada" name="morada" class="form-control" placeholder="Rua, Nº, Cidade" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="unidadeTelefone" class="form-label">Telefone</label>
+                            <input type="text" id="unidadeTelefone" name="telefone" class="form-control" placeholder="912 345 678" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="unidadeEmail" class="form-label">Email</label>
+                            <input type="email" id="unidadeEmail" name="email" class="form-control" placeholder="contato@rehablink.pt" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Imagem da Unidade</label>
+                            <div class="image-preview">
+                                <div class="upload-btn" onclick="document.getElementById('unidadeImagemUpload').click()">
+                                    <i class="fa-solid fa-cloud-upload-alt me-2"></i> Carregar Imagem
+                                </div>
+                                <input type="file" id="unidadeImagemUpload" accept="image/*" style="display: none;">
+                                <div id="previewContainer" style="display: none;">
+                                    <img id="previewImg" class="preview-img" alt="Pré-visualização">
+                                    <button type="button" class="btn-danger btn-sm" onclick="removerImagem()" style="padding: 4px 8px;">
+                                        <i class="fa-solid fa-trash"></i> Remover
+                                    </button>
+                                </div>
+                                <span id="noImageText" class="text-muted small">Nenhuma imagem selecionada</span>
+                            </div>
+                            <input type="hidden" id="unidadeImagemData" value="">
+                            <div class="form-hint">
+                                <i class="fa-regular fa-lightbulb"></i> Clique para carregar uma imagem do seu computador
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-plus me-2"></i> Adicionar Unidade
+                        </button>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Unidades Cadastradas</h5>
+                    <button onclick="mostrarGestaoUnidades()" class="btn-danger btn-sm-custom">
+                        <i class="fa-solid fa-trash me-1"></i> Gerir Unidades
+                    </button>
+                </div>
+                <div id="gestao-unidades" class="row g-4 d-none"></div>
+                <div id="lista-unidades" class="row g-4">
+                    <!-- Unidades serão carregadas aqui -->
+                </div>
+            </section>
+        </main>
     </div>
 
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
-        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-user-gear"></i> Administrador
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
-        <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i> Alterar
-            password</a></li>
-        <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-right-from-bracket me-2"></i>
-            Sair</a></li>
-      </ul>
-    </div>
-  </header>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- SERVIÇOS (mantido igual) ---
+            const SERV_KEY = "servicos";
+            const servDefaults = [
+                { titulo: "Análises Clínicas", icone: "fa-solid fa-flask", descricao: "Análises de sangue, urina e outros fluidos biológicos com resultados rápidos e precisos." },
+                { titulo: "Radiologia", icone: "fa-solid fa-x-ray", descricao: "Exames de imagem de alta resolução para diagnóstico preciso." },
+                { titulo: "Cardiologia", icone: "fa-solid fa-heart-pulse", descricao: "Eletrocardiogramas, holter e outros exames cardiovasculares." },
+                { titulo: "Endoscopias", icone: "fa-solid fa-microscope", descricao: "Exames endoscópicos realizados por especialistas." }
+            ];
+            let servList = JSON.parse(localStorage.getItem(SERV_KEY) || "[]");
+            if (!servList.length) {
+                servList = servDefaults.slice();
+                localStorage.setItem(SERV_KEY, JSON.stringify(servList));
+            }
 
-  <!-- Sidebar + Conteúdo -->
-  <div class="wrapper">
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <h2>Menu</h2>
-      <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-      <a href="backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
-        Office</a>
-      <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
-        Acessos</a>
-      <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i>
-        Controlo de
-        Faturação</a>
-      <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e Consumíveis</a>
-      <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais de
-        Saúde</a>
-      <a href="../modulo5/transporte.html" class="nav-link">
-        <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
-      </a>
-      <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
-        <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
-      </a>
-      <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
-        <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
-      </a>
-      <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
-        <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
-      </a>
-    </nav>
+            const formServ = document.getElementById("form-servico");
+            const listaServ = document.getElementById("lista-servicos");
+            const gestaoServ = document.getElementById("gestao-servicos");
+            let servEditIdx = null;
 
-    <!-- Conteúdo -->
-    <main class="content">
-      <div class="dashboard-tabs">
-        <a href="backoffice_quem_somos.html" class="tab">Quem Somos</a>
-        <a href="backoffice_equipa.html" class="tab">Nossa Equipa</a>
-        <a href="backoffice_servicos.html" class="tab active">Nossos Serviços</a>
-        <a href="backoffice_seguros.html" class="tab">Acordos e Seguros</a>
-      </div>
-      <h1><strong>Back Office da Página "Nossos Serviços"</strong></h1>
+            function renderServicos(editMode = false) {
+                const container = editMode ? gestaoServ : listaServ;
+                container.innerHTML = "";
+                
+                if (editMode) {
+                    container.classList.remove("d-none");
+                } else {
+                    container.classList.add("d-none");
+                }
+                
+                servList.forEach((s, i) => {
+                    if (editMode) {
+                        container.innerHTML += `
+                            <div class="col-md-6">
+                                <div class="service-card">
+                                    <div class="service-icon"><i class="${s.icone}"></i></div>
+                                    <div class="service-title">${escapeHtml(s.titulo)}</div>
+                                    <div class="service-desc">${escapeHtml(s.descricao)}</div>
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <button class="btn-warning btn-sm edit-serv" data-i="${i}"><i class="fas fa-pen"></i> Editar</button>
+                                        <button class="btn-outline-danger btn-sm del-serv" data-i="${i}"><i class="fas fa-trash"></i> Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML += `
+                            <div class="col-md-6">
+                                <div class="service-card">
+                                    <div class="service-icon"><i class="${s.icone}"></i></div>
+                                    <div class="service-title">${escapeHtml(s.titulo)}</div>
+                                    <div class="service-desc">${escapeHtml(s.descricao)}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
 
-      <form id="form-servico" class="mb-4">
-        <input type="text" name="titulo" class="form-control mb-2" placeholder="Título do serviço" required>
-        <input type="text" name="icone" class="form-control mb-2" placeholder="Classe do ícone (ex: bi-heart-pulse)" required>
-        <textarea name="descricao" class="form-control mb-2" placeholder="Descrição" required></textarea>
-        <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
-      </form>
+            formServ.addEventListener("submit", e => {
+                e.preventDefault();
+                const titulo = document.getElementById("servicoTitulo").value.trim();
+                const icone = document.getElementById("servicoIcone").value.trim();
+                const descricao = document.getElementById("servicoDescricao").value.trim();
+                
+                if (!titulo || !icone || !descricao) {
+                    alert("Preencha todos os campos");
+                    return;
+                }
+                
+                const obj = { titulo, icone, descricao };
+                
+                if (servEditIdx !== null) {
+                    servList[servEditIdx] = obj;
+                    servEditIdx = null;
+                } else {
+                    servList.push(obj);
+                }
+                
+                formServ.reset();
+                renderServicos(false);
+                renderServicos(true);
+                localStorage.setItem(SERV_KEY, JSON.stringify(servList));
+            });
 
-      <!-- Botão Para Mostrar Serviços -->
-      <button onclick="mostrarGestaoServicos()" class="btn btn-danger mb-3">Eliminar Serviços</button>
-      <!-- Conteúdo dinâmico da gestão de serviços -->
-      <div id="gestao-servicos" class="row g-4 d-none"></div>
-      <hr class="my-5">
+            gestaoServ.addEventListener("click", e => {
+                const btn = e.target.closest("button");
+                if (!btn) return;
+                const i = +btn.dataset.i;
+                
+                if (btn.classList.contains("edit-serv")) {
+                    const s = servList[i];
+                    document.getElementById("servicoTitulo").value = s.titulo;
+                    document.getElementById("servicoIcone").value = s.icone;
+                    document.getElementById("servicoDescricao").value = s.descricao;
+                    servEditIdx = i;
+                    renderServicos(false);
+                    renderServicos(true);
+                } else if (btn.classList.contains("del-serv")) {
+                    if (confirm("Eliminar este serviço?")) {
+                        servList.splice(i, 1);
+                        renderServicos(false);
+                        renderServicos(true);
+                        localStorage.setItem(SERV_KEY, JSON.stringify(servList));
+                    }
+                }
+            });
 
-      <!-- Unidades -->
-      <div style="margin-top: 3rem;"></div>
-      <h1><strong>Gestão das Unidades</strong></h1>
+            renderServicos(false);
+            renderServicos(true);
 
-      <form id="form-unidade" class="mb-4">
-        <input type="text" name="nome" class="form-control mb-2" placeholder="Nome" required>
-        <input type="text" name="morada" class="form-control mb-2" placeholder="Morada" required>
-        <input type="text" name="telefone" class="form-control mb-2" placeholder="Telefone" required>
-        <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
-        <input type="file" name="imagem" class="form-control mb-2" accept="image/*" required>
-        <button type="submit" class="btn btn-primary">Adicionar Unidade</button>
-      </form>
+            // --- UNIDADES com UPLOAD DE IMAGEM ---
+            const UNI_KEY = "unidades";
+            
+            // Placeholder padrão
+            const defaultPlaceholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23E2E8F0'/%3E%3Ctext x='100' y='75' text-anchor='middle' fill='%239CA3AF' font-size='12'%3ESem Imagem%3C/text%3E%3C/svg%3E";
+            
+            let uniList = JSON.parse(localStorage.getItem(UNI_KEY) || "[]");
+            if (!uniList.length) {
+                uniList = [
+                    { nome: "Laboratório Central", morada: "Rua da Boavista, 123, Porto", telefone: "912 345 678", email: "central@rehablink.pt", imagem: defaultPlaceholder },
+                    { nome: "Unidade Norte", morada: "Av. da Liberdade, 456, Braga", telefone: "923 456 789", email: "norte@rehablink.pt", imagem: defaultPlaceholder },
+                    { nome: "Unidade Sul", morada: "Rua 25 de Abril, 789, Lisboa", telefone: "934 567 890", email: "sul@rehablink.pt", imagem: defaultPlaceholder }
+                ];
+                localStorage.setItem(UNI_KEY, JSON.stringify(uniList));
+            }
 
-      <!-- Botão para mostrar gestão de unidades -->
-      <button onclick="mostrarGestaoUnidades()" class="btn btn-danger mb-3">Eliminar Unidades</button>
-      <div id="gestao-unidades" class="row g-4 d-none"></div>
-    
-    </main>
-  </div>
+            const formUni = document.getElementById("form-unidade");
+            const listaUni = document.getElementById("lista-unidades");
+            const gestaoUni = document.getElementById("gestao-unidades");
+            let uniEditIdx = null;
+            
+            // Upload de imagem para unidades
+            const unidadeImagemUpload = document.getElementById("unidadeImagemUpload");
+            const previewContainer = document.getElementById("previewContainer");
+            const previewImg = document.getElementById("previewImg");
+            const noImageText = document.getElementById("noImageText");
+            const unidadeImagemData = document.getElementById("unidadeImagemData");
+            
+            unidadeImagemUpload.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgData = event.target.result;
+                        previewImg.src = imgData;
+                        previewContainer.style.display = "flex";
+                        noImageText.style.display = "none";
+                        unidadeImagemData.value = imgData;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            function removerImagem() {
+                previewContainer.style.display = "none";
+                noImageText.style.display = "inline";
+                unidadeImagemData.value = "";
+                unidadeImagemUpload.value = "";
+                previewImg.src = "";
+            }
+            
+            window.removerImagem = removerImagem;
+            
+            function updateImagePreview(imgData) {
+                if (imgData && imgData.trim() !== "") {
+                    previewImg.src = imgData;
+                    previewContainer.style.display = "flex";
+                    noImageText.style.display = "none";
+                    unidadeImagemData.value = imgData;
+                } else {
+                    previewContainer.style.display = "none";
+                    noImageText.style.display = "inline";
+                    unidadeImagemData.value = "";
+                }
+            }
+            
+            function escapeHtml(str) {
+                if (!str) return "";
+                return str.replace(/[&<>]/g, function(m) {
+                    if (m === "&") return "&amp;";
+                    if (m === "<") return "&lt;";
+                    if (m === ">") return "&gt;";
+                    return m;
+                });
+            }
+
+            function renderUnidades(editMode = false) {
+                const container = editMode ? gestaoUni : listaUni;
+                container.innerHTML = "";
+                
+                if (editMode) {
+                    container.classList.remove("d-none");
+                } else {
+                    container.classList.add("d-none");
+                }
+                
+                uniList.forEach((u, i) => {
+                    const imagemUrl = u.imagem && u.imagem.trim() !== "" ? u.imagem : defaultPlaceholder;
+                    
+                    if (editMode) {
+                        container.innerHTML += `
+                            <div class="col-md-6">
+                                <div class="unidade-card">
+                                    <img src="${imagemUrl}" alt="${escapeHtml(u.nome)}" class="unidade-img" onerror="this.src='${defaultPlaceholder}'">
+                                    <div class="unidade-title">${escapeHtml(u.nome)}</div>
+                                    <div class="unidade-info"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(u.morada)}</div>
+                                    <div class="unidade-info"><i class="fa-solid fa-phone"></i> ${escapeHtml(u.telefone)}</div>
+                                    <div class="unidade-info"><i class="fa-regular fa-envelope"></i> ${escapeHtml(u.email)}</div>
+                                    <div class="d-flex gap-2 justify-content-end mt-3">
+                                        <button class="btn-warning btn-sm edit-uni" data-i="${i}"><i class="fas fa-pen"></i> Editar</button>
+                                        <button class="btn-outline-danger btn-sm del-uni" data-i="${i}"><i class="fas fa-trash"></i> Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML += `
+                            <div class="col-md-6">
+                                <div class="unidade-card">
+                                    <img src="${imagemUrl}" alt="${escapeHtml(u.nome)}" class="unidade-img" onerror="this.src='${defaultPlaceholder}'">
+                                    <div class="unidade-title">${escapeHtml(u.nome)}</div>
+                                    <div class="unidade-info"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(u.morada)}</div>
+                                    <div class="unidade-info"><i class="fa-solid fa-phone"></i> ${escapeHtml(u.telefone)}</div>
+                                    <div class="unidade-info"><i class="fa-regular fa-envelope"></i> ${escapeHtml(u.email)}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            formUni.addEventListener("submit", e => {
+                e.preventDefault();
+                const nome = document.getElementById("unidadeNome").value.trim();
+                const morada = document.getElementById("unidadeMorada").value.trim();
+                const telefone = document.getElementById("unidadeTelefone").value.trim();
+                const email = document.getElementById("unidadeEmail").value.trim();
+                const imagem = unidadeImagemData.value || defaultPlaceholder;
+                
+                if (!nome || !morada || !telefone || !email) {
+                    alert("Preencha todos os campos obrigatórios");
+                    return;
+                }
+                
+                const obj = { nome, morada, telefone, email, imagem };
+                
+                if (uniEditIdx !== null) {
+                    uniList[uniEditIdx] = obj;
+                    uniEditIdx = null;
+                } else {
+                    uniList.push(obj);
+                }
+                
+                formUni.reset();
+                removerImagem();
+                renderUnidades(false);
+                renderUnidades(true);
+                localStorage.setItem(UNI_KEY, JSON.stringify(uniList));
+            });
+
+            gestaoUni.addEventListener("click", e => {
+                const btn = e.target.closest("button");
+                if (!btn) return;
+                const i = +btn.dataset.i;
+                
+                if (btn.classList.contains("edit-uni")) {
+                    const u = uniList[i];
+                    document.getElementById("unidadeNome").value = u.nome;
+                    document.getElementById("unidadeMorada").value = u.morada;
+                    document.getElementById("unidadeTelefone").value = u.telefone;
+                    document.getElementById("unidadeEmail").value = u.email;
+                    updateImagePreview(u.imagem || "");
+                    uniEditIdx = i;
+                    renderUnidades(false);
+                    renderUnidades(true);
+                } else if (btn.classList.contains("del-uni")) {
+                    if (confirm("Eliminar esta unidade?")) {
+                        uniList.splice(i, 1);
+                        renderUnidades(false);
+                        renderUnidades(true);
+                        localStorage.setItem(UNI_KEY, JSON.stringify(uniList));
+                    }
+                }
+            });
+
+            renderUnidades(false);
+            renderUnidades(true);
+        });
+
+        function mostrarGestaoServicos() {
+            const gestao = document.getElementById("gestao-servicos");
+            const lista = document.getElementById("lista-servicos");
+            gestao.classList.toggle("d-none");
+            lista.classList.toggle("d-none");
+        }
+
+        function mostrarGestaoUnidades() {
+            const gestao = document.getElementById("gestao-unidades");
+            const lista = document.getElementById("lista-unidades");
+            gestao.classList.toggle("d-none");
+            lista.classList.toggle("d-none");
+        }
+    </script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="../../js/1230404.js"></script>
-<script src="../../js/1221051.js"></script>
-
 </html>

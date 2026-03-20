@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Registo de Acessos</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link active"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Registo de Acessos</h1>
+                <div>
+                    <button class="btn-filter" onclick="exportarLogs()">
+                        <i class="fa-solid fa-download me-2"></i> Exportar Logs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrar Acessos
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select" id="filtroPeriodo">
+                            <option value="hoje">Hoje</option>
+                            <option value="ontem">Ontem</option>
+                            <option value="ultimos7">Últimos 7 dias</option>
+                            <option value="ultimos30">Últimos 30 dias</option>
+                            <option value="personalizado">Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo de Utilizador</label>
+                        <select class="form-select" id="filtroTipo">
+                            <option value="todos">Todos</option>
+                            <option value="utente">Utente</option>
+                            <option value="medico">Médico</option>
+                            <option value="fisioterapeuta">Fisioterapeuta</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Pesquisar</label>
+                        <input type="text" id="pesquisa" class="form-control" placeholder="Nome do utilizador...">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-reset" onclick="limparFiltros()">Limpar</button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Acessos -->
+            <div class="table-container">
+                <table id="tabelaAcessos" class="table table-hover">
+                    <thead>
+                        32
+                            <th>Nome</th>
+                            <th>Tipo de Utilizador</th>
+                            <th>Data e Hora de Acesso</th>
+                            <th>IP</th>
+                            <th>Dispositivo</th>
+                        32
+                    </thead>
+                    <tbody>
+                        32
+                            32<strong>Maria Silva</strong>32
+                            32<span class="badge-cargo badge-medico">Utente</span>32
+                            322025-05-22 09:35:1532
+                            32192.168.1.10532
+                            32Windows / Chrome32
+                        41
+                        32
+                            32<strong>Dr. João Martins</strong>32
+                            32<span class="badge-cargo badge-medico">Médico</span>32
+                            322025-05-21 15:12:4232
+                            32192.168.1.10232
+                            32Windows / Firefox32
+                        41
+                        32
+                            32<strong>Enf. Ana Ribeiro</strong>32
+                            32<span class="badge-cargo badge-tecnico">Técnico</span>32
+                            322025-05-20 17:44:1032
+                            32192.168.1.11032
+                            32Android / App32
+                        41
+                        32
+                            32<strong>Dra. Carla Santos</strong>32
+                            32<span class="badge-cargo badge-fisioterapeuta">Fisioterapeuta</span>32
+                            322025-05-20 09:22:0832
+                            32192.168.1.10832
+                            32Mac / Safari32
+                        41
+                        32
+                            32<strong>Admin Sistema</strong>32
+                            32<span class="badge-cargo badge-medico">Administrador</span>32
+                            322025-05-20 08:00:0032
+                            32192.168.1.10032
+                            32Windows / Edge32
+                        41
+                        32
+                            32<strong>João Rodrigues</strong>32
+                            32<span class="badge-cargo badge-medico">Utente</span>32
+                            322025-05-19 14:30:2232
+                            32192.168.1.11532
+                            32iPhone / Safari32
+                        41
+                    </tbody>
+                90
+            </div>
+
+            <!-- Estatísticas de Acessos -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Acessos Hoje</h5>
+                        <div class="stat-value" style="font-size: 2rem;">156</div>
+                        <div class="stat-label">total de acessos</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Acessos Esta Semana</h5>
+                        <div class="stat-value" style="font-size: 2rem;">1,284</div>
+                        <div class="stat-label">+12% vs semana anterior</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Pico de Acessos</h5>
+                        <div class="stat-value" style="font-size: 2rem;">10:00 - 12:00</div>
+                        <div class="stat-label">horário de maior utilização</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        let dataTable;
+
+        $(document).ready(function () {
+            dataTable = $('#tabelaAcessos').DataTable({
+                pageLength: 10,
+                pagingType: "full_numbers",
+                order: [[2, 'desc']],
+                language: {
+                    decimal: "",
+                    emptyTable: "Sem dados disponíveis na tabela.",
+                    info: "Mostrando _START_ até _END_ de _TOTAL_ registos",
+                    infoEmpty: "Mostrando 0 até 0 de 0 registos",
+                    infoFiltered: "(Filtrando _MAX_ total de registos)",
+                    lengthMenu: "Mostrar _MENU_ registos por página",
+                    loadingRecords: "Carregando...",
+                    processing: "Processando...",
+                    search: "Pesquisar:",
+                    zeroRecords: "Nenhum registo encontrado.",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                },
+                columnDefs: [
+                    { orderable: true, targets: [2] },
+                    { orderable: false, targets: [3, 4] }
+                ]
+            });
+        });
+
+        function limparFiltros() {
+            $('#filtroPeriodo').val('hoje');
+            $('#filtroTipo').val('todos');
+            $('#pesquisa').val('');
+            dataTable.search('').draw();
+        }
+
+        function aplicarFiltros() {
+            const periodo = $('#filtroPeriodo').val();
+            const tipo = $('#filtroTipo').val();
+            const pesquisa = $('#pesquisa').val();
+            
+            let filtro = '';
+            if (periodo !== 'hoje') filtro += periodo + ' ';
+            if (tipo !== 'todos') filtro += tipo + ' ';
+            if (pesquisa) filtro += pesquisa;
+            
+            dataTable.search(filtro).draw();
+        }
+
+        function exportarLogs() {
+            alert('A exportar logs de acesso...');
+        }
+    </script>
+</body>
+</html>

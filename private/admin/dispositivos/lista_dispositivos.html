@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Gestão de Dispositivos</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="lista_dispositivos.html" class="nav-link active"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Gestão de Dispositivos</h1>
+                <button class="btn-filter" onclick="window.location.href='associar_dispositivo.html'">
+                    <i class="fa-solid fa-plus me-2"></i>Associar Dispositivo
+                </button>
+            </div>
+
+            <!-- Estatísticas Rápidas -->
+            <div class="metricas-grid">
+                <div class="metrica-card">
+                    <div class="metrica-valor">24</div>
+                    <div class="metrica-label">Total Dispositivos</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-circle" style="color: #48bb78;"></i> 22 online</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">18</div>
+                    <div class="metrica-label">Dispositivos Ativos</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +2 esta semana</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">2</div>
+                    <div class="metrica-label">Offline >24h</div>
+                    <div class="metrica-trend down"><i class="fa-solid fa-arrow-down"></i> Alertar</div>
+                </div>
+                <div class="metrica-card">
+                    <div class="metrica-valor">98%</div>
+                    <div class="metrica-label">Taxa de Transmissão</div>
+                    <div class="metrica-trend"><i class="fa-solid fa-check-circle" style="color: #48bb78;"></i> Estável</div>
+                </div>
+            </div>
+
+            <!-- Tabela de Dispositivos -->
+            <div class="table-container">
+                <table id="tabelaDispositivos" class="table">
+                    <thead>
+                        32
+                            <th>ID Dispositivo</th>
+                            <th>Paciente Associado</th>
+                            <th>Estado</th>
+                            <th>Última Ligação</th>
+                            <th>Tipo de Sensor</th>
+                            <th>Ações</th>
+                        32
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>PS-1024</strong></td>
+                            <td>Ana Ferreira</td>
+                            <td><span class="badge-status badge-online">Online</span></td>
+                            <td>20 Mar 2026 10:28</td>
+                            <td>Força de pinça</td>
+                            <td>
+                                <button class="btn-acao btn-sm" onclick="testarLigacao('PS-1024')"><i class="fa-solid fa-plug"></i></button>
+                                <button class="btn-acao btn-sm" onclick="verDados('PS-1024')"><i class="fa-solid fa-chart-line"></i></button>
+                                <button class="btn-acao btn-sm" onclick="desassociar('PS-1024')"><i class="fa-solid fa-unlink"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>PS-1032</strong></td>
+                            <td>João Rodrigues</td>
+                            <td><span class="badge-status badge-offline">Offline</span></td>
+                            <td>19 Mar 2026 08:15</td>
+                            <td>Precisão</td>
+                            <td>
+                                <button class="btn-acao btn-sm" onclick="testarLigacao('PS-1032')"><i class="fa-solid fa-plug"></i></button>
+                                <button class="btn-acao btn-sm" onclick="verDados('PS-1032')"><i class="fa-solid fa-chart-line"></i></button>
+                                <button class="btn-acao btn-sm" onclick="desassociar('PS-1032')"><i class="fa-solid fa-unlink"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>PS-1045</strong></td>
+                            <td>Carlos Monteiro</td>
+                            <td><span class="badge-status badge-online">Online</span></td>
+                            <td>20 Mar 2026 09:45</td>
+                            <td>Resistência</td>
+                            <td>
+                                <button class="btn-acao btn-sm"><i class="fa-solid fa-plug"></i></button>
+                                <button class="btn-acao btn-sm"><i class="fa-solid fa-chart-line"></i></button>
+                                <button class="btn-acao btn-sm"><i class="fa-solid fa-unlink"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                80
+            </div>
+
+            <!-- Alertas de Dispositivos -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-bell me-2" style="color: #8B0000;"></i>Alertas de Dispositivos</h3>
+                </div>
+                <div class="alerta-card erro">
+                    <div class="alerta-icon erro">
+                        <i class="fa-solid fa-exclamation"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <h4>Dispositivo PS-1032 offline há 2 dias</h4>
+                        <p>Paciente: João Rodrigues · Último envio: 19 Mar 2026 08:15</p>
+                    </div>
+                </div>
+                <div class="alerta-card atencao">
+                    <div class="alerta-icon atencao">
+                        <i class="fa-solid fa-battery-quarter"></i>
+                    </div>
+                    <div class="alerta-content">
+                        <h4>Bateria baixa - PS-1045</h4>
+                        <p>15% restante · Necessita carregamento</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#tabelaDispositivos').DataTable({
+            pageLength: 10,
+            language: {
+                emptyTable: "Nenhum dispositivo encontrado",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ dispositivos",
+                search: "Pesquisar:"
+            }
+        });
+
+        function testarLigacao(id) { alert('A testar ligação com dispositivo ' + id); }
+        function verDados(id) { alert('Ver dados do dispositivo ' + id); }
+        function desassociar(id) { if(confirm('Desassociar dispositivo ' + id + '?')) alert('Dispositivo desassociado'); }
+    </script>
+</body>
+</html>

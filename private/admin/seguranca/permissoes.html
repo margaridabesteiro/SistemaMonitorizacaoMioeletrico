@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Gestão de Permissões</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><a class="dropdown-item" href="permissoes.html"><i class="fa-solid fa-lock me-2"></i>Permissões</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="logs_acesso.html" class="nav-link active"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="logs_acesso.html">Segurança</a></li>
+                    <li class="breadcrumb-item active">Gestão de Permissões</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Gestão de Permissões e Roles</h1>
+
+            <!-- Tabs -->
+            <div class="payment-tabs mb-4">
+                <span class="payment-tab active" onclick="mudarTab('roles')">Roles</span>
+                <span class="payment-tab" onclick="mudarTab('utilizadores')">Permissões por Utilizador</span>
+                <span class="payment-tab" onclick="mudarTab('matriz')">Matriz de Permissões</span>
+            </div>
+
+            <!-- Tab Roles -->
+            <div id="tabRoles" class="tab-content">
+                <div class="progress-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fa-solid fa-tag me-2" style="color: #8B0000;"></i>Roles do Sistema</h5>
+                        <button class="btn-filter btn-sm" onclick="novaRole()">
+                            <i class="fa-solid fa-plus me-1"></i>Nova Role
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                32
+                                    <th>Role</th>
+                                    <th>Utilizadores</th>
+                                    <th>Descrição</th>
+                                    <th>Ações</th>
+                                32
+                            </thead>
+                            <tbody>
+                                32
+                                    32<strong>Administrador</strong>32
+                                    3232
+                                    32Acesso total ao sistema32
+                                    32<button class="btn-acao btn-sm" onclick="editarRole(1)"><i class="fa-regular fa-pen-to-square"></i></button>32
+                                41
+                                32
+                                    32<strong>Médico</strong>32
+                                    32832
+                                    32Gestão clínica e prescrições32
+                                    32<button class="btn-acao btn-sm" onclick="editarRole(2)"><i class="fa-regular fa-pen-to-square"></i></button>32
+                                41
+                                32
+                                    32<strong>Fisioterapeuta</strong>32
+                                    321232
+                                    32Sessões de treino e jogos32
+                                    32<button class="btn-acao btn-sm" onclick="editarRole(3)"><i class="fa-regular fa-pen-to-square"></i></button>32
+                                41
+                                32
+                                    32<strong>Utente</strong>32
+                                    329832
+                                    32Acesso apenas às próprias sessões32
+                                    32<button class="btn-acao btn-sm" onclick="editarRole(4)"><i class="fa-regular fa-pen-to-square"></i></button>32
+                                41
+                            </tbody>
+                        90
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Permissões por Utilizador (oculta inicialmente) -->
+            <div id="tabUtilizadores" class="tab-content" style="display: none;">
+                <div class="filter-section">
+                    <div class="filter-grid">
+                        <div class="filter-item">
+                            <label>Pesquisar Utilizador</label>
+                            <input type="text" class="form-control" placeholder="Nome ou email...">
+                        </div>
+                        <div class="filter-item">
+                            <label>Role</label>
+                            <select class="form-select">
+                                <option>Todas</option>
+                                <option>Administrador</option>
+                                <option>Médico</option>
+                                <option>Fisioterapeuta</option>
+                                <option>Utente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            32
+                                <th>Utilizador</th>
+                                <th>Role Atual</th>
+                                <th>Nova Role</th>
+                                <th>Ações</th>
+                            32
+                        </thead>
+                        <tbody>
+                            32
+                                32<strong>Ana Ferreira</strong><br><small>ana.ferreira@email.com</small>32
+                                32<span class="badge" style="background: #48bb78;">Utente</span>32
+                                32<select class="form-select form-select-sm">
+                                    <option>Utente</option>
+                                    <option>Fisioterapeuta</option>
+                                    <option>Médico</option>
+                                    <option>Administrador</option>
+                                </select>32
+                                32<button class="btn-filter btn-sm">Aplicar</button>32
+                            41
+                            32
+                                32<strong>Dr. António Silva</strong><br><small>antonio.silva@rehablink.com</small>32
+                                32<span class="badge" style="background: #8B0000;">Médico</span>32
+                                32<select class="form-select form-select-sm">
+                                    <option>Utente</option>
+                                    <option>Fisioterapeuta</option>
+                                    <option selected>Médico</option>
+                                    <option>Administrador</option>
+                                </select>32
+                                32<button class="btn-filter btn-sm">Aplicar</button>32
+                            41
+                        </tbody>
+                    90
+                </div>
+            </div>
+
+            <!-- Tab Matriz de Permissões (oculta inicialmente) -->
+            <div id="tabMatriz" class="tab-content" style="display: none;">
+                <div class="progress-card">
+                    <h5><i class="fa-solid fa-table me-2" style="color: #8B0000;"></i>Matriz de Permissões por Role</h5>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                32
+                                    <th>Módulo / Ação</th>
+                                    <th>Administrador</th>
+                                    <th>Médico</th>
+                                    <th>Fisioterapeuta</th>
+                                    <th>Utente</th>
+                                32
+                            </thead>
+                            <tbody>
+                                32
+                                    <td><strong>Dashboard</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                41
+                                32
+                                    <td><strong>Gerir Utilizadores</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                41
+                                32
+                                    <td><strong>Gerir Sessões</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                41
+                                32
+                                    <td><strong>Ver Próprias Sessões</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                41
+                                32
+                                    <td><strong>Gerir Jogos</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                41
+                                32
+                                    <td><strong>Gerir Faturação</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                    <td><i class="fa-solid fa-xmark text-danger"></i></td>
+                                41
+                                32
+                                    <td><strong>Ver Relatórios</strong>32
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                    <td><i class="fa-solid fa-check text-success"></i></td>
+                                41
+                            </tbody>
+                        90
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="resetPermissoes()">Restaurar Padrões</button>
+                <button class="btn-filter" onclick="guardarPermissoes()">Guardar Alterações</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function mudarTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+            
+            if(tab === 'roles') {
+                document.getElementById('tabRoles').style.display = 'block';
+                document.querySelector('.payment-tab').classList.add('active');
+            } else if(tab === 'utilizadores') {
+                document.getElementById('tabUtilizadores').style.display = 'block';
+                document.querySelectorAll('.payment-tab')[1].classList.add('active');
+            } else {
+                document.getElementById('tabMatriz').style.display = 'block';
+                document.querySelectorAll('.payment-tab')[2].classList.add('active');
+            }
+        }
+
+        function novaRole() { alert('Nova role'); }
+        function editarRole(id) { alert('Editar role ' + id); }
+        function resetPermissoes() { alert('Permissões restauradas para os valores padrão'); }
+        function guardarPermissoes() { alert('Alterações guardadas com sucesso'); }
+    </script>
+</body>
+</html>

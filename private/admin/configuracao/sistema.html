@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Configuração do Sistema</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="sistema.html" class="nav-link active"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Configuração do Sistema</h1>
+
+            <form>
+                <!-- Parâmetros Globais -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-sliders me-2" style="color: #8B0000;"></i>Parâmetros Globais de Treino</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Limite de força mínimo padrão (N)</label>
+                            <input type="number" class="form-control" value="5" min="0" max="20">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Limite de força máximo padrão (N)</label>
+                            <input type="number" class="form-control" value="15" min="0" max="30">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Duração padrão de sessão (minutos)</label>
+                            <input type="number" class="form-control" value="15" min="5" max="60">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tempo máximo de sessão (minutos)</label>
+                            <input type="number" class="form-control" value="45" min="15" max="90">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuração da API -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-cloud me-2" style="color: #8B0000;"></i>Configuração da API</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">API Endpoint</label>
+                            <input type="text" class="form-control" value="https://api.rehablink.com/v1">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">API Key</label>
+                            <input type="password" class="form-control" value="••••••••••••••••">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Timeout (segundos)</label>
+                            <input type="number" class="form-control" value="30">
+                        </div>
+                    </div>
+                    <button class="btn-acao" onclick="testarAPI()"><i class="fa-solid fa-plug me-2"></i>Testar Ligação</button>
+                </div>
+
+                <!-- Notificações -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-regular fa-bell me-2" style="color: #8B0000;"></i>Configuração de Notificações</h5>
+                    <hr>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifDispositivos" checked>
+                        <label class="form-check-label" for="notifDispositivos">
+                            Alertas de dispositivos offline
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifErros" checked>
+                        <label class="form-check-label" for="notifErros">
+                            Alertas de erros do sistema
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="notifBackup">
+                        <label class="form-check-label" for="notifBackup">
+                            Notificações de backup
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Segurança -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-lock me-2" style="color: #8B0000;"></i>Configuração de Segurança</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tempo de sessão (minutos)</label>
+                            <input type="number" class="form-control" value="30">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tentativas de login</label>
+                            <input type="number" class="form-control" value="5">
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="doisFatores">
+                        <label class="form-check-label" for="doisFatores">
+                            Ativar autenticação de dois fatores para administradores
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="logsDetalhados" checked>
+                        <label class="form-check-label" for="logsDetalhados">
+                            Manter logs detalhados de acesso
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="d-flex gap-2 justify-content-end mt-4">
+                    <button type="reset" class="btn-reset">Restaurar Padrões</button>
+                    <button type="submit" class="btn-filter" onclick="guardarConfig()">Guardar Configurações</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function testarAPI() {
+            alert('A testar ligação com a API...');
+        }
+        function guardarConfig() {
+            alert('Configurações guardadas com sucesso!');
+        }
+    </script>
+</body>
+</html>

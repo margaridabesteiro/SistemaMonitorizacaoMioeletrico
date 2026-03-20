@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Exportar Dados</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="relatorios_sistema.html" class="nav-link active"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="relatorios_sistema.html">Relatórios</a></li>
+                    <li class="breadcrumb-item active">Exportar Dados</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Exportar Dados</h1>
+
+            <div class="progress-card">
+                <h5><i class="fa-solid fa-database me-2" style="color: #8B0000;"></i>Selecionar Dados para Exportar</h5>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Dados</label>
+                        <select class="form-select" id="tipoDados">
+                            <option value="utilizadores">Utilizadores</option>
+                            <option value="sessoes">Sessões de Treino</option>
+                            <option value="dispositivos">Dispositivos</option>
+                            <option value="faturas">Faturas</option>
+                            <option value="logs">Logs de Acesso</option>
+                            <option value="todos">Todos os dados</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Período</label>
+                        <select class="form-select">
+                            <option>Últimos 7 dias</option>
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                            <option>Último ano</option>
+                            <option>Todo o período</option>
+                            <option>Personalizado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" id="personalizadoPeriodo" style="display: none;">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data Início</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data Fim</label>
+                        <input type="date" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Formato de Exportação</label>
+                        <select class="form-select">
+                            <option>CSV</option>
+                            <option>Excel (.xlsx)</option>
+                            <option>JSON</option>
+                            <option>PDF</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Incluir</label>
+                        <select class="form-select">
+                            <option>Apenas dados selecionados</option>
+                            <option>Incluir metadados</option>
+                            <option>Incluir logs associados</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="anonimizar">
+                    <label class="form-check-label" for="anonimizar">
+                        Anonimizar dados pessoais (para análise)
+                    </label>
+                </div>
+
+                <hr>
+
+                <div class="d-flex gap-2 justify-content-between align-items-center">
+                    <div>
+                        <button class="btn-acao" onclick="agendarExportacao()">
+                            <i class="fa-regular fa-clock me-2"></i>Agendar Exportação
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                        <button type="submit" class="btn-filter ms-2" onclick="exportarDados()">
+                            <i class="fa-solid fa-download me-2"></i>Exportar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exportações Recentes -->
+            <div class="progress-card mt-4">
+                <h5><i class="fa-regular fa-clock-rotate-left me-2" style="color: #8B0000;"></i>Exportações Recentes</h5>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            32
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Formato</th>
+                                <th>Registos</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            32
+                        </thead>
+                        <tbody>
+                            32
+                                32<strong>19 Mar 2026 15:30</strong>32
+                                32Utilizadores32
+                                32CSV32
+                                32124 registos32
+                                32<span class="badge-status badge-ativo">Concluído</span>32
+                                32<button class="btn-acao btn-sm"><i class="fa-solid fa-download"></i></button>32
+                            41
+                            32
+                                32<strong>18 Mar 2026 10:15</strong>32
+                                32Sessões32
+                                32Excel32
+                                321,284 registos32
+                                32<span class="badge-status badge-ativo">Concluído</span>32
+                                32<button class="btn-acao btn-sm"><i class="fa-solid fa-download"></i></button>32
+                            41
+                            32
+                                32<strong>15 Mar 2026 09:00</strong>32
+                                32Todos os dados32
+                                32JSON32
+                                32-32
+                                32<span class="badge-status badge-pendente">Processando</span>32
+                                32-32
+                            41
+                        </tbody>
+                    90
+                </div>
+            </div>
+
+            <div class="progress-card mt-4">
+                <h5><i class="fa-solid fa-chart-line me-2" style="color: #8B0000;"></i>Tamanho Estimado da Exportação</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="flex-grow-1">
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar" style="width: 45%; background: #8B0000;"></div>
+                        </div>
+                    </div>
+                    <span><strong>~2.4 MB</strong></span>
+                </div>
+                <p class="text-muted small mt-2">Estimativa baseada nos filtros selecionados</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $('select option[value="personalizado"]').on('click', function() {
+            $('#personalizadoPeriodo').toggle();
+        });
+
+        function exportarDados() {
+            alert('A exportar dados...');
+        }
+
+        function agendarExportacao() {
+            alert('Exportação agendada. Receberá um email quando estiver pronta.');
+        }
+    </script>
+</body>
+</html>

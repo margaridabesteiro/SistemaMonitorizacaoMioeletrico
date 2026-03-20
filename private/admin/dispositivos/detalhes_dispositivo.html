@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Detalhes do Dispositivo</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="lista_dispositivos.html" class="nav-link active"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_dispositivos.html">Dispositivos</a></li>
+                    <li class="breadcrumb-item active">Detalhes: PS-1024</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Dispositivo PS-1024</h1>
+                <div>
+                    <button class="btn-acao" onclick="testarLigacao()">
+                        <i class="fa-solid fa-plug me-2"></i>Testar Ligação
+                    </button>
+                    <button class="btn-filter ms-2" onclick="editarDispositivo()">
+                        <i class="fa-regular fa-pen-to-square me-2"></i>Editar
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-info-circle me-2" style="color: #8B0000;"></i>Informação Geral</h5>
+                        <hr>
+                        <p><strong>ID Dispositivo:</strong> PS-1024</p>
+                        <p><strong>Paciente Associado:</strong> Ana Ferreira</p>
+                        <p><strong>Tipo de Sensor:</strong> Força de pinça</p>
+                        <p><strong>Número de Série:</strong> SN-1024A5</p>
+                        <p><strong>Estado:</strong> <span class="badge-status badge-online">Online</span></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-calendar me-2" style="color: #8B0000;"></i>Datas Importantes</h5>
+                        <hr>
+                        <p><strong>Data de Instalação:</strong> 15 Janeiro 2026</p>
+                        <p><strong>Última Ligação:</strong> 20 Mar 2026 10:28:15</p>
+                        <p><strong>Data de Garantia:</strong> 15 Janeiro 2027</p>
+                        <p><strong>Próxima Manutenção:</strong> 15 Abril 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #8B0000;"></i>Dados do Sensor</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="dadosSensorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-simple me-2" style="color: #8B0000;"></i>Estatísticas de Uso</h5>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Sessões</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-value">98%</div>
+                                <div class="stat-label">Uptime</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-value">12.5N</div>
+                                <div class="stat-label">Força Máx</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-history me-2" style="color: #8B0000;"></i>Últimas Transmissões</h5>
+                        <div class="table-container p-0">
+                            <table class="table">
+                                <thead>
+                                    32
+                                        <th>Data</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                    32
+                                </thead>
+                                <tbody>
+                                    32
+                                        32<strong>10:28</strong>32
+                                        328.2N32
+                                        32<span class="badge-status badge-online">Sucesso</span>32
+                                    41
+                                    32
+                                        32<strong>09:15</strong>32
+                                        327.9N32
+                                        32<span class="badge-status badge-online">Sucesso</span>32
+                                    41
+                                    32
+                                        32<strong>08:00</strong>32
+                                        328.5N32
+                                        32<span class="badge-status badge-online">Sucesso</span>32
+                                    41
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-exclamation-triangle me-2" style="color: #8B0000;"></i>Histórico de Alertas</h5>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    32
+                                        <th>Data</th>
+                                        <th>Tipo</th>
+                                        <th>Descrição</th>
+                                        <th>Resolvido</th>
+                                    32
+                                </thead>
+                                <tbody>
+                                    32
+                                        32<strong>15 Mar 2026 14:20</strong>32
+                                        32<span class="badge" style="background: #f59e0b;">Aviso</span>32
+                                        32Bateria baixa (15%)32
+                                        32<span class="badge-status badge-ativo">Sim</span>32
+                                    41
+                                    32
+                                        32<strong>10 Mar 2026 22:30</strong>32
+                                        32<span class="badge" style="background: #dc2626;">Erro</span>32
+                                        32Falha de comunicação32
+                                        32<span class="badge-status badge-ativo">Sim</span>32
+                                    41
+                                </tbody>
+                            90
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="history.back()">Voltar</button>
+                <button class="btn-danger" onclick="desassociar()">Desassociar Dispositivo</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        new Chart(document.getElementById('dadosSensorChart'), {
+            type: 'line',
+            data: {
+                labels: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'],
+                datasets: [{
+                    label: 'Força (N)',
+                    data: [8.2, 7.9, 8.5, 9.1, 8.8, 8.3],
+                    borderColor: '#8B0000',
+                    backgroundColor: 'rgba(139,0,0,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            }
+        });
+
+        function testarLigacao() { alert('A testar ligação com o dispositivo...'); }
+        function editarDispositivo() { alert('Editar dispositivo'); }
+        function desassociar() { if(confirm('Desassociar este dispositivo?')) alert('Dispositivo desassociado'); }
+    </script>
+</body>
+</html>

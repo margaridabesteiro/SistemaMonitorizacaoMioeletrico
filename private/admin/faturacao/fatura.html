@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Detalhes da Fatura</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+    <style>
+        /* Estilos para a fatura */
+        .fatura-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(139, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .fatura-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .fatura-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .fatura-id {
+            background: #f8fafc;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        
+        .fatura-info {
+            margin: 20px 0;
+        }
+        
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        
+        .info-label {
+            width: 180px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #4a5568;
+        }
+        
+        .btn-voltar {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            border-radius: 10px;
+            color: #4a5568;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-voltar:hover {
+            border-color: #8B0000;
+            color: #8B0000;
+            transform: translateX(-2px);
+            text-decoration: none;
+        }
+        
+        .btn-exportar {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-exportar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+            color: white;
+        }
+        
+        .badge-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-pago {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .badge-pendente {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .badge-cancelado {
+            background: #fed7d7;
+            color: #991b1b;
+        }
+        
+        .fatura-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: right;
+        }
+        
+        .fatura-total .total-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .fatura-total .total-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8B0000;
+            margin-left: 15px;
+        }
+        
+        @media print {
+            .topbar, .sidebar, .btn-voltar, .btn-exportar, .d-print-none {
+                display: none !important;
+            }
+            .wrapper {
+                display: block;
+                padding: 0;
+            }
+            .content {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .fatura-card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3 d-print-none">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar d-print-none">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="controlo_faturacao.html" class="nav-link active"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="fatura-card" id="fatura-container">
+                <div class="fatura-header">
+                    <div class="fatura-logo">
+                        <i class="fa-solid fa-hand-holding-heart me-2"></i> RehabLink
+                    </div>
+                    <div class="fatura-id">
+                        Fatura #<span id="fatura-id">FT-2026-0124</span>
+                    </div>
+                </div>
+
+                <div class="fatura-info">
+                    <div class="info-row">
+                        <div class="info-label">Utente:</div>
+                        <div class="info-value" id="fatura-utente">Ana Ferreira</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">NIF:</div>
+                        <div class="info-value" id="fatura-NIF">123456789</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Seguradora/SNS:</div>
+                        <div class="info-value" id="fatura-seguradora">ADSE</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Exame:</div>
+                        <div class="info-value" id="fatura-exame">Hemograma Completo</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Teste Especial:</div>
+                        <div class="info-value" id="fatura-testeEspecial">-</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Valor:</div>
+                        <div class="info-value" id="fatura-valor">€125,00</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Data de Emissão:</div>
+                        <div class="info-value" id="fatura-data">20 Março 2026</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Método de Pagamento:</div>
+                        <div class="info-value" id="fatura-metodo">MbWay</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Estado:</div>
+                        <div class="info-value">
+                            <span class="badge-status badge-pago" id="fatura-estado">Pago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fatura-total">
+                    <span class="total-label">Total a Pagar:</span>
+                    <span class="total-value" id="fatura-total">€125,00</span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4 d-print-none">
+                    <a href="controlo_faturacao.html" class="btn-voltar">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Voltar
+                    </a>
+                    <button class="btn-exportar" id="btnExportarFatura" onclick="exportarPDF()">
+                        <i class="fa-solid fa-file-pdf me-2"></i> Exportar Fatura PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Informação adicional (apenas ecrã) -->
+            <div class="text-center mt-4 d-print-none">
+                <small class="text-muted">Esta fatura pode ser impressa ou guardada como PDF.</small>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Função para exportar PDF
+        function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Conteúdo da fatura
+            const faturaId = document.getElementById('fatura-id').innerText;
+            const utente = document.getElementById('fatura-utente').innerText;
+            const nif = document.getElementById('fatura-NIF').innerText;
+            const seguradora = document.getElementById('fatura-seguradora').innerText;
+            const exame = document.getElementById('fatura-exame').innerText;
+            const testeEspecial = document.getElementById('fatura-testeEspecial').innerText;
+            const valor = document.getElementById('fatura-valor').innerText;
+            const data = document.getElementById('fatura-data').innerText;
+            const metodo = document.getElementById('fatura-metodo').innerText;
+            const estado = document.getElementById('fatura-estado').innerText;
+            const total = document.getElementById('fatura-total').innerText;
+            
+            // Configurar PDF
+            doc.setFontSize(20);
+            doc.setTextColor(139, 0, 0);
+            doc.text('RehabLink', 20, 20);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Fatura ' + faturaId, 20, 30);
+            
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Detalhes da Fatura', 20, 45);
+            
+            doc.setFontSize(10);
+            doc.text('Utente: ' + utente, 20, 55);
+            doc.text('NIF: ' + nif, 20, 62);
+            doc.text('Seguradora/SNS: ' + seguradora, 20, 69);
+            doc.text('Exame: ' + exame, 20, 76);
+            doc.text('Teste Especial: ' + testeEspecial, 20, 83);
+            doc.text('Valor: ' + valor, 20, 90);
+            doc.text('Data: ' + data, 20, 97);
+            doc.text('Método de Pagamento: ' + metodo, 20, 104);
+            doc.text('Estado: ' + estado, 20, 111);
+            
+            doc.setFontSize(12);
+            doc.setTextColor(139, 0, 0);
+            doc.text('Total a Pagar: ' + total, 20, 125);
+            
+            // Data de emissão do PDF
+            const hoje = new Date();
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Documento emitido em ' + hoje.toLocaleDateString('pt-PT'), 20, 280);
+            
+            doc.save('fatura_' + faturaId + '.pdf');
+        }
+        
+        // Carregar dados da fatura (simulação - podia vir do localStorage ou URL)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simular dados da fatura (em produção, viriam do localStorage ou API)
+            const urlParams = new URLSearchParams(window.location.search);
+            const faturaId = urlParams.get('id') || 'FT-2026-0124';
+            
+            // Dados de exemplo
+            const faturas = {
+                'FT-2026-0124': {
+                    id: 'FT-2026-0124',
+                    utente: 'Ana Ferreira',
+                    nif: '123456789',
+                    seguradora: 'ADSE',
+                    exame: 'Hemograma Completo',
+                    testeEspecial: '-',
+                    valor: '€125,00',
+                    data: '20 Março 2026',
+                    metodo: 'MbWay',
+                    estado: 'Pago'
+                },
+                'FT-2026-0118': {
+                    id: 'FT-2026-0118',
+                    utente: 'João Rodrigues',
+                    nif: '987654321',
+                    seguradora: 'Multicare',
+                    exame: 'TSH',
+                    testeEspecial: '-',
+                    valor: '€95,00',
+                    data: '15 Março 2026',
+                    metodo: 'Cartão bancário',
+                    estado: 'Pago'
+                }
+            };
+            
+            const dados = faturas[faturaId] || faturas['FT-2026-0124'];
+            
+            document.getElementById('fatura-id').innerText = dados.id;
+            document.getElementById('fatura-utente').innerText = dados.utente;
+            document.getElementById('fatura-NIF').innerText = dados.nif;
+            document.getElementById('fatura-seguradora').innerText = dados.seguradora;
+            document.getElementById('fatura-exame').innerText = dados.exame;
+            document.getElementById('fatura-testeEspecial').innerText = dados.testeEspecial;
+            document.getElementById('fatura-valor').innerText = dados.valor;
+            document.getElementById('fatura-data').innerText = dados.data;
+            document.getElementById('fatura-metodo').innerText = dados.metodo;
+            document.getElementById('fatura-total').innerText = dados.valor;
+            
+            // Atualizar badge de estado
+            const estadoSpan = document.getElementById('fatura-estado');
+            if (dados.estado === 'Pago') {
+                estadoSpan.className = 'badge-status badge-pago';
+                estadoSpan.innerText = 'Pago';
+            } else if (dados.estado === 'Pendente') {
+                estadoSpan.className = 'badge-status badge-pendente';
+                estadoSpan.innerText = 'Pendente';
+            } else {
+                estadoSpan.className = 'badge-status badge-cancelado';
+                estadoSpan.innerText = 'Cancelado';
+            }
+        });
+    </script>
+</body>
+</html>

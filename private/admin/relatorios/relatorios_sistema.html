@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Exportar Dados</title>
+
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="exportar_dados.html" class="nav-link active"><i class="fa-solid fa-download me-2"></i>Exportar Dados</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="relatorios_sistema.html">Relatórios</a></li>
+                    <li class="breadcrumb-item active">Exportar Dados</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Exportar Dados</h1>
+
+            <div class="progress-card">
+                <h5>
+                    <i class="fa-solid fa-database me-2" style="color: #8B0000;"></i>
+                    Selecionar Dados para Exportar
+                </h5>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Dados</label>
+                        <select class="form-select" id="tipoDados">
+                            <option value="utilizadores">Utilizadores</option>
+                            <option value="sessoes">Sessões de Treino</option>
+                            <option value="dispositivos">Dispositivos</option>
+                            <option value="faturas">Faturas</option>
+                            <option value="logs">Logs de Acesso</option>
+                            <option value="todos">Todos os dados</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Período</label>
+                        <select class="form-select" id="periodo">
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="30" selected>Últimos 30 dias</option>
+                            <option value="90">Últimos 90 dias</option>
+                            <option value="365">Último ano</option>
+                            <option value="todos">Todo o período</option>
+                            <option value="personalizado">Personalizado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" id="personalizadoPeriodo" style="display: none;">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data Início</label>
+                        <input type="date" class="form-control" id="dataInicio">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data Fim</label>
+                        <input type="date" class="form-control" id="dataFim">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Formato de Exportação</label>
+                        <select class="form-select" id="formato">
+                            <option value="csv">CSV</option>
+                            <option value="excel">Excel (.xlsx)</option>
+                            <option value="json">JSON</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Incluir</label>
+                        <select class="form-select" id="incluir">
+                            <option value="apenas">Apenas dados selecionados</option>
+                            <option value="metadados">Incluir metadados</option>
+                            <option value="logs">Incluir logs associados</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="anonimizar">
+                    <label class="form-check-label">Anonimizar dados pessoais (para análise)</label>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+                    <button class="btn-acao" onclick="agendarExportacao()">
+                        <i class="fa-regular fa-clock me-2"></i>
+                        Agendar Exportação
+                    </button>
+
+                    <div>
+                        <button class="btn-reset" onclick="history.back()">Cancelar</button>
+                        <button class="btn-filter ms-2" onclick="exportarDados()">
+                            <i class="fa-solid fa-download me-2"></i>
+                            Exportar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mt-4">
+                <h5>
+                    <i class="fa-regular fa-clock-rotate-left me-2" style="color: #8B0000;"></i>
+                    Exportações Recentes
+                </h5>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Formato</th>
+                                <th>Registos</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>19 Mar 2026 15:30</strong></td>
+                                <td>Utilizadores</td>
+                                <td>CSV</td>
+                                <td>124 registos</td>
+                                <td><span class="badge-status badge-ativo">Concluído</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="baixarExportacao('utilizadores_20260319.csv')">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>18 Mar 2026 10:15</strong></td>
+                                <td>Sessões</td>
+                                <td>Excel</td>
+                                <td>1,284 registos</td>
+                                <td><span class="badge-status badge-ativo">Concluído</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="baixarExportacao('sessoes_20260318.xlsx')">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>15 Mar 2026 09:00</strong></td>
+                                <td>Todos os dados</td>
+                                <td>JSON</td>
+                                <td>-</td>
+                                <td><span class="badge-status badge-pendente">Processando</span></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="progress-card mt-4">
+                <h5>
+                    <i class="fa-solid fa-chart-line me-2" style="color: #8B0000;"></i>
+                    Tamanho Estimado da Exportação
+                </h5>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="flex-grow-1">
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar" style="width: 45%; background: #8B0000;"></div>
+                        </div>
+                    </div>
+                    <span id="tamanhoEstimado"><strong>~2.4 MB</strong></span>
+                </div>
+                <p class="text-muted small mt-2">Estimativa baseada nos filtros selecionados</p>
+            </div>
+
+            <div class="progress-card mt-4">
+                <h5 class="mb-3" style="color: #8B0000;">
+                    <i class="fa-regular fa-circle-info me-2"></i> Informação
+                </h5>
+                <p class="text-muted small mb-0">
+                    As exportações são processadas em segundo plano. Para grandes volumes de dados, pode agendar a exportação e receberá um email quando o ficheiro estiver pronto.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dados simulados para exportação
+        const dadosExemplo = {
+            utilizadores: [
+                { id: 1, nome: "Ana Ferreira", email: "ana@email.com", tipo: "Utente", data: "2026-03-20" },
+                { id: 2, nome: "Dr. António Silva", email: "antonio@rehablink.pt", tipo: "Médico", data: "2026-03-19" },
+                { id: 3, nome: "Dra. Carla Santos", email: "carla@rehablink.pt", tipo: "Fisioterapeuta", data: "2026-03-18" }
+            ],
+            sessoes: [
+                { id: 1, paciente: "Ana Ferreira", tipo: "Força de pinça", duracao: "15 min", forcaMedia: "8.2N", data: "2026-03-20" },
+                { id: 2, paciente: "João Rodrigues", tipo: "Precisão", duracao: "10 min", forcaMedia: "7.8N", data: "2026-03-19" }
+            ],
+            dispositivos: [
+                { id: "PS-1024", paciente: "Ana Ferreira", estado: "online", ultimaLigacao: "20 Mar 2026 10:28" },
+                { id: "PS-1032", paciente: "João Rodrigues", estado: "offline", ultimaLigacao: "19 Mar 2026 08:15" }
+            ],
+            faturas: [
+                { id: "FT-2026-0124", utente: "Ana Ferreira", valor: "€125,00", data: "20 Mar 2026", estado: "Pago" },
+                { id: "FT-2026-0118", utente: "João Rodrigues", valor: "€95,00", data: "15 Mar 2026", estado: "Pago" }
+            ],
+            logs: [
+                { data: "20 Mar 2026 10:30:15", utilizador: "Admin Sistema", acao: "Login", ip: "192.168.1.100" },
+                { data: "20 Mar 2026 09:45:22", utilizador: "Dra. Carla Santos", acao: "Login", ip: "192.168.1.105" }
+            ]
+        };
+
+        // Mostrar/ocultar campos de período personalizado
+        const periodoSelect = document.getElementById('periodo');
+        const personalizadoDiv = document.getElementById('personalizadoPeriodo');
+
+        periodoSelect.addEventListener('change', function() {
+            if (this.value === 'personalizado') {
+                personalizadoDiv.style.display = 'flex';
+            } else {
+                personalizadoDiv.style.display = 'none';
+            }
+        });
+
+        // Atualizar tamanho estimado
+        const tipoDados = document.getElementById('tipoDados');
+        const tamanhoSpan = document.getElementById('tamanhoEstimado');
+
+        const tamanhos = {
+            utilizadores: '~0.5 MB',
+            sessoes: '~2.4 MB',
+            dispositivos: '~0.3 MB',
+            faturas: '~1.2 MB',
+            logs: '~3.5 MB',
+            todos: '~8.2 MB'
+        };
+
+        tipoDados.addEventListener('change', function() {
+            const tamanho = tamanhos[this.value] || '~2.4 MB';
+            tamanhoSpan.innerHTML = `<strong>${tamanho}</strong>`;
+        });
+
+        function getPeriodoTexto() {
+            const periodo = document.getElementById('periodo').value;
+            if (periodo === 'personalizado') {
+                const inicio = document.getElementById('dataInicio').value;
+                const fim = document.getElementById('dataFim').value;
+                return inicio && fim ? `${inicio} a ${fim}` : 'Período personalizado';
+            }
+            const periodoMap = {
+                '7': 'Últimos 7 dias',
+                '30': 'Últimos 30 dias',
+                '90': 'Últimos 90 dias',
+                '365': 'Último ano',
+                'todos': 'Todo o período'
+            };
+            return periodoMap[periodo] || periodo;
+        }
+
+        function getDadosParaExportar() {
+            const tipo = document.getElementById('tipoDados').value;
+            if (tipo === 'todos') {
+                return dadosExemplo;
+            }
+            return { [tipo]: dadosExemplo[tipo] || [] };
+        }
+
+        function exportarCSV() {
+            const dados = getDadosParaExportar();
+            const tipo = document.getElementById('tipoDados').value;
+            let csv = '';
+            
+            if (tipo === 'todos') {
+                for (const [key, value] of Object.entries(dados)) {
+                    if (value.length > 0) {
+                        const headers = Object.keys(value[0]).join(',');
+                        const rows = value.map(row => Object.values(row).join(',')).join('\n');
+                        csv += `\n${key.toUpperCase()}\n${headers}\n${rows}\n`;
+                    }
+                }
+            } else {
+                const data = dados[tipo] || [];
+                if (data.length > 0) {
+                    const headers = Object.keys(data[0]).join(',');
+                    const rows = data.map(row => Object.values(row).join(',')).join('\n');
+                    csv = `${headers}\n${rows}`;
+                } else {
+                    csv = 'Nenhum dado encontrado';
+                }
+            }
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `${tipo}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarJSON() {
+            const dados = getDadosParaExportar();
+            const tipo = document.getElementById('tipoDados').value;
+            const jsonStr = JSON.stringify(dados, null, 2);
+            
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `${tipo}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const tipo = document.getElementById('tipoDados').value;
+            const dados = getDadosParaExportar();
+            const periodo = getPeriodoTexto();
+            
+            doc.setFontSize(16);
+            doc.setTextColor(139, 0, 0);
+            doc.text('RehabLink - Relatório de Dados', 14, 20);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Tipo: ${tipo}`, 14, 30);
+            doc.text(`Período: ${periodo}`, 14, 36);
+            doc.text(`Data de emissão: ${new Date().toLocaleDateString('pt-PT')}`, 14, 42);
+            
+            let yOffset = 55;
+            
+            if (tipo === 'todos') {
+                for (const [key, value] of Object.entries(dados)) {
+                    if (value && value.length > 0) {
+                        doc.setFontSize(12);
+                        doc.setTextColor(139, 0, 0);
+                        doc.text(key.toUpperCase(), 14, yOffset);
+                        yOffset += 8;
+                        
+                        const headers = Object.keys(value[0]);
+                        const rows = value.map(row => Object.values(row));
+                        
+                        doc.autoTable({
+                            startY: yOffset,
+                            head: [headers],
+                            body: rows,
+                            theme: 'striped',
+                            headStyles: { fillColor: [139, 0, 0], textColor: [255, 255, 255] },
+                            margin: { left: 14 }
+                        });
+                        
+                        yOffset = doc.lastAutoTable.finalY + 10;
+                    }
+                }
+            } else {
+                const data = dados[tipo] || [];
+                if (data.length > 0) {
+                    const headers = Object.keys(data[0]);
+                    const rows = data.map(row => Object.values(row));
+                    
+                    doc.autoTable({
+                        startY: yOffset,
+                        head: [headers],
+                        body: rows,
+                        theme: 'striped',
+                        headStyles: { fillColor: [139, 0, 0], textColor: [255, 255, 255] },
+                        margin: { left: 14, right: 14 }
+                    });
+                } else {
+                    doc.text('Nenhum dado encontrado para o período selecionado.', 14, yOffset);
+                }
+            }
+            
+            doc.save(`relatorio_${tipo}_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+        function exportarExcel() {
+            alert('Exportação para Excel: Os dados seriam gerados em formato XLSX. Para demonstração, será gerado um arquivo CSV.');
+            exportarCSV();
+        }
+
+        async function exportarDados() {
+            const tipo = document.getElementById('tipoDados').value;
+            const periodo = document.getElementById('periodo').value;
+            const formato = document.getElementById('formato').value;
+            const anonimizar = document.getElementById('anonimizar').checked;
+            
+            let dataInicio = '';
+            let dataFim = '';
+            
+            if (periodo === 'personalizado') {
+                dataInicio = document.getElementById('dataInicio').value;
+                dataFim = document.getElementById('dataFim').value;
+                
+                if (!dataInicio || !dataFim) {
+                    alert('Por favor, selecione as datas de início e fim.');
+                    return;
+                }
+            }
+            
+            const confirmar = confirm(
+                `Confirmar exportação?\n\n` +
+                `Tipo: ${tipo}\n` +
+                `Período: ${getPeriodoTexto()}\n` +
+                `Formato: ${formato.toUpperCase()}\n` +
+                `Anonimizar: ${anonimizar ? 'Sim' : 'Não'}\n\n` +
+                `O ficheiro será descarregado automaticamente.`
+            );
+            
+            if (!confirmar) return;
+            
+            // Simular progresso
+            const btn = event.target;
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Processando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                switch(formato) {
+                    case 'csv':
+                        exportarCSV();
+                        break;
+                    case 'json':
+                        exportarJSON();
+                        break;
+                    case 'pdf':
+                        exportarPDF();
+                        break;
+                    case 'excel':
+                        exportarExcel();
+                        break;
+                    default:
+                        exportarCSV();
+                }
+                
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+                alert('Exportação concluída com sucesso!');
+            }, 1000);
+        }
+
+        function agendarExportacao() {
+            const tipo = document.getElementById('tipoDados').value;
+            const periodo = getPeriodoTexto();
+            const formato = document.getElementById('formato').value;
+            
+            alert(
+                `Exportação agendada!\n\n` +
+                `Tipo: ${tipo}\n` +
+                `Período: ${periodo}\n` +
+                `Formato: ${formato.toUpperCase()}\n\n` +
+                `Receberá um email quando o ficheiro estiver pronto.`
+            );
+        }
+
+        function baixarExportacao(nomeFicheiro) {
+            alert(`A descarregar ${nomeFicheiro}...`);
+            setTimeout(() => {
+                alert('Download concluído!');
+            }, 500);
+        }
+    </script>
+</body>
+</html>

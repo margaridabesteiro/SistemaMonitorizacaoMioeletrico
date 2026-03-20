@@ -2,354 +2,505 @@
 <html lang="pt">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HealthTech Clinical Labs</title>
-  <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
-  <link rel="stylesheet" href="../../assets/css/common.css">
-  <link rel="stylesheet" href="../../assets/css/1221419.css">
-  <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Backoffice - Nossa Equipa</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+    <style>
+        /* Estilo para as abas profissionais */
+        .dashboard-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0;
+        }
+        
+        .dashboard-tab {
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            background: transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .dashboard-tab:hover {
+            color: #8B0000;
+            background: rgba(139, 0, 0, 0.05);
+            text-decoration: none;
+        }
+        
+        .dashboard-tab.active {
+            color: #8B0000;
+            background: white;
+        }
+        
+        .dashboard-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #8B0000;
+            border-radius: 2px;
+        }
+        
+        .dashboard-tab i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .form-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        
+        .form-control:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #2c7a4d 0%, #38a169 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 122, 77, 0.3);
+        }
+        
+        .btn-warning {
+            background: #fbbf24;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #1a202c;
+        }
+        
+        .btn-warning:hover {
+            background: #f59e0b;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table th {
+            background: #8B0000;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .rounded-circle {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        section h2 {
+            color: #8B0000;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        section h2 i {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 
-<body class="menu-user">
-  <!-- Topbar -->
-  <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
-    <div class="sistema-nome d-flex align-items-center gap-2">
-      <a href="../index_admin.html" class="text-white text-decoration-none d-flex align-items-center gap-2">
-        <i class="fa-solid fa-flask-vial logo-icon"></i> <span>HealthTech Clinical Labs</span>
-      </a>
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="backoffice_quem_somos.html" class="nav-link active">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <!-- Abas profissionais -->
+            <div class="dashboard-tabs">
+                <a href="backoffice_quem_somos.html" class="dashboard-tab">
+                    <i class="fa-solid fa-building"></i> Quem Somos
+                </a>
+                <a href="backoffice_equipa.html" class="dashboard-tab active">
+                    <i class="fa-solid fa-users"></i> Nossa Equipa
+                </a>
+                <a href="backoffice_servicos.html" class="dashboard-tab">
+                    <i class="fa-solid fa-stethoscope"></i> Nossos Serviços
+                </a>
+                <a href="backoffice_seguros.html" class="dashboard-tab">
+                    <i class="fa-solid fa-handshake"></i> Acordos e Seguros
+                </a>
+            </div>
+
+            <h1 class="mb-4" style="color: #8B0000;">Backoffice - Nossa Equipa</h1>
+
+            <!-- Gestão de Médicos -->
+            <section class="progress-card mb-5">
+                <h2><i class="fa-solid fa-user-doctor"></i> Gestão de Médicos</h2>
+                <form id="form-medicos" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="nomeMedico" class="form-label">Nome do Médico</label>
+                            <input type="text" id="nomeMedico" name="nomeMedico" class="form-control" required placeholder="ex: Dr. João Silva">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="especialidade" class="form-label">Cargo / Especialidade</label>
+                            <input type="text" id="especialidade" name="especialidade" class="form-control" required placeholder="ex: Cardiologia">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fotoMedico" class="form-label">Foto (nome do ficheiro, opcional)</label>
+                            <input type="text" id="fotoMedico" name="fotoMedico" class="form-control" placeholder="medico1.jpg">
+                        </div>
+                        <div class="col-12">
+                            <label for="descricao" class="form-label">Descrição</label>
+                            <textarea id="descricao" name="descricao" class="form-control" rows="4" required placeholder="Breve percurso profissional"></textarea>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn-success">
+                            <i class="fa-solid fa-plus me-1"></i> Adicionar / Atualizar Médico
+                        </button>
+                    </div>
+                </form>
+
+                <div class="table-container">
+                    <table id="tabela-medicos" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>Cargo</th>
+                                <th>Descrição</th>
+                                <th class="text-center">Ações</th>
+                            </thead>
+                        <tbody>
+                            <!-- Registos dinâmicos -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Gestão de Técnicos -->
+            <section class="progress-card">
+                <h2><i class="fa-solid fa-flask"></i> Gestão de Técnicos</h2>
+                <form id="form-tecnicos" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="fotoUrl" class="form-label">Foto (nome do ficheiro, opcional)</label>
+                            <input type="text" id="fotoUrl" name="fotoUrl" class="form-control" placeholder="tecnico1.png">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nome" class="form-label">Nome do Técnico</label>
+                            <input type="text" id="nome" name="nome" class="form-control" required placeholder="ex: Ana Silva">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="funcao" class="form-label">Função</label>
+                            <input type="text" id="funcao" name="funcao" class="form-control" required placeholder="ex: Técnica Laboratorial">
+                        </div>
+                        <div class="col-12">
+                            <label for="unidade" class="form-label">Unidade / Laboratório</label>
+                            <input type="text" id="unidade" name="unidade" class="form-control" required placeholder="ex: Laboratório Central">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-plus me-1"></i> Adicionar / Atualizar Técnico
+                        </button>
+                    </div>
+                </form>
+
+                <div class="table-container">
+                    <table id="tabela-tecnicos" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>Função</th>
+                                <th>Unidade</th>
+                                <th class="text-center">Ações</th>
+                            </thead>
+                        <tbody>
+                            <!-- Registos dinâmicos -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
     </div>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button"
-        id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-user-gear"></i> Administrador
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUserButton">
-        <li>
-          <a class="dropdown-item" href="../../../public/login.html">
-            <i class="fa-solid fa-key me-2"></i> Alterar password
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="../../../public/index.html">
-            <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
-          </a>
-        </li>
-      </ul>
-    </div>
-  </header>
 
-  <!-- Wrapper -->
-  <div class="wrapper d-flex">
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <h2>Menu</h2>
-      <a href="../modulo2/dashboard_admin_agendamentos.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-      <a href="backoffice_quem_somos.html" class="nav-link"><i class="fa-solid fa-desktop"></i> Back
-        Office</a>
-      <a href="../modulo8/acesso.html" class="nav-link ativo"><i class="fa-solid fa-user-check"></i> Registo de
-        Acessos</a>
-      <a href="../modulo8/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i>
-        Controlo de
-        Faturação</a>
-      <a href="../modulo8/gestao_RC.html" class="nav-link"><i class="fa-solid fa-vial"></i> Reagentes e Consumíveis</a>
-      <a href="../modulo8/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor"></i> Profissionais de
-        Saúde</a>
-      <a href="../modulo5/transporte.html" class="nav-link">
-        <i class="fa-solid fa-truck me-1"></i>Transportes de Material Biológico
-      </a>
-      <a href="../modulo5/MonitorizacaoTransportes.html" class="nav-link">
-        <i class="fa-solid fa-check-circle me-1"></i>Monitorização Módulo 5
-      </a>
-      <a href="../modulo7/relatoriosExames.html" class="nav-link ativo">
-        <i class="fa-solid fa-file me-1"></i>Relatórios de Exames
-      </a>
-      <a href="../modulo7/monitorizacaoEmissaoExames.html" class="nav-link">
-        <i class="fa-solid fa-file-medical me-1"></i>Monitorização do Módulo 7
-      </a>
-    </nav>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- MÉDICOS ---
+            const MED_KEY = "medicos";
+            const medDefaults = [
+                { foto: "assets/img/medico.jpg", nome: "Dr. António Ribeiro", cargo: "Clínica Geral", descricao: "Especialista em Clínica Geral com foco em medicina preventiva, acompanhamento de doenças crónicas e promoção da saúde global." },
+                { foto: "assets/img/medico4.jpg", nome: "Dra. Marta Fernandes", cargo: "Pediatria", descricao: "Médica pediatra dedicada ao acompanhamento do desenvolvimento infantil e à saúde preventiva desde o nascimento." },
+                { foto: "assets/img/medico2.jpg", nome: "Dr. Ricardo Silva", cargo: "Endocrinologia", descricao: "Experiente em distúrbios hormonais, focado no tratamento de diabetes, obesidade e doenças da tiroide." },
+                { foto: "assets/img/medico3.jpg", nome: "Dra. Ana Almeida", cargo: "Ginecologia", descricao: "Ginecologista com experiência em saúde da mulher, planeamento familiar, fertilidade e cuidados obstétricos completos." },
+                { foto: "assets/img/medico5.jpg", nome: "Dr. João Lopes", cargo: "Cardiologia", descricao: "Cardiologista especializado em diagnóstico, reabilitação e prevenção de doenças cardiovasculares e hipertensão." }
+            ];
+            let medList = JSON.parse(localStorage.getItem(MED_KEY) || "[]");
+            if (!medList.length) {
+                medList = medDefaults.slice();
+                localStorage.setItem(MED_KEY, JSON.stringify(medList));
+            }
+            const formMed = document.getElementById("form-medicos");
+            const tblMed = document.querySelector("#tabela-medicos tbody");
+            let medEditIdx = null;
 
-    <!-- Conteúdo -->
-    <main class="content">
-      <div class="dashboard-tabs">
-        <a href="backoffice_quem_somos.html" class="tab">Quem Somos</a>
-        <a href="backoffice_equipa.html" class="tab active">Nossa Equipa</a>
-        <a href="backoffice_servicos.html" class="tab">Serviços</a>
-        <a href="backoffice_seguros.html" class="tab">Acordos e Seguros</a>
-      </div>
-      <h1><strong>Back Office da Página "A Nossa Equipa"</strong></h1>
+            function renderMed() {
+                tblMed.innerHTML = "";
+                medList.forEach((m, i) => {
+                    tblMed.innerHTML += `
+                        <tr>
+                            <td><img src="${m.foto}" alt="${m.nome}" width="50" height="50" class="rounded-circle" style="object-fit: cover;"></td>
+                            <td><strong>${m.nome}</strong></td>
+                            <td>${m.cargo}</td>
+                            <td>${m.descricao}</td>
+                            <td class="text-center">
+                                <button class="btn-warning btn-sm edit-med" data-i="${i}"><i class="fas fa-pen"></i></button>
+                                <button class="btn-danger btn-sm del-med" data-i="${i}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                localStorage.setItem(MED_KEY, JSON.stringify(medList));
+            }
 
-      <!-- Gestão de Médicos -->
-      <section class="container mt-4">
-        <form id="form-medicos" class="mb-4">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="nomeMedico" class="form-label">Nome do Médico</label>
-              <input type="text" id="nomeMedico" name="nomeMedico" class="form-control" required
-                placeholder="ex: Dr. João Silva">
-            </div>
-            <div class="col-md-4">
-              <label for="especialidade" class="form-label">Cargo / Especialidade</label>
-              <input type="text" id="especialidade" name="especialidade" class="form-control" required
-                placeholder="ex: Cardiologia">
-            </div>
-            <div class="col-md-4">
-              <label for="fotoMedico" class="form-label">Foto (nome do ficheiro, opcional)</label>
-              <input type="text" id="fotoMedico" name="fotoMedico" class="form-control" placeholder="medico1.jpg">
-            </div>
-            <div class="col-12">
-              <label for="descricao" class="form-label">Descrição</label>
-              <textarea id="descricao" name="descricao" class="form-control" rows="4" required
-                placeholder="Breve percurso profissional"></textarea>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success mt-3">
-            <i class="fa-solid fa-plus me-1"></i> Adicionar / Atualizar Médico
-          </button>
-        </form>
+            formMed.addEventListener("submit", e => {
+                e.preventDefault();
+                let foto = formMed.fotoMedico.value.trim();
+                if (!foto) {
+                    foto = "assets/img/medico.png";
+                }
+                if (foto && !foto.startsWith("http") && !foto.startsWith("/") && !foto.startsWith("assets/")) {
+                    foto = "assets/img/" + foto;
+                }
+                const nome = formMed.nomeMedico.value.trim();
+                const cargo = formMed.especialidade.value.trim();
+                const descricao = formMed.descricao.value.trim();
+                if (!nome || !cargo || !descricao) return alert("Preencha todos os campos");
+                const obj = { foto, nome, cargo, descricao };
+                if (medEditIdx !== null) {
+                    medList[medEditIdx] = obj;
+                    medEditIdx = null;
+                } else {
+                    medList.push(obj);
+                }
+                formMed.reset();
+                renderMed();
+            });
 
-        <table id="tabela-medicos" class="table table-bordered table-striped align-middle mt-4">
-          <thead class="table-dark">
-            <tr>
-              <th>Foto</th>
-              <th>Nome</th>
-              <th>Cargo</th>
-              <th>Descrição</th>
-              <th class="text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Registos dinâmicos -->
-          </tbody>
-        </table>
-      </section>
-      <!-- Gestão de Técnicos -->
-      <section class="container mt-5">
-        <h2 class="mb-3">Gestão de Técnicos</h2>
-        <form id="form-tecnicos" class="mb-4">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="fotoUrl" class="form-label">Foto (nome do ficheiro, opcional)</label>
-              <input type="text" id="fotoUrl" name="fotoUrl" class="form-control" placeholder="tecnico1.png">
-            </div>
-            <div class="col-md-4">
-              <label for="nome" class="form-label">Nome do Técnico</label>
-              <input type="text" id="nome" name="nome" class="form-control" required placeholder="ex: Ana Silva">
-            </div>
-            <div class="col-md-4">
-              <label for="funcao" class="form-label">Função</label>
-              <input type="text" id="funcao" name="funcao" class="form-control" required
-                placeholder="ex: Técnica Laboratorial">
-            </div>
-            <div class="col-12">
-              <label for="unidade" class="form-label">Unidade / Laboratório</label>
-              <input type="text" id="unidade" name="unidade" class="form-control" required
-                placeholder="ex: Laboratório Central">
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary mt-3">
-            <i class="fa-solid fa-plus me-1"></i> Adicionar / Atualizar Técnico
-          </button>
-        </form>
-
-        <table id="tabela-tecnicos" class="table table-bordered table-striped align-middle mt-4">
-          <thead class="table-dark">
-            <tr>
-              <th>Foto</th>
-              <th>Nome</th>
-              <th>Função</th>
-              <th>Unidade</th>
-              <th class="text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Registos dinâmicos -->
-          </tbody>
-        </table>
-      </section>
-    </main>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
-  <script src="../../js/1221419.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // --- MÉDICOS ---
-      const MED_KEY = "medicos";
-      const medDefaults = [
-        { foto: "assets/img/medico.jpg", nome: "Dr. António Ribeiro", cargo: "Clínica Geral", descricao: "Especialista em Clínica Geral com foco em medicina preventiva, acompanhamento de doenças crónicas e promoção da saúde global." },
-        { foto: "assets/img/medico4.jpg", nome: "Dra. Marta Fernandes", cargo: "Pediatria", descricao: "Médica pediatra dedicada ao acompanhamento do desenvolvimento infantil e à saúde preventiva desde o nascimento." },
-        { foto: "assets/img/medico2.jpg", nome: "Dr. Ricardo Silva", cargo: "Endocrinologia", descricao: "Experiente em distúrbios hormonais, focado no tratamento de diabetes, obesidade e doenças da tiroide." },
-        { foto: "assets/img/medico3.jpg", nome: "Dra. Ana Almeida", cargo: "Ginecologia", descricao: "Ginecologista com experiência em saúde da mulher, planeamento familiar, fertilidade e cuidados obstétricos completos." },
-        { foto: "assets/img/medico5.jpg", nome: "Dr. João Lopes", cargo: "Cardiologia", descricao: "Cardiologista especializado em diagnóstico, reabilitação e prevenção de doenças cardiovasculares e hipertensão." }
-      ];
-      let medList = JSON.parse(localStorage.getItem(MED_KEY) || "[]");
-      if (!medList.length) {
-        medList = medDefaults.slice();
-        localStorage.setItem(MED_KEY, JSON.stringify(medList));
-      }
-      const formMed = document.getElementById("form-medicos");
-      const tblMed = document.querySelector("#tabela-medicos tbody");
-      let medEditIdx = null;
-
-      function renderMed() {
-        tblMed.innerHTML = "";
-        medList.forEach((m, i) => {
-          tblMed.innerHTML += `
-      <tr>
-        <td><img src="${m.foto}" alt="${m.nome}" width="50" class="rounded-circle"></td>
-        <td>${m.nome}</td>
-        <td>${m.cargo}</td>
-        <td>${m.descricao}</td>
-        <td class="text-center">
-          <button class="btn btn-warning btn-sm edit-med" data-i="${i}"><i class="fas fa-pen"></i></button>
-          <button class="btn btn-danger btn-sm del-med" data-i="${i}"><i class="fas fa-trash"></i></button>
-        </td>
-      </tr>`;
-        });
-        localStorage.setItem(MED_KEY, JSON.stringify(medList));
-      }
-      formMed.addEventListener("submit", e => {
-        e.preventDefault();
-        let foto = formMed.fotoMedico.value.trim();
-        if (!foto) {
-          foto = "assets/img/medico.png"; // Usa uma imagem default (cria se quiseres uma para médicos)
-        }
-        if (foto && !foto.startsWith("http") && !foto.startsWith("/") && !foto.startsWith("assets/")) {
-          foto = "assets/img/" + foto;
-        }
-        const nome = formMed.nomeMedico.value.trim();
-        const cargo = formMed.especialidade.value.trim();
-        const descricao = formMed.descricao.value.trim();
-        if (!nome || !cargo || !descricao) return alert("Preencha todos os campos");
-        const obj = { foto, nome, cargo, descricao };
-        if (medEditIdx !== null) {
-          medList[medEditIdx] = obj;
-          medEditIdx = null;
-        } else {
-          medList.push(obj);
-        }
-        formMed.reset();
-        renderMed();
-      });
-      tblMed.addEventListener("click", e => {
-        const btn = e.target.closest("button");
-        if (!btn) return;
-        const i = +btn.dataset.i;
-        if (btn.classList.contains("edit-med")) {
-          const m = medList[i];
-          // Mostra só o nome do ficheiro, retirando o path se existir
-          let nomeFoto = m.foto;
-          if (nomeFoto.startsWith("assets/img/")) nomeFoto = nomeFoto.replace("assets/img/", "");
-          formMed.fotoMedico.value = nomeFoto;
-          formMed.nomeMedico.value = m.nome;
-          formMed.especialidade.value = m.cargo;
-          formMed.descricao.value = m.descricao;
-          medEditIdx = i;
-        } else if (btn.classList.contains("del-med")) {
-          if (confirm("Eliminar médico?")) {
-            medList.splice(i, 1);
+            tblMed.addEventListener("click", e => {
+                const btn = e.target.closest("button");
+                if (!btn) return;
+                const i = +btn.dataset.i;
+                if (btn.classList.contains("edit-med")) {
+                    const m = medList[i];
+                    let nomeFoto = m.foto;
+                    if (nomeFoto.startsWith("assets/img/")) nomeFoto = nomeFoto.replace("assets/img/", "");
+                    formMed.fotoMedico.value = nomeFoto;
+                    formMed.nomeMedico.value = m.nome;
+                    formMed.especialidade.value = m.cargo;
+                    formMed.descricao.value = m.descricao;
+                    medEditIdx = i;
+                } else if (btn.classList.contains("del-med")) {
+                    if (confirm("Eliminar médico?")) {
+                        medList.splice(i, 1);
+                        renderMed();
+                    }
+                }
+            });
             renderMed();
-          }
-        }
-      });
-      renderMed();
 
-      // --- TÉCNICOS ---
-      const TEC_KEY = "tecnicos";
-      const tecDefaults = [
-        { foto: "assets/img/tecnica1.png", nome: "Ana Silva", funcao: "Técnica Laboratorial", unidade: "Laboratório Central" },
-        { foto: "assets/img/tecnico1.jpeg", nome: "Bruno Ferreira", funcao: "Técnico Laboratorial", unidade: "Laboratório Norte" },
-        { foto: "assets/img/tecnica2.webp", nome: "Carla Santos", funcao: "Técnica de Laboratório", unidade: "Laboratório Sul" },
-        { foto: "assets/img/tecnico2.jpg", nome: "Daniel Costa", funcao: "Técnico de Apoio Laboratorial", unidade: "Laboratório Central" },
-        { foto: "assets/img/tecnica3.jpg", nome: "Eduarda Martins", funcao: "Técnica de Laboratório", unidade: "Laboratório Coimbra" },
-        { foto: "assets/img/tecnico3.avif", nome: "Filipe Gomes", funcao: "Técnico Laboratorial", unidade: "Laboratório Lisboa" },
-        { foto: "assets/img/tecnica4.jpg", nome: "Gabriela Rocha", funcao: "Técnica de Laboratório", unidade: "Laboratório Central" },
-        { foto: "assets/img/tecnico4.jpg", nome: "Hugo Pereira", funcao: "Técnico de Apoio Laboratorial", unidade: "Unidade Norte" },
-        { foto: "assets/img/tecnica5.jpg", nome: "Inês Almeida", funcao: "Técnica Laboratorial", unidade: "Laboratório Algarve" },
-        { foto: "assets/img/tecnico5.webp", nome: "João Rodrigues", funcao: "Técnico Laboratorial", unidade: "Laboratório Central" }
-      ];
-      let tecList = JSON.parse(localStorage.getItem(TEC_KEY) || "[]");
-      if (!tecList.length) {
-        tecList = tecDefaults.slice();
-        localStorage.setItem(TEC_KEY, JSON.stringify(tecList));
-      }
-      const formTec = document.getElementById("form-tecnicos");
-      const tblTec = document.querySelector("#tabela-tecnicos tbody");
-      let tecEditIdx = null;
+            // --- TÉCNICOS ---
+            const TEC_KEY = "tecnicos";
+            const tecDefaults = [
+                { foto: "assets/img/tecnica1.png", nome: "Ana Silva", funcao: "Técnica Laboratorial", unidade: "Laboratório Central" },
+                { foto: "assets/img/tecnico1.jpeg", nome: "Bruno Ferreira", funcao: "Técnico Laboratorial", unidade: "Laboratório Norte" },
+                { foto: "assets/img/tecnica2.webp", nome: "Carla Santos", funcao: "Técnica de Laboratório", unidade: "Laboratório Sul" },
+                { foto: "assets/img/tecnico2.jpg", nome: "Daniel Costa", funcao: "Técnico de Apoio Laboratorial", unidade: "Laboratório Central" },
+                { foto: "assets/img/tecnica3.jpg", nome: "Eduarda Martins", funcao: "Técnica de Laboratório", unidade: "Laboratório Coimbra" },
+                { foto: "assets/img/tecnico3.avif", nome: "Filipe Gomes", funcao: "Técnico Laboratorial", unidade: "Laboratório Lisboa" },
+                { foto: "assets/img/tecnica4.jpg", nome: "Gabriela Rocha", funcao: "Técnica de Laboratório", unidade: "Laboratório Central" },
+                { foto: "assets/img/tecnico4.jpg", nome: "Hugo Pereira", funcao: "Técnico de Apoio Laboratorial", unidade: "Unidade Norte" },
+                { foto: "assets/img/tecnica5.jpg", nome: "Inês Almeida", funcao: "Técnica Laboratorial", unidade: "Laboratório Algarve" },
+                { foto: "assets/img/tecnico5.webp", nome: "João Rodrigues", funcao: "Técnico Laboratorial", unidade: "Laboratório Central" }
+            ];
+            let tecList = JSON.parse(localStorage.getItem(TEC_KEY) || "[]");
+            if (!tecList.length) {
+                tecList = tecDefaults.slice();
+                localStorage.setItem(TEC_KEY, JSON.stringify(tecList));
+            }
+            const formTec = document.getElementById("form-tecnicos");
+            const tblTec = document.querySelector("#tabela-tecnicos tbody");
+            let tecEditIdx = null;
 
-      function renderTec() {
-        tblTec.innerHTML = "";
-        tecList.forEach((t, i) => {
-          tblTec.innerHTML += `
-      <tr>
-        <td><img src="${t.foto}" alt="${t.nome}" width="50" class="rounded-circle"></td>
-        <td>${t.nome}</td>
-        <td>${t.funcao}</td>
-        <td>${t.unidade ? t.unidade : "-"}</td>
-        <td class="text-center">
-          <button class="btn btn-warning btn-sm edit-tec" data-i="${i}"><i class="fas fa-pen"></i></button>
-          <button class="btn btn-danger btn-sm del-tec" data-i="${i}"><i class="fas fa-trash"></i></button>
-        </td>
-      </tr>`;
-        });
-        localStorage.setItem(TEC_KEY, JSON.stringify(tecList));
-      }
+            function renderTec() {
+                tblTec.innerHTML = "";
+                tecList.forEach((t, i) => {
+                    tblTec.innerHTML += `
+                        <tr>
+                            <td><img src="${t.foto}" alt="${t.nome}" width="50" height="50" class="rounded-circle" style="object-fit: cover;"></td>
+                            <td><strong>${t.nome}</strong></td>
+                            <td>${t.funcao}</td>
+                            <td>${t.unidade ? t.unidade : "-"}</td>
+                            <td class="text-center">
+                                <button class="btn-warning btn-sm edit-tec" data-i="${i}"><i class="fas fa-pen"></i></button>
+                                <button class="btn-danger btn-sm del-tec" data-i="${i}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                localStorage.setItem(TEC_KEY, JSON.stringify(tecList));
+            }
 
-      formTec.addEventListener("submit", e => {
-        e.preventDefault();
-        let foto = formTec.fotoUrl.value.trim();
-        if (!foto) {
-          foto = "assets/img/tecnico.png"; // imagem default se não for preenchida
-        }
-        if (foto && !foto.startsWith("http") && !foto.startsWith("/") && !foto.startsWith("assets/")) {
-          foto = "assets/img/" + foto;
-        }
-        const nome = formTec.nome.value.trim();
-        const funcao = formTec.funcao.value.trim();
-        const unidade = formTec.unidade.value.trim();
-        if (!nome || !funcao || !unidade) return alert("Preencha todos os campos");
-        const obj = { foto, nome, funcao, unidade };
-        if (tecEditIdx !== null) {
-          tecList[tecEditIdx] = obj;
-          tecEditIdx = null;
-        } else {
-          tecList.push(obj);
-        }
-        formTec.reset();
-        renderTec();
-      });
+            formTec.addEventListener("submit", e => {
+                e.preventDefault();
+                let foto = formTec.fotoUrl.value.trim();
+                if (!foto) {
+                    foto = "assets/img/tecnico.png";
+                }
+                if (foto && !foto.startsWith("http") && !foto.startsWith("/") && !foto.startsWith("assets/")) {
+                    foto = "assets/img/" + foto;
+                }
+                const nome = formTec.nome.value.trim();
+                const funcao = formTec.funcao.value.trim();
+                const unidade = formTec.unidade.value.trim();
+                if (!nome || !funcao || !unidade) return alert("Preencha todos os campos");
+                const obj = { foto, nome, funcao, unidade };
+                if (tecEditIdx !== null) {
+                    tecList[tecEditIdx] = obj;
+                    tecEditIdx = null;
+                } else {
+                    tecList.push(obj);
+                }
+                formTec.reset();
+                renderTec();
+            });
 
-      tblTec.addEventListener("click", e => {
-        const btn = e.target.closest("button");
-        if (!btn) return;
-        const i = +btn.dataset.i;
-        if (btn.classList.contains("edit-tec")) {
-          const t = tecList[i];
-          // Mostra só o nome do ficheiro
-          let nomeFoto = t.foto;
-          if (nomeFoto.startsWith("assets/img/")) nomeFoto = nomeFoto.replace("assets/img/", "");
-          formTec.fotoUrl.value = nomeFoto;
-          formTec.nome.value = t.nome;
-          formTec.funcao.value = t.funcao;
-          formTec.unidade.value = t.unidade;
-          tecEditIdx = i;
-        } else if (btn.classList.contains("del-tec")) {
-          if (confirm("Eliminar técnico?")) {
-            tecList.splice(i, 1);
+            tblTec.addEventListener("click", e => {
+                const btn = e.target.closest("button");
+                if (!btn) return;
+                const i = +btn.dataset.i;
+                if (btn.classList.contains("edit-tec")) {
+                    const t = tecList[i];
+                    let nomeFoto = t.foto;
+                    if (nomeFoto.startsWith("assets/img/")) nomeFoto = nomeFoto.replace("assets/img/", "");
+                    formTec.fotoUrl.value = nomeFoto;
+                    formTec.nome.value = t.nome;
+                    formTec.funcao.value = t.funcao;
+                    formTec.unidade.value = t.unidade;
+                    tecEditIdx = i;
+                } else if (btn.classList.contains("del-tec")) {
+                    if (confirm("Eliminar técnico?")) {
+                        tecList.splice(i, 1);
+                        renderTec();
+                    }
+                }
+            });
             renderTec();
-          }
-        }
-      });
-      renderTec();
-    });
-  </script>
+        });
+    </script>
 </body>
-
 </html>

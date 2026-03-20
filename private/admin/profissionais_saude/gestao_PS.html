@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Profissionais de Saúde</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="gestao_PS.html" class="nav-link active"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Profissionais de Saúde</h1>
+                <a href="registo_PS.html" class="btn-novo">
+                    <i class="fa-solid fa-user-plus me-2"></i> Novo Profissional
+                </a>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrar Profissionais
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Cargo</label>
+                        <select class="form-select" id="filtroCargo">
+                            <option value="todos">Todos</option>
+                            <option value="medico">Médico</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="fisioterapeuta">Fisioterapeuta</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Instituição</label>
+                        <select class="form-select" id="filtroInstituicao">
+                            <option value="todos">Todas</option>
+                            <option>Unidade Central Porto</option>
+                            <option>Clínica do Norte – Famalicão</option>
+                            <option>Posto de Braga</option>
+                            <option>Unidade de Viana do Castelo</option>
+                            <option>Clínica RehabLink - Porto</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Pesquisar</label>
+                        <input type="text" id="pesquisa" class="form-control" placeholder="Nome, contacto...">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-reset" onclick="limparFiltros()">Limpar</button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Profissionais -->
+            <div class="table-container">
+                <table id="tabelaPS" class="table table-hover">
+                    <thead>
+                        32
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Especialidade</th>
+                            <th>Instituição</th>
+                            <th>Contacto</th>
+                            <th class="text-center">Ações</th>
+                        32
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Dr. António Ribeiro</strong></td>
+                            <td><span class="badge-cargo badge-medico">Médico</span></td>
+                            <td>Cardiologia</td>
+                            <td>Unidade Central Porto</td>
+                            <td><a href="tel:912345678">912 345 678</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=1" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=1" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dra. Ana Almeida</strong></td>
+                            <td><span class="badge-cargo badge-medico">Médico</span></td>
+                            <td>Pediatria</td>
+                            <td>Clínica do Norte – Famalicão</td>
+                            <td><a href="tel:916789432">916 789 432</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=2" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=2" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ana Silva</strong></td>
+                            <td><span class="badge-cargo badge-tecnico">Técnico</span></td>
+                            <td>-</td>
+                            <td>Posto de Braga</td>
+                            <td><a href="tel:912111111">912 111 111</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=3" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=3" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bruno Ferreira</strong></td>
+                            <td><span class="badge-cargo badge-tecnico">Técnico</span></td>
+                            <td>-</td>
+                            <td>Unidade de Viana do Castelo</td>
+                            <td><a href="tel:913222222">913 222 222</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=4" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=4" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dra. Carla Santos</strong></td>
+                            <td><span class="badge-cargo badge-fisioterapeuta">Fisioterapeuta</span></td>
+                            <td>Reabilitação</td>
+                            <td>Clínica RehabLink - Porto</td>
+                            <td><a href="tel:934567890">934 567 890</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=5" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=5" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dr. Ricardo Mendes</strong></td>
+                            <td><span class="badge-cargo badge-medico">Médico</span></td>
+                            <td>Ortopedia</td>
+                            <td>Unidade Central Porto</td>
+                            <td><a href="tel:925678901">925 678 901</a></td>
+                            <td class="text-center">
+                                <a href="editar_profissional.html?id=6" class="btn-editar">
+                                    <i class="fas fa-pen"></i> Editar
+                                </a>
+                                <a href="desativar_PS.html?id=6" class="btn-desativar">
+                                    <i class="fa-solid fa-user-slash"></i> Desativar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                60
+            </div>
+
+            <!-- Botão Voltar -->
+            <div class="d-flex justify-content-end mt-4">
+                <a href="../index_admin.html" class="btn-voltar">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        let dataTable;
+
+        $(document).ready(function () {
+            dataTable = $('#tabelaPS').DataTable({
+                pageLength: 10,
+                pagingType: "full_numbers",
+                language: {
+                    decimal: "",
+                    emptyTable: "Sem profissionais cadastrados",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ profissionais",
+                    infoEmpty: "Mostrando 0 a 0 de 0 profissionais",
+                    infoFiltered: "(filtrado de _MAX_ profissionais)",
+                    lengthMenu: "Mostrar _MENU_ profissionais",
+                    search: "Pesquisar:",
+                    zeroRecords: "Nenhum profissional encontrado",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [5] }
+                ]
+            });
+        });
+
+        function limparFiltros() {
+            $('#filtroCargo').val('todos');
+            $('#filtroInstituicao').val('todos');
+            $('#pesquisa').val('');
+            dataTable.search('').draw();
+        }
+
+        function aplicarFiltros() {
+            const cargo = $('#filtroCargo').val();
+            const instituicao = $('#filtroInstituicao').val();
+            const pesquisa = $('#pesquisa').val();
+            
+            let filtro = '';
+            if (cargo !== 'todos') filtro += cargo;
+            if (instituicao !== 'todos') filtro += ' ' + instituicao;
+            if (pesquisa) filtro += ' ' + pesquisa;
+            
+            dataTable.search(filtro).draw();
+        }
+    </script>
+</body>
+</html>

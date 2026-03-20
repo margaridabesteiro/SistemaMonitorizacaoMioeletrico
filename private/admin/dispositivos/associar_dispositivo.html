@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Associar Dispositivo</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="lista_dispositivos.html" class="nav-link active"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_dispositivos.html">Dispositivos</a></li>
+                    <li class="breadcrumb-item active">Associar Dispositivo</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Associar Dispositivo</h1>
+
+            <form class="progress-card">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">ID do Dispositivo</label>
+                        <input type="text" class="form-control" placeholder="Ex: PS-1032" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Paciente</label>
+                        <select class="form-select" required>
+                            <option value="">Selecionar paciente...</option>
+                            <option value="ana-ferreira">Ana Ferreira</option>
+                            <option value="joao-rodrigues">João Rodrigues</option>
+                            <option value="carlos-monteiro">Carlos Monteiro</option>
+                            <option value="maria-santos">Maria Santos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Sensor</label>
+                        <select class="form-select" required>
+                            <option value="">Selecionar tipo...</option>
+                            <option value="forca">Força de pinça</option>
+                            <option value="precisao">Precisão</option>
+                            <option value="resistencia">Resistência</option>
+                            <option value="multi">Multi-sensor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Número de Série</label>
+                        <input type="text" class="form-control" placeholder="SN-XXXXXXXX">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Instalação</label>
+                        <input type="date" class="form-control" value="2026-03-20">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Garantia</label>
+                        <input type="date" class="form-control" value="2027-03-20">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-control" rows="3" placeholder="Notas sobre a instalação ou configuração do dispositivo..."></textarea>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="testarLigacao">
+                    <label class="form-check-label" for="testarLigacao">
+                        Testar ligação após associação
+                    </label>
+                </div>
+
+                <hr>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                    <button type="submit" class="btn-filter" onclick="associarDispositivo()">Associar Dispositivo</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function associarDispositivo() {
+            alert('Dispositivo associado com sucesso!');
+            window.location.href = 'lista_dispositivos.html';
+        }
+    </script>
+</body>
+</html>

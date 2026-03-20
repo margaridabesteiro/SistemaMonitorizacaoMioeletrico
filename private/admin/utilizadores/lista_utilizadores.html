@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Gestão de Utilizadores</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="lista_utilizadores.html" class="nav-link active"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Gestão de Utilizadores</h1>
+                <button class="btn-filter" onclick="window.location.href='novo_utilizador.html'">
+                    <i class="fa-solid fa-user-plus me-2"></i>Novo Utilizador
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrar Utilizadores
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Tipo</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Utente</option>
+                            <option>Fisioterapeuta</option>
+                            <option>Médico</option>
+                            <option>Administrador</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select class="form-select">
+                            <option>Todos</option>
+                            <option>Ativo</option>
+                            <option>Inativo</option>
+                            <option>Pendente</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Pesquisar</label>
+                        <input type="text" class="form-control" placeholder="Nome, email...">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-reset">Limpar</button>
+                    <button class="btn-filter">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Utilizadores -->
+            <div class="table-container">
+                <table id="tabelaUtilizadores" class="table">
+                    <thead>
+                        32
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Último Acesso</th>
+                            <th>Ações</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Ana Ferreira</strong></td>
+                                <td>ana.ferreira@email.com</td>
+                                <td><span class="badge" style="background: #48bb78; color: white;">Utente</span></td>
+                                <td><span class="badge-status badge-ativo">Ativo</span></td>
+                                <td>19 Mar 2026 10:30</td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="editarUtilizador(1)"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="ativarDesativar(1)"><i class="fa-solid fa-toggle-on"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="apagarUtilizador(1)"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dr. António Silva</strong></td>
+                                <td>antonio.silva@rehablink.com</td>
+                                <td><span class="badge" style="background: #8B0000; color: white;">Médico</span></td>
+                                <td><span class="badge-status badge-ativo">Ativo</span></td>
+                                <td>20 Mar 2026 09:15</td>
+                                <td>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dra. Carla Santos</strong></td>
+                                <td>carla.santos@rehablink.com</td>
+                                <td><span class="badge" style="background: #A52A2A; color: white;">Fisioterapeuta</span></td>
+                                <td><span class="badge-status badge-ativo">Ativo</span></td>
+                                <td>20 Mar 2026 08:45</td>
+                                <td>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Admin Sistema</strong></td>
+                                <td>admin@rehablink.com</td>
+                                <td><span class="badge" style="background: #B22222; color: white;">Administrador</span></td>
+                                <td><span class="badge-status badge-ativo">Ativo</span></td>
+                                <td>20 Mar 2026 10:30</td>
+                                <td>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>João Rodrigues</strong></td>
+                                <td>joao.rodrigues@email.com</td>
+                                <td><span class="badge" style="background: #48bb78; color: white;">Utente</span></td>
+                                <td><span class="badge-status badge-inativo">Inativo</span></td>
+                                <td>10 Mar 2026 14:20</td>
+                                <td>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-off"></i></button>
+                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+        <script>
+            $('#tabelaUtilizadores').DataTable({
+                pageLength: 10,
+                language: {
+                    emptyTable: "Nenhum utilizador encontrado",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ utilizadores",
+                    search: "Pesquisar:",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            function editarUtilizador(id) { alert('Editar utilizador ' + id); }
+            function ativarDesativar(id) { alert('Alterar estado do utilizador ' + id); }
+            function apagarUtilizador(id) { if(confirm('Tem certeza?')) alert('Utilizador removido'); }
+        </script>
+    </body>
+    </html>

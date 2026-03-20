@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Controlo de Faturação</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    
+    <style>
+        /* Estilos adicionais para badges de estado de fatura */
+        .badge-pago {
+            background: #48bb78;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-pendente {
+            background: #fbbf24;
+            color: #1a202c;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-cancelado {
+            background: #dc2626;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .btn-ver-fatura, .btn-editar-fatura, .btn-eliminar-fatura {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+        
+        .btn-ver-fatura {
+            color: #1a5f8a;
+        }
+        
+        .btn-ver-fatura:hover {
+            background: #1a5f8a;
+            color: white;
+            border-color: #1a5f8a;
+            text-decoration: none;
+        }
+        
+        .btn-editar-fatura {
+            color: #fbbf24;
+        }
+        
+        .btn-editar-fatura:hover {
+            background: #fbbf24;
+            color: #1a202c;
+            border-color: #fbbf24;
+            text-decoration: none;
+        }
+        
+        .btn-eliminar-fatura {
+            color: #dc2626;
+        }
+        
+        .btn-eliminar-fatura:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            text-decoration: none;
+        }
+        
+        .btn-nova-fatura {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-nova-fatura:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-exportar {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 10px;
+            color: #4a5568;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-exportar:hover {
+            border-color: #8B0000;
+            color: #8B0000;
+            transform: translateY(-2px);
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(139, 0, 0, 0.1);
+        }
+        
+        .filter-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #8B0000;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="controlo_faturacao.html" class="nav-link active"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Controlo de Faturação</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn-exportar" onclick="exportarFaturas()">
+                        <i class="fa-solid fa-download me-2"></i> Exportar
+                    </button>
+                    <a href="nova_fatura.html" class="btn-nova-fatura">
+                        <i class="fa-solid fa-plus me-2"></i> Nova Fatura
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrar Faturas
+                </div>
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Estado</label>
+                        <select class="form-select" id="filtroEstado">
+                            <option value="todos">Todos</option>
+                            <option value="pago">Pago</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select" id="filtroPeriodo">
+                            <option value="todos">Todos</option>
+                            <option value="hoje">Hoje</option>
+                            <option value="mes">Este mês</option>
+                            <option value="trimestre">Último trimestre</option>
+                            <option value="ano">Este ano</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Pesquisar</label>
+                        <input type="text" id="pesquisa" class="form-control" placeholder="Utente, NIF...">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-reset" onclick="limparFiltros()">Limpar</button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Faturas -->
+            <div class="table-container">
+                <table id="tabelaFaturacao" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Utente</th>
+                            <th>NIF</th>
+                            <th>Seguradora/SNS</th>
+                            <th>Exame</th>
+                            <th>Teste Especial</th>
+                            <th>Valor (€)</th>
+                            <th>Data</th>
+                            <th>Método Pagamento</th>
+                            <th>Estado</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Maria Silva</strong></td>
+                            <td>123456789</td>
+                            <td>SNS</td>
+                            <td>Glicose</td>
+                            <td>-</td>
+                            <td>€0,00</td>
+                            <td>2025-05-06</td>
+                            <td>MbWay</td>
+                            <td><span class="badge-pago">Pago</span></td>
+                            <td class="text-center">
+                                <a href="fatura.html" class="btn-ver-fatura" onclick="guardarFatura(this)">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                                <a href="editar_fatura.html" class="btn-editar-fatura">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="apagar_fatura.html" class="btn-eliminar-fatura">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pedro Carvalho</strong></td>
+                            <td>493768375</td>
+                            <td>Multicare</td>
+                            <td>TSH</td>
+                            <td>-</td>
+                            <td>€13,00</td>
+                            <td>2025-06-05</td>
+                            <td>Dinheiro</td>
+                            <td><span class="badge-pendente">Pendente</span></td>
+                            <td class="text-center">
+                                <a href="fatura.html" class="btn-ver-fatura" onclick="guardarFatura(this)">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                                <a href="editar_fatura.html" class="btn-editar-fatura">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="apagar_fatura.html" class="btn-eliminar-fatura">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Miguel Oliveira</strong></td>
+                            <td>123467095</td>
+                            <td>Multicare</td>
+                            <td>Creatinina</td>
+                            <td>Diabetes</td>
+                            <td>€30,00</td>
+                            <td>2025-09-30</td>
+                            <td>MbWay</td>
+                            <td><span class="badge-cancelado">Cancelado</span></td>
+                            <td class="text-center">
+                                <a href="fatura.html" class="btn-ver-fatura" onclick="guardarFatura(this)">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                                <a href="editar_fatura.html" class="btn-editar-fatura">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="apagar_fatura.html" class="btn-eliminar-fatura">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ana Ferreira</strong></td>
+                            <td>987654321</td>
+                            <td>ADSE</td>
+                            <td>Hemograma</td>
+                            <td>-</td>
+                            <td>€45,00</td>
+                            <td>2026-03-15</td>
+                            <td>Transferência</td>
+                            <td><span class="badge-pago">Pago</span></td>
+                            <td class="text-center">
+                                <a href="fatura.html" class="btn-ver-fatura" onclick="guardarFatura(this)">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                                <a href="editar_fatura.html" class="btn-editar-fatura">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="apagar_fatura.html" class="btn-eliminar-fatura">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>João Rodrigues</strong></td>
+                            <td>123456897</td>
+                            <td>SAMS</td>
+                            <td>Colesterol</td>
+                            <td>-</td>
+                            <td>€18,50</td>
+                            <td>2026-03-10</td>
+                            <td>MbWay</td>
+                            <td><span class="badge-pendente">Pendente</span></td>
+                            <td class="text-center">
+                                <a href="fatura.html" class="btn-ver-fatura" onclick="guardarFatura(this)">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                                <a href="editar_fatura.html" class="btn-editar-fatura">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="apagar_fatura.html" class="btn-eliminar-fatura">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resumo de Faturação -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Total Faturado</h5>
+                        <div class="stat-value" style="font-size: 2rem;">€12,450</div>
+                        <div class="stat-label">últimos 30 dias</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Valor Pendente</h5>
+                        <div class="stat-value" style="font-size: 2rem;">€2,340</div>
+                        <div class="stat-label">faturas por pagar</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="progress-card">
+                        <h5 class="mb-3" style="color: #8B0000;">Taxa de Pagamento</h5>
+                        <div class="stat-value" style="font-size: 2rem;">78%</div>
+                        <div class="stat-label">das faturas pagas</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        let dataTable;
+
+        $(document).ready(function () {
+            dataTable = $('#tabelaFaturacao').DataTable({
+                pageLength: 10,
+                pagingType: "full_numbers",
+                order: [[6, 'desc']],
+                language: {
+                    decimal: "",
+                    emptyTable: "Sem dados disponíveis na tabela.",
+                    info: "Mostrando _START_ até _END_ de _TOTAL_ registos",
+                    infoEmpty: "Mostrando 0 até 0 de 0 registos",
+                    infoFiltered: "(Filtrando _MAX_ total de registos)",
+                    lengthMenu: "Mostrar _MENU_ registos por página",
+                    loadingRecords: "Carregando...",
+                    processing: "Processando...",
+                    search: "Pesquisar:",
+                    zeroRecords: "Nenhum registo encontrado.",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [9] }
+                ]
+            });
+        });
+
+        function limparFiltros() {
+            $('#filtroEstado').val('todos');
+            $('#filtroPeriodo').val('todos');
+            $('#pesquisa').val('');
+            dataTable.search('').draw();
+        }
+
+        function aplicarFiltros() {
+            const estado = $('#filtroEstado').val();
+            const periodo = $('#filtroPeriodo').val();
+            const pesquisa = $('#pesquisa').val();
+            
+            let filtro = '';
+            if (estado !== 'todos') filtro += estado + ' ';
+            if (periodo !== 'todos') filtro += periodo + ' ';
+            if (pesquisa) filtro += pesquisa;
+            
+            dataTable.search(filtro).draw();
+        }
+
+        function guardarFatura(element) {
+            localStorage.setItem('faturaData', JSON.stringify({
+                utente: $(element).closest('tr').find('td:eq(0)').text(),
+                nif: $(element).closest('tr').find('td:eq(1)').text(),
+                // ... outros campos
+            }));
+        }
+
+        function exportarFaturas() {
+            alert('A exportar faturas...');
+            // Implementar exportação para PDF/Excel
+        }
+    </script>
+</body>
+</html>

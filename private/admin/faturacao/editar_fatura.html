@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Editar Fatura</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+    <style>
+        /* Estilos adicionais para o formulário */
+        .btn-cancelar {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+        }
+        
+        .btn-cancelar:hover {
+            border-color: #8B0000;
+            color: #8B0000;
+            transform: translateX(-2px);
+            text-decoration: none;
+        }
+        
+        .btn-guardar {
+            background: linear-gradient(135deg, #2c7a4d 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 122, 77, 0.3);
+            color: white;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .form-control, .form-select {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .form-hint {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="controlo_faturacao.html" class="nav-link active"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="controlo_faturacao.html">Faturação</a></li>
+                    <li class="breadcrumb-item active">Editar Fatura</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4" style="color: #8B0000;">Editar Fatura</h1>
+
+            <div class="progress-card">
+                <form class="row g-3" id="formEditarFatura">
+                    <!-- Nome do Utente -->
+                    <div class="col-md-6">
+                        <label for="nomeUtente" class="form-label">Nome do Utente</label>
+                        <input type="text" class="form-control" id="nomeUtente" value="Ana Ferreira" required>
+                    </div>
+
+                    <!-- NIF -->
+                    <div class="col-md-6">
+                        <label for="nif" class="form-label">NIF</label>
+                        <input type="text" class="form-control" id="nif" maxlength="9" value="123456789" required>
+                    </div>
+
+                    <!-- Seguradora/SNS -->
+                    <div class="col-md-6">
+                        <label for="seguradora" class="form-label">Seguradora / SNS</label>
+                        <input type="text" class="form-control" id="seguradora" value="ADSE" required>
+                    </div>
+
+                    <!-- Exame -->
+                    <div class="col-md-6">
+                        <label for="exame" class="form-label">Exame</label>
+                        <input type="text" class="form-control" id="exame" value="Hemograma Completo" required>
+                    </div>
+
+                    <!-- Teste Especial -->
+                    <div class="col-md-6">
+                        <label for="testeEspecial" class="form-label">Teste Especial</label>
+                        <input type="text" class="form-control" id="testeEspecial" value="-">
+                        <div class="form-hint"><i class="fa-regular fa-lightbulb"></i> Deixar em branco se não aplicável</div>
+                    </div>
+
+                    <!-- Valor -->
+                    <div class="col-md-3">
+                        <label for="valor" class="form-label">Valor (€)</label>
+                        <input type="number" class="form-control" id="valor" value="125.00" step="0.01" required>
+                    </div>
+
+                    <!-- Data -->
+                    <div class="col-md-3">
+                        <label for="dataPagamento" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="dataPagamento" value="2026-03-20" required>
+                    </div>
+
+                    <!-- Método de Pagamento -->
+                    <div class="col-md-3">
+                        <label for="metodoPagamento" class="form-label">Método de Pagamento</label>
+                        <select class="form-select" id="metodoPagamento" required>
+                            <option value="">Escolha...</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão bancário">Cartão bancário</option>
+                            <option value="MbWay" selected>MbWay</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-3">
+                        <label for="estadoPagamento" class="form-label">Estado</label>
+                        <select class="form-select" id="estadoPagamento" required>
+                            <option value="">Escolha...</option>
+                            <option value="Pago" selected>Pago</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <!-- Nº Fatura (apenas leitura) -->
+                    <div class="col-md-12">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted">Nº Fatura</label>
+                                <p class="fw-bold">FT-2026-0124</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted">Data de Emissão</label>
+                                <p class="fw-bold">20 Março 2026</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted">Última Alteração</label>
+                                <p class="fw-bold">20 Mar 2026, 10:30</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="col-12 d-flex gap-3 justify-content-end mt-4">
+                        <a href="controlo_faturacao.html" class="btn-cancelar">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn-guardar" onclick="guardarAlteracoes()">
+                            <i class="fa-solid fa-save me-2"></i> Guardar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Informação adicional -->
+            <div class="progress-card mt-4">
+                <h5 class="mb-3" style="color: #8B0000;">
+                    <i class="fa-regular fa-circle-info me-2"></i> Informação
+                </h5>
+                <p class="text-muted small mb-0">
+                    As alterações realizadas nesta fatura serão registadas no histórico de auditoria.
+                    Certifique-se de que os dados estão corretos antes de guardar.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function guardarAlteracoes() {
+            const nome = document.getElementById('nomeUtente').value;
+            const nif = document.getElementById('nif').value;
+            const valor = document.getElementById('valor').value;
+            
+            if (!nome || !nif || !valor) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            alert('Alterações guardadas com sucesso!');
+            window.location.href = 'controlo_faturacao.html';
+        }
+    </script>
+</body>
+</html>

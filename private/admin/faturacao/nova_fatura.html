@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Nova Fatura</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+    <style>
+        /* Estilos adicionais para o formulário */
+        .btn-cancelar {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+        }
+        
+        .btn-cancelar:hover {
+            border-color: #8B0000;
+            color: #8B0000;
+            transform: translateX(-2px);
+            text-decoration: none;
+        }
+        
+        .btn-registar {
+            background: linear-gradient(135deg, #2c7a4d 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-registar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 122, 77, 0.3);
+            color: white;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .form-control, .form-select {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .form-hint {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 4px;
+        }
+        
+        .valor-preview {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="controlo_faturacao.html" class="nav-link active"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="controlo_faturacao.html">Faturação</a></li>
+                    <li class="breadcrumb-item active">Nova Fatura</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4" style="color: #8B0000;">Registo de Fatura</h1>
+
+            <div class="progress-card">
+                <form class="row g-3" id="formNovaFatura">
+                    <!-- Nome do Utente -->
+                    <div class="col-md-6">
+                        <label for="nomeUtente" class="form-label">Nome do Utente</label>
+                        <input type="text" class="form-control" id="nomeUtente" required placeholder="Nome completo do utente">
+                    </div>
+
+                    <!-- NIF -->
+                    <div class="col-md-6">
+                        <label for="nif" class="form-label">NIF</label>
+                        <input type="text" class="form-control" id="nif" maxlength="9" required placeholder="123456789">
+                        <div class="form-hint"><i class="fa-regular fa-lightbulb"></i> Apenas números, 9 dígitos</div>
+                    </div>
+
+                    <!-- Seguradora/SNS -->
+                    <div class="col-md-6">
+                        <label for="seguradora" class="form-label">Seguradora / SNS</label>
+                        <input type="text" class="form-control" id="seguradora" required placeholder="Ex: ADSE, SAMS, SNS">
+                    </div>
+
+                    <!-- Exame -->
+                    <div class="col-md-6">
+                        <label for="exame" class="form-label">Exame</label>
+                        <select id="exame" name="exame" class="form-select" required>
+                            <option value="" selected disabled>Selecione um exame...</option>
+                            <option value="Glicose">Glicose</option>
+                            <option value="Colesterol Total">Colesterol Total</option>
+                            <option value="Hemograma Completo">Hemograma Completo</option>
+                            <option value="Creatinina">Creatinina</option>
+                            <option value="TSH (Hormona Tireoidiana)">TSH (Hormona Tireoidiana)</option>
+                        </select>
+                    </div>
+
+                    <!-- Teste Especial -->
+                    <div class="col-md-6">
+                        <label for="teste" class="form-label">Teste Especial</label>
+                        <select id="teste" name="teste" class="form-select">
+                            <option value="" selected>Nenhum</option>
+                            <option value="Testes de Grupo Sanguíneo">Testes de Grupo Sanguíneo</option>
+                            <option value="Teste de Gravidez">Teste de Gravidez</option>
+                            <option value="Testes de Diabetes">Testes de Diabetes</option>
+                            <option value="Testes de Colesterol">Testes de Colesterol</option>
+                            <option value="Testes de Saúde Cardiovascular">Testes de Saúde Cardiovascular</option>
+                            <option value="Testes para Avaliação Desportiva">Testes para Avaliação Desportiva</option>
+                            <option value="Testes da Tiróide">Testes da Tiróide</option>
+                            <option value="Testes de Saúde Renal">Testes de Saúde Renal</option>
+                            <option value="Testes de Saúde Hepática">Testes de Saúde Hepática</option>
+                            <option value="Testes para Deteção de Infeções Sexualmente Transmissíveis (ISTs)">Testes para Deteção de ISTs</option>
+                        </select>
+                        <div class="form-hint"><i class="fa-regular fa-lightbulb"></i> Opcional, deixar em branco se não aplicável</div>
+                    </div>
+
+                    <!-- Valor -->
+                    <div class="col-md-3">
+                        <label for="valor" class="form-label">Valor (€)</label>
+                        <input type="number" class="form-control" id="valor" step="0.01" required placeholder="0.00">
+                    </div>
+
+                    <!-- Data -->
+                    <div class="col-md-3">
+                        <label for="dataPagamento" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="dataPagamento" required>
+                    </div>
+
+                    <!-- Método de Pagamento -->
+                    <div class="col-md-3">
+                        <label for="metodoPagamento" class="form-label">Método de Pagamento</label>
+                        <select class="form-select" id="metodoPagamento" required>
+                            <option value="" selected disabled>Escolha...</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão bancário">Cartão bancário</option>
+                            <option value="MbWay">MbWay</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Subsistema">Subsistema</option>
+                        </select>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-3">
+                        <label for="estadoPagamento" class="form-label">Estado</label>
+                        <select class="form-select" id="estadoPagamento" required>
+                            <option value="" selected disabled>Escolha...</option>
+                            <option value="Pago">Pago</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <!-- Pré-visualização do valor -->
+                    <div class="col-12">
+                        <div class="valor-preview">
+                            <small class="text-muted">Valor a faturar:</small>
+                            <span id="valorPreview" class="fw-bold" style="color: #8B0000; font-size: 1.2rem;">€0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="col-12 d-flex gap-3 justify-content-end mt-4">
+                        <a href="controlo_faturacao.html" class="btn-cancelar">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn-registar" onclick="registarFatura(event)">
+                            <i class="fa-solid fa-file-invoice me-2"></i> Registar Fatura
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Informação adicional -->
+            <div class="progress-card mt-4">
+                <h5 class="mb-3" style="color: #8B0000;">
+                    <i class="fa-regular fa-circle-info me-2"></i> Informação
+                </h5>
+                <p class="text-muted small mb-0">
+                    Após registar a fatura, a mesma ficará disponível na lista de controlo de faturação.
+                    Pode editar ou cancelar a fatura posteriormente, se necessário.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Atualizar pré-visualização do valor em tempo real
+        document.getElementById('valor').addEventListener('input', function() {
+            const valor = this.value;
+            const preview = document.getElementById('valorPreview');
+            if (valor && !isNaN(valor)) {
+                preview.textContent = '€' + parseFloat(valor).toFixed(2);
+            } else {
+                preview.textContent = '€0,00';
+            }
+        });
+
+        function registarFatura(event) {
+            event.preventDefault();
+            
+            // Obter valores
+            const nome = document.getElementById('nomeUtente').value.trim();
+            const nif = document.getElementById('nif').value.trim();
+            const seguradora = document.getElementById('seguradora').value.trim();
+            const exame = document.getElementById('exame').value;
+            const teste = document.getElementById('teste').value;
+            const valor = document.getElementById('valor').value;
+            const data = document.getElementById('dataPagamento').value;
+            const metodo = document.getElementById('metodoPagamento').value;
+            const estado = document.getElementById('estadoPagamento').value;
+            
+            // Validação
+            if (!nome) {
+                alert('Por favor, preencha o nome do utente');
+                return false;
+            }
+            if (!nif || nif.length !== 9) {
+                alert('Por favor, preencha um NIF válido com 9 dígitos');
+                return false;
+            }
+            if (!seguradora) {
+                alert('Por favor, preencha a seguradora/SNS');
+                return false;
+            }
+            if (!exame) {
+                alert('Por favor, selecione um exame');
+                return false;
+            }
+            if (!valor || valor <= 0) {
+                alert('Por favor, preencha um valor válido');
+                return false;
+            }
+            if (!data) {
+                alert('Por favor, selecione a data');
+                return false;
+            }
+            if (!metodo) {
+                alert('Por favor, selecione o método de pagamento');
+                return false;
+            }
+            if (!estado) {
+                alert('Por favor, selecione o estado da fatura');
+                return false;
+            }
+            
+            // Gerar número de fatura (simulação)
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const numero = Math.floor(Math.random() * 1000) + 1;
+            const numFatura = `FT-${ano}-${numero.toString().padStart(4, '0')}`;
+            
+            // Simular guardar dados (localStorage)
+            const faturas = JSON.parse(localStorage.getItem('faturas') || '[]');
+            const novaFatura = {
+                id: numFatura,
+                utente: nome,
+                nif: nif,
+                seguradora: seguradora,
+                exame: exame,
+                testeEspecial: teste || '-',
+                valor: '€' + parseFloat(valor).toFixed(2),
+                data: new Date(data).toLocaleDateString('pt-PT'),
+                metodo: metodo,
+                estado: estado
+            };
+            faturas.push(novaFatura);
+            localStorage.setItem('faturas', JSON.stringify(faturas));
+            
+            alert(`Fatura ${numFatura} registada com sucesso!`);
+            window.location.href = 'controlo_faturacao.html';
+            
+            return false;
+        }
+        
+        // Preencher data atual como padrão
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataPagamento').value = hoje;
+        });
+    </script>
+</body>
+</html>

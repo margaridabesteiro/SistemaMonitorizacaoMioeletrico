@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Registo de Profissional</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    
+
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../utilizadores/lista_utilizadores.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="gestao_PS.html" class="nav-link active"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+            <hr class="my-3">
+            <a href="../backoffice/backoffice_quem_somos.html" class="nav-link">
+                <i class="fa-solid fa-globe me-2"></i>Backoffice Site
+            </a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="gestao_PS.html">Profissionais Saúde</a></li>
+                    <li class="breadcrumb-item active">Registo de Profissional</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4" style="color: #8B0000;">Registo de Profissional de Saúde</h1>
+
+            <div class="progress-card">
+                <form class="row g-3 needs-validation" id="formRegisto" novalidate>
+                    <!-- Tipo de Profissional -->
+                    <div class="col-md-6">
+                        <label for="tipoProfissional" class="form-label">Tipo de Profissional</label>
+                        <select id="tipoProfissional" name="tipoProfissional" class="form-select" required>
+                            <option selected disabled value="">Selecione...</option>
+                            <option value="medico">Médico</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="fisioterapeuta">Fisioterapeuta</option>
+                        </select>
+                    </div>
+
+                    <!-- Nome -->
+                    <div class="col-md-6">
+                        <label for="nomeProfissional" class="form-label">Nome Completo</label>
+                        <input type="text" class="form-control" id="nomeProfissional" name="nomeProfissional" required maxlength="100">
+                    </div>
+
+                    <!-- Especialidade (só para Médico e Fisioterapeuta) -->
+                    <div class="col-md-6 campo-especialidade" id="campoEspecialidade" style="display: none;">
+                        <label for="especialidade" class="form-label">Especialidade</label>
+                        <input type="text" class="form-control" id="especialidade" name="especialidade" maxlength="50">
+                        <div class="form-hint"><i class="fa-regular fa-lightbulb"></i> Ex: Cardiologia, Ortopedia, Reabilitação</div>
+                    </div>
+
+                    <!-- Instituição -->
+                    <div class="col-md-6">
+                        <label for="instituicao" class="form-label">Instituição / Local de Trabalho</label>
+                        <input type="text" class="form-control" id="instituicao" name="instituicao" required maxlength="80">
+                    </div>
+
+                    <!-- Contacto -->
+                    <div class="col-md-6">
+                        <label for="contacto" class="form-label">Contacto</label>
+                        <input type="text" class="form-control" id="contacto" name="contacto" maxlength="15" placeholder="912 345 678">
+                    </div>
+
+                    <!-- Email (adicional) -->
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="profissional@rehablink.com">
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="col-12 d-flex gap-3 justify-content-end mt-4">
+                        <a href="gestao_PS.html" class="btn-ver-todos">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn-registar">
+                            <i class="fa-solid fa-plus me-2"></i> Registar Profissional
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Informação adicional -->
+            <div class="progress-card mt-4">
+                <h5 class="mb-3" style="color: #8B0000;">
+                    <i class="fa-regular fa-circle-info me-2"></i> Informação
+                </h5>
+                <p class="text-muted small mb-0">
+                    Os profissionais de saúde registados terão acesso às áreas correspondentes do sistema conforme o seu cargo.
+                    Os médicos e fisioterapeutas podem ter especialidades associadas.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/esconder campo de especialidade baseado no tipo de profissional
+        const tipoSelect = document.getElementById('tipoProfissional');
+        const campoEspecialidade = document.getElementById('campoEspecialidade');
+        
+        tipoSelect.addEventListener('change', function() {
+            const tipo = this.value;
+            if (tipo === 'medico' || tipo === 'fisioterapeuta') {
+                campoEspecialidade.style.display = 'block';
+            } else {
+                campoEspecialidade.style.display = 'none';
+                document.getElementById('especialidade').value = '';
+            }
+        });
+
+        // Validação e submissão do formulário
+        document.getElementById('formRegisto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validação básica
+            const tipo = document.getElementById('tipoProfissional').value;
+            const nome = document.getElementById('nomeProfissional').value.trim();
+            const instituicao = document.getElementById('instituicao').value.trim();
+            
+            if (!tipo) {
+                alert('Por favor, selecione o tipo de profissional');
+                return;
+            }
+            
+            if (!nome) {
+                alert('Por favor, preencha o nome do profissional');
+                return;
+            }
+            
+            if (!instituicao) {
+                alert('Por favor, preencha a instituição');
+                return;
+            }
+            
+            // Se for médico ou fisioterapeuta, validar especialidade
+            if ((tipo === 'medico' || tipo === 'fisioterapeuta') && !document.getElementById('especialidade').value.trim()) {
+                alert('Por favor, preencha a especialidade');
+                return;
+            }
+            
+            alert('Profissional registado com sucesso!');
+            window.location.href = 'gestao_PS.html';
+        });
+    </script>
+</body>
+</html>
