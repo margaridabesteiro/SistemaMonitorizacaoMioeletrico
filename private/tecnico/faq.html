@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Central de Ajuda</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="../jogos/jogos_disponiveis.html" class="nav-link"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+            <a href="faq.html" class="nav-link active"><i class="fa-regular fa-circle-question me-2"></i>Ajuda</a>
+        </nav>
+
+        <main class="content">
+            <div class="text-center mb-5">
+                <div class="welcome-icon" style="font-size: 4rem; color: #1a5f8a;">
+                    <i class="fa-regular fa-circle-question"></i>
+                </div>
+                <h1>Central de Ajuda</h1>
+                <p class="text-muted">Encontre respostas para as suas dúvidas</p>
+            </div>
+
+            <!-- Barra de Pesquisa -->
+            <div class="filter-section mb-5">
+                <div class="filter-title">
+                    <i class="fa-solid fa-magnifying-glass me-2"></i>
+                    Como podemos ajudar?
+                </div>
+                <input type="text" class="form-control" placeholder="Pesquisar na central de ajuda..." style="border-radius: 50px; padding: 12px 20px;">
+            </div>
+
+            <!-- Categorias -->
+            <div class="metricas-grid mb-5">
+                <div class="metrica-card text-center" onclick="scrollToSection('primeiros-passos')">
+                    <i class="fa-solid fa-rocket" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Primeiros Passos</h6>
+                    <small class="text-muted">Como começar a usar</small>
+                </div>
+                <div class="metrica-card text-center" onclick="scrollToSection('pacientes')">
+                    <i class="fa-solid fa-users" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Gestão de Pacientes</h6>
+                    <small class="text-muted">Adicionar e gerir</small>
+                </div>
+                <div class="metrica-card text-center" onclick="scrollToSection('sessoes')">
+                    <i class="fa-regular fa-calendar-check" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Sessões de Treino</h6>
+                    <small class="text-muted">Criar e acompanhar</small>
+                </div>
+                <div class="metrica-card text-center" onclick="scrollToSection('jogos')">
+                    <i class="fa-solid fa-gamepad" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Jogos</h6>
+                    <small class="text-muted">Atribuir e analisar</small>
+                </div>
+                <div class="metrica-card text-center" onclick="scrollToSection('analise')">
+                    <i class="fa-solid fa-chart-line" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Análise de Dados</h6>
+                    <small class="text-muted">Interpretar resultados</small>
+                </div>
+                <div class="metrica-card text-center" onclick="scrollToSection('relatorios')">
+                    <i class="fa-regular fa-file-lines" style="font-size: 2rem; color: #1a5f8a;"></i>
+                    <h6 class="mt-2">Relatórios</h6>
+                    <small class="text-muted">Gerar e exportar</small>
+                </div>
+            </div>
+
+            <!-- FAQs -->
+            <div class="progress-card mb-4" id="primeiros-passos">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-rocket me-2" style="color: #1a5f8a;"></i>Primeiros Passos</h3>
+                </div>
+                <div class="accordion" id="accordionPrimeiros">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Como começo a utilizar o RehabLink?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#accordionPrimeiros">
+                            <div class="accordion-body">
+                                Após login, o Dashboard é o seu ponto de partida. Aqui encontra visão geral dos pacientes, alertas e sessões do dia. Utilize o menu lateral para navegar entre as diferentes funcionalidades.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Como configuro o meu perfil?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordionPrimeiros">
+                            <div class="accordion-body">
+                                Clique no seu nome no canto superior direito e selecione "Meu Perfil". Aí pode editar os seus dados pessoais, contacto e informações profissionais.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mb-4" id="pacientes">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-users me-2" style="color: #1a5f8a;"></i>Gestão de Pacientes</h3>
+                </div>
+                <div class="accordion" id="accordionPacientes">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Como adicionar um novo paciente?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse show" data-bs-parent="#accordionPacientes">
+                            <div class="accordion-body">
+                                Aceda a "Pacientes" no menu lateral, clique em "Novo Paciente" e preencha os dados clínicos e pessoais.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Como vejo o histórico completo de um paciente?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#accordionPacientes">
+                            <div class="accordion-body">
+                                Na lista de pacientes, clique no botão "Ver perfil" do paciente desejado. Lá encontrará todas as informações clínicas, gráficos e histórico de sessões.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mb-4" id="sessoes">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-calendar-check me-2" style="color: #1a5f8a;"></i>Sessões de Treino</h3>
+                </div>
+                <div class="accordion" id="accordionSessoes">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Como criar uma nova sessão de treino?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse show" data-bs-parent="#accordionSessoes">
+                            <div class="accordion-body">
+                                Aceda a "Sessões de Treino" > "Nova Sessão". Selecione o paciente, tipo de exercício, zona alvo, duração e data.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                Como acompanhar uma sessão em tempo real?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#accordionSessoes">
+                            <div class="accordion-body">
+                                Na lista de sessões, clique no botão "Iniciar" na sessão agendada. O gráfico mostra a força em tempo real e permite pausar ou finalizar.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mb-4" id="jogos">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-gamepad me-2" style="color: #1a5f8a;"></i>Jogos de Reabilitação</h3>
+                </div>
+                <div class="accordion" id="accordionJogos">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                Como atribuir jogos a um paciente?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse show" data-bs-parent="#accordionJogos">
+                            <div class="accordion-body">
+                                Aceda a "Jogos" no menu lateral, selecione o paciente e marque os jogos desejados para a semana.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                Como vejo os resultados dos jogos?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#accordionJogos">
+                            <div class="accordion-body">
+                                No perfil do paciente, na secção "Jogos" ou acedendo a "Histórico de Jogos" no menu de jogos.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mb-4" id="analise">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Análise de Dados</h3>
+                </div>
+                <div class="accordion" id="accordionAnalise">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                                Como interpretar os gráficos de força?
+                            </button>
+                        </h2>
+                        <div id="faq9" class="accordion-collapse collapse show" data-bs-parent="#accordionAnalise">
+                            <div class="accordion-body">
+                                Os gráficos mostram a evolução da força ao longo das sessões. Valores dentro da zona alvo (verde) indicam bom desempenho.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">
+                                O que significa o coeficiente de consistência?
+                            </button>
+                        </h2>
+                        <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#accordionAnalise">
+                            <div class="accordion-body">
+                                Quanto mais próximo de 0, mais consistente é o controlo. Valores acima de 1 indicam alta variabilidade.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card mb-4" id="relatorios">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-file-lines me-2" style="color: #1a5f8a;"></i>Relatórios</h3>
+                </div>
+                <div class="accordion" id="accordionRelatorios">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">
+                                Como gerar um relatório clínico?
+                            </button>
+                        </h2>
+                        <div id="faq11" class="accordion-collapse collapse show" data-bs-parent="#accordionRelatorios">
+                            <div class="accordion-body">
+                                Aceda a "Relatórios", selecione o paciente e período desejado e clique em "Gerar Relatório". Pode guardar como PDF.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contacto de Suporte -->
+            <div class="progress-card mt-4" style="background: linear-gradient(135deg, #0f3b5e 0%, #1a5f8a 100%); color: white;">
+                <div class="text-center p-4">
+                    <i class="fa-regular fa-envelope" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <h5>Precisa de mais ajuda?</h5>
+                    <p>Contacte o suporte técnico</p>
+                    <button class="btn-filter" style="background: white; color: #1a5f8a;" onclick="contactarSuporte()">
+                        <i class="fa-regular fa-message me-2"></i>Enviar Mensagem
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+        function contactarSuporte() {
+            alert('Abrir chat de suporte...');
+            window.location.href = '../mensagens/conversas.html?suporte=true';
+        }
+    </script>
+</body>
+</html>

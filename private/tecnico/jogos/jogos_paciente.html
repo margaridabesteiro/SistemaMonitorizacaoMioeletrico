@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Histórico de Jogos</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    
+    <style>
+        .games-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .game-mini-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(15, 59, 94, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .game-mini-card:hover {
+            transform: translateY(-3px);
+            border-color: #1a5f8a;
+            box-shadow: 0 8px 20px rgba(15, 59, 94, 0.1);
+        }
+        
+        .game-mini-emoji {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(26, 95, 138, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-mini-info {
+            flex: 1;
+        }
+        
+        .game-mini-info h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f3b5e;
+            margin-bottom: 4px;
+        }
+        
+        .game-mini-info p {
+            font-size: 0.7rem;
+            color: #718096;
+            margin: 0;
+        }
+        
+        .game-mini-stats {
+            text-align: right;
+        }
+        
+        .game-mini-stats .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a5f8a;
+        }
+        
+        .game-mini-stats .stat-label {
+            font-size: 0.6rem;
+            color: #a0aec0;
+        }
+        
+        .week-badge {
+            background: #1a5f8a;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .week-badge-inactive {
+            background: #e2e8f0;
+            color: #718096;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="jogos_disponiveis.html" class="nav-link active"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+        </nav>
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../pacientes/lista_pacientes.html">Pacientes</a></li>
+                    <li class="breadcrumb-item"><a href="../pacientes/perfil_paciente.html?paciente=ana-ferreira">Ana Ferreira</a></li>
+                    <li class="breadcrumb-item active">Histórico de Jogos</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Histórico de Jogos</h1>
+                <button class="btn-filter" onclick="window.location.href='jogos_disponiveis.html?paciente=ana-ferreira'">
+                    <i class="fa-solid fa-plus me-2"></i>Atribuir Jogos
+                </button>
+            </div>
+
+            <!-- Card do Paciente -->
+            <div class="paciente-card mb-4">
+                <div class="paciente-header">
+                    <div class="paciente-avatar">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="paciente-info">
+                        <h3>Ana Ferreira</h3>
+                        <p>Força média: 8.2N · Semana de tratamento: 12</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumo por Jogo -->
+            <div class="progress-card mb-4">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-simple me-2" style="color: #1a5f8a;"></i>Resumo por Jogo</h3>
+                </div>
+                <div class="games-mini-grid">
+                    <!-- Force Trainer -->
+                    <div class="game-mini-card">
+                        <div class="game-mini-emoji">📈</div>
+                        <div class="game-mini-info">
+                            <h6>Force Trainer</h6>
+                            <p>Força · Introdução</p>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">sessões</div>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">850</div>
+                            <div class="stat-label">melhor</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Catch! -->
+                    <div class="game-mini-card">
+                        <div class="game-mini-emoji">🧺</div>
+                        <div class="game-mini-info">
+                            <h6>Catch!</h6>
+                            <p>Reação · Nível 1</p>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">sessões</div>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">52</div>
+                            <div class="stat-label">melhor</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flappy -->
+                    <div class="game-mini-card">
+                        <div class="game-mini-emoji">🐦</div>
+                        <div class="game-mini-info">
+                            <h6>Flappy</h6>
+                            <p>Controlo · Nível 2</p>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">sessões</div>
+                        </div>
+                        <div class="game-mini-stats">
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">melhor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histórico por Semana -->
+            <div class="progress-card mb-4">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-calendar me-2" style="color: #1a5f8a;"></i>Histórico por Semana</h3>
+                </div>
+                <div class="table-container">
+                    <table id="tabelaSemanas" class="table">
+                        <thead>
+                            <tr>
+                                <th>Semana</th>
+                                <th>Período</th>
+                                <th>Jogos Atribuídos</th>
+                                <th>Jogos Realizados</th>
+                                <th>Média Desempenho</th>
+                                <th>Melhor Pontuação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Semana 12</strong></td>
+                                <td><small>13-19 Mar 2026</small></td>
+                                <td>Force Trainer, Catch!</td>
+                                <td>2/2 jogos</td>
+                                <td><span class="badge-progresso progresso-alto">90%</span></td>
+                                <td><strong>Force Trainer:</strong> 850 pts</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSemana(12)"><i class="fa-regular fa-eye"></i> Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 11</strong></td>
+                                <td><small>06-12 Mar 2026</small></td>
+                                <td>Force Trainer, Catch!</td>
+                                <td>2/2 jogos</td>
+                                <td><span class="badge-progresso progresso-alto">86%</span></td>
+                                <td><strong>Catch!:</strong> 45 bolas</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSemana(11)"><i class="fa-regular fa-eye"></i> Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 10</strong></td>
+                                <td><small>27 Fev-05 Mar 2026</small></td>
+                                <td>Force Trainer, Catch!, Flappy</td>
+                                <td>3/3 jogos</td>
+                                <td><span class="badge-progresso progresso-alto">91%</span></td>
+                                <td><strong>Force Trainer:</strong> 820 pts</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSemana(10)"><i class="fa-regular fa-eye"></i> Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 9</strong></td>
+                                <td><small>20-26 Fev 2026</small></td>
+                                <td>Force Trainer, Catch!</td>
+                                <td>2/2 jogos</td>
+                                <td><span class="badge-progresso progresso-medio">78%</span></td>
+                                <td><strong>Force Trainer:</strong> 780 pts</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSemana(9)"><i class="fa-regular fa-eye"></i> Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semana 8</strong></td>
+                                <td><small>13-19 Fev 2026</small></td>
+                                <td>Force Trainer only</td>
+                                <td>1/1 jogos</td>
+                                <td><span class="badge-progresso progresso-medio">75%</span></td>
+                                <td><strong>Force Trainer:</strong> 720 pts</td>
+                                <td><button class="btn-acao btn-sm" onclick="verSemana(8)"><i class="fa-regular fa-eye"></i> Ver</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Histórico Detalhado por Jogo -->
+            <div class="progress-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Histórico Detalhado</h3>
+                    <div>
+                        <select class="form-select form-select-sm" style="width: auto; display: inline-block;" id="filtroJogo">
+                            <option value="todos">Todos os jogos</option>
+                            <option value="force">Force Trainer</option>
+                            <option value="catch">Catch!</option>
+                            <option value="flappy">Flappy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="tabelaHistoricoDetalhado" class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Jogo</th>
+                                <th>Pontuação</th>
+                                <th>Força Máx</th>
+                                <th>Força Média</th>
+                                <th>Tempo na Zona</th>
+                                <th>Desempenho</th>
+                                <th>Observações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>13 Mar 2026</strong><br><small>10:30</small></td>
+                                <td>Force Trainer</td>
+                                <td><strong>850 pts</strong></td>
+                                <td><strong>12.5N</strong></td>
+                                <td>8.2N</td>
+                                <td>92%</td>
+                                <td><span class="badge-progresso progresso-alto">Excelente</span></td>
+                                <td>Boa evolução na força</td>
+                            </tr>
+                            <tr>
+                                <td><strong>13 Mar 2026</strong><br><small>09:00</small></td>
+                                <td>Catch!</td>
+                                <td><strong>45 bolas</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>75%</td>
+                                <td><span class="badge-progresso progresso-medio">Bom</span></td>
+                                <td>Melhorou reação</td>
+                            </tr>
+                            <tr>
+                                <td><strong>12 Mar 2026</strong><br><small>14:00</small></td>
+                                <td>Force Trainer</td>
+                                <td><strong>820 pts</strong></td>
+                                <td><strong>11.8N</strong></td>
+                                <td>7.9N</td>
+                                <td>88%</td>
+                                <td><span class="badge-progresso progresso-alto">Muito bom</span></td>
+                                <td>Consistente</td>
+                            </tr>
+                            <tr>
+                                <td><strong>11 Mar 2026</strong><br><small>15:30</small></td>
+                                <td>Catch!</td>
+                                <td><strong>38 bolas</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>63%</td>
+                                <td><span class="badge-progresso progresso-medio">Regular</span></td>
+                                <td>Dificuldade inicial</td>
+                            </tr>
+                            <tr>
+                                <td><strong>10 Mar 2026</strong><br><small>11:00</small></td>
+                                <td>Flappy</td>
+                                <td><strong>15 canos</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>60%</td>
+                                <td><span class="badge-progresso progresso-medio">Regular</span></td>
+                                <td>Precisa mais treino</td>
+                            </tr>
+                            <tr>
+                                <td><strong>08 Mar 2026</strong><br><small>09:30</small></td>
+                                <td>Force Trainer</td>
+                                <td><strong>780 pts</strong></td>
+                                <td><strong>10.2N</strong></td>
+                                <td>7.5N</td>
+                                <td>81%</td>
+                                <td><span class="badge-progresso progresso-alto">Bom</span></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gráfico de Evolução -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Evolução nos Jogos</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="evolucaoJogosChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+                </button>
+                <button class="btn-filter" onclick="exportarHistorico()">
+                    <i class="fa-solid fa-download me-2"></i>Exportar Histórico
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inicializar DataTables
+            $('#tabelaSemanas').DataTable({
+                pageLength: 5,
+                order: [[0, 'desc']],
+                language: {
+                    emptyTable: "Nenhuma semana encontrada",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ semanas",
+                    search: "Pesquisar:",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            $('#tabelaHistoricoDetalhado').DataTable({
+                pageLength: 10,
+                order: [[0, 'desc']],
+                language: {
+                    emptyTable: "Nenhum registo encontrado",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registos",
+                    search: "Pesquisar:",
+                    paginate: {
+                        first: "Primeira",
+                        last: "Última",
+                        next: "Seguinte",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            // Gráfico de Evolução
+            new Chart(document.getElementById('evolucaoJogosChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Sem 6', 'Sem 7', 'Sem 8', 'Sem 9', 'Sem 10', 'Sem 11', 'Sem 12'],
+                    datasets: [{
+                        label: 'Force Trainer (pts)',
+                        data: [520, 580, 720, 780, 820, 780, 850],
+                        borderColor: '#1a5f8a',
+                        backgroundColor: 'transparent',
+                        tension: 0.3
+                    }, {
+                        label: 'Catch! (bolas)',
+                        data: [28, 32, 35, 38, 42, 45, 45],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'transparent',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Filtro por jogo
+            $('#filtroJogo').on('change', function() {
+                var valor = $(this).val();
+                var tabela = $('#tabelaHistoricoDetalhado').DataTable();
+                
+                if (valor === 'todos') {
+                    tabela.search('').draw();
+                } else if (valor === 'force') {
+                    tabela.search('Force Trainer').draw();
+                } else if (valor === 'catch') {
+                    tabela.search('Catch!').draw();
+                } else if (valor === 'flappy') {
+                    tabela.search('Flappy').draw();
+                }
+            });
+        });
+
+        function verSemana(semana) {
+            alert('Ver detalhes da Semana ' + semana);
+            // window.location.href = 'detalhes_semana.html?semana=' + semana;
+        }
+
+        function exportarHistorico() {
+            alert('A exportar histórico completo de jogos...');
+        }
+    </script>
+</body>
+</html>

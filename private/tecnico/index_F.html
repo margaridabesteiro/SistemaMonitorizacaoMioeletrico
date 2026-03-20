@@ -5,20 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RehabLink | Fisioterapeuta - Dashboard</title>
-    
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/fisioterapeuta.css">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -34,16 +34,25 @@
         </div>
 
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-nurse"></i>
-                <span>Dra. Carla Santos</span>
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
-                <li><a class="dropdown-item" href="../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
     </header>
@@ -178,7 +187,7 @@
                     <h3><i class="fa-regular fa-clock"></i> Sessões de Hoje</h3>
                     <a href="sessoes/lista_sessoes.html">Ver todas</a>
                 </div>
-                
+
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -251,7 +260,7 @@
                     <h3><i class="fa-solid fa-chart-line"></i> Progresso dos Pacientes</h3>
                     <a href="pacientes/lista_pacientes.html">Ver todos</a>
                 </div>
-                
+
                 <div class="paciente-card">
                     <div class="paciente-header">
                         <div class="paciente-avatar">
@@ -373,9 +382,9 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Gráfico de Força
             const ctxForca = document.getElementById('forcaChart').getContext('2d');
             new Chart(ctxForca, {
@@ -424,17 +433,17 @@
             });
 
             // Chatbot
-            $('#chatbot-button').click(function() {
+            $('#chatbot-button').click(function () {
                 $('#chatbot').removeClass('d-none');
                 $(this).hide();
             });
 
-            $('#close-chat').click(function() {
+            $('#close-chat').click(function () {
                 $('#chatbot').addClass('d-none');
                 $('#chatbot-button').show();
             });
 
-            $('.faq-btn').click(function() {
+            $('.faq-btn').click(function () {
                 const question = $(this).text();
                 alert('Funcionalidade em desenvolvimento: ' + question);
             });

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Jogos do Paciente</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    
+    <style>
+        /* Mantendo a formatação dos cards igual ao original, mas com cores do fisioterapeuta */
+        .games-grid-custom {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-card-custom {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(15, 59, 94, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .game-card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(15, 59, 94, 0.15);
+            border-color: #1a5f8a;
+        }
+
+        .game-image-custom {
+            height: 120px;
+            background: linear-gradient(135deg, #0f3b5e 0%, #1a5f8a 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .game-emoji {
+            font-size: 3.5rem;
+            line-height: 1;
+            opacity: 0.9;
+        }
+
+        .game-level-custom {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 5px 12px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .game-info-custom {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-title-custom {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #0f3b5e;
+            margin-bottom: 8px;
+        }
+
+        .game-desc-custom {
+            font-size: 0.86rem;
+            color: #4a5568;
+            line-height: 1.55;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .game-tags-custom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tag-custom {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.56rem;
+            color: #1a5f8a;
+            background: rgba(26, 95, 138, 0.08);
+            border: 1px solid rgba(26, 95, 138, 0.15);
+            border-radius: 50px;
+            padding: 4px 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .game-footer-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .form-check-input:checked {
+            background-color: #1a5f8a;
+            border-color: #1a5f8a;
+        }
+
+        .badge-resultado {
+            background: #48bb78;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Manter cores originais dos badges dos jogos? Se quiser podemos adaptar */
+        .game-card-custom[data-jogo="1"] .game-image-custom { background: linear-gradient(135deg, #0f3b5e 0%, #1a5f8a 100%); }
+        .game-card-custom[data-jogo="2"] .game-image-custom { background: linear-gradient(135deg, #0f3b5e 0%, #1a5f8a 100%); }
+        .game-card-custom[data-jogo="3"] .game-image-custom { background: linear-gradient(135deg, #0f3b5e 0%, #1a5f8a 100%); }
+    </style>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="jogos_disponiveis.html" class="nav-link active"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+        </nav>
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../pacientes/lista_pacientes.html">Pacientes</a></li>
+                    <li class="breadcrumb-item"><a href="../pacientes/perfil_paciente.html?paciente=ana-ferreira">Ana Ferreira</a></li>
+                    <li class="breadcrumb-item active">Jogos da Semana</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Jogos de Reabilitação</h1>
+                <div>
+                    <span class="badge" style="background: #1a5f8a; color: white; padding: 8px 15px;">
+                        <i class="fa-regular fa-calendar me-2"></i>Semana 12 · 13 a 19 Mar 2026
+                    </span>
+                </div>
+            </div>
+
+            <!-- Informação do Paciente -->
+            <div class="paciente-card mb-4">
+                <div class="paciente-header">
+                    <div class="paciente-avatar">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="paciente-info">
+                        <h3>Ana Ferreira</h3>
+                        <p>Força média: 8.2N · Semana de tratamento: 12</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jogos Disponíveis -->
+            <h5 class="mb-3" style="color: #0f3b5e;">Selecione os jogos para esta semana</h5>
+            
+            <div class="games-grid-custom">
+                <!-- Jogo 1: Force Trainer -->
+                <div class="game-card-custom" data-jogo="1">
+                    <div class="game-image-custom">
+                        <span class="game-emoji">📈</span>
+                        <span class="game-level-custom">Nível 1 · Introdução</span>
+                    </div>
+                    <div class="game-info-custom">
+                        <div class="game-title-custom">Force Trainer</div>
+                        <div class="game-desc-custom">Segue a linha com a tua prótese. Controla a força para manter o ponto dentro do trajeto.</div>
+                        <div class="game-tags-custom">
+                            <span class="tag-custom">Força</span>
+                            <span class="tag-custom">60s</span>
+                            <span class="tag-custom">Analógico</span>
+                        </div>
+                        <div class="game-footer-custom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="jogo1" checked>
+                                <label class="form-check-label" for="jogo1" style="color: #4a5568; font-size: 0.9rem;">
+                                    Incluir esta semana
+                                </label>
+                            </div>
+                            <span class="badge-resultado">92%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jogo 2: Catch! -->
+                <div class="game-card-custom" data-jogo="2">
+                    <div class="game-image-custom">
+                        <span class="game-emoji">🧺</span>
+                        <span class="game-level-custom">Nível 1 · Reação</span>
+                    </div>
+                    <div class="game-info-custom">
+                        <div class="game-title-custom">Catch!</div>
+                        <div class="game-desc-custom">Apanha as bolas que caem com o cesto. Pressiona para mover para a direita, solta para voltar.</div>
+                        <div class="game-tags-custom">
+                            <span class="tag-custom">Reação</span>
+                            <span class="tag-custom">60s</span>
+                            <span class="tag-custom">Binário</span>
+                        </div>
+                        <div class="game-footer-custom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="jogo2" checked>
+                                <label class="form-check-label" for="jogo2" style="color: #4a5568; font-size: 0.9rem;">
+                                    Incluir esta semana
+                                </label>
+                            </div>
+                            <span class="badge-resultado">88%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jogo 3: Flappy -->
+                <div class="game-card-custom" data-jogo="3">
+                    <div class="game-image-custom">
+                        <span class="game-emoji">🐦</span>
+                        <span class="game-level-custom">Nível 2 · Controlo</span>
+                    </div>
+                    <div class="game-info-custom">
+                        <div class="game-title-custom">Flappy</div>
+                        <div class="game-desc-custom">Clica para bater as asas e passa entre os canos. Exige controlo preciso e timing constante.</div>
+                        <div class="game-tags-custom">
+                            <span class="tag-custom">Timing</span>
+                            <span class="tag-custom">60s</span>
+                            <span class="tag-custom">Click</span>
+                        </div>
+                        <div class="game-footer-custom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="jogo3">
+                                <label class="form-check-label" for="jogo3" style="color: #4a5568; font-size: 0.9rem;">
+                                    Incluir esta semana
+                                </label>
+                            </div>
+                            <span class="badge-resultado">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jogos já atribuídos esta semana -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-calendar-check me-2" style="color: #1a5f8a;"></i>Jogos desta Semana</h3>
+                </div>
+                <div class="table-container">
+                    <table class="table" id="tabelaJogos">
+                        <thead>
+                            <tr>
+                                <th>Jogo</th>
+                                <th>Tipo</th>
+                                <th>Nível</th>
+                                <th>Duração</th>
+                                <th>Status</th>
+                                <th>Último Resultado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Force Trainer</strong></td>
+                                <td>Força</td>
+                                <td>Nível 1</td>
+                                <td>60s</td>
+                                <td><span class="badge-progresso progresso-alto">Ativo</span></td>
+                                <td><span class="badge" style="background: #48bb78; color: white;">92%</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="removerJogo(1)">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Catch!</strong></td>
+                                <td>Reação</td>
+                                <td>Nível 1</td>
+                                <td>60s</td>
+                                <td><span class="badge-progresso progresso-alto">Ativo</span></td>
+                                <td><span class="badge" style="background: #48bb78; color: white;">88%</span></td>
+                                <td>
+                                    <button class="btn-acao btn-sm" onclick="removerJogo(2)">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Histórico de Resultados -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line me-2" style="color: #1a5f8a;"></i>Resultados da Semana</h3>
+                </div>
+                <div class="table-container">
+                    <table class="table" id="tabelaResultados">
+                        <thead>
+                            <tr>
+                                <th>Jogo</th>
+                                <th>Data</th>
+                                <th>Força Máx</th>
+                                <th>Força Média</th>
+                                <th>Pontuação</th>
+                                <th>Desempenho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Force Trainer</td>
+                                <td>13 Mar 2026</td>
+                                <td>12.5N</td>
+                                <td>8.2N</td>
+                                <td>850 pts</td>
+                                <td><span class="badge-progresso progresso-alto">92%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Force Trainer</td>
+                                <td>12 Mar 2026</td>
+                                <td>11.8N</td>
+                                <td>7.9N</td>
+                                <td>820 pts</td>
+                                <td><span class="badge-progresso progresso-alto">88%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Catch!</td>
+                                <td>13 Mar 2026</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>45 bolas</td>
+                                <td><span class="badge-progresso progresso-medio">75%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Catch!</td>
+                                <td>11 Mar 2026</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>38 bolas</td>
+                                <td><span class="badge-progresso progresso-medio">63%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="d-flex gap-2 justify-content-end mt-4">
+                <button class="btn-reset" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Cancelar
+                </button>
+                <button class="btn-filter" onclick="guardarJogos()">
+                    <i class="fa-regular fa-floppy-disk me-2"></i>Guardar Jogos da Semana
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inicializar DataTables
+            $('#tabelaJogos').DataTable({
+                pageLength: 5,
+                searching: false,
+                info: false,
+                lengthChange: false,
+                language: { emptyTable: "Nenhum jogo atribuído" }
+            });
+
+            $('#tabelaResultados').DataTable({
+                pageLength: 5,
+                searching: false,
+                info: false,
+                lengthChange: false,
+                order: [[1, 'desc']],
+                language: { emptyTable: "Nenhum resultado registado" }
+            });
+        });
+
+        function guardarJogos() {
+            alert('Jogos da semana guardados com sucesso! O paciente já pode aceder aos jogos selecionados.');
+        }
+
+        function removerJogo(id) {
+            if (confirm('Remover este jogo da lista desta semana?')) {
+                alert('Jogo removido');
+                // Aqui poderia remover a linha da tabela
+            }
+        }
+    </script>
+</body>
+</html>

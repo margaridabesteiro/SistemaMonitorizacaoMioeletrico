@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Preferências</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="../jogos/jogos_disponiveis.html" class="nav-link"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+            <a href="preferencias.html" class="nav-link active"><i class="fa-solid fa-gear me-2"></i>Preferências</a>
+        </nav>
+
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Preferências do Sistema</h1>
+            </div>
+
+            <form>
+                <!-- Notificações -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-regular fa-bell me-2" style="color: #1a5f8a;"></i>Notificações</h5>
+                    <hr>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifAlertas" checked>
+                        <label class="form-check-label" for="notifAlertas">
+                            Receber alertas clínicos (pacientes sem treino, redução de força)
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifSessoes" checked>
+                        <label class="form-check-label" for="notifSessoes">
+                            Receber lembretes de sessões agendadas
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifMensagens" checked>
+                        <label class="form-check-label" for="notifMensagens">
+                            Receber notificações de novas mensagens
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="notifRelatorios">
+                        <label class="form-check-label" for="notifRelatorios">
+                            Receber resumos semanais por email
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Visualização -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-eye me-2" style="color: #1a5f8a;"></i>Visualização</h5>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Tema</label>
+                        <select class="form-select" style="max-width: 200px;">
+                            <option selected>Claro</option>
+                            <option>Escuro</option>
+                            <option>Sistema</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dashboard inicial</label>
+                        <select class="form-select" style="max-width: 250px;">
+                            <option selected>Dashboard Principal</option>
+                            <option>Lista de Pacientes</option>
+                            <option>Sessões do Dia</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Itens por página nas tabelas</label>
+                        <select class="form-select" style="max-width: 100px;">
+                            <option>10</option>
+                            <option selected>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Preferências Clínicas -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-stethoscope me-2" style="color: #1a5f8a;"></i>Preferências Clínicas</h5>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Duração padrão de sessão (minutos)</label>
+                        <input type="number" class="form-control" style="max-width: 100px;" value="15" min="5" max="60">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Zona alvo padrão (N)</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="number" class="form-control" placeholder="Mínimo" value="8">
+                            </div>
+                            <div class="col-4">
+                                <input type="number" class="form-control" placeholder="Máximo" value="12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="gamificacaoDefault" checked>
+                        <label class="form-check-label" for="gamificacaoDefault">
+                            Ativar gamificação por defeito
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="alertasAutomaticos" checked>
+                        <label class="form-check-label" for="alertasAutomaticos">
+                            Gerar alertas automáticos quando força desce >20%
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Privacidade -->
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-lock me-2" style="color: #1a5f8a;"></i>Privacidade e Segurança</h5>
+                    <hr>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="sessaoAutomatica" checked>
+                        <label class="form-check-label" for="sessaoAutomatica">
+                            Terminar sessão após 30 minutos de inatividade
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="logsAtividade">
+                        <label class="form-check-label" for="logsAtividade">
+                            Manter logs de atividade para auditoria
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="d-flex gap-2 justify-content-end mt-4">
+                    <button type="reset" class="btn-reset">Restaurar Padrões</button>
+                    <button type="submit" class="btn-filter" onclick="guardarPreferencias()">Guardar Preferências</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function guardarPreferencias() {
+            alert('Preferências guardadas com sucesso!');
+        }
+    </script>
+</body>
+</html>

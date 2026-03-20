@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Meu Perfil</title>
+    
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/fisioterapeuta.css">
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="jogos/jogos_disponiveis.html" class="nav-link"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+            <a href="perfil.html" class="nav-link active"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+        </nav>
+
+        <main class="content">
+            <h1 class="mb-4">Meu Perfil</h1>
+
+            <div class="row">
+                <!-- Foto e Informação Básica -->
+                <div class="col-md-4">
+                    <div class="progress-card text-center">
+                        <div class="paciente-avatar" style="width: 100px; height: 100px; margin: 0 auto 15px; font-size: 2.5rem;">
+                            <i class="fa-solid fa-user-nurse"></i>
+                        </div>
+                        <h3 class="mb-1">Dra. Carla Santos</h3>
+                        <p class="text-muted">Fisioterapeuta · Cédula: F-12345</p>
+                        <hr>
+                        <p><i class="fa-regular fa-envelope me-2"></i>carla.santos@rehablink.com</p>
+                        <p><i class="fa-regular fa-phone me-2"></i>912 345 678</p>
+                        <p><i class="fa-regular fa-building me-2"></i>Clínica RehabLink - Porto</p>
+                        <button class="btn-acao mt-3" onclick="editarFoto()">
+                            <i class="fa-regular fa-image me-2"></i>Alterar Foto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dados Pessoais -->
+                <div class="col-md-8">
+                    <form class="progress-card">
+                        <h5><i class="fa-regular fa-user me-2" style="color: #1a5f8a;"></i>Dados Pessoais</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" value="Carla Maria Santos Ferreira">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Número de Cédula</label>
+                                <input type="text" class="form-control" value="F-12345" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Data de Nascimento</label>
+                                <input type="date" class="form-control" value="1985-03-15">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">NIF</label>
+                                <input type="text" class="form-control" value="123456789">
+                            </div>
+                        </div>
+
+                        <h5 class="mt-4"><i class="fa-regular fa-address-card me-2" style="color: #1a5f8a;"></i>Contacto</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" value="carla.santos@rehablink.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Telemóvel</label>
+                                <input type="tel" class="form-control" value="912 345 678">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Morada</label>
+                            <input type="text" class="form-control" value="Rua da Boavista, 123, 4º Esq, 4050-115 Porto">
+                        </div>
+
+                        <h5 class="mt-4"><i class="fa-solid fa-briefcase me-2" style="color: #1a5f8a;"></i>Informação Profissional</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Especialidade</label>
+                                <select class="form-select">
+                                    <option selected>Reabilitação de Amputados</option>
+                                    <option>Fisioterapia Geral</option>
+                                    <option>Neurologia</option>
+                                    <option>Ortopedia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Anos de Experiência</label>
+                                <input type="number" class="form-control" value="12">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Clínica / Local de Trabalho</label>
+                                <input type="text" class="form-control" value="Clínica RehabLink - Porto">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Horário de Trabalho</label>
+                                <select class="form-select">
+                                    <option selected>Segunda a Sexta, 09:00-18:00</option>
+                                    <option>Segunda a Quinta, 08:00-17:00</option>
+                                    <option>Horário Flexível</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Biografia</label>
+                            <textarea class="form-control" rows="3">Fisioterapeuta especializada em reabilitação de amputados e proteses. Mais de 10 anos de experiência em centros de reabilitação. Certificada em próteses mioelétricas.</textarea>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end mt-4">
+                            <button type="reset" class="btn-reset">Cancelar</button>
+                            <button type="submit" class="btn-filter" onclick="guardarPerfil()">Guardar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function guardarPerfil() {
+            alert('Perfil atualizado com sucesso!');
+        }
+        function editarFoto() {
+            alert('Funcionalidade de alteração de foto em desenvolvimento');
+        }
+    </script>
+</body>
+</html>

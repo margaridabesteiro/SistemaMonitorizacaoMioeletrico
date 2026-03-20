@@ -11,6 +11,92 @@
     <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Estilos específicos para os jogos no perfil */
+        .games-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .game-mini-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(15, 59, 94, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .game-mini-card:hover {
+            transform: translateY(-3px);
+            border-color: #1a5f8a;
+            box-shadow: 0 8px 20px rgba(15, 59, 94, 0.1);
+        }
+        
+        .game-mini-emoji {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(26, 95, 138, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-mini-info {
+            flex: 1;
+        }
+        
+        .game-mini-info h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f3b5e;
+            margin-bottom: 4px;
+        }
+        
+        .game-mini-info p {
+            font-size: 0.7rem;
+            color: #718096;
+            margin: 0;
+        }
+        
+        .game-mini-score {
+            text-align: right;
+        }
+        
+        .game-mini-score .score-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a5f8a;
+        }
+        
+        .game-mini-score .score-label {
+            font-size: 0.6rem;
+            color: #a0aec0;
+        }
+        
+        .btn-jogos {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: #1a5f8a;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-jogos:hover {
+            background: #1a5f8a;
+            color: white;
+            border-color: #1a5f8a;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,8 +112,21 @@
                 <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
-                <li><a class="dropdown-item" href="../../../public/index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
     </header>
@@ -35,10 +134,10 @@
     <div class="wrapper">
         <nav class="sidebar">
             <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
-            <a href="../index_F.html" class="nav-link ">
+            <a href="../index_F.html" class="nav-link">
                 <i class="fa-solid fa-chart-line me-2"></i>Dashboard
             </a>
-            <a href="pacientes/lista_pacientes.html" class="nav-link active">
+            <a href="lista_pacientes.html" class="nav-link active">
                 <i class="fa-solid fa-users me-2"></i>Pacientes
             </a>
             <a href="../sessoes/lista_sessoes.html" class="nav-link">
@@ -155,6 +254,77 @@
                 </button>
             </div>
 
+            <!-- Jogos de Reabilitação -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h5><i class="fa-solid fa-gamepad me-2" style="color: #1a5f8a;"></i>Jogos de Reabilitação</h5>
+                    <button class="btn-jogos" onclick="window.location.href='../jogos/jogos_disponiveis.html?paciente=ana-ferreira'">
+                        <i class="fa-solid fa-pen me-1"></i> Gerir jogos
+                    </button>
+                </div>
+                
+                <!-- Jogos da Semana Atual -->
+                <div class="mb-3">
+                    <span class="badge" style="background: #1a5f8a20; color: #1a5f8a; padding: 5px 12px;">
+                        <i class="fa-regular fa-calendar me-1"></i>Semana 12 · 13 a 19 Mar 2026
+                    </span>
+                </div>
+                
+                <div class="games-mini-grid">
+                    <!-- Jogo 1: Force Trainer -->
+                    <div class="game-mini-card">
+                        <div class="game-mini-emoji">
+                            📈
+                        </div>
+                        <div class="game-mini-info">
+                            <h6>Force Trainer</h6>
+                            <p>Força · Nível 1</p>
+                        </div>
+                        <div class="game-mini-score">
+                            <div class="score-value">92%</div>
+                            <div class="score-label">último</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Jogo 2: Catch! -->
+                    <div class="game-mini-card">
+                        <div class="game-mini-emoji">
+                            🧺
+                        </div>
+                        <div class="game-mini-info">
+                            <h6>Catch!</h6>
+                            <p>Reação · Nível 1</p>
+                        </div>
+                        <div class="game-mini-score">
+                            <div class="score-value">88%</div>
+                            <div class="score-label">último</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Jogo 3: Flappy (não atribuído esta semana) -->
+                    <div class="game-mini-card" style="opacity: 0.6;">
+                        <div class="game-mini-emoji" style="background: rgba(160, 174, 192, 0.1);">
+                            🐦
+                        </div>
+                        <div class="game-mini-info">
+                            <h6 style="color: #a0aec0;">Flappy</h6>
+                            <p>Controlo · Nível 2</p>
+                        </div>
+                        <div class="game-mini-score">
+                            <div class="score-value">-</div>
+                            <div class="score-label">não atribuído</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botão para ver todos os jogos -->
+                <div class="text-center mt-3">
+                    <button class="btn-acao btn-sm" onclick="window.location.href='../jogos/jogos_paciente.html?paciente=ana-ferreira'">
+                        <i class="fa-regular fa-clock-rotate-left me-1"></i>Ver histórico completo de jogos
+                    </button>
+                </div>
+            </div>
+
             <!-- Últimas Sessões -->
             <div class="progress-card mt-4">
                 <div class="card-header">
@@ -180,7 +350,7 @@
                                 <td>15 min</td>
                                 <td>8.2N</td>
                                 <td><span class="badge-progresso progresso-alto">92%</span></td>
-                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(1)"><i class="fa-regular fa-eye"></i></button></td>
                             </tr>
                             <tr>
                                 <td>11 Mar 2026</td>
@@ -188,6 +358,65 @@
                                 <td>10 min</td>
                                 <td>7.8N</td>
                                 <td><span class="badge-progresso progresso-alto">88%</span></td>
+                                <td><button class="btn-acao btn-sm" onclick="verSessao(2)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 2026</td>
+                                <td>Jogo - Force Trainer</td>
+                                <td>8 min</td>
+                                <td>7.2N</td>
+                                <td><span class="badge-progresso progresso-alto">85%</span></td>
+                                <td><button class="btn-acao btn-sm" onclick="verResultadoJogo(1)"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Histórico Rápido de Jogos -->
+            <div class="progress-card mt-4">
+                <div class="card-header">
+                    <h5><i class="fa-solid fa-chart-simple me-2" style="color: #1a5f8a;"></i>Últimos Resultados nos Jogos</h5>
+                    <a href="../jogos/jogos_paciente.html?paciente=ana-ferreira">Ver todos</a>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Jogo</th>
+                                <th>Data</th>
+                                <th>Pontuação</th>
+                                <th>Desempenho</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Force Trainer</td>
+                                <td>13 Mar 2026</td>
+                                <td>850 pts</td>
+                                <td><span class="badge-progresso progresso-alto">92%</span></td>
+                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Catch!</td>
+                                <td>13 Mar 2026</td>
+                                <td>45 bolas</td>
+                                <td><span class="badge-progresso progresso-medio">75%</span></td>
+                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Force Trainer</td>
+                                <td>12 Mar 2026</td>
+                                <td>820 pts</td>
+                                <td><span class="badge-progresso progresso-alto">88%</span></td>
+                                <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Catch!</td>
+                                <td>11 Mar 2026</td>
+                                <td>38 bolas</td>
+                                <td><span class="badge-progresso progresso-medio">63%</span></td>
                                 <td><button class="btn-acao btn-sm"><i class="fa-regular fa-eye"></i></button></td>
                             </tr>
                         </tbody>
@@ -231,6 +460,8 @@
         function criarSessao() { window.location.href = '../sessoes/nova_sessao.html?paciente=ana-ferreira'; }
         function enviarMensagem() { window.location.href = '../mensagens/conversas.html?paciente=ana-ferreira'; }
         function calibrarSensor() { window.location.href = '../config/calibracao.html?paciente=ana-ferreira'; }
+        function verSessao(id) { window.location.href = '../sessoes/detalhes_sessao.html?id=' + id; }
+        function verResultadoJogo(id) { window.location.href = '../jogos/resultados_jogo.html?jogo=' + id + '&paciente=ana-ferreira'; }
     </script>
 </body>
 </html>

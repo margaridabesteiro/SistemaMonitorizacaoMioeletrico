@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Relatório de Evolução</title>
+    
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fisioterapeuta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_F.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink · Fisioterapeuta</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Dra. Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../public/index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="../index_F.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="../pacientes/lista_pacientes.html" class="nav-link"><i class="fa-solid fa-users me-2"></i>Pacientes</a>
+            <a href="../sessoes/lista_sessoes.html" class="nav-link"><i class="fa-regular fa-calendar-check me-2"></i>Sessões</a>
+            <a href="../jogos/jogos_disponiveis.html" class="nav-link"><i class="fa-solid fa-gamepad me-2"></i>Jogos</a>
+            <a href="../analise/desempenho.html" class="nav-link"><i class="fa-solid fa-chart-bar me-2"></i>Análise</a>
+            <a href="gerar_relatorio.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="gerar_relatorio.html">Relatórios</a></li>
+                    <li class="breadcrumb-item active">Relatório de Evolução</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Relatório de Evolução</h1>
+                <div>
+                    <button class="btn-filter" onclick="window.print()">
+                        <i class="fa-regular fa-file-pdf me-2"></i>Guardar PDF
+                    </button>
+                    <button class="btn-acao ms-2" onclick="exportarRelatorio()">
+                        <i class="fa-solid fa-download me-2"></i>Exportar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section mb-4">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Paciente</label>
+                        <select class="form-select">
+                            <option>Ana Ferreira</option>
+                            <option>João Rodrigues</option>
+                            <option>Carlos Monteiro</option>
+                            <option>Todos os pacientes</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select">
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                            <option>Últimos 6 meses</option>
+                            <option>Todo o período</option>
+                            <option>Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Métrica</label>
+                        <select class="form-select">
+                            <option>Todas</option>
+                            <option>Força máxima</option>
+                            <option>Força média</option>
+                            <option>Tempo na zona alvo</option>
+                            <option>Consistência</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions mt-3">
+                    <button class="btn-reset" onclick="limparFiltros()">Limpar</button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">Gerar Relatório</button>
+                </div>
+            </div>
+
+            <!-- Resumo do Relatório -->
+            <div class="progress-card mb-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>Paciente:</strong> Ana Ferreira</p>
+                        <p><strong>Período:</strong> 13 Set 2025 - 13 Mar 2026 (6 meses)</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Total de sessões:</strong> 24</p>
+                        <p><strong>Taxa de conclusão:</strong> 92%</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Data do relatório:</strong> 20 Mar 2026</p>
+                        <p><strong>Fisioterapeuta:</strong> Dra. Carla Santos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos de Evolução -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Evolução da Força Máxima e Média</h5>
+                        <canvas id="evolucaoForcaChart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Evolução do Tempo na Zona Alvo</h5>
+                        <canvas id="evolucaoZonaChart" style="height: 250px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Evolução da Consistência</h5>
+                        <canvas id="evolucaoConsistenciaChart" style="height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Dados -->
+            <div class="progress-card mt-4">
+                <h5 class="mb-3">Dados Mensais</h5>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Sessões</th>
+                                <th>Força Máx (N)</th>
+                                <th>Força Média (N)</th>
+                                <th>Tempo Zona (%)</th>
+                                <th>Consistência</th>
+                            </thead>
+                        <tbody>
+                            <tr>
+                                <td>Outubro 2025</td>
+                                <td>4</td>
+                                <td>5.2</td>
+                                <td>4.1</td>
+                                <td>45%</td>
+                                <td>1.2</td>
+                            </tr>
+                            <tr>
+                                <td>Novembro 2025</td>
+                                <td>6</td>
+                                <td>6.8</td>
+                                <td>5.2</td>
+                                <td>58%</td>
+                                <td>1.1</td>
+                            </tr>
+                            <tr>
+                                <td>Dezembro 2025</td>
+                                <td>5</td>
+                                <td>8.1</td>
+                                <td>6.5</td>
+                                <td>68%</td>
+                                <td>0.95</td>
+                            </tr>
+                            <tr>
+                                <td>Janeiro 2026</td>
+                                <td>6</td>
+                                <td>10.2</td>
+                                <td>7.8</td>
+                                <td>78%</td>
+                                <td>0.88</td>
+                            </tr>
+                            <tr>
+                                <td>Fevereiro 2026</td>
+                                <td>8</td>
+                                <td>11.5</td>
+                                <td>8.5</td>
+                                <td>85%</td>
+                                <td>0.82</td>
+                            </tr>
+                            <tr>
+                                <td>Março 2026</td>
+                                <td>4</td>
+                                <td>12.5</td>
+                                <td>8.9</td>
+                                <td>88%</td>
+                                <td>0.78</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Análise e Recomendações -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-solid fa-chart-line me-2" style="color: #48bb78;"></i>Principais Conquistas</h5>
+                        <ul class="mb-0">
+                            <li>Aumento de 140% na força máxima (5.2N → 12.5N)</li>
+                            <li>Melhoria de 96% no tempo na zona alvo (45% → 88%)</li>
+                            <li>Consistência melhorou 35% (1.2 → 0.78)</li>
+                            <li>Taxa de conclusão de 92% nas últimas 8 semanas</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="progress-card">
+                        <h5><i class="fa-regular fa-lightbulb me-2" style="color: #fbbf24;"></i>Recomendações</h5>
+                        <ul class="mb-0">
+                            <li>Aumentar zona alvo para 10N-14N na próxima fase</li>
+                            <li>Introduzir exercícios de precisão mais complexos</li>
+                            <li>Manter frequência de 3 sessões por semana</li>
+                            <li>Adicionar sessões gamificadas para motivação</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assinaturas -->
+            <div class="row mt-5">
+                <div class="col-6">
+                    <hr class="w-75">
+                    <p class="mb-0"><strong>Dra. Carla Santos</strong></p>
+                    <small class="text-muted">Fisioterapeuta · Cédula: F-12345</small>
+                </div>
+                <div class="col-6 text-end">
+                    <hr class="w-75 ms-auto">
+                    <p class="mb-0"><strong>Ana Ferreira</strong></p>
+                    <small class="text-muted">Paciente</small>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        new Chart(document.getElementById('evolucaoForcaChart'), {
+            type: 'line',
+            data: {
+                labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                datasets: [{
+                    label: 'Força Máxima (N)',
+                    data: [5.2, 6.8, 8.1, 10.2, 11.5, 12.5],
+                    borderColor: '#1a5f8a',
+                    backgroundColor: 'rgba(26,95,138,0.1)',
+                    tension: 0.3,
+                    fill: true
+                }, {
+                    label: 'Força Média (N)',
+                    data: [4.1, 5.2, 6.5, 7.8, 8.5, 8.9],
+                    borderColor: '#48bb78',
+                    backgroundColor: 'transparent',
+                    tension: 0.3
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('evolucaoZonaChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                datasets: [{
+                    label: 'Tempo na Zona Alvo (%)',
+                    data: [45, 58, 68, 78, 85, 88],
+                    backgroundColor: '#1a5f8a'
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('evolucaoConsistenciaChart'), {
+            type: 'line',
+            data: {
+                labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                datasets: [{
+                    label: 'Consistência (CV)',
+                    data: [1.2, 1.1, 0.95, 0.88, 0.82, 0.78],
+                    borderColor: '#fbbf24',
+                    backgroundColor: 'rgba(251,191,36,0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            }
+        });
+
+        function limparFiltros() { alert('Filtros limpos'); }
+        function aplicarFiltros() { alert('Relatório gerado com novos filtros'); }
+        function exportarRelatorio() { alert('A exportar relatório...'); }
+    </script>
+</body>
+</html>

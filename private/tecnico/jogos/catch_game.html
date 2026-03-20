@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catch! – Prosthesis Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Clash+Display:wght@400;500;600;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1826;
+    --surface2: #242135;
+    --accent: #f7c948;
+    --accent2: #ff6b6b;
+    --good: #5cdb95;
+    --text: #fffffe;
+    --text2: #a7a9be;
+    --border: rgba(255,255,255,0.07);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .brand { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; color: var(--accent); }
+  .brand span { color: var(--text2); font-weight: 400; font-size: 0.8rem; display: block; letter-spacing: 0.04em; font-family: 'Space Mono', monospace; text-transform: uppercase; margin-top: 1px; }
+
+  .timer {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 16px;
+    transition: color 0.3s;
+  }
+  .timer.urgent { color: var(--accent2); }
+
+  /* Stats */
+  .stats {
+    width: 100%;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    text-align: center;
+  }
+
+  .stat-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+
+  .stat-val { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+  #scoreVal  { color: var(--accent); }
+  #livesVal  { color: var(--accent2); }
+  #levelVal  { color: var(--good); }
+
+  /* Canvas */
+  #canvas {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: block;
+    touch-action: none;
+    cursor: pointer;
+  }
+
+  /* Hint */
+  .hint {
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  /* Overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,14,23,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay.show { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 40px 44px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn { from{transform:scale(0.75);opacity:0} to{transform:scale(1);opacity:1} }
+
+  .modal-emoji { font-size: 3rem; margin-bottom: 10px; }
+  .modal-title { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 4px; }
+  .modal-sub   { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
+
+  .modal-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+  .modal-item  { background: var(--bg); border-radius: 12px; padding: 12px; }
+  .m-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .m-val { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; }
+
+  .btn-play {
+    width: 100%;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    padding: 15px; border: none; border-radius: 12px;
+    background: var(--accent); color: var(--bg);
+    cursor: pointer; transition: all 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .btn-play:hover { opacity: 0.88; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">Catch!<span>Prosthesis Rehab</span></div>
+  <div class="timer" id="timer">1:00</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-lbl">Pontos</div><div class="stat-val" id="scoreVal">0</div></div>
+  
+  
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div class="hint" id="hint">Toca e segura para mover o cesto para a direita</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-emoji" id="mEmoji">🏆</div>
+    <div class="modal-title" id="mTitle">Sessao terminada!</div>
+    <div class="modal-sub" id="mSub">60 segundos · Catch!</div>
+    <div class="modal-grid">
+      <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">0</div></div>
+      <div class="modal-item"><div class="m-lbl">Apanhadas</div><div class="m-val" style="color:var(--good)" id="mCaught">0</div></div>
+      <div class="modal-item"><div class="m-lbl">Perdidas</div><div class="m-val" style="color:var(--accent2)" id="mMissed">0</div></div>
+      <div class="modal-item"><div class="m-lbl">Taxa acerto</div><div class="m-val" style="color:var(--text2)" id="mLevel">0</div></div>
+    </div>
+    <button class="btn-play" id="btnPlay" onclick="startGame()">Jogar</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+
+// ── Sizing ─────────────────────────────────────────────
+function resize() {
+  const maxW = Math.min(window.innerWidth - 32, 600);
+  canvas.width  = maxW;
+  canvas.height = Math.min(window.innerHeight - 200, 420);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── Config ─────────────────────────────────────────────
+const GAME_DURATION = 60;
+const BASKET_W  = 120;
+const BASKET_H  = 40;
+const BASKET_SPEED = 8.0;   // px/frame when pressing
+const BASKET_RETURN = 5.5;  // px/frame returning
+const BALL_RADIUS = 20;
+
+// ── State ──────────────────────────────────────────────
+let gameRunning = false;
+let pressing    = false;
+let timeLeft    = GAME_DURATION;
+let timerInt    = null;
+let score       = 0;
+let caught      = 0;
+let missed      = 0;
+let animId      = null;
+
+let basketX     = 0;  // center x
+let basketVel   = 0;
+
+let balls = [];
+let particles = [];
+let flashFrames = 0;
+let flashColor  = '';
+
+// ── Audio ──────────────────────────────────────────────
+let audioCtx;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, type, dur, vol) {
+  try {
+    var a = getAudio(), o = a.createOscillator(), g = a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol || 0.18, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + dur);
+    o.start(); o.stop(a.currentTime + dur);
+  } catch(e) {}
+}
+function playCatch() { playTone(660, 'sine', 0.12, 0.22); setTimeout(function(){ playTone(880, 'sine', 0.1, 0.18); }, 80); }
+function playMiss()  { playTone(150, 'sawtooth', 0.28, 0.2); }
+function playLevel() { [523,659,784].forEach(function(f,i){ setTimeout(function(){ playTone(f,'sine',0.15,0.22); }, i*100); }); }
+
+// ── Ball factory ───────────────────────────────────────
+var BALL_COLORS = ['#f7c948','#ff6b6b','#5cdb95','#7eb8f7','#d4a5f5','#ff9f43'];
+
+function spawnBall() {
+  var speedBase = 1.0;
+  var speed     = speedBase + Math.random() * 0.6;
+  balls.push({
+    x:     BALL_RADIUS + Math.random() * (canvas.width - BALL_RADIUS * 2),
+    y:     -BALL_RADIUS,
+    vy:    speed,
+    r:     BALL_RADIUS,
+    color: BALL_COLORS[Math.floor(Math.random() * BALL_COLORS.length)],
+    spin:  (Math.random() - 0.5) * 0.1,
+    angle: 0,
+  });
+}
+
+// ── Particles ──────────────────────────────────────────
+function burst(x, y, color, count) {
+  for (var i = 0; i < (count || 10); i++) {
+    var ang = Math.random() * Math.PI * 2;
+    var spd = 2 + Math.random() * 4;
+    particles.push({
+      x: x, y: y,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd - 2,
+      r: 3 + Math.random() * 4,
+      color: color,
+      life: 1,
+      decay: 0.04 + Math.random() * 0.03,
+    });
+  }
+}
+
+// ── Timer ──────────────────────────────────────────────
+function startTimer() {
+  clearInterval(timerInt);
+  timeLeft = GAME_DURATION;
+  updateTimer();
+  timerInt = setInterval(function() {
+    timeLeft--;
+    updateTimer();
+if (timeLeft <= 0) { clearInterval(timerInt); endGame(); }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+  var el = document.getElementById('timer');
+  el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  el.className = 'timer' + (timeLeft <= 10 ? ' urgent' : '');
+}
+
+// ── Spawn timing ───────────────────────────────────────
+var spawnCounter  = 0;
+var spawnInterval = 80; // frames between spawns
+
+function getSpawnInterval() {
+  return 140;
+}
+
+// ── Draw helpers ───────────────────────────────────────
+function drawBasket(x, y) {
+  var w = BASKET_W, h = BASKET_H;
+  var left = x - w / 2, right = x + w / 2;
+
+  // Shadow
+  ctx.shadowBlur = 18;
+  ctx.shadowColor = 'rgba(247,201,72,0.35)';
+
+  // Body
+  ctx.fillStyle = '#c8952a';
+  ctx.beginPath();
+  ctx.moveTo(left, y);
+  ctx.lineTo(right, y);
+  ctx.lineTo(right - 6, y + h);
+  ctx.lineTo(left + 6, y + h);
+  ctx.closePath();
+  ctx.fill();
+
+  // Rim
+  ctx.strokeStyle = '#f7c948';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(left - 4, y);
+  ctx.lineTo(right + 4, y);
+  ctx.stroke();
+
+  // Weave lines
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+  ctx.lineWidth = 1.5;
+  for (var i = 1; i < 3; i++) {
+    var yy = y + (h / 3) * i;
+    var inset = 6 * (i / 3);
+    ctx.beginPath();
+    ctx.moveTo(left + inset, yy);
+    ctx.lineTo(right - inset, yy);
+    ctx.stroke();
+  }
+  // Vertical weave
+  for (var j = 0; j < 5; j++) {
+    var xx = left + 6 + (w - 12) * (j / 4);
+    ctx.beginPath();
+    ctx.moveTo(xx, y);
+    ctx.lineTo(xx - 2, y + h);
+    ctx.stroke();
+  }
+
+  ctx.shadowBlur = 0;
+}
+
+function drawBall(b) {
+  ctx.save();
+  ctx.translate(b.x, b.y);
+  ctx.rotate(b.angle);
+
+  ctx.shadowBlur = 14;
+  ctx.shadowColor = b.color + '88';
+
+  // Ball
+  ctx.beginPath();
+  ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+  ctx.fillStyle = b.color;
+  ctx.fill();
+
+  // Shine
+  ctx.beginPath();
+  ctx.arc(-b.r * 0.28, -b.r * 0.28, b.r * 0.32, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+function drawParticles() {
+  particles.forEach(function(p) {
+    ctx.globalAlpha = p.life;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+// ── Game loop ──────────────────────────────────────────
+function gameLoop() {
+  if (!gameRunning) return;
+
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Flash overlay
+  if (flashFrames > 0) {
+    ctx.fillStyle = flashColor;
+    ctx.fillRect(0, 0, W, H);
+    flashFrames--;
+  }
+
+  // Background grid (subtle)
+  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+  ctx.lineWidth = 1;
+  for (var gx = 0; gx < W; gx += 40) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+  }
+  for (var gy = 0; gy < H; gy += 40) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+  }
+
+  // Basket physics
+  var targetX = pressing ? W - BASKET_W / 2 - 10 : BASKET_W / 2 + 10;
+  var spd = pressing ? BASKET_SPEED : BASKET_RETURN;
+  if (basketX < targetX) basketX = Math.min(basketX + spd, targetX);
+  else                   basketX = Math.max(basketX - spd, targetX);
+  basketX = Math.max(BASKET_W / 2, Math.min(W - BASKET_W / 2, basketX));
+
+  var basketY = H - BASKET_H - 16;
+
+  // Spawn balls
+  spawnCounter++;
+  if (spawnCounter >= getSpawnInterval()) {
+    spawnBall();
+    spawnCounter = 0;
+  }
+
+  // Update & draw balls
+  for (var i = balls.length - 1; i >= 0; i--) {
+    var b = balls[i];
+    b.y += b.vy;
+    b.angle += b.spin;
+
+    // Catch check
+    var inX = Math.abs(b.x - basketX) < BASKET_W / 2 + b.r * 0.4;
+    var inY = b.y + b.r >= basketY && b.y - b.r < basketY + BASKET_H;
+    if (inX && inY && b.y > basketY - b.r * 2) {
+      balls.splice(i, 1);
+      caught++;
+      score += 10;
+      document.getElementById('scoreVal').textContent = score;
+      burst(b.x, basketY, b.color, 12);
+      flashFrames = 3;
+      flashColor  = 'rgba(92,219,149,0.08)';
+      playCatch();
+      continue;
+    }
+
+    // Miss check
+    if (b.y - b.r > H) {
+      balls.splice(i, 1);
+      missed++;
+      burst(b.x, H - 10, '#ff6b6b', 7);
+      flashFrames = 5;
+      flashColor  = 'rgba(255,107,107,0.12)';
+      playMiss();
+      continue;
+    }
+
+    drawBall(b);
+  }
+
+  // Particles
+  for (var j = particles.length - 1; j >= 0; j--) {
+    var p = particles[j];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.life -= p.decay;
+    if (p.life <= 0) { particles.splice(j, 1); continue; }
+  }
+  drawParticles();
+
+  // Basket
+  drawBasket(basketX, basketY);
+
+  // Press indicator arrow
+  ctx.fillStyle = pressing ? '#f7c948' : 'rgba(255,255,255,0.15)';
+  ctx.font = 'bold 13px Space Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText(pressing ? '>> FECHAR >>' : '<< ABRIR <<', W / 2, H - 4);
+
+  animId = requestAnimationFrame(gameLoop);
+}
+
+// ── Game flow ──────────────────────────────────────────
+function startGame() {
+  cancelAnimationFrame(animId);
+  clearInterval(timerInt);
+
+  gameRunning  = true;
+  pressing     = false;
+  score        = 0;
+  lives        = 3;
+  caught       = 0;
+  missed       = 0;
+  spawnCounter = 0;
+  balls        = [];
+  particles    = [];
+  flashFrames  = 0;
+  basketX      = canvas.width / 2;
+
+  document.getElementById('scoreVal').textContent = '0';
+  document.getElementById('hint').textContent = 'Toca e segura para mover o cesto para a direita';
+  document.getElementById('overlay').classList.remove('show');
+
+  startTimer();
+  animId = requestAnimationFrame(gameLoop);
+}
+
+function endGame() {
+  gameRunning = false;
+  cancelAnimationFrame(animId);
+
+  var emoji = caught >= 20 ? '\uD83C\uDFC6' : caught >= 10 ? '\uD83D\uDCAA' : caught >= 5 ? '\uD83D\uDC4D' : '\uD83D\uDE05';
+  document.getElementById('mEmoji').textContent  = emoji;
+  document.getElementById('mTitle').textContent  = 'Sessao terminada!';
+  document.getElementById('mSub').textContent    = '60 segundos · Catch!';
+  document.getElementById('mScore').textContent  = score;
+  document.getElementById('mCaught').textContent = caught;
+  document.getElementById('mMissed').textContent = missed;
+  document.getElementById('mLevel').textContent  = Math.round(caught / Math.max(1, caught + missed) * 100) + '%';
+  document.getElementById('btnPlay').textContent = 'Jogar novamente';
+
+  setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 400);
+}
+
+// ── Input ──────────────────────────────────────────────
+canvas.addEventListener('mousedown',  function(){ pressing = true;  });
+canvas.addEventListener('mouseup',    function(){ pressing = false; });
+canvas.addEventListener('mouseleave', function(){ pressing = false; });
+canvas.addEventListener('touchstart', function(e){ e.preventDefault(); pressing = true;  }, { passive: false });
+canvas.addEventListener('touchend',   function(e){ e.preventDefault(); pressing = false; }, { passive: false });
+
+// Keyboard: L = press, A = release
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'l' || e.key === 'L') pressing = true;
+  if (e.key === 'a' || e.key === 'A') pressing = false;
+});
+document.addEventListener('keyup', function(e) {
+  if (e.key === 'l' || e.key === 'L') pressing = false;
+});
+
+// Show start screen
+document.getElementById('overlay').classList.add('show');
+document.getElementById('mTitle').textContent = 'Catch!';
+document.getElementById('mSub').textContent   = 'Apanha as bolas com o cesto';
+document.getElementById('mEmoji').textContent = '\uD83E\uDDE0';
+document.getElementById('mScore').textContent = '—';
+document.getElementById('mCaught').textContent = '—';
+document.getElementById('mMissed').textContent = '—';
+document.getElementById('mLevel').textContent  = '—';
+document.getElementById('btnPlay').textContent = 'Comecar';
+</script>
+</body>
+</html>
