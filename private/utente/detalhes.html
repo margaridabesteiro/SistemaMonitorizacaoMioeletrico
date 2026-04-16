@@ -4,187 +4,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes Utente - HealthTech Clinical Labs</title>
-    <!-- Favicon -->
+    <title>RehabLink | Detalhes da Fatura</title>
+
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,700;1,400&display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome -->
+
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
-    <!-- Estilos da página -->
-    <link rel="stylesheet" href="../assets/css/common.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/1211150.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="menu-user">
-    <!-- Topbar -->
-    <header class="topbar d-flex justify-content-between align-items-center px-3 py-2">
-        <div class="sistema-nome d-flex align-items-center gap-2">
-            <i class="fa-solid fa-flask-vial logo-icon"></i> HealthTech Clinical Labs
+<body>
+
+<header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+    <div class="sistema-nome">
+        <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+            <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+            <span class="fw-bold">RehabLink</span>
+        </a>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-user-nurse"></i> Carla Santos
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="../perfil.html">Meu Perfil</a></li>
+            <li><a class="dropdown-item" href="../config/preferencias.html">Preferências</a></li>
+            <li><a class="dropdown-item" href="../../../index.html">Sair</a></li>
+        </ul>
+    </div>
+</header>
+
+<div class="wrapper">
+
+<nav class="sidebar">
+    <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+    <a href="index_utente.html" class="nav-link">Página do Utente</a>
+    <a href="sessoes_agendadas.html" class="nav-link">Sessões de treino</a>
+    <a href="historico_sessoes.html" class="nav-link">Histórico de sessões</a>
+    <a href="jogos_reabilitacao.html" class="nav-link">Jogos</a>
+    <a href="pagamentos.html" class="nav-link active">Pagamentos</a>
+</nav>
+
+<main class="content">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Detalhes da Fatura</h1>
+    <a href="pagamentos.html" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+    </a>
+</div>
+
+<div class="invoice-card">
+
+    <div class="invoice-header">
+        <div>
+            <span class="invoice-id">Fatura #INV-2026-0042</span>
+            <span class="payment-pending ms-3">
+                <i class="fa-regular fa-clock me-1"></i>Pendente
+            </span>
         </div>
-        <!-- Dropdown Bootstrap -->
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-nurse"></i>  Carla Santos
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <!-- NOVO: Link para Perfil -->
-                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="../config/preferencias.html"><i
-                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
-                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
-                <li><a class="dropdown-item" href="../../../index.html"><i
-                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
-            </ul>
+        <span class="invoice-date">05/04/2026</span>
+    </div>
+
+    <div class="invoice-details">
+
+        <div class="invoice-detail-item">
+            <span class="detail-label">Utente</span>
+            <span class="detail-value">Carla Santos</span>
         </div>
-    </header>
 
-    <!-- Sidebar + Conteúdo -->
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
-            <a href="index_utente.html" class="nav-link">
-                <i class="fa-solid fa-chart-line me-2"></i>
-                Página do Utente
-            </a>
-            <a href="sessoes_agendadas.html" class="nav-link">
-                <i class="fa-solid fa-calendar-check me-2"></i>
-                Sessões de treino
-            </a>
-            <a href="historico_sessoes.html" class="nav-link">
-                <i class="fa-solid fa-clock-rotate-left me-2"></i>
-                Histórico de sessões
-            </a>
-            <a href="jogos_reabilitacao.html" class="nav-link">
-                <i class="fa-solid fa-gamepad me-2"></i>
-                Jogos de reabilitação
-            </a>
-            <a href="pagamentos.html" class="nav-link active">
-                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
-                Histórico de Pagamentos
-            </a>
-            <a href="mensagens.html" class="nav-link">
-                <i class="fa-solid fa-envelope me-2"></i>
-                Mensagens
-                <span class="notification-badge" style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
-            </a>
-        </nav>
+        <div class="invoice-detail-item">
+            <span class="detail-label">Sessão</span>
+            <span class="detail-value">Treino de força de pinça</span>
+        </div>
 
-        <!-- Conteúdo principal -->
-        <main class="col-md-9 col-lg-10 p-4">
+        <div class="invoice-detail-item">
+            <span class="detail-label">Fisioterapeuta</span>
+            <span class="detail-value">Ana Silva</span>
+        </div>
 
-            <div class="d-flex justify-content-center mt-4">
-                <div class="card w-100 shadow rounded" style="max-width: 900px;">
-                    <div class="card-body">
+        <div class="invoice-detail-item">
+            <span class="detail-label">Duração</span>
+            <span class="detail-value">45 minutos</span>
+        </div>
 
-                        <h2 class="mb-4">
-                            <strong><i class="fa-solid fa-user me-2"></i> Ficha do Utente</strong>
-                        </h2>
-                        <hr>
+        <div class="invoice-detail-item">
+            <span class="detail-label">Valor Base</span>
+            <span class="detail-value">€ 45,00</span>
+        </div>
 
-                        <!-- Aqui mostramos mensagens de erro (ex.: “ID não foi passado”) -->
-                        <div id="utenteInfo"></div>
+        <div class="invoice-detail-item">
+            <span class="detail-label">Comparticipação</span>
+            <span class="detail-value text-success">- € 36,00 (80%)</span>
+        </div>
 
-                        <!-- Este container ficará hidden até encontrarmos o utente no localStorage -->
-                        <div id="detalhesContainerUtente" style="display: none;">
+        <div class="invoice-detail-item">
+            <span class="detail-label">Total a Pagar</span>
+            <span class="detail-value fw-bold text-primary">€ 9,00</span>
+        </div>
 
-                            <!-- ID do Utente (o JS preenche com o valor recebido na URL) -->
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">ID Utente</label>
-                                <p class="form-control-plaintext" id="idUtente"></p>
-                            </div>
+        <div class="invoice-detail-item">
+            <span class="detail-label">Método de Pagamento</span>
+            <span class="payment-method-badge payment-method-mbway">
+                MB Way
+            </span>
+        </div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome Completo</label>
-                                <p class="form-control-plaintext" id="nomeUtente"></p>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Data de Nascimento</label>
-                                    <p class="form-control-plaintext" id="dataNascimento"></p>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">NIF</label>
-
-                                    <p class="form-control-plaintext" id="nifUtente"></p>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Sexo</label>
-
-                                    <p class="form-control-plaintext" id="sexoUtente"></p>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Contacto</label>
-
-                                    <p class="form-control-plaintext" id="contactoUtente"></p>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Email</label>
-
-                                <p class="form-control-plaintext" id="emailUtente"></p>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Morada</label>
-
-                                <p class="form-control-plaintext" id="moradaUtente"></p>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Número SNS</label>
-
-                                    <p class="form-control-plaintext" id="snsUtente"></p>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Subsistema de Saúde</label>
-
-                                    <p class="form-control-plaintext" id="subsistemaUtente"></p>
-                                </div>
-                            </div>
-
-                            <hr>
-                            <h4>Prescrições deste Utente</h4>
-                            <!--tabela de prescrições que este utente já fez -->
-                            <div id="listaPrescricoesUtente"></div>
-                        </div>
-
-                        <div class="d-flex justify-content-end">
-                            <a href="../medico/gestaoUtente.html" class="btn btn-outline-secondary">
-                                <i class="fa-solid fa-arrow-left me-1"></i> Voltar
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </main>
-
+        <div class="invoice-detail-item">
+            <span class="detail-label">Estado</span>
+            <span class="detail-value text-warning">A aguardar pagamento</span>
+        </div>
 
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="../js/1211150.js"></script>
-</body>
+    <div class="invoice-actions mt-3">
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="fa-solid fa-print me-2"></i>Imprimir
+        </button>
 
+        <button class="btn btn-outline-primary">
+            <i class="fa-regular fa-file-pdf me-2"></i>Download PDF
+        </button>
+    </div>
+
+</div>
+
+<div class="alert alert-info mt-4">
+    Esta fatura inclui comparticipação automática. Consulte o seu seguro para mais detalhes.
+</div>
+
+</main>
+</div>
+
+<script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>
