@@ -249,64 +249,86 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="../js/utente.js"></script>
 
     <script>
         $(document).ready(function () {
 
-            // ABRIR MODAL
             $('.btn-instrucoes').click(function () {
-                const modal = new bootstrap.Modal(document.getElementById('modalInstrucoes'));
-                modal.show();
+                new bootstrap.Modal(document.getElementById('modalInstrucoes')).show();
             });
 
-            // DOWNLOAD PDF
             $('#downloadInstrucoes').click(function () {
 
-                const conteudo = `
-        <html>
-        <head>
-            <title>Instruções RehabLink</title>
-            <style>
-                body { font-family: Arial; padding: 40px; }
-                .header {
-                    background:#6f42c1;
-                    color:white;
-                    padding:20px;
-                }
-                .section {
-                    margin-top:20px;
-                }
-            </style>
-        </head>
-        <body>
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
 
-            <div class="header">
-                <h1>RehabLink</h1>
-                <p>Instruções de Sessão</p>
-            </div>
+                // HEADER
+                doc.setFillColor(111, 66, 193);
+                doc.rect(0, 0, 210, 30, 'F');
 
-            <div class="section">
-                <p><strong>Objetivo:</strong> Melhorar a força de pinça</p>
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(18);
+                doc.text("RehabLink", 14, 15);
 
-                <ul>
-                    <li>Colocar a prótese corretamente</li>
-                    <li>Aplicar força gradual</li>
-                    <li>Manter na zona alvo</li>
-                    <li>Repetir 10 vezes</li>
-                </ul>
+                doc.setFontSize(11);
+                doc.text("Instruções de Sessão", 14, 23);
 
-                <p><strong>Zona alvo:</strong> 8N – 12N</p>
-            </div>
+                // RESET COLOR
+                doc.setTextColor(0, 0, 0);
 
-        </body>
-        </html>
-        `;
+                // INFO
+                doc.setFontSize(12);
+                doc.text("Utente: Carla Santos", 14, 45);
+                doc.text("Data: " + new Date().toLocaleDateString(), 14, 52);
 
-                const win = window.open('', '', 'width=800,height=600');
-                win.document.write(conteudo);
-                win.document.close();
-                win.print();
+                // SEPARADOR
+                doc.setDrawColor(200);
+                doc.line(14, 58, 196, 58);
+
+                // TITULO
+                doc.setFontSize(14);
+                doc.text("Objetivo", 14, 70);
+
+                doc.setFontSize(12);
+                doc.text("Melhorar a força de pinça", 14, 78);
+
+                // PASSOS
+                doc.setFontSize(14);
+                doc.text("Instruções", 14, 95);
+
+                doc.setFontSize(12);
+
+                const instrucoes = [
+                    "Colocar a prótese corretamente",
+                    "Aplicar força de forma gradual",
+                    "Manter dentro da zona alvo",
+                    "Sustentar durante 3 segundos",
+                    "Repetir o exercício 10 vezes"
+                ];
+
+                let y = 105;
+                instrucoes.forEach((item, i) => {
+                    doc.text((i + 1) + ". " + item, 14, y);
+                    y += 8;
+                });
+
+                // ZONA ALVO BOX
+                doc.setFillColor(245, 240, 255);
+                doc.rect(14, y + 5, 180, 20, 'F');
+
+                doc.setFontSize(13);
+                doc.setTextColor(111, 66, 193);
+                doc.text("Zona alvo: 8N – 12N", 20, y + 18);
+
+                // FOOTER
+                doc.setTextColor(120);
+                doc.setFontSize(10);
+                doc.text("RehabLink • Sistema de Reabilitação Mioelétrica", 14, 280);
+
+                // DOWNLOAD DIRETO
+                doc.save("instrucoes_rehablink.pdf");
             });
 
         });
