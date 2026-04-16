@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RehabLink | Histórico de Pagamentos</title>
-    
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
@@ -34,7 +34,7 @@
 
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-nurse"></i>  Carla Santos
+                <i class="fa-solid fa-user-nurse"></i> Carla Santos
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <!-- NOVO: Link para Perfil -->
@@ -83,7 +83,8 @@
             <a href="mensagens.html" class="nav-link ">
                 <i class="fa-solid fa-envelope me-2"></i>
                 Mensagens
-                <span class="notification-badge" style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
+                <span class="notification-badge"
+                    style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
             </a>
         </nav>
 
@@ -147,7 +148,8 @@
                         <span class="input-group-text bg-transparent border-0">
                             <i class="fa-regular fa-calendar text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-0" placeholder="Período personalizado" style="background: #f7fafc;">
+                        <input type="text" class="form-control border-0" placeholder="Período personalizado"
+                            style="background: #f7fafc;">
                     </div>
                 </div>
             </div>
@@ -189,7 +191,7 @@
                             05/04/2026
                         </span>
                     </div>
-                    
+
                     <div class="invoice-details">
                         <div class="invoice-detail-item">
                             <span class="detail-label">Sessão</span>
@@ -257,7 +259,7 @@
                             28/03/2026
                         </span>
                     </div>
-                    
+
                     <div class="invoice-details">
                         <div class="invoice-detail-item">
                             <span class="detail-label">Sessão</span>
@@ -325,7 +327,7 @@
                             15/03/2026
                         </span>
                     </div>
-                    
+
                     <div class="invoice-details">
                         <div class="invoice-detail-item">
                             <span class="detail-label">Sessão</span>
@@ -386,7 +388,7 @@
                             10/02/2026
                         </span>
                     </div>
-                    
+
                     <div class="invoice-details">
                         <div class="invoice-detail-item">
                             <span class="detail-label">Pacote</span>
@@ -461,7 +463,8 @@
             <div class="alert alert-info mt-4 d-flex align-items-center" role="alert">
                 <i class="fa-solid fa-circle-info fa-2x me-3"></i>
                 <div>
-                    <strong>Comparticipação SNS / Seguradora:</strong> Os valores apresentados já incluem a comparticipação aplicável. 
+                    <strong>Comparticipação SNS / Seguradora:</strong> Os valores apresentados já incluem a
+                    comparticipação aplicável.
                     Para mais informações sobre a cobertura do seu seguro, consulte a seção "Detalhes" de cada fatura.
                 </div>
             </div>
@@ -503,6 +506,32 @@
         </div>
     </div>
 
+    <!-- Modal Pagamento -->
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px;">
+                <div class="modal-header" style="background:#6f42c1; color:white;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-credit-card me-2"></i>
+                        Pagamento Multibanco
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-3">Use os dados abaixo para efetuar o pagamento:</p>
+
+                    <div class="p-3 rounded" style="background:#f4f0fb;">
+                        <p><strong>Entidade:</strong> <span id="entidade"></span></p>
+                        <p><strong>Referência:</strong> <span id="referencia"></span></p>
+                        <p><strong>Valor:</strong> € 9,00</p>
+                    </div>
+
+                    <small class="text-muted">Pagamento válido por 48 horas</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -510,33 +539,82 @@
     <script src="../js/utente.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // Interatividade das tabs
-            $('.payment-tab').click(function() {
+        $(document).ready(function () {
+
+            // Tabs
+            $('.payment-tab').click(function () {
                 $('.payment-tab').removeClass('active');
                 $(this).addClass('active');
-                // Aqui você pode filtrar as faturas baseado na tab selecionada
             });
 
-            // Interatividade dos períodos
-            $('.period-option').click(function() {
+            // Períodos
+            $('.period-option').click(function () {
                 $('.period-option').removeClass('active');
                 $(this).addClass('active');
-                // Aqui você pode filtrar as faturas por período
             });
 
-            // Botões de pagamento
-            $('.btn-primary:contains("Pagar Agora")').click(function() {
-                // Simular processo de pagamento
-                alert('Redirecionando para gateway de pagamento...');
+            // VER DETALHES -> REDIRECIONA
+            $('.btn-invoice-view').click(function () {
+                window.location.href = "detalhes.html";
             });
 
-            // Download de faturas
-            $('.btn-invoice-download').click(function() {
-                // Simular download
-                alert('A gerar PDF da fatura...');
+            // DOWNLOAD FATURA PDF FICTÍCIO
+            $('.btn-invoice-download').click(function () {
+
+                const conteudo = `
+            <html>
+            <head>
+                <title>Fatura RehabLink</title>
+                <style>
+                    body { font-family: Arial; padding: 40px; }
+                    .header { background:#6f42c1; color:white; padding:20px; }
+                    .box { margin-top:20px; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>RehabLink</h1>
+                    <p>Fatura / Recibo</p>
+                </div>
+
+                <div class="box">
+                    <p><strong>Cliente:</strong> Carla Santos</p>
+                    <p><strong>Data:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><strong>Serviço:</strong> Sessão de Reabilitação</p>
+                    <p><strong>Valor:</strong> € 9,00</p>
+                </div>
+            </body>
+            </html>
+        `;
+
+                const win = window.open('', '', 'width=800,height=600');
+                win.document.write(conteudo);
+                win.document.close();
+                win.print();
             });
+
+            // PAGAR AGORA -> POPUP REALISTA
+            $('.btn-primary:contains("Pagar Agora")').click(function () {
+
+                function gerarNumero(tamanho) {
+                    let num = '';
+                    for (let i = 0; i < tamanho; i++) {
+                        num += Math.floor(Math.random() * 10);
+                    }
+                    return num;
+                }
+
+                $('#entidade').text(gerarNumero(5));
+                $('#referencia').text(gerarNumero(9));
+
+                const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                modal.show();
+            });
+
         });
     </script>
+
+
 </body>
+
 </html>
