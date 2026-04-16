@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RehabLink | Sessões de Treino</title>
-    
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="../assets/css/utente.css">
-    
+
 </head>
 
 <body>
@@ -34,7 +34,7 @@
 
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-nurse"></i>  Carla Santos
+                <i class="fa-solid fa-user-nurse"></i> Carla Santos
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <!-- NOVO: Link para Perfil -->
@@ -83,7 +83,8 @@
             <a href="mensagens.html" class="nav-link">
                 <i class="fa-solid fa-envelope me-2"></i>
                 Mensagens
-                <span class="notification-badge" style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
+                <span class="notification-badge"
+                    style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
             </a>
         </nav>
 
@@ -136,11 +137,7 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-play me-1"></i>
-                                        Iniciar
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm">
+                                    <button class="btn btn-outline-secondary btn-sm btn-instrucoes">
                                         <i class="fa-regular fa-file-lines me-1"></i>
                                         Instruções
                                     </button>
@@ -166,11 +163,7 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-play me-1"></i>
-                                        Iniciar
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm">
+                                    <button class="btn btn-outline-secondary btn-sm btn-instrucoes">
                                         <i class="fa-regular fa-file-lines me-1"></i>
                                         Instruções
                                     </button>
@@ -210,12 +203,114 @@
             </div>
         </div>
     </div>
+    <!-- Modal Instruções -->
+    <div class="modal fade" id="modalInstrucoes" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px;">
+
+                <div class="modal-header" style="background:#6f42c1; color:white;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-file-lines me-2"></i>
+                        Instruções da Sessão
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" id="conteudoInstrucoes">
+
+                    <p><strong>Objetivo:</strong> Melhorar a força de pinça.</p>
+
+                    <ul>
+                        <li>Coloque corretamente a prótese</li>
+                        <li>Inicie com força leve</li>
+                        <li>Aumente gradualmente até zona alvo</li>
+                        <li>Mantenha durante 3 segundos</li>
+                        <li>Repita 10 vezes</li>
+                    </ul>
+
+                    <p><strong>Zona alvo:</strong> 8N – 12N</p>
+
+                    <p class="text-muted">Evite movimentos bruscos e mantenha controlo constante.</p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" id="downloadInstrucoes">
+                        <i class="fa-regular fa-file-pdf me-2"></i>
+                        Download PDF
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../js/utente.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // ABRIR MODAL
+            $('.btn-instrucoes').click(function () {
+                const modal = new bootstrap.Modal(document.getElementById('modalInstrucoes'));
+                modal.show();
+            });
+
+            // DOWNLOAD PDF
+            $('#downloadInstrucoes').click(function () {
+
+                const conteudo = `
+        <html>
+        <head>
+            <title>Instruções RehabLink</title>
+            <style>
+                body { font-family: Arial; padding: 40px; }
+                .header {
+                    background:#6f42c1;
+                    color:white;
+                    padding:20px;
+                }
+                .section {
+                    margin-top:20px;
+                }
+            </style>
+        </head>
+        <body>
+
+            <div class="header">
+                <h1>RehabLink</h1>
+                <p>Instruções de Sessão</p>
+            </div>
+
+            <div class="section">
+                <p><strong>Objetivo:</strong> Melhorar a força de pinça</p>
+
+                <ul>
+                    <li>Colocar a prótese corretamente</li>
+                    <li>Aplicar força gradual</li>
+                    <li>Manter na zona alvo</li>
+                    <li>Repetir 10 vezes</li>
+                </ul>
+
+                <p><strong>Zona alvo:</strong> 8N – 12N</p>
+            </div>
+
+        </body>
+        </html>
+        `;
+
+                const win = window.open('', '', 'width=800,height=600');
+                win.document.write(conteudo);
+                win.document.close();
+                win.print();
+            });
+
+        });
+    </script>
 
 
 </body>
