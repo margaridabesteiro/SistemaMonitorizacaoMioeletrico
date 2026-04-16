@@ -125,7 +125,7 @@
             <i class="fa-solid fa-print me-2"></i>Imprimir
         </button>
 
-        <button class="btn btn-outline-primary">
+        <button class="btn btn-outline-primary" id="downloadPDF">
             <i class="fa-regular fa-file-pdf me-2"></i>Download PDF
         </button>
     </div>
@@ -140,6 +140,66 @@
 </div>
 
 <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+
+<script>
+document.getElementById('downloadPDF').addEventListener('click', function() {
+
+    const conteudo = `
+        <html>
+        <head>
+            <title>Fatura RehabLink</title>
+            <style>
+                body { font-family: Arial; padding: 40px; }
+                .header {
+                    background:#6f42c1;
+                    color:white;
+                    padding:20px;
+                }
+                .section {
+                    margin-top:20px;
+                }
+                .total {
+                    font-size:20px;
+                    font-weight:bold;
+                    color:#6f42c1;
+                }
+            </style>
+        </head>
+        <body>
+
+            <div class="header">
+                <h1>RehabLink</h1>
+                <p>Fatura Detalhada</p>
+            </div>
+
+            <div class="section">
+                <p><strong>Fatura:</strong> INV-2026-0042</p>
+                <p><strong>Data:</strong> ${new Date().toLocaleDateString()}</p>
+                <p><strong>Utente:</strong> Carla Santos</p>
+            </div>
+
+            <div class="section">
+                <p><strong>Serviço:</strong> Treino de força de pinça</p>
+                <p><strong>Fisioterapeuta:</strong> Ana Silva</p>
+                <p><strong>Duração:</strong> 45 minutos</p>
+            </div>
+
+            <div class="section">
+                <p>Valor Base: € 45,00</p>
+                <p>Comparticipação: - € 36,00</p>
+                <p class="total">Total: € 9,00</p>
+            </div>
+
+        </body>
+        </html>
+    `;
+
+    const win = window.open('', '', 'width=800,height=600');
+    win.document.write(conteudo);
+    win.document.close();
+    win.print();
+});
+</script>
 
 </body>
 </html>
