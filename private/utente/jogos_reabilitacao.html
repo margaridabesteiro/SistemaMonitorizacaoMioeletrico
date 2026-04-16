@@ -111,23 +111,7 @@
                 <div class="games-header-pattern"></div>
             </div>
 
-            <!-- Categorias -->
-            <div class="categories-section">
-                <div class="categories-title">
-                    <h3>Categorias</h3>
-                    <a href="#" style="color: #667eea; font-size: 0.9rem;">Ver todas</a>
-                </div>
-                <div class="categories-scroll">
-                    <span class="category-chip active">Todos</span>
-                    <span class="category-chip">Força</span>
-                    <span class="category-chip">Precisão</span>
-                    <span class="category-chip">Coordenação</span>
-                    <span class="category-chip">Velocidade</span>
-                    <span class="category-chip">Resistência</span>
-                    <span class="category-chip">Memória</span>
-                    <span class="category-chip">Equilíbrio</span>
-                </div>
-            </div>
+            
 
             <!-- Jogos em Destaque -->
             <div class="featured-section">
@@ -139,14 +123,14 @@
                     <div class="featured-main">
                         <h3>Desafio da Força</h3>
                         <p>Teste os seus limites neste jogo emocionante. Quanto mais força aplicar, mais pontos ganha!</p>
-                        <button class="btn-play" onclick="jogarJogo(1)">
+                        <button class="btn-play" onclick="window.location.href='jogos/prosthesis_trainer.html'">
                             <i class="fa-solid fa-play me-2"></i>
                             Jogar agora
                         </button>
                         <i class="fa-solid fa-dumbbell"></i>
                     </div>
                     <div class="featured-side">
-                        <div class="featured-side-card" onclick="jogarJogo(2)">
+                        <div class="featured-side-card" onclick="window.location.href='jogos/catch_game.html'">
                             <div class="featured-side-icon">
                                 <i class="fa-solid fa-bullseye"></i>
                             </div>
@@ -155,7 +139,7 @@
                                 <p>Treine a sua precisão</p>
                             </div>
                         </div>
-                        <div class="featured-side-card" onclick="jogarJogo(3)">
+                        <div class="featured-side-card" onclick="window.location.href='jogos/flappy_trainer.html'">
                             <div class="featured-side-icon">
                                 <i class="fa-solid fa-hand"></i>
                             </div>
@@ -164,15 +148,7 @@
                                 <p>Desafie os seus reflexos</p>
                             </div>
                         </div>
-                        <div class="featured-side-card" onclick="jogarJogo(4)">
-                            <div class="featured-side-icon">
-                                <i class="fa-solid fa-brain"></i>
-                            </div>
-                            <div class="featured-side-info">
-                                <h4>Memória Ativa</h4>
-                                <p>Estimule a sua mente</p>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -214,45 +190,13 @@
     </div>
 </div>
 
-<!-- NÍVEL 3 (BLOQUEADO) -->
-<div class="game-card" style="opacity:0.6;">
-    <div class="game-image">
-        <i class="fa-solid fa-lock"></i>
-        <span class="game-level">Nível 3</span>
-    </div>
-    <div class="game-info">
-        <h3>Precisão Avançada</h3>
-        <p>Em desenvolvimento</p>
-        <div class="game-actions">
-            <button class="btn-play" disabled>
-                Brevemente
-            </button>
-        </div>
-    </div>
-</div>
 
-<!-- NÍVEL 4 (BLOQUEADO) -->
-<div class="game-card" style="opacity:0.6;">
-    <div class="game-image">
-        <i class="fa-solid fa-lock"></i>
-        <span class="game-level">Nível 4</span>
-    </div>
-    <div class="game-info">
-        <h3>Coordenação Dinâmica</h3>
-        <p>Em desenvolvimento</p>
-        <div class="game-actions">
-            <button class="btn-play" disabled>
-                Brevemente
-            </button>
-        </div>
-    </div>
-</div>
 
-<!-- NÍVEL 5 -->
+<!-- NÍVEL 3 -->
 <div class="game-card">
     <div class="game-image">
         <i class="fa-solid fa-wave-square"></i>
-        <span class="game-level">Nível 5</span>
+        <span class="game-level">Nível 3</span>
     </div>
     <div class="game-info">
         <h3>Force Trainer</h3>
@@ -314,16 +258,7 @@
                 $('#chatbot-button').show();
             });
 
-            // Categorias - clique
-            $('.category-chip').click(function() {
-                $('.category-chip').removeClass('active');
-                $(this).addClass('active');
-                
-                const categoria = $(this).text();
-                if (categoria !== 'Todos') {
-                    alert('A filtrar jogos por categoria: ' + categoria);
-                }
-            });
+            
 
             // FAQ buttons
             $('.faq-btn').click(function() {
