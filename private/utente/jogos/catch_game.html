@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catch! – Prosthesis Trainer</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Clash+Display:wght@400;500;600;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0f0e17;
     --surface: #1a1826;
-    --surface2: #242135;
     --accent: #f7c948;
     --accent2: #ff6b6b;
     --good: #5cdb95;
@@ -18,553 +17,632 @@
     --border: rgba(255,255,255,0.07);
     --radius: 16px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Outfit', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 16px;
-    user-select: none;
-    -webkit-user-select: none;
-    overflow: hidden;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 16px;
+    user-select: none; overflow: hidden;
   }
-
-  /* Header */
   .header {
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
+    width: 100%; max-width: 600px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
   }
-
   .brand { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; color: var(--accent); }
-  .brand span { color: var(--text2); font-weight: 400; font-size: 0.8rem; display: block; letter-spacing: 0.04em; font-family: 'Space Mono', monospace; text-transform: uppercase; margin-top: 1px; }
-
+  .brand span { color: var(--text2); font-weight: 400; font-size: 0.75rem; display: block; font-family: 'Space Mono', monospace; text-transform: uppercase; }
   .timer {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--text);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    padding: 6px 16px;
-    transition: color 0.3s;
+    font-family: 'Space Mono', monospace; font-size: 1.4rem; font-weight: 700;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 50px; padding: 6px 16px; transition: color 0.3s;
   }
   .timer.urgent { color: var(--accent2); }
 
+  /* IP bar */
+  .ip-bar { width: 100%; max-width: 600px; display: flex; gap: 8px; margin-bottom: 8px; }
+  .ip-bar input {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; padding: 8px 12px; outline: none;
+  }
+  .ip-bar button {
+    background: var(--accent); color: var(--bg); border: none;
+    border-radius: 10px; font-family: 'Outfit', sans-serif;
+    font-weight: 700; font-size: 0.85rem; padding: 8px 16px; cursor: pointer;
+  }
+
+  /* Status bar */
+  .status-bar {
+    width: 100%; max-width: 600px; display: flex;
+    align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .ws-status { display: flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; }
+  .ws-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); transition: background 0.3s; }
+  .ws-dot.connected { background: var(--good); }
+
+  /* Calibration button */
+  .btn-cal {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text2); cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.2s;
+  }
+  .btn-cal:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-cal.calibrating { border-color: var(--accent2); color: var(--accent2); animation: pulse 0.6s infinite alternate; }
+  @keyframes pulse { from { opacity: 1; } to { opacity: 0.4; } }
+
   /* Stats */
-  .stats {
-    width: 100%;
-    max-width: 600px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+  .stats { width: 100%; max-width: 600px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; text-align: center; }
+  .stat-lbl { font-family: 'Space Mono', monospace; font-size: 0.5rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+  .stat-val { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
 
-  .stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 12px;
-    text-align: center;
-  }
+  /* Force bar */
+  .force-wrap { width: 100%; max-width: 600px; margin-bottom: 10px; }
+  .force-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .force-track { width: 100%; height: 10px; background: var(--surface); border-radius: 99px; border: 1px solid var(--border); overflow: hidden; }
+  .force-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--good), var(--accent)); transition: width 0.05s linear; }
 
-  .stat-lbl {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 3px;
-  }
+  canvas { width: 100%; max-width: 600px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); display: block; touch-action: none; }
 
-  .stat-val { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-  #scoreVal  { color: var(--accent); }
-  #livesVal  { color: var(--accent2); }
-  #levelVal  { color: var(--good); }
-
-  /* Canvas */
-  #canvas {
-    width: 100%;
-    max-width: 600px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    display: block;
-    touch-action: none;
-    cursor: pointer;
-  }
-
-  /* Hint */
-  .hint {
-    margin-top: 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-align: center;
-  }
+  .hint { margin-top: 8px; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
 
   /* Overlay */
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15,14,23,0.85);
-    backdrop-filter: blur(12px);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-  }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(15,14,23,0.88); backdrop-filter: blur(12px); z-index: 100; align-items: center; justify-content: center; }
   .overlay.show { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 28px;
-    padding: 40px 44px;
-    text-align: center;
-    max-width: 360px;
-    width: 90%;
-    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 36px 40px; text-align: center; max-width: 360px; width: 90%; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
   @keyframes popIn { from{transform:scale(0.75);opacity:0} to{transform:scale(1);opacity:1} }
-
   .modal-emoji { font-size: 3rem; margin-bottom: 10px; }
   .modal-title { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 4px; }
-  .modal-sub   { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
-
-  .modal-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+  .modal-sub   { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+  .modal-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
   .modal-item  { background: var(--bg); border-radius: 12px; padding: 12px; }
-  .m-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
-  .m-val { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; }
-
-  .btn-play {
-    width: 100%;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem; font-weight: 700;
-    padding: 15px; border: none; border-radius: 12px;
-    background: var(--accent); color: var(--bg);
-    cursor: pointer; transition: all 0.2s;
-    letter-spacing: -0.01em;
-  }
+  .m-lbl { font-family: 'Space Mono', monospace; font-size: 0.5rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .m-val { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; }
+  .btn-play { width: 100%; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; padding: 14px; border: none; border-radius: 12px; background: var(--accent); color: var(--bg); cursor: pointer; transition: all 0.2s; }
   .btn-play:hover { opacity: 0.88; transform: translateY(-1px); }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="brand">Catch!<span>Prosthesis Rehab</span></div>
+  <div class="brand">Catch!<span>Prosthesis Rehab v2</span></div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
+<div class="ip-bar">
+  <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.198.1.130"/>
+  <button onclick="connectFSR()">Ligar</button>
+</div>
+
+<div class="status-bar">
+  <div class="ws-status">
+    <div class="ws-dot" id="wsDot"></div>
+    <span id="wsLabel">Desligado</span>
+  </div>
+  <button class="btn-cal" id="btnCal" onclick="startCalibration()">Calibrar</button>
+</div>
+
 <div class="stats">
-  <div class="stat"><div class="stat-lbl">Pontos</div><div class="stat-val" id="scoreVal">0</div></div>
-  
-  
+  <div class="stat"><div class="stat-lbl">Pontos</div><div class="stat-val" id="scoreVal" style="color:var(--accent)">0</div></div>
+  <div class="stat"><div class="stat-lbl">Apanhadas</div><div class="stat-val" id="caughtVal" style="color:var(--good)">0</div></div>
+  <div class="stat"><div class="stat-lbl">Perdidas</div><div class="stat-val" id="missedVal" style="color:var(--accent2)">0</div></div>
+</div>
+
+<div class="force-wrap">
+  <div class="force-lbl">
+    <span>Força FSR</span>
+    <span id="forcePct">0%</span>
+  </div>
+  <div class="force-track"><div class="force-fill" id="forceFill"></div></div>
 </div>
 
 <canvas id="canvas"></canvas>
-
-<div class="hint" id="hint">Toca e segura para mover o cesto para a direita</div>
+<div class="hint" id="hint">Força &lt;50% move para a esquerda · Força &gt;50% move para a direita · Relaxa para parar</div>
 
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-emoji" id="mEmoji">🏆</div>
     <div class="modal-title" id="mTitle">Sessao terminada!</div>
-    <div class="modal-sub" id="mSub">60 segundos · Catch!</div>
+    <div class="modal-sub" id="mSub">60 s · Catch! v2</div>
     <div class="modal-grid">
       <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">0</div></div>
       <div class="modal-item"><div class="m-lbl">Apanhadas</div><div class="m-val" style="color:var(--good)" id="mCaught">0</div></div>
       <div class="modal-item"><div class="m-lbl">Perdidas</div><div class="m-val" style="color:var(--accent2)" id="mMissed">0</div></div>
-      <div class="modal-item"><div class="m-lbl">Taxa acerto</div><div class="m-val" style="color:var(--text2)" id="mLevel">0</div></div>
+      <div class="modal-item"><div class="m-lbl">Taxa acerto</div><div class="m-val" style="color:var(--text2)" id="mAcc">—</div></div>
+    </div>
+    <!-- IP input — só visível no ecrã inicial -->
+    <div id="ipBlock" style="display:none; margin-bottom:14px;">
+      <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--text2);
+                  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">
+        IP do ESP32
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input id="ipModal" type="text" placeholder="ex: 192.168.1.130"
+          style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;
+                 color:var(--text);font-family:'Space Mono',monospace;font-size:0.8rem;
+                 padding:10px 12px;outline:none;"/>
+        <button onclick="connectFromModal()"
+          style="background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+                 font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;
+                 padding:10px 16px;cursor:pointer;">Ligar</button>
+      </div>
+      <div id="modalWsStatus" style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+        <div id="modalWsDot" style="width:7px;height:7px;border-radius:50%;
+             background:var(--accent2);transition:background 0.3s;flex-shrink:0"></div>
+        <span id="modalWsLabel" style="font-family:'Space Mono',monospace;font-size:0.6rem;
+              color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
+      </div>
     </div>
     <button class="btn-play" id="btnPlay" onclick="startGame()">Jogar</button>
   </div>
 </div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+//  CANVAS SETUP
+// ═══════════════════════════════════════════════════════
 const canvas = document.getElementById('canvas');
 const ctx    = canvas.getContext('2d');
 
-// ── Sizing ─────────────────────────────────────────────
 function resize() {
-  const maxW = Math.min(window.innerWidth - 32, 600);
+  var maxW = Math.min(window.innerWidth - 32, 600);
   canvas.width  = maxW;
-  canvas.height = Math.min(window.innerHeight - 200, 420);
+  canvas.height = Math.min(window.innerHeight - 280, 380);
 }
 resize();
 window.addEventListener('resize', resize);
 
-// ── Config ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  SIGNAL PROCESSING
+// ═══════════════════════════════════════════════════════
+var FILTER_SIZE = 8;       // média móvel — janela de amostras
+var filterBuf   = [];      // buffer circular
+var filterSum   = 0;
+
+// Calibração
+var baseline    = 0;       // repouso
+var maxVal      = 3000;    // contração máxima (actualizado na calibração)
+var DEADZONE    = 0.05;    // zona morta (5%) — evita drift em repouso
+var THRESHOLD   = 0.15;    // mínimo para contar como "pressing"
+
+// Força normalizada atual (0–1), já filtrada
+var forceNorm   = 0;
+
+function addSample(raw) {
+  // Média móvel
+  filterBuf.push(raw);
+  filterSum += raw;
+  if (filterBuf.length > FILTER_SIZE) {
+    filterSum -= filterBuf.shift();
+  }
+  var smoothed = filterSum / filterBuf.length;
+
+  // Normalização com baseline e max
+  var norm = (smoothed - baseline) / Math.max(1, maxVal - baseline);
+  norm = Math.max(0, Math.min(1, norm));
+
+  // Zona morta
+  if (norm < DEADZONE) norm = 0;
+
+  forceNorm = norm;
+
+  // Atualiza barra de força
+  var pct = Math.round(norm * 100);
+  document.getElementById('forceFill').style.width = pct + '%';
+  document.getElementById('forcePct').textContent  = pct + '%';
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALIBRAÇÃO
+// ═══════════════════════════════════════════════════════
+var calState    = 'idle';   // idle | baseline | max
+var calSamples  = [];
+var CAL_SAMPLES = 40;       // ~2s a 50ms
+
+function startCalibration() {
+  if (calState !== 'idle') return;
+  calState   = 'baseline';
+  calSamples = [];
+  var btn = document.getElementById('btnCal');
+  btn.classList.add('calibrating');
+  btn.textContent = 'Relaxa… (2s)';
+  document.getElementById('hint').textContent = 'Relaxa o músculo completamente…';
+}
+
+function processCal(raw) {
+  if (calState === 'idle') return;
+
+  calSamples.push(raw);
+
+  if (calState === 'baseline' && calSamples.length >= CAL_SAMPLES) {
+    // Baseline = média das amostras em repouso
+    baseline   = calSamples.reduce(function(a,b){ return a+b; }, 0) / calSamples.length;
+    calSamples = [];
+    calState   = 'max';
+    var btn = document.getElementById('btnCal');
+    btn.textContent = 'Contrai max… (2s)';
+    document.getElementById('hint').textContent = 'Contrai ao máximo durante 2 segundos…';
+  } else if (calState === 'max' && calSamples.length >= CAL_SAMPLES) {
+    // Max = valor máximo observado durante contração
+    maxVal   = Math.max.apply(null, calSamples);
+    calState = 'idle';
+    filterBuf = []; filterSum = 0;
+    var btn = document.getElementById('btnCal');
+    btn.classList.remove('calibrating');
+    btn.textContent = 'Calibrar';
+    document.getElementById('hint').textContent =
+      'Calibrado! Baseline=' + Math.round(baseline) + ' Max=' + Math.round(maxVal);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  WEBSOCKET
+// ═══════════════════════════════════════════════════════
+var ws = null;
+var wsReconnectTimer = null;
+var wsReconnectDelay = 2000;   // começa em 2s
+var wsIntentionalClose = false;
+
+function connectFSR() {
+  // Cancelar qualquer reconexão pendente
+  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+
+  var ip = document.getElementById('ipInput').value.trim();
+  if (!ip) return;
+  localStorage.setItem('esp32_ip', ip);
+  // Sincroniza com o campo do modal se existir
+  var modalInput = document.getElementById('ipModal');
+  if (modalInput) modalInput.value = ip;
+
+  // Fechar ligação existente de forma intencional
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    wsIntentionalClose = true;
+    try { ws.close(); } catch(e){}
+  }
+  wsIntentionalClose = false;
+  wsReconnectDelay = 2000; // reset do delay ao ligar manualmente
+
+  _openWS(ip);
+}
+
+function _openWS(ip) {
+  ws = new WebSocket('ws://' + ip + ':81');
+
+  ws.onopen = function() {
+    wsReconnectDelay = 2000; // reset ao conectar com sucesso
+    document.getElementById('wsDot').classList.add('connected');
+    document.getElementById('wsLabel').textContent = 'ESP32 ligado · ' + ip;
+  };
+
+  ws.onmessage = function(e) {
+    var raw = parseInt(e.data);
+    if (isNaN(raw)) return;
+    processCal(raw);
+    addSample(raw);
+  };
+
+  ws.onclose = function() {
+    document.getElementById('wsDot').classList.remove('connected');
+    if (wsIntentionalClose) return; // não reconectar se foi intencional
+    var delay = wsReconnectDelay;
+    wsReconnectDelay = Math.min(wsReconnectDelay * 1.5, 15000); // backoff até 15s
+    document.getElementById('wsLabel').textContent =
+      'Desligado — a reconectar em ' + Math.round(delay/1000) + 's…';
+    wsReconnectTimer = setTimeout(function() { _openWS(ip); }, delay);
+  };
+
+  ws.onerror = function() {
+    document.getElementById('wsLabel').textContent = 'Erro de ligação';
+    // onclose é chamado a seguir automaticamente, que trata da reconexão
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+//  GAME CONFIG
+// ═══════════════════════════════════════════════════════
 const GAME_DURATION = 60;
-const BASKET_W  = 120;
-const BASKET_H  = 40;
-const BASKET_SPEED = 8.0;   // px/frame when pressing
-const BASKET_RETURN = 5.5;  // px/frame returning
-const BALL_RADIUS = 20;
+const BASKET_W      = 120;
+const BASKET_H      = 40;
+const MAX_SPEED     = 14;   // px/frame à força máxima
 
-// ── State ──────────────────────────────────────────────
-let gameRunning = false;
-let pressing    = false;
-let timeLeft    = GAME_DURATION;
-let timerInt    = null;
-let score       = 0;
-let caught      = 0;
-let missed      = 0;
-let animId      = null;
+var gameRunning = false;
+var timeLeft    = GAME_DURATION;
+var timerInt    = null;
+var score       = 0;
+var caught      = 0;
+var missed      = 0;
+var animId      = null;
+var basketX     = 0;
+var balls       = [];
+var particles   = [];
+var flashFrames = 0;
+var flashColor  = '';
+var spawnCounter= 0;
 
-let basketX     = 0;  // center x
-let basketVel   = 0;
-
-let balls = [];
-let particles = [];
-let flashFrames = 0;
-let flashColor  = '';
-
-// ── Audio ──────────────────────────────────────────────
-let audioCtx;
-function getAudio() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-function playTone(freq, type, dur, vol) {
+// ═══════════════════════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════════════════════
+var audioCtx;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function playTone(freq,type,dur,vol) {
   try {
-    var a = getAudio(), o = a.createOscillator(), g = a.createGain();
+    var a=getAudio(),o=a.createOscillator(),g=a.createGain();
     o.connect(g); g.connect(a.destination);
-    o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(vol || 0.18, a.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + dur);
-    o.start(); o.stop(a.currentTime + dur);
-  } catch(e) {}
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol||0.18,a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);
+    o.start(); o.stop(a.currentTime+dur);
+  } catch(e){}
 }
-function playCatch() { playTone(660, 'sine', 0.12, 0.22); setTimeout(function(){ playTone(880, 'sine', 0.1, 0.18); }, 80); }
-function playMiss()  { playTone(150, 'sawtooth', 0.28, 0.2); }
-function playLevel() { [523,659,784].forEach(function(f,i){ setTimeout(function(){ playTone(f,'sine',0.15,0.22); }, i*100); }); }
+function playCatch(){ playTone(660,'sine',0.12,0.22); setTimeout(function(){ playTone(880,'sine',0.1,0.18); },80); }
+function playMiss() { playTone(150,'sawtooth',0.28,0.2); }
 
-// ── Ball factory ───────────────────────────────────────
-var BALL_COLORS = ['#f7c948','#ff6b6b','#5cdb95','#7eb8f7','#d4a5f5','#ff9f43'];
+// ═══════════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════════
+function startTimer() {
+  timeLeft = GAME_DURATION; updateTimer();
+  timerInt = setInterval(function(){
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) { clearInterval(timerInt); endGame(); }
+  }, 1000);
+}
+function updateTimer() {
+  var m=Math.floor(timeLeft/60), s=timeLeft%60;
+  var el=document.getElementById('timer');
+  el.textContent = m+':'+(s<10?'0':'')+s;
+  el.className = 'timer'+(timeLeft<=10?' urgent':'');
+}
+
+// ═══════════════════════════════════════════════════════
+//  BALLS
+// ═══════════════════════════════════════════════════════
+var COLORS=['#f7c948','#ff6b6b','#5cdb95','#7eb8f7','#d4a5f5','#ff9f43'];
 
 function spawnBall() {
-  var speedBase = 1.0;
-  var speed     = speedBase + Math.random() * 0.6;
   balls.push({
-    x:     BALL_RADIUS + Math.random() * (canvas.width - BALL_RADIUS * 2),
-    y:     -BALL_RADIUS,
-    vy:    speed,
-    r:     BALL_RADIUS,
-    color: BALL_COLORS[Math.floor(Math.random() * BALL_COLORS.length)],
-    spin:  (Math.random() - 0.5) * 0.1,
-    angle: 0,
+    x: 20+Math.random()*(canvas.width-40),
+    y: -20, vy: 1.0+Math.random()*0.8,
+    r: 20,
+    color: COLORS[Math.floor(Math.random()*COLORS.length)],
+    angle: 0, spin: (Math.random()-0.5)*0.08
   });
 }
 
-// ── Particles ──────────────────────────────────────────
-function burst(x, y, color, count) {
-  for (var i = 0; i < (count || 10); i++) {
-    var ang = Math.random() * Math.PI * 2;
-    var spd = 2 + Math.random() * 4;
-    particles.push({
-      x: x, y: y,
-      vx: Math.cos(ang) * spd,
-      vy: Math.sin(ang) * spd - 2,
-      r: 3 + Math.random() * 4,
-      color: color,
-      life: 1,
-      decay: 0.04 + Math.random() * 0.03,
-    });
+function burst(x,y,color,n) {
+  for (var i=0;i<n;i++) {
+    var a=Math.random()*Math.PI*2, spd=1.5+Math.random()*3;
+    particles.push({ x:x,y:y, vx:Math.cos(a)*spd, vy:Math.sin(a)*spd-2,
+      r:3+Math.random()*4, color:color, life:1, decay:0.035+Math.random()*0.03 });
   }
 }
 
-// ── Timer ──────────────────────────────────────────────
-function startTimer() {
-  clearInterval(timerInt);
-  timeLeft = GAME_DURATION;
-  updateTimer();
-  timerInt = setInterval(function() {
-    timeLeft--;
-    updateTimer();
-if (timeLeft <= 0) { clearInterval(timerInt); endGame(); }
-  }, 1000);
-}
-
-function updateTimer() {
-  var m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-  var el = document.getElementById('timer');
-  el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
-  el.className = 'timer' + (timeLeft <= 10 ? ' urgent' : '');
-}
-
-// ── Spawn timing ───────────────────────────────────────
-var spawnCounter  = 0;
-var spawnInterval = 80; // frames between spawns
-
-function getSpawnInterval() {
-  return 140;
-}
-
-// ── Draw helpers ───────────────────────────────────────
-function drawBasket(x, y) {
-  var w = BASKET_W, h = BASKET_H;
-  var left = x - w / 2, right = x + w / 2;
-
-  // Shadow
-  ctx.shadowBlur = 18;
-  ctx.shadowColor = 'rgba(247,201,72,0.35)';
-
-  // Body
-  ctx.fillStyle = '#c8952a';
-  ctx.beginPath();
-  ctx.moveTo(left, y);
-  ctx.lineTo(right, y);
-  ctx.lineTo(right - 6, y + h);
-  ctx.lineTo(left + 6, y + h);
-  ctx.closePath();
-  ctx.fill();
-
-  // Rim
-  ctx.strokeStyle = '#f7c948';
-  ctx.lineWidth = 5;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(left - 4, y);
-  ctx.lineTo(right + 4, y);
-  ctx.stroke();
-
-  // Weave lines
-  ctx.shadowBlur = 0;
-  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
-  ctx.lineWidth = 1.5;
-  for (var i = 1; i < 3; i++) {
-    var yy = y + (h / 3) * i;
-    var inset = 6 * (i / 3);
-    ctx.beginPath();
-    ctx.moveTo(left + inset, yy);
-    ctx.lineTo(right - inset, yy);
-    ctx.stroke();
+// ═══════════════════════════════════════════════════════
+//  DRAW
+// ═══════════════════════════════════════════════════════
+function drawBasket(x,y) {
+  var w=BASKET_W, h=BASKET_H, left=x-w/2, right=x+w/2;
+  ctx.shadowBlur=18; ctx.shadowColor='rgba(247,201,72,0.35)';
+  ctx.fillStyle='#c8952a';
+  ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y);
+  ctx.lineTo(right-6,y+h); ctx.lineTo(left+6,y+h); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#f7c948'; ctx.lineWidth=5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(left-4,y); ctx.lineTo(right+4,y); ctx.stroke();
+  ctx.shadowBlur=0; ctx.strokeStyle='rgba(0,0,0,0.18)'; ctx.lineWidth=1.5;
+  for (var i=1;i<3;i++) {
+    var yy=y+(h/3)*i, ins=6*(i/3);
+    ctx.beginPath(); ctx.moveTo(left+ins,yy); ctx.lineTo(right-ins,yy); ctx.stroke();
   }
-  // Vertical weave
-  for (var j = 0; j < 5; j++) {
-    var xx = left + 6 + (w - 12) * (j / 4);
-    ctx.beginPath();
-    ctx.moveTo(xx, y);
-    ctx.lineTo(xx - 2, y + h);
-    ctx.stroke();
+  for (var j=0;j<5;j++) {
+    var xx=left+6+(w-12)*(j/4);
+    ctx.beginPath(); ctx.moveTo(xx,y); ctx.lineTo(xx-2,y+h); ctx.stroke();
   }
-
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur=0;
 }
 
 function drawBall(b) {
-  ctx.save();
-  ctx.translate(b.x, b.y);
-  ctx.rotate(b.angle);
-
-  ctx.shadowBlur = 14;
-  ctx.shadowColor = b.color + '88';
-
-  // Ball
-  ctx.beginPath();
-  ctx.arc(0, 0, b.r, 0, Math.PI * 2);
-  ctx.fillStyle = b.color;
-  ctx.fill();
-
-  // Shine
-  ctx.beginPath();
-  ctx.arc(-b.r * 0.28, -b.r * 0.28, b.r * 0.32, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.35)';
-  ctx.fill();
-
-  ctx.shadowBlur = 0;
-  ctx.restore();
+  ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.angle);
+  ctx.shadowBlur=14; ctx.shadowColor=b.color+'88';
+  ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2); ctx.fillStyle=b.color; ctx.fill();
+  ctx.beginPath(); ctx.arc(-b.r*0.28,-b.r*0.28,b.r*0.32,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fill();
+  ctx.shadowBlur=0; ctx.restore();
 }
 
 function drawParticles() {
-  particles.forEach(function(p) {
-    ctx.globalAlpha = p.life;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.fill();
+  particles.forEach(function(p){
+    ctx.globalAlpha=p.life;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);
+    ctx.fillStyle=p.color; ctx.fill();
   });
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha=1;
 }
 
-// ── Game loop ──────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  GAME LOOP — controlo proporcional
+// ═══════════════════════════════════════════════════════
 function gameLoop() {
   if (!gameRunning) return;
+  var W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
 
-  var W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
+  if (flashFrames>0) { ctx.fillStyle=flashColor; ctx.fillRect(0,0,W,H); flashFrames--; }
 
-  // Flash overlay
-  if (flashFrames > 0) {
-    ctx.fillStyle = flashColor;
-    ctx.fillRect(0, 0, W, H);
-    flashFrames--;
-  }
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.025)'; ctx.lineWidth=1;
+  for (var gx=0;gx<W;gx+=40){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+  for (var gy=0;gy<H;gy+=40){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
 
-  // Background grid (subtle)
-  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
-  ctx.lineWidth = 1;
-  for (var gx = 0; gx < W; gx += 40) {
-    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
-  }
-  for (var gy = 0; gy < H; gy += 40) {
-    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
-  }
+  // ── Controlo por velocidade ────────────────────────
+  // força 0       → cesto para (fica onde está)
+  // força > limiar → move para a direita a velocidade proporcional
+  // força negativa (abaixo de 0.5) → move para a esquerda (opcional)
+  // força 0   → esquerda máxima | força 0.5 → parado | força 1 → direita máxima
+  var pressing = forceNorm > THRESHOLD;
+  var velocity = (forceNorm - 0.5) * 2 * MAX_SPEED;
+  basketX += velocity;
 
-  // Basket physics
-  var targetX = pressing ? W - BASKET_W / 2 - 10 : BASKET_W / 2 + 10;
-  var spd = pressing ? BASKET_SPEED : BASKET_RETURN;
-  if (basketX < targetX) basketX = Math.min(basketX + spd, targetX);
-  else                   basketX = Math.max(basketX - spd, targetX);
-  basketX = Math.max(BASKET_W / 2, Math.min(W - BASKET_W / 2, basketX));
+  basketX = Math.max(BASKET_W/2, Math.min(W-BASKET_W/2, basketX));
 
   var basketY = H - BASKET_H - 16;
 
-  // Spawn balls
+  // Spawn
   spawnCounter++;
-  if (spawnCounter >= getSpawnInterval()) {
-    spawnBall();
-    spawnCounter = 0;
-  }
+  if (spawnCounter >= 140) { spawnBall(); spawnCounter=0; }
 
-  // Update & draw balls
-  for (var i = balls.length - 1; i >= 0; i--) {
-    var b = balls[i];
-    b.y += b.vy;
-    b.angle += b.spin;
-
-    // Catch check
-    var inX = Math.abs(b.x - basketX) < BASKET_W / 2 + b.r * 0.4;
-    var inY = b.y + b.r >= basketY && b.y - b.r < basketY + BASKET_H;
-    if (inX && inY && b.y > basketY - b.r * 2) {
-      balls.splice(i, 1);
-      caught++;
-      score += 10;
-      document.getElementById('scoreVal').textContent = score;
-      burst(b.x, basketY, b.color, 12);
-      flashFrames = 3;
-      flashColor  = 'rgba(92,219,149,0.08)';
-      playCatch();
-      continue;
+  // Balls
+  for (var i=balls.length-1;i>=0;i--) {
+    var b=balls[i]; b.y+=b.vy; b.angle+=b.spin;
+    var inX=Math.abs(b.x-basketX)<BASKET_W/2+b.r*0.4;
+    var inY=b.y+b.r>=basketY && b.y-b.r<basketY+BASKET_H;
+    if (inX&&inY&&b.y>basketY-b.r*2) {
+      balls.splice(i,1); caught++; score+=10;
+      document.getElementById('scoreVal').textContent=score;
+      document.getElementById('caughtVal').textContent=caught;
+      burst(b.x,basketY,b.color,12);
+      flashFrames=3; flashColor='rgba(92,219,149,0.08)';
+      playCatch(); continue;
     }
-
-    // Miss check
-    if (b.y - b.r > H) {
-      balls.splice(i, 1);
-      missed++;
-      burst(b.x, H - 10, '#ff6b6b', 7);
-      flashFrames = 5;
-      flashColor  = 'rgba(255,107,107,0.12)';
-      playMiss();
-      continue;
+    if (b.y-b.r>H) {
+      balls.splice(i,1); missed++;
+      document.getElementById('missedVal').textContent=missed;
+      burst(b.x,H-10,'#ff6b6b',7);
+      flashFrames=5; flashColor='rgba(255,107,107,0.12)';
+      playMiss(); continue;
     }
-
     drawBall(b);
   }
 
   // Particles
-  for (var j = particles.length - 1; j >= 0; j--) {
-    var p = particles[j];
-    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.life -= p.decay;
-    if (p.life <= 0) { particles.splice(j, 1); continue; }
+  for (var j=particles.length-1;j>=0;j--) {
+    var p=particles[j]; p.x+=p.vx; p.y+=p.vy; p.vy+=0.18; p.life-=p.decay;
+    if (p.life<=0){ particles.splice(j,1); continue; }
   }
   drawParticles();
+  drawBasket(basketX,basketY);
 
-  // Basket
-  drawBasket(basketX, basketY);
+  // Indicador de força
+  var pct=Math.round(forceNorm*100);
+  ctx.fillStyle=pressing ? '#f7c948' : 'rgba(255,255,255,0.15)';
+  ctx.font='bold 12px Space Mono'; ctx.textAlign='center';
+  var centered = (forceNorm - 0.5) / 0.5;
+  var dir = pressing ? (centered > 0.1 ? '→ DIREITA' : centered < -0.1 ? '← ESQUERDA' : '■ PARADO') : 'RELAXA';
+  ctx.fillText(pressing ? ('FORÇA: '+pct+'% ' + dir) : 'RELAXA', W/2, H-4);
 
-  // Press indicator arrow
-  ctx.fillStyle = pressing ? '#f7c948' : 'rgba(255,255,255,0.15)';
-  ctx.font = 'bold 13px Space Mono';
-  ctx.textAlign = 'center';
-  ctx.fillText(pressing ? '>> FECHAR >>' : '<< ABRIR <<', W / 2, H - 4);
-
-  animId = requestAnimationFrame(gameLoop);
+  animId=requestAnimationFrame(gameLoop);
 }
 
-// ── Game flow ──────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  GAME FLOW
+// ═══════════════════════════════════════════════════════
 function startGame() {
-  cancelAnimationFrame(animId);
-  clearInterval(timerInt);
-
-  gameRunning  = true;
-  pressing     = false;
-  score        = 0;
-  lives        = 3;
-  caught       = 0;
-  missed       = 0;
-  spawnCounter = 0;
-  balls        = [];
-  particles    = [];
-  flashFrames  = 0;
-  basketX      = canvas.width / 2;
-
-  document.getElementById('scoreVal').textContent = '0';
-  document.getElementById('hint').textContent = 'Toca e segura para mover o cesto para a direita';
+  cancelAnimationFrame(animId); clearInterval(timerInt);
+  gameRunning=true; score=0; caught=0; missed=0;
+  spawnCounter=0; balls=[]; particles=[]; flashFrames=0;
+  basketX=canvas.width/2;
+  document.getElementById('scoreVal').textContent='0';
+  document.getElementById('caughtVal').textContent='0';
+  document.getElementById('missedVal').textContent='0';
+  document.getElementById('hint').textContent='Força <50% → esquerda · Força >50% → direita · Relaxa para parar';
   document.getElementById('overlay').classList.remove('show');
-
   startTimer();
-  animId = requestAnimationFrame(gameLoop);
+  animId=requestAnimationFrame(gameLoop);
 }
 
 function endGame() {
-  gameRunning = false;
-  cancelAnimationFrame(animId);
-
-  var emoji = caught >= 20 ? '\uD83C\uDFC6' : caught >= 10 ? '\uD83D\uDCAA' : caught >= 5 ? '\uD83D\uDC4D' : '\uD83D\uDE05';
-  document.getElementById('mEmoji').textContent  = emoji;
-  document.getElementById('mTitle').textContent  = 'Sessao terminada!';
-  document.getElementById('mSub').textContent    = '60 segundos · Catch!';
-  document.getElementById('mScore').textContent  = score;
-  document.getElementById('mCaught').textContent = caught;
-  document.getElementById('mMissed').textContent = missed;
-  document.getElementById('mLevel').textContent  = Math.round(caught / Math.max(1, caught + missed) * 100) + '%';
-  document.getElementById('btnPlay').textContent = 'Jogar novamente';
-
-  setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 400);
+  gameRunning=false; cancelAnimationFrame(animId);
+  var acc=Math.round(caught/Math.max(1,caught+missed)*100);
+  var emoji=caught>=20?'🏆':caught>=10?'💪':caught>=5?'👍':'😅';
+  document.getElementById('mEmoji').textContent=emoji;
+  document.getElementById('mTitle').textContent='Sessao terminada!';
+  document.getElementById('mSub').textContent='60 s · Catch! v2';
+  document.getElementById('mScore').textContent=score;
+  document.getElementById('mCaught').textContent=caught;
+  document.getElementById('mMissed').textContent=missed;
+  document.getElementById('mAcc').textContent=acc+'%';
+  document.getElementById('btnPlay').textContent='Jogar novamente';
+  setTimeout(function(){ document.getElementById('overlay').classList.add('show'); },400);
 }
 
-// ── Input ──────────────────────────────────────────────
-canvas.addEventListener('mousedown',  function(){ pressing = true;  });
-canvas.addEventListener('mouseup',    function(){ pressing = false; });
-canvas.addEventListener('mouseleave', function(){ pressing = false; });
-canvas.addEventListener('touchstart', function(e){ e.preventDefault(); pressing = true;  }, { passive: false });
-canvas.addEventListener('touchend',   function(e){ e.preventDefault(); pressing = false; }, { passive: false });
-
-// Keyboard: L = press, A = release
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'l' || e.key === 'L') pressing = true;
-  if (e.key === 'a' || e.key === 'A') pressing = false;
+// ═══════════════════════════════════════════════════════
+//  INPUT FALLBACK (rato/teclado para testar sem ESP32)
+// ═══════════════════════════════════════════════════════
+canvas.addEventListener('mousedown',  function(e){ if(!ws||ws.readyState!==1){ var r=canvas.getBoundingClientRect(); forceNorm=(e.clientX-r.left)/r.width; } });
+canvas.addEventListener('mousemove',  function(e){ if((!ws||ws.readyState!==1)&&e.buttons){ var r=canvas.getBoundingClientRect(); forceNorm=(e.clientX-r.left)/r.width; } });
+canvas.addEventListener('mouseup',    function(){ if(!ws||ws.readyState!==1) forceNorm=0; });
+canvas.addEventListener('mouseleave', function(){ if(!ws||ws.readyState!==1) forceNorm=0; });
+canvas.addEventListener('touchstart', function(e){ e.preventDefault(); if(!ws||ws.readyState!==1){ var r=canvas.getBoundingClientRect(); forceNorm=(e.touches[0].clientX-r.left)/r.width; } },{passive:false});
+canvas.addEventListener('touchmove',  function(e){ e.preventDefault(); if(!ws||ws.readyState!==1){ var r=canvas.getBoundingClientRect(); forceNorm=(e.touches[0].clientX-r.left)/r.width; } },{passive:false});
+canvas.addEventListener('touchend',   function(e){ e.preventDefault(); if(!ws||ws.readyState!==1) forceNorm=0; },{passive:false});
+document.addEventListener('keydown', function(e){
+  if(!ws||ws.readyState!==1){
+    if(e.key==='ArrowRight'||e.key==='l'||e.key==='L') forceNorm=0.85;
+    if(e.key==='ArrowLeft' ||e.key==='j'||e.key==='J') forceNorm=0.15;
+  }
 });
-document.addEventListener('keyup', function(e) {
-  if (e.key === 'l' || e.key === 'L') pressing = false;
+document.addEventListener('keyup', function(e){
+  if(e.key==='ArrowRight'||e.key==='l'||e.key==='L'||e.key==='ArrowLeft'||e.key==='j'||e.key==='J') forceNorm=0;
 });
 
-// Show start screen
+// ═══════════════════════════════════════════════════════
+//  START SCREEN
+// ═══════════════════════════════════════════════════════
+
+// Sincroniza os dois campos de IP
+function syncIP() {
+  var stored = localStorage.getItem('esp32_ip') || '10.198.1.130';
+  document.getElementById('ipInput').value  = stored;
+  document.getElementById('ipModal').value  = stored;
+}
+
+function connectFromModal() {
+  var ip = document.getElementById('ipModal').value.trim();
+  if (!ip) return;
+  // Sincroniza com o campo principal e guarda
+  document.getElementById('ipInput').value = ip;
+  localStorage.setItem('esp32_ip', ip);
+  connectFSR();
+}
+
+// Actualiza o dot/label do modal quando o WS muda
+function updateModalWs() {
+  var connected = ws && ws.readyState === 1;
+  document.getElementById('modalWsDot').style.background =
+    connected ? 'var(--good)' : 'var(--accent2)';
+  document.getElementById('modalWsLabel').textContent =
+    connected ? 'Ligado · ' + document.getElementById('ipModal').value
+              : document.getElementById('wsLabel').textContent;
+}
+
+// Quando o jogo termina, esconde o ipBlock (mostra só resultados)
+var _origEndGame = endGame;
+endGame = function() {
+  _origEndGame();
+  document.getElementById('ipBlock').style.display = 'none';
+};
+
+// Ecrã inicial
 document.getElementById('overlay').classList.add('show');
-document.getElementById('mTitle').textContent = 'Catch!';
-document.getElementById('mSub').textContent   = 'Apanha as bolas com o cesto';
-document.getElementById('mEmoji').textContent = '\uD83E\uDDE0';
+document.getElementById('mTitle').textContent = 'Catch! v2';
+document.getElementById('mSub').textContent   = 'Controlo proporcional · FSR calibrado';
+document.getElementById('mEmoji').textContent = '🧠';
 document.getElementById('mScore').textContent = '—';
-document.getElementById('mCaught').textContent = '—';
-document.getElementById('mMissed').textContent = '—';
-document.getElementById('mLevel').textContent  = '—';
-document.getElementById('btnPlay').textContent = 'Comecar';
+document.getElementById('mCaught').textContent= '—';
+document.getElementById('mMissed').textContent= '—';
+document.getElementById('mAcc').textContent   = '—';
+document.getElementById('btnPlay').textContent = 'Começar';
+document.getElementById('ipBlock').style.display = 'block';
+
+syncIP();
+
+// Polling simples para actualizar o dot do modal enquanto overlay está aberto
+setInterval(function() {
+  if (document.getElementById('overlay').classList.contains('show')) updateModalWs();
+}, 500);
 </script>
 </body>
 </html>
