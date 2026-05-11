@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Sessões de Treino</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/img/logo.jpg" type="image/jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../assets/css/utente.css">
+
+</head>
+
+<body>
+    <!-- Topbar Moderno -->
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="dashboard_utente.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
+                <span class="fw-bold">RehabLink</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-nurse"></i> Carla Santos
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!-- NOVO: Link para Perfil -->
+                <li><a class="dropdown-item" href="../perfil.html"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../config/preferencias.html"><i
+                            class="fa-solid fa-gear me-2"></i>Preferências</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                            class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../index.html"><i
+                            class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar Moderno -->
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
+            <a href="index_utente.html" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Página do Utente
+            </a>
+            <a href="sessoes_agendadas.html" class="nav-link active">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Sessões de treino
+            </a>
+            <a href="historico_sessoes.html" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                Histórico de sessões
+            </a>
+            <a href="jogos_reabilitacao.html" class="nav-link">
+                <i class="fa-solid fa-gamepad me-2"></i>
+                Jogos de reabilitação
+            </a>
+            <a href="pagamentos.html" class="nav-link">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Histórico de Pagamentos
+            </a>
+            <a href="mensagens.html" class="nav-link">
+                <i class="fa-solid fa-envelope me-2"></i>
+                Mensagens
+                <span class="notification-badge"
+                    style="position: relative; top: 0; right: 0; margin-left: auto;">3</span>
+            </a>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Próximas Sessões</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <label for="tipo" class="fw-semibold text-muted">Filtrar:</label>
+                    <select class="form-select w-auto" id="tipo">
+                        <option value="forca">Treino de força</option>
+                        <option value="precisao">Treino de precisão</option>
+                        <option value="avaliacao">Avaliação funcional</option>
+                        <option value="gamificado">Sessão gamificada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tabela_sessoes" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th>Fisioterapeuta</th>
+                            <th>Tipo de exercício</th>
+                            <th>Zona alvo</th>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Duração</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-md" style="color: #667eea;"></i>
+                                    Ana Silva
+                                </div>
+                            </td>
+                            <td>Treino de força de pinça</td>
+                            <td><span class="badge bg-info">8N – 12N</span></td>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-04-02</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>10:30</td>
+                            <td><span class="badge bg-light text-dark">15 min</span></td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fa-regular fa-clock me-1"></i>Agendada
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-secondary btn-sm btn-instrucoes">
+                                        <i class="fa-regular fa-file-lines me-1"></i>
+                                        Instruções
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-md" style="color: #667eea;"></i>
+                                    Bruno Ferreira
+                                </div>
+                            </td>
+                            <td>Treino de precisão</td>
+                            <td><span class="badge bg-info">4N – 6N</span></td>
+                            <td><i class="fa-regular fa-calendar me-1"></i>2026-04-05</td>
+                            <td><i class="fa-regular fa-clock me-1"></i>14:00</td>
+                            <td><span class="badge bg-light text-dark">10 min</span></td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fa-regular fa-clock me-1"></i>Agendada
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-secondary btn-sm btn-instrucoes">
+                                        <i class="fa-regular fa-file-lines me-1"></i>
+                                        Instruções
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Flutuante -->
+    <div id="chatbot-button" class="chatbot-button">
+        <i class="fa-regular fa-comment-dots"></i>
+    </div>
+
+    <div id="chatbot" class="chatbot-container d-none">
+        <div class="chat-header">
+            <span><i class="fa-regular fa-comment me-2"></i>Assistente RehabLink</span>
+            <span id="close-chat" class="close-btn">&times;</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-message fa-2x mb-2"></i>
+                <p>Olá! Como posso ajudar?</p>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="suggestions">
+                <button class="faq-btn">Como realizar força</button>
+                <button class="faq-btn">Zona alvo</button>
+                <button class="faq-btn">Força na zona verde</button>
+                <button class="faq-btn">Controlo da prótese</button>
+                <button class="faq-btn">Próxima sessão</button>
+                <button class="faq-btn">Sensor não responde</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Instruções -->
+    <div class="modal fade" id="modalInstrucoes" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px;">
+
+                <div class="modal-header" style="background:#6f42c1; color:white;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-file-lines me-2"></i>
+                        Instruções da Sessão
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" id="conteudoInstrucoes">
+
+                    <p><strong>Objetivo:</strong> Melhorar a força de pinça.</p>
+
+                    <ul>
+                        <li>Coloque corretamente a prótese</li>
+                        <li>Inicie com força leve</li>
+                        <li>Aumente gradualmente até zona alvo</li>
+                        <li>Mantenha durante 3 segundos</li>
+                        <li>Repita 10 vezes</li>
+                    </ul>
+
+                    <p><strong>Zona alvo:</strong> 8N – 12N</p>
+
+                    <p class="text-muted">Evite movimentos bruscos e mantenha controlo constante.</p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" id="downloadInstrucoes">
+                        <i class="fa-regular fa-file-pdf me-2"></i>
+                        Download PDF
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="../js/utente.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('.btn-instrucoes').click(function () {
+                new bootstrap.Modal(document.getElementById('modalInstrucoes')).show();
+            });
+
+            $('#downloadInstrucoes').click(function () {
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // HEADER
+                doc.setFillColor(111, 66, 193);
+                doc.rect(0, 0, 210, 30, 'F');
+
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(18);
+                doc.text("RehabLink", 14, 15);
+
+                doc.setFontSize(11);
+                doc.text("Instruções de Sessão", 14, 23);
+
+                // RESET COLOR
+                doc.setTextColor(0, 0, 0);
+
+                // INFO
+                doc.setFontSize(12);
+                doc.text("Utente: Carla Santos", 14, 45);
+                doc.text("Data: " + new Date().toLocaleDateString(), 14, 52);
+
+                // SEPARADOR
+                doc.setDrawColor(200);
+                doc.line(14, 58, 196, 58);
+
+                // TITULO
+                doc.setFontSize(14);
+                doc.text("Objetivo", 14, 70);
+
+                doc.setFontSize(12);
+                doc.text("Melhorar a força de pinça", 14, 78);
+
+                // PASSOS
+                doc.setFontSize(14);
+                doc.text("Instruções", 14, 95);
+
+                doc.setFontSize(12);
+
+                const instrucoes = [
+                    "Colocar a prótese corretamente",
+                    "Aplicar força de forma gradual",
+                    "Manter dentro da zona alvo",
+                    "Sustentar durante 3 segundos",
+                    "Repetir o exercício 10 vezes"
+                ];
+
+                let y = 105;
+                instrucoes.forEach((item, i) => {
+                    doc.text((i + 1) + ". " + item, 14, y);
+                    y += 8;
+                });
+
+                // ZONA ALVO BOX
+                doc.setFillColor(245, 240, 255);
+                doc.rect(14, y + 5, 180, 20, 'F');
+
+                doc.setFontSize(13);
+                doc.setTextColor(111, 66, 193);
+                doc.text("Zona alvo: 8N – 12N", 20, y + 18);
+
+                // FOOTER
+                doc.setTextColor(120);
+                doc.setFontSize(10);
+                doc.text("RehabLink • Sistema de Reabilitação Mioelétrica", 14, 280);
+
+                // DOWNLOAD DIRETO
+                doc.save("instrucoes_rehablink.pdf");
+            });
+
+        });
+    </script>
+
+
+</body>
+
+</html>
