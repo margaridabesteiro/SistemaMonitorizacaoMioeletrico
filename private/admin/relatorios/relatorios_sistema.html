@@ -1,39 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RehabLink | Exportar Dados</title>
-
+    <title>RehabLink | Relatórios do Sistema</title>
     <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
     <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
-
 <body>
-
     <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
         <div class="sistema-nome">
             <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
-                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
                 <span class="fw-bold">RehabLink · Administrador</span>
             </a>
         </div>
-
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-user-gear"></i> Admin
             </button>
-
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
                 <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
@@ -47,189 +42,169 @@
             <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
             <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
             <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
-            <a href="relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
-            <a href="exportar_dados.html" class="nav-link active"><i class="fa-solid fa-download me-2"></i>Exportar Dados</a>
+            <a href="relatorios_sistema.html" class="nav-link active"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
             <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
             <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
         </nav>
 
         <main class="content">
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="relatorios_sistema.html">Relatórios</a></li>
-                    <li class="breadcrumb-item active">Exportar Dados</li>
-                </ol>
-            </nav>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Relatórios do Sistema</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn-filter" onclick="exportarRelatorioAtual()">
+                        <i class="fa-solid fa-download me-2"></i>Exportar
+                    </button>
+                </div>
+            </div>
 
-            <h1 class="mb-4">Exportar Dados</h1>
-
-            <div class="progress-card">
-                <h5>
-                    <i class="fa-solid fa-database me-2" style="color: #8B0000;"></i>
-                    Selecionar Dados para Exportar
-                </h5>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tipo de Dados</label>
-                        <select class="form-select" id="tipoDados">
-                            <option value="utilizadores">Utilizadores</option>
-                            <option value="sessoes">Sessões de Treino</option>
-                            <option value="dispositivos">Dispositivos</option>
-                            <option value="faturas">Faturas</option>
-                            <option value="logs">Logs de Acesso</option>
-                            <option value="todos">Todos os dados</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Período</label>
-                        <select class="form-select" id="periodo">
+            <!-- Filtros -->
+            <div class="filter-section mb-4">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <label>Período</label>
+                        <select class="form-select" id="filtroPeriodo" onchange="aplicarFiltros()">
                             <option value="7">Últimos 7 dias</option>
                             <option value="30" selected>Últimos 30 dias</option>
                             <option value="90">Últimos 90 dias</option>
                             <option value="365">Último ano</option>
-                            <option value="todos">Todo o período</option>
-                            <option value="personalizado">Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Tipo de Relatório</label>
+                        <select class="form-select" id="filtroTipo" onchange="aplicarFiltros()">
+                            <option value="todos">Todos</option>
+                            <option value="sessoes">Sessões</option>
+                            <option value="utilizadores">Utilizadores</option>
+                            <option value="faturacao">Faturação</option>
                         </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="row" id="personalizadoPeriodo" style="display: none;">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Data Início</label>
-                        <input type="date" class="form-control" id="dataInicio">
+            <!-- Tabs -->
+            <div class="payment-tabs mb-4">
+                <span class="payment-tab active" onclick="mudarTab('geral', this)">Geral</span>
+                <span class="payment-tab" onclick="mudarTab('sessoes', this)">Sessões</span>
+                <span class="payment-tab" onclick="mudarTab('utilizadores', this)">Utilizadores</span>
+                <span class="payment-tab" onclick="mudarTab('faturacao', this)">Faturação</span>
+            </div>
+
+            <!-- TAB GERAL -->
+            <div id="tabGeral">
+                <div class="metricas-grid mb-4">
+                    <div class="metrica-card">
+                        <div class="metrica-valor">124</div>
+                        <div class="metrica-label">Total Utilizadores</div>
+                        <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +8 este mês</div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Data Fim</label>
-                        <input type="date" class="form-control" id="dataFim">
+                    <div class="metrica-card">
+                        <div class="metrica-valor">1.284</div>
+                        <div class="metrica-label">Sessões Realizadas</div>
+                        <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +15% vs. mês anterior</div>
+                    </div>
+                    <div class="metrica-card">
+                        <div class="metrica-valor">98,2%</div>
+                        <div class="metrica-label">Taxa de Disponibilidade</div>
+                        <div class="metrica-trend"><i class="fa-solid fa-check-circle" style="color:#48bb78"></i> Estável</div>
+                    </div>
+                    <div class="metrica-card">
+                        <div class="metrica-valor">€12.450</div>
+                        <div class="metrica-label">Faturação Mensal</div>
+                        <div class="metrica-trend"><i class="fa-solid fa-arrow-up"></i> +3% vs. mês anterior</div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Formato de Exportação</label>
-                        <select class="form-select" id="formato">
-                            <option value="csv">CSV</option>
-                            <option value="excel">Excel (.xlsx)</option>
-                            <option value="json">JSON</option>
-                            <option value="pdf">PDF</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Incluir</label>
-                        <select class="form-select" id="incluir">
-                            <option value="apenas">Apenas dados selecionados</option>
-                            <option value="metadados">Incluir metadados</option>
-                            <option value="logs">Incluir logs associados</option>
-                        </select>
-                    </div>
+                <div class="progress-card">
+                    <h5><i class="fa-solid fa-chart-line me-2" style="color:#8B0000"></i>Atividade do Sistema</h5>
+                    <canvas id="graficoAtividade" height="80"></canvas>
                 </div>
+            </div>
 
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="anonimizar">
-                    <label class="form-check-label">Anonimizar dados pessoais (para análise)</label>
+            <!-- TAB SESSÕES -->
+            <div id="tabSessoes" style="display:none">
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-regular fa-calendar-check me-2" style="color:#8B0000"></i>Sessões por Mês</h5>
+                    <canvas id="graficoSessoes" height="80"></canvas>
                 </div>
-
-                <hr>
-
-                <div class="d-flex justify-content-between">
-                    <button class="btn-acao" onclick="agendarExportacao()">
-                        <i class="fa-regular fa-clock me-2"></i>
-                        Agendar Exportação
-                    </button>
-
-                    <div>
-                        <button class="btn-reset" onclick="history.back()">Cancelar</button>
-                        <button class="btn-filter ms-2" onclick="exportarDados()">
-                            <i class="fa-solid fa-download me-2"></i>
-                            Exportar Agora
+                <div class="progress-card">
+                    <h5><i class="fa-solid fa-table me-2" style="color:#8B0000"></i>Resumo de Sessões</h5>
+                    <div class="table-container">
+                        <table class="table" id="tabelaSessoes">
+                            <thead><tr><th>Mês</th><th>Total Sessões</th><th>Concluídas</th><th>Canceladas</th><th>Taxa Conclusão</th></tr></thead>
+                            <tbody>
+                                <tr><td>Mar 2026</td><td>248</td><td>235</td><td>13</td><td><span class="badge-status badge-ativo">94.8%</span></td></tr>
+                                <tr><td>Fev 2026</td><td>212</td><td>198</td><td>14</td><td><span class="badge-status badge-ativo">93.4%</span></td></tr>
+                                <tr><td>Jan 2026</td><td>195</td><td>180</td><td>15</td><td><span class="badge-status badge-ativo">92.3%</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn-filter btn-sm" onclick="descarregarTabela('tabelaSessoes', 'sessoes')">
+                            <i class="fa-solid fa-download me-2"></i>Descarregar CSV
+                        </button>
+                        <button class="btn-acao btn-sm ms-2" onclick="descarregarTabelaPDF('tabelaSessoes', 'Relatório de Sessões')">
+                            <i class="fa-solid fa-file-pdf me-2"></i>Descarregar PDF
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="progress-card mt-4">
-                <h5>
-                    <i class="fa-regular fa-clock-rotate-left me-2" style="color: #8B0000;"></i>
-                    Exportações Recentes
-                </h5>
-
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Tipo</th>
-                                <th>Formato</th>
-                                <th>Registos</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>19 Mar 2026 15:30</strong></td>
-                                <td>Utilizadores</td>
-                                <td>CSV</td>
-                                <td>124 registos</td>
-                                <td><span class="badge-status badge-ativo">Concluído</span></td>
-                                <td>
-                                    <button class="btn-acao btn-sm" onclick="baixarExportacao('utilizadores_20260319.csv')">
-                                        <i class="fa-solid fa-download"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>18 Mar 2026 10:15</strong></td>
-                                <td>Sessões</td>
-                                <td>Excel</td>
-                                <td>1,284 registos</td>
-                                <td><span class="badge-status badge-ativo">Concluído</span></td>
-                                <td>
-                                    <button class="btn-acao btn-sm" onclick="baixarExportacao('sessoes_20260318.xlsx')">
-                                        <i class="fa-solid fa-download"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>15 Mar 2026 09:00</strong></td>
-                                <td>Todos os dados</td>
-                                <td>JSON</td>
-                                <td>-</td>
-                                <td><span class="badge-status badge-pendente">Processando</span></td>
-                                <td>-</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- TAB UTILIZADORES -->
+            <div id="tabUtilizadores" style="display:none">
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-users me-2" style="color:#8B0000"></i>Evolução de Utilizadores</h5>
+                    <canvas id="graficoUtilizadores" height="80"></canvas>
                 </div>
-            </div>
-
-            <div class="progress-card mt-4">
-                <h5>
-                    <i class="fa-solid fa-chart-line me-2" style="color: #8B0000;"></i>
-                    Tamanho Estimado da Exportação
-                </h5>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="flex-grow-1">
-                        <div class="progress" style="height: 10px;">
-                            <div class="progress-bar" style="width: 45%; background: #8B0000;"></div>
-                        </div>
+                <div class="progress-card">
+                    <h5><i class="fa-solid fa-table me-2" style="color:#8B0000"></i>Utilizadores por Tipo</h5>
+                    <div class="table-container">
+                        <table class="table" id="tabelaUtilizadores">
+                            <thead><tr><th>Tipo</th><th>Total</th><th>Ativos</th><th>Inativos</th><th>Novos este mês</th></tr></thead>
+                            <tbody>
+                                <tr><td>Utentes</td><td>98</td><td>85</td><td>13</td><td>+6</td></tr>
+                                <tr><td>Médicos</td><td>12</td><td>12</td><td>0</td><td>+1</td></tr>
+                                <tr><td>Fisioterapeutas</td><td>10</td><td>9</td><td>1</td><td>+1</td></tr>
+                                <tr><td>Administradores</td><td>4</td><td>4</td><td>0</td><td>0</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <span id="tamanhoEstimado"><strong>~2.4 MB</strong></span>
+                    <div class="mt-3">
+                        <button class="btn-filter btn-sm" onclick="descarregarTabela('tabelaUtilizadores', 'utilizadores')">
+                            <i class="fa-solid fa-download me-2"></i>Descarregar CSV
+                        </button>
+                        <button class="btn-acao btn-sm ms-2" onclick="descarregarTabelaPDF('tabelaUtilizadores', 'Relatório de Utilizadores')">
+                            <i class="fa-solid fa-file-pdf me-2"></i>Descarregar PDF
+                        </button>
+                    </div>
                 </div>
-                <p class="text-muted small mt-2">Estimativa baseada nos filtros selecionados</p>
             </div>
 
-            <div class="progress-card mt-4">
-                <h5 class="mb-3" style="color: #8B0000;">
-                    <i class="fa-regular fa-circle-info me-2"></i> Informação
-                </h5>
-                <p class="text-muted small mb-0">
-                    As exportações são processadas em segundo plano. Para grandes volumes de dados, pode agendar a exportação e receberá um email quando o ficheiro estiver pronto.
-                </p>
+            <!-- TAB FATURAÇÃO -->
+            <div id="tabFaturacao" style="display:none">
+                <div class="progress-card mb-4">
+                    <h5><i class="fa-solid fa-chart-line me-2" style="color:#8B0000"></i>Faturação Mensal</h5>
+                    <canvas id="graficoFaturacao" height="80"></canvas>
+                </div>
+                <div class="progress-card">
+                    <h5><i class="fa-solid fa-table me-2" style="color:#8B0000"></i>Resumo de Faturação</h5>
+                    <div class="table-container">
+                        <table class="table" id="tabelaFaturacao">
+                            <thead><tr><th>Mês</th><th>Faturas Emitidas</th><th>Total</th><th>Pago</th><th>Pendente</th></tr></thead>
+                            <tbody>
+                                <tr><td>Mar 2026</td><td>48</td><td>€12.450</td><td>€10.200</td><td>€2.250</td></tr>
+                                <tr><td>Fev 2026</td><td>42</td><td>€11.800</td><td>€11.800</td><td>€0</td></tr>
+                                <tr><td>Jan 2026</td><td>38</td><td>€10.950</td><td>€10.950</td><td>€0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn-filter btn-sm" onclick="descarregarTabela('tabelaFaturacao', 'faturacao')">
+                            <i class="fa-solid fa-download me-2"></i>Descarregar CSV
+                        </button>
+                        <button class="btn-acao btn-sm ms-2" onclick="descarregarTabelaPDF('tabelaFaturacao', 'Relatório de Faturação')">
+                            <i class="fa-solid fa-file-pdf me-2"></i>Descarregar PDF
+                        </button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -237,285 +212,135 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script>
-        // Dados simulados para exportação
-        const dadosExemplo = {
-            utilizadores: [
-                { id: 1, nome: "Ana Ferreira", email: "ana@email.com", tipo: "Utente", data: "2026-03-20" },
-                { id: 2, nome: "Dr. António Silva", email: "antonio@rehablink.pt", tipo: "Médico", data: "2026-03-19" },
-                { id: 3, nome: "Dra. Carla Santos", email: "carla@rehablink.pt", tipo: "Fisioterapeuta", data: "2026-03-18" }
-            ],
-            sessoes: [
-                { id: 1, paciente: "Ana Ferreira", tipo: "Força de pinça", duracao: "15 min", forcaMedia: "8.2N", data: "2026-03-20" },
-                { id: 2, paciente: "João Rodrigues", tipo: "Precisão", duracao: "10 min", forcaMedia: "7.8N", data: "2026-03-19" }
-            ],
-            dispositivos: [
-                { id: "PS-1024", paciente: "Ana Ferreira", estado: "online", ultimaLigacao: "20 Mar 2026 10:28" },
-                { id: "PS-1032", paciente: "João Rodrigues", estado: "offline", ultimaLigacao: "19 Mar 2026 08:15" }
-            ],
-            faturas: [
-                { id: "FT-2026-0124", utente: "Ana Ferreira", valor: "€125,00", data: "20 Mar 2026", estado: "Pago" },
-                { id: "FT-2026-0118", utente: "João Rodrigues", valor: "€95,00", data: "15 Mar 2026", estado: "Pago" }
-            ],
-            logs: [
-                { data: "20 Mar 2026 10:30:15", utilizador: "Admin Sistema", acao: "Login", ip: "192.168.1.100" },
-                { data: "20 Mar 2026 09:45:22", utilizador: "Dra. Carla Santos", acao: "Login", ip: "192.168.1.105" }
-            ]
-        };
+        let tabAtual = 'geral';
 
-        // Mostrar/ocultar campos de período personalizado
-        const periodoSelect = document.getElementById('periodo');
-        const personalizadoDiv = document.getElementById('personalizadoPeriodo');
+        function mudarTab(tab, el) {
+            // Remover active de todos os tabs
+            document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+            // Adicionar active ao tab clicado
+            el.classList.add('active');
 
-        periodoSelect.addEventListener('change', function() {
-            if (this.value === 'personalizado') {
-                personalizadoDiv.style.display = 'flex';
-            } else {
-                personalizadoDiv.style.display = 'none';
-            }
-        });
+            // Esconder todos os conteúdos
+            ['tabGeral', 'tabSessoes', 'tabUtilizadores', 'tabFaturacao'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
 
-        // Atualizar tamanho estimado
-        const tipoDados = document.getElementById('tipoDados');
-        const tamanhoSpan = document.getElementById('tamanhoEstimado');
+            // Mostrar o tab selecionado
+            const mapa = { geral: 'tabGeral', sessoes: 'tabSessoes', utilizadores: 'tabUtilizadores', faturacao: 'tabFaturacao' };
+            document.getElementById(mapa[tab]).style.display = 'block';
+            tabAtual = tab;
 
-        const tamanhos = {
-            utilizadores: '~0.5 MB',
-            sessoes: '~2.4 MB',
-            dispositivos: '~0.3 MB',
-            faturas: '~1.2 MB',
-            logs: '~3.5 MB',
-            todos: '~8.2 MB'
-        };
-
-        tipoDados.addEventListener('change', function() {
-            const tamanho = tamanhos[this.value] || '~2.4 MB';
-            tamanhoSpan.innerHTML = `<strong>${tamanho}</strong>`;
-        });
-
-        function getPeriodoTexto() {
-            const periodo = document.getElementById('periodo').value;
-            if (periodo === 'personalizado') {
-                const inicio = document.getElementById('dataInicio').value;
-                const fim = document.getElementById('dataFim').value;
-                return inicio && fim ? `${inicio} a ${fim}` : 'Período personalizado';
-            }
-            const periodoMap = {
-                '7': 'Últimos 7 dias',
-                '30': 'Últimos 30 dias',
-                '90': 'Últimos 90 dias',
-                '365': 'Último ano',
-                'todos': 'Todo o período'
-            };
-            return periodoMap[periodo] || periodo;
+            // Inicializar gráficos se necessário
+            if (tab === 'sessoes' && !window.graficoSessoes) iniciarGraficoSessoes();
+            if (tab === 'utilizadores' && !window.graficoUtilizadores) iniciarGraficoUtilizadores();
+            if (tab === 'faturacao' && !window.graficoFaturacao) iniciarGraficoFaturacao();
         }
 
-        function getDadosParaExportar() {
-            const tipo = document.getElementById('tipoDados').value;
-            if (tipo === 'todos') {
-                return dadosExemplo;
-            }
-            return { [tipo]: dadosExemplo[tipo] || [] };
+        function aplicarFiltros() {
+            // Filtros aplicados - em produção filtraria os dados
         }
 
-        function exportarCSV() {
-            const dados = getDadosParaExportar();
-            const tipo = document.getElementById('tipoDados').value;
+        // Gráfico de atividade (geral)
+        const ctxAtividade = document.getElementById('graficoAtividade').getContext('2d');
+        new Chart(ctxAtividade, {
+            type: 'line',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                datasets: [{ label: 'Acessos', data: [142, 156, 148, 165, 172, 98, 45], borderColor: '#8B0000', backgroundColor: 'rgba(139,0,0,0.1)', tension: 0.4, fill: true }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        function iniciarGraficoSessoes() {
+            const ctx = document.getElementById('graficoSessoes').getContext('2d');
+            window.graficoSessoes = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                    datasets: [
+                        { label: 'Concluídas', data: [165, 178, 158, 180, 198, 235], backgroundColor: '#8B0000' },
+                        { label: 'Canceladas', data: [12, 8, 15, 15, 14, 13], backgroundColor: '#e2e8f0' }
+                    ]
+                },
+                options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true } } }
+            });
+        }
+
+        function iniciarGraficoUtilizadores() {
+            const ctx = document.getElementById('graficoUtilizadores').getContext('2d');
+            window.graficoUtilizadores = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                    datasets: [{ label: 'Total Utilizadores', data: [102, 106, 110, 114, 118, 124], borderColor: '#8B0000', backgroundColor: 'rgba(139,0,0,0.1)', tension: 0.4, fill: true }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+        function iniciarGraficoFaturacao() {
+            const ctx = document.getElementById('graficoFaturacao').getContext('2d');
+            window.graficoFaturacao = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'],
+                    datasets: [{ label: 'Faturação (€)', data: [9500, 10200, 11200, 10950, 11800, 12450], borderColor: '#8B0000', backgroundColor: 'rgba(139,0,0,0.1)', tension: 0.4, fill: true }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+        function descarregarTabela(tabelaId, nome) {
+            const tabela = document.getElementById(tabelaId);
+            const rows = tabela.querySelectorAll('tr');
             let csv = '';
-            
-            if (tipo === 'todos') {
-                for (const [key, value] of Object.entries(dados)) {
-                    if (value.length > 0) {
-                        const headers = Object.keys(value[0]).join(',');
-                        const rows = value.map(row => Object.values(row).join(',')).join('\n');
-                        csv += `\n${key.toUpperCase()}\n${headers}\n${rows}\n`;
-                    }
-                }
-            } else {
-                const data = dados[tipo] || [];
-                if (data.length > 0) {
-                    const headers = Object.keys(data[0]).join(',');
-                    const rows = data.map(row => Object.values(row).join(',')).join('\n');
-                    csv = `${headers}\n${rows}`;
-                } else {
-                    csv = 'Nenhum dado encontrado';
-                }
-            }
-            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('th, td');
+                const rowData = Array.from(cells).map(c => c.innerText.trim()).join(',');
+                csv += rowData + '\n';
+            });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute('download', `${tipo}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`);
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', `relatorio_${nome}_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url);
         }
 
-        function exportarJSON() {
-            const dados = getDadosParaExportar();
-            const tipo = document.getElementById('tipoDados').value;
-            const jsonStr = JSON.stringify(dados, null, 2);
-            
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute('download', `${tipo}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }
-
-        function exportarPDF() {
+        function descarregarTabelaPDF(tabelaId, titulo) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const tipo = document.getElementById('tipoDados').value;
-            const dados = getDadosParaExportar();
-            const periodo = getPeriodoTexto();
-            
-            doc.setFontSize(16);
+            const tabela = document.getElementById(tabelaId);
+            const headers = Array.from(tabela.querySelectorAll('thead th')).map(th => th.innerText);
+            const rows = Array.from(tabela.querySelectorAll('tbody tr')).map(tr =>
+                Array.from(tr.querySelectorAll('td')).map(td => td.innerText)
+            );
+            doc.setFontSize(14);
             doc.setTextColor(139, 0, 0);
-            doc.text('RehabLink - Relatório de Dados', 14, 20);
-            
-            doc.setFontSize(10);
+            doc.text(titulo, 14, 20);
+            doc.setFontSize(9);
             doc.setTextColor(100, 100, 100);
-            doc.text(`Tipo: ${tipo}`, 14, 30);
-            doc.text(`Período: ${periodo}`, 14, 36);
-            doc.text(`Data de emissão: ${new Date().toLocaleDateString('pt-PT')}`, 14, 42);
-            
-            let yOffset = 55;
-            
-            if (tipo === 'todos') {
-                for (const [key, value] of Object.entries(dados)) {
-                    if (value && value.length > 0) {
-                        doc.setFontSize(12);
-                        doc.setTextColor(139, 0, 0);
-                        doc.text(key.toUpperCase(), 14, yOffset);
-                        yOffset += 8;
-                        
-                        const headers = Object.keys(value[0]);
-                        const rows = value.map(row => Object.values(row));
-                        
-                        doc.autoTable({
-                            startY: yOffset,
-                            head: [headers],
-                            body: rows,
-                            theme: 'striped',
-                            headStyles: { fillColor: [139, 0, 0], textColor: [255, 255, 255] },
-                            margin: { left: 14 }
-                        });
-                        
-                        yOffset = doc.lastAutoTable.finalY + 10;
-                    }
-                }
-            } else {
-                const data = dados[tipo] || [];
-                if (data.length > 0) {
-                    const headers = Object.keys(data[0]);
-                    const rows = data.map(row => Object.values(row));
-                    
-                    doc.autoTable({
-                        startY: yOffset,
-                        head: [headers],
-                        body: rows,
-                        theme: 'striped',
-                        headStyles: { fillColor: [139, 0, 0], textColor: [255, 255, 255] },
-                        margin: { left: 14, right: 14 }
-                    });
-                } else {
-                    doc.text('Nenhum dado encontrado para o período selecionado.', 14, yOffset);
-                }
+            doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-PT')}`, 14, 28);
+            doc.autoTable({ startY: 35, head: [headers], body: rows, theme: 'striped', headStyles: { fillColor: [139,0,0], textColor: [255,255,255] } });
+            doc.save(`${titulo.toLowerCase().replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`);
+        }
+
+        function exportarRelatorioAtual() {
+            const mapa = { geral: 'Relatório Geral', sessoes: 'Relatório de Sessões', utilizadores: 'Relatório de Utilizadores', faturacao: 'Relatório de Faturação' };
+            const titulo = mapa[tabAtual] || 'Relatório';
+            const formato = prompt('Formato de exportação:\n1 - CSV\n2 - PDF\n\nInsira 1 ou 2:', '1');
+            if (formato === '1') {
+                const tabelaMapa = { geral: null, sessoes: 'tabelaSessoes', utilizadores: 'tabelaUtilizadores', faturacao: 'tabelaFaturacao' };
+                const tabelaId = tabelaMapa[tabAtual];
+                if (tabelaId) descarregarTabela(tabelaId, tabAtual);
+                else alert('Para exportar dados gerais, selecione um dos outros separadores.');
+            } else if (formato === '2') {
+                const tabelaMapa = { sessoes: 'tabelaSessoes', utilizadores: 'tabelaUtilizadores', faturacao: 'tabelaFaturacao' };
+                const tabelaId = tabelaMapa[tabAtual];
+                if (tabelaId) descarregarTabelaPDF(tabelaId, titulo);
+                else alert('Para exportar em PDF, selecione um dos outros separadores.');
             }
-            
-            doc.save(`relatorio_${tipo}_${new Date().toISOString().slice(0, 10)}.pdf`);
-        }
-
-        function exportarExcel() {
-            alert('Exportação para Excel: Os dados seriam gerados em formato XLSX. Para demonstração, será gerado um arquivo CSV.');
-            exportarCSV();
-        }
-
-        async function exportarDados() {
-            const tipo = document.getElementById('tipoDados').value;
-            const periodo = document.getElementById('periodo').value;
-            const formato = document.getElementById('formato').value;
-            const anonimizar = document.getElementById('anonimizar').checked;
-            
-            let dataInicio = '';
-            let dataFim = '';
-            
-            if (periodo === 'personalizado') {
-                dataInicio = document.getElementById('dataInicio').value;
-                dataFim = document.getElementById('dataFim').value;
-                
-                if (!dataInicio || !dataFim) {
-                    alert('Por favor, selecione as datas de início e fim.');
-                    return;
-                }
-            }
-            
-            const confirmar = confirm(
-                `Confirmar exportação?\n\n` +
-                `Tipo: ${tipo}\n` +
-                `Período: ${getPeriodoTexto()}\n` +
-                `Formato: ${formato.toUpperCase()}\n` +
-                `Anonimizar: ${anonimizar ? 'Sim' : 'Não'}\n\n` +
-                `O ficheiro será descarregado automaticamente.`
-            );
-            
-            if (!confirmar) return;
-            
-            // Simular progresso
-            const btn = event.target;
-            const textoOriginal = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Processando...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                switch(formato) {
-                    case 'csv':
-                        exportarCSV();
-                        break;
-                    case 'json':
-                        exportarJSON();
-                        break;
-                    case 'pdf':
-                        exportarPDF();
-                        break;
-                    case 'excel':
-                        exportarExcel();
-                        break;
-                    default:
-                        exportarCSV();
-                }
-                
-                btn.innerHTML = textoOriginal;
-                btn.disabled = false;
-                alert('Exportação concluída com sucesso!');
-            }, 1000);
-        }
-
-        function agendarExportacao() {
-            const tipo = document.getElementById('tipoDados').value;
-            const periodo = getPeriodoTexto();
-            const formato = document.getElementById('formato').value;
-            
-            alert(
-                `Exportação agendada!\n\n` +
-                `Tipo: ${tipo}\n` +
-                `Período: ${periodo}\n` +
-                `Formato: ${formato.toUpperCase()}\n\n` +
-                `Receberá um email quando o ficheiro estiver pronto.`
-            );
-        }
-
-        function baixarExportacao(nomeFicheiro) {
-            alert(`A descarregar ${nomeFicheiro}...`);
-            setTimeout(() => {
-                alert('Download concluído!');
-            }, 500);
         }
     </script>
 </body>

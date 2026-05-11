@@ -17,7 +17,7 @@
     <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
         <div class="sistema-nome">
             <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
-                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
                 <span class="fw-bold">RehabLink · Administrador</span>
             </a>
         </div>
@@ -29,7 +29,7 @@
                 <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
                 <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
@@ -87,8 +87,8 @@
                     </div>
                 </div>
                 <div class="filter-actions">
-                    <button class="btn-reset">Limpar</button>
-                    <button class="btn-filter">Aplicar</button>
+                    <button class="btn-reset" onclick="limparFiltros()">Limpar</button>
+                    <button class="btn-filter" onclick="aplicarFiltros()">Aplicar</button>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
                                 <td><span class="badge-status badge-ativo">Ativo</span></td>
                                 <td>20 Mar 2026 09:15</td>
                                 <td>
-                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarUtilizador(0)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
@@ -136,7 +136,7 @@
                                 <td><span class="badge-status badge-ativo">Ativo</span></td>
                                 <td>20 Mar 2026 08:45</td>
                                 <td>
-                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarUtilizador(0)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
@@ -148,7 +148,7 @@
                                 <td><span class="badge-status badge-ativo">Ativo</span></td>
                                 <td>20 Mar 2026 10:30</td>
                                 <td>
-                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarUtilizador(0)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-on"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
@@ -160,7 +160,7 @@
                                 <td><span class="badge-status badge-inativo">Inativo</span></td>
                                 <td>10 Mar 2026 14:20</td>
                                 <td>
-                                    <button class="btn-acao btn-sm"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="btn-acao btn-sm" onclick="editarUtilizador(0)"><i class="fa-regular fa-pen-to-square"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-solid fa-toggle-off"></i></button>
                                     <button class="btn-acao btn-sm"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
@@ -194,5 +194,41 @@
             function ativarDesativar(id) { alert('Alterar estado do utilizador ' + id); }
             function apagarUtilizador(id) { if(confirm('Tem certeza?')) alert('Utilizador removido'); }
         </script>
-    </body>
+    
+    <script>
+        function editarUtilizador(el) {
+            window.location.href = 'editar_utilizador.html';
+        }
+        function ativarDesativar(el) {
+            const icon = el.querySelector('i');
+            if (icon.classList.contains('fa-toggle-on')) {
+                if (confirm('Desativar este utilizador?')) {
+                    icon.classList.replace('fa-toggle-on', 'fa-toggle-off');
+                    icon.style.color = '#a0aec0';
+                }
+            } else {
+                if (confirm('Ativar este utilizador?')) {
+                    icon.classList.replace('fa-toggle-off', 'fa-toggle-on');
+                    icon.style.color = '';
+                }
+            }
+        }
+        function apagarUtilizador(el) {
+            if (confirm('Apagar este utilizador? Esta ação não pode ser desfeita.')) {
+                const tr = el.closest('tr');
+                if (tr) tr.remove();
+                alert('Utilizador removido.');
+            }
+        }
+        function limparFiltros() {
+            document.querySelectorAll('.filter-section select, .filter-section input[type=text]').forEach(el => {
+                if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                else el.value = '';
+            });
+        }
+        function aplicarFiltros() {
+            // Em produção filtraria a DataTable
+        }
+    </script>
+</body>
     </html>

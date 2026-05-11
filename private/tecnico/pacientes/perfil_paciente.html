@@ -123,7 +123,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i
                             class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
@@ -175,12 +175,15 @@
                         <p class="text-muted">Paciente desde 15 Jan 2026 · Nº Processo: P-2026-0124</p>
                     </div>
                 </div>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 flex-wrap">
                     <button class="btn-filter" onclick="criarSessao()">
                         <i class="fa-regular fa-calendar-plus me-2"></i>Nova Sessão
                     </button>
                     <button class="btn-acao" onclick="enviarMensagem()">
                         <i class="fa-regular fa-envelope me-2"></i>Mensagem
+                    </button>
+                    <button class="btn-acao" onclick="abrirModalFeedback()">
+                        <i class="fa-regular fa-star me-2"></i>Enviar Feedback por Email
                     </button>
                 </div>
             </div>
@@ -326,7 +329,7 @@
                 <!-- Botão para ver todos os jogos -->
                 <div class="text-center mt-3">
                     <button class="btn-acao btn-sm" onclick="window.location.href='../jogos/jogos_paciente.html?paciente=ana-ferreira'">
-                        <i class="fa-regular fa-clock-rotate-left me-1"></i>Ver histórico completo de jogos
+                        <i class="fa-solid fa-rotate-left me-1"></i>Ver histórico completo de jogos
                     </button>
                 </div>
             </div>
@@ -468,6 +471,66 @@
         function calibrarSensor() { window.location.href = '../config/calibracao.html?paciente=ana-ferreira'; }
         function verSessao(id) { window.location.href = '../sessoes/detalhes_sessao.html?id=' + id; }
         function verResultadoJogo(id) { window.location.href = '../jogos/resultados_jogo.html?jogo=' + id + '&paciente=ana-ferreira'; }
+    </script>
+
+    <!-- Modal Feedback por Email -->
+    <div class="modal-overlay" id="modalFeedback" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;padding:2rem;max-width:500px;width:90%;">
+            <h5 style="color:#1a5f8a;"><i class="fa-regular fa-envelope me-2"></i>Enviar Feedback por Email</h5>
+            <hr>
+            <div class="mb-3">
+                <label class="form-label">Destinatário</label>
+                <input type="email" class="form-control" id="emailDestFeedback" value="ana.ferreira@email.com">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Assunto</label>
+                <input type="text" class="form-control" id="assuntoFeedback" value="Relatório de Progresso - Ana Ferreira" maxlength="150">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mensagem <span style="color:#8B0000">*</span></label>
+                <textarea class="form-control" id="mensagemFeedback" rows="5" maxlength="2000" placeholder="Escreva o feedback sobre o progresso do paciente..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tipo de Feedback</label>
+                <select class="form-select" id="tipoFeedback">
+                    <option value="progresso">Relatório de Progresso</option>
+                    <option value="sessao">Resumo de Sessão</option>
+                    <option value="recomendacao">Recomendação</option>
+                    <option value="alerta">Alerta Clínico</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+                <button class="btn-reset" onclick="fecharModalFeedback()">Cancelar</button>
+                <button class="btn-filter" onclick="enviarFeedbackEmail()">
+                    <i class="fa-solid fa-paper-plane me-2"></i>Enviar Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function abrirModalFeedback() {
+            document.getElementById('modalFeedback').style.display = 'flex';
+        }
+        function fecharModalFeedback() {
+            document.getElementById('modalFeedback').style.display = 'none';
+        }
+        function enviarFeedbackEmail() {
+            const email = document.getElementById('emailDestFeedback').value.trim();
+            const assunto = document.getElementById('assuntoFeedback').value.trim();
+            const mensagem = document.getElementById('mensagemFeedback').value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Por favor, introduza um email válido.'); return;
+            }
+            if (!mensagem || mensagem.length < 10) {
+                alert('Por favor, escreva uma mensagem com pelo menos 10 caracteres.'); return;
+            }
+            // Simular envio de email via mailto
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(mensagem)}`;
+            window.open(mailtoLink);
+            fecharModalFeedback();
+            alert('Email preparado! Se o cliente de email não abriu automaticamente, o link foi gerado com sucesso.');
+        }
     </script>
 </body>
 </html>

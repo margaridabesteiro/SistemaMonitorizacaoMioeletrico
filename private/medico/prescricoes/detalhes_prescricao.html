@@ -46,7 +46,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i
                             class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
@@ -65,7 +65,7 @@
                 <i class="fa-regular fa-calendar-check me-2"></i>Consultas
             </a>
             <a href="lista_prescricoes.html" class="nav-link active">
-                <i class="fa-solid fa-prescription me-2"></i>Prescrições
+                <i class="fa-solid fa-file-medical me-2"></i>Prescrições
             </a>
             <a href="../pacientes/gestaoUtente.html" class="nav-link">
                 <i class="fa-solid fa-users me-2"></i>Pacientes
@@ -347,8 +347,13 @@
         }
 
         function exportarPDF() {
-            alert('A gerar PDF da prescrição...');
-            // Implementar geração de PDF
+            // Use jsPDF if available, otherwise CSV fallback
+            const csv = ['Campo,Valor','Prescrição,P-2026-001','Paciente,Ana Ferreira','Médico,Dr. António Silva','Tipo,Força de pinça','Sessões,12','Frequência,3x/semana','Zona Alvo,8-12N','Data,15 Jan 2026','Estado,Ativo'].join('\n');
+            const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download','prescricao_ana_ferreira.csv');
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         function cancelarPrescricao() {

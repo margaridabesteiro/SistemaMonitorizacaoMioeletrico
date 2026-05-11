@@ -120,7 +120,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i
                             class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
@@ -500,13 +500,57 @@
         });
 
         function verSemana(semana) {
-            alert('Ver detalhes da Semana ' + semana);
+            // Dados de exemplo por semana
+            const dadosSemanas = {
+                12: { inicio: '7 Mar 2026', fim: '13 Mar 2026', sessoes: 5, forcaMedia: '8.2N', melhorScore: 920, jogos: ['Force Trainer (x2)', 'Catch! (x2)', 'Prosthesis Trainer (x1)'] },
+                11: { inicio: '28 Fev 2026', fim: '6 Mar 2026', sessoes: 4, forcaMedia: '7.9N', melhorScore: 885, jogos: ['Force Trainer (x2)', 'Catch! (x2)'] },
+                10: { inicio: '21 Fev 2026', fim: '27 Fev 2026', sessoes: 5, forcaMedia: '7.7N', melhorScore: 850, jogos: ['Force Trainer (x3)', 'Catch! (x2)'] },
+                9:  { inicio: '14 Fev 2026', fim: '20 Fev 2026', sessoes: 3, forcaMedia: '7.4N', melhorScore: 810, jogos: ['Force Trainer (x2)', 'Catch! (x1)'] },
+                8:  { inicio: '7 Fev 2026', fim: '13 Fev 2026', sessoes: 4, forcaMedia: '7.1N', melhorScore: 770, jogos: ['Force Trainer (x2)', 'Catch! (x2)'] }
+            };
+            const d = dadosSemanas[semana] || { inicio: '-', fim: '-', sessoes: 0, forcaMedia: '-', melhorScore: 0, jogos: [] };
+            const modal = document.getElementById('modalDetalhesSemana');
+            document.getElementById('detalhesSemanaConteudo').innerHTML = `
+                <p><strong>Semana:</strong> ${d.inicio} – ${d.fim}</p>
+                <p><strong>Sessões realizadas:</strong> ${d.sessoes}</p>
+                <p><strong>Força média:</strong> ${d.forcaMedia}</p>
+                <p><strong>Melhor pontuação:</strong> ${d.melhorScore}</p>
+                <p><strong>Jogos praticados:</strong></p>
+                <ul>${d.jogos.map(j => `<li>${j}</li>`).join('')}</ul>
+            `;
+            modal.style.display = 'flex';
             // window.location.href = 'detalhes_semana.html?semana=' + semana;
         }
 
         function exportarHistorico() {
-            alert('A exportar histórico completo de jogos...');
+            const csv = [
+                'Semana,Período,Sessões,Força Média,Melhor Score',
+                '12,7 Mar 2026 - 13 Mar 2026,5,8.2N,920',
+                '11,28 Fev 2026 - 6 Mar 2026,4,7.9N,885',
+                '10,21 Fev 2026 - 27 Fev 2026,5,7.7N,850',
+                '9,14 Fev 2026 - 20 Fev 2026,3,7.4N,810',
+                '8,7 Fev 2026 - 13 Fev 2026,4,7.1N,770'
+            ].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'historico_jogos_ana_ferreira.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
+
+    <!-- Modal Detalhes Semana -->
+    <div id="modalDetalhesSemana" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;padding:2rem;max-width:480px;width:90%;">
+            <h5 style="color:#1a5f8a;"><i class="fa-regular fa-calendar me-2"></i>Detalhes da Semana</h5>
+            <hr>
+            <div id="detalhesSemanaConteudo"></div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn-reset" onclick="document.getElementById('modalDetalhesSemana').style.display='none'">Fechar</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

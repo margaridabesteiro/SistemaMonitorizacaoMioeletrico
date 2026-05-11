@@ -47,7 +47,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i
                             class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
@@ -66,7 +66,7 @@
                 <i class="fa-regular fa-calendar-check me-2"></i>Consultas
             </a>
             <a href="../prescricoes/lista_prescricoes.html" class="nav-link">
-                <i class="fa-solid fa-prescription me-2"></i>Prescrições
+                <i class="fa-solid fa-file-medical me-2"></i>Prescrições
             </a>
             <a href="gestaoUtente.html" class="nav-link active">
                 <i class="fa-solid fa-users me-2"></i>Pacientes
@@ -410,15 +410,15 @@
 
         // Funções de ação
         function verPaciente(id) {
-            window.location.href = 'detalhes_paciente.html?id=' + id;
+            abrirDetalhesPaciente(id);
         }
 
         function editarPaciente(id) {
-            window.location.href = 'editar_paciente.html?id=' + id;
+            abrirEditarPaciente(id);
         }
 
         function agendarConsulta(paciente) {
-            window.location.href = '../consultas/consultas.html?novo=true&paciente=' + paciente;
+            abrirAgendarConsulta(paciente);
         }
 
         function limparFiltros() {
@@ -440,8 +440,217 @@
         }
 
         function exportarLista() {
-            alert('A exportar lista de pacientes...');
-            // Implementar exportação para Excel/PDF
+            const csv = ['Nome,NIF,Telefone,Email,Subsistema,Última Consulta',
+                'Ana Ferreira,123456789,912 345 678,ana.ferreira@email.com,SNS,13 Mar 2026',
+                'João Rodrigues,987654321,923 456 789,joao.rodrigues@email.com,ADSE,10 Mar 2026',
+                'Carlos Monteiro,456789123,934 567 891,carlos.monteiro@email.com,SAMS,13 Mar 2026',
+                'Maria Santos,321654987,945 678 912,maria.santos@email.com,SNS,12 Mar 2026'
+            ].join('\n');
+            const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'lista_pacientes.csv');
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+    </script>
+
+    <!-- Modal Detalhes Paciente -->
+    <div id="modalDetalhesPaciente" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;padding:2rem;max-width:550px;width:90%;max-height:80vh;overflow-y:auto;">
+            <h5 style="color:#1e7b4b;"><i class="fa-regular fa-file-lines me-2"></i>Ficha do Paciente</h5>
+            <hr>
+            <div id="detalhesPacienteContent"></div>
+            <div class="d-flex gap-2 justify-content-end mt-3">
+                <button class="btn-reset" onclick="document.getElementById('modalDetalhesPaciente').style.display='none'">Fechar</button>
+                <button class="btn-filter" onclick="window.location.href='../prescricoes/nova_prescricao.html'">
+                    <i class="fa-solid fa-file-medical me-2"></i>Nova Prescrição
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Paciente -->
+    <div id="modalEditarPaciente" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;padding:2rem;max-width:550px;width:90%;max-height:85vh;overflow-y:auto;">
+            <h5 style="color:#1e7b4b;"><i class="fa-regular fa-pen-to-square me-2"></i>Editar Paciente</h5>
+            <hr>
+            <div class="mb-3">
+                <label class="form-label">Nome <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="editNome" minlength="3" maxlength="100">
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="editDataNasc">
+                    <small class="text-muted">Idade entre 0 e 100 anos</small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Género</label>
+                    <select class="form-select" id="editGenero">
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                        <option value="O">Outro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">NIF</label>
+                    <input type="text" class="form-control" id="editNif" pattern="[0-9]{9}" maxlength="9">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Telefone</label>
+                    <input type="tel" class="form-control" id="editTel" pattern="[0-9]{9}" maxlength="9">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="editEmail">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Subsistema de Saúde</label>
+                <select class="form-select" id="editSubsistema">
+                    <option>SNS</option><option>ADSE</option><option>SAMS</option><option>Medicare</option><option>Outro</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Diagnóstico</label>
+                <textarea class="form-control" id="editDiagnostico" rows="2" maxlength="500"></textarea>
+            </div>
+            <div id="editErro" style="color:red;font-size:0.85rem;display:none;"></div>
+            <div class="d-flex gap-2 justify-content-end mt-3">
+                <button class="btn-reset" onclick="document.getElementById('modalEditarPaciente').style.display='none'">Cancelar</button>
+                <button class="btn-filter" onclick="guardarEdicaoPaciente()">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agendar Consulta -->
+    <div id="modalAgendarConsulta" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;padding:2rem;max-width:500px;width:90%;">
+            <h5 style="color:#1e7b4b;"><i class="fa-regular fa-calendar-plus me-2"></i>Nova Marcação</h5>
+            <hr>
+            <div class="mb-3">
+                <label class="form-label">Paciente</label>
+                <input type="text" class="form-control" id="consultaPaciente" readonly>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Data <span style="color:red">*</span></label>
+                    <input type="date" class="form-control" id="consultaData">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Hora <span style="color:red">*</span></label>
+                    <input type="time" class="form-control" id="consultaHora" min="08:00" max="20:00">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tipo de Consulta</label>
+                <select class="form-select" id="consultaTipo">
+                    <option>Consulta de acompanhamento</option>
+                    <option>Avaliação inicial</option>
+                    <option>Reavaliação</option>
+                    <option>Urgência</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Observações</label>
+                <textarea class="form-control" id="consultaObs" rows="2" maxlength="300"></textarea>
+            </div>
+            <div id="consultaErro" style="color:red;font-size:0.85rem;display:none;"></div>
+            <div class="d-flex gap-2 justify-content-end">
+                <button class="btn-reset" onclick="document.getElementById('modalAgendarConsulta').style.display='none'">Cancelar</button>
+                <button class="btn-filter" onclick="confirmarMarcacao()">
+                    <i class="fa-solid fa-check me-2"></i>Confirmar Marcação
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dadosPacientes = {
+            'ana-ferreira': { nome: 'Ana Ferreira', dob: '1990-03-15', genero: 'F', nif: '123456789', tel: '912345678', email: 'ana.ferreira@email.com', subsistema: 'SNS', diagnostico: 'Amputação transradial esquerda – reabilitação mioelétrica', ultimaConsulta: '13 Mar 2026' },
+            'joao-rodrigues': { nome: 'João Rodrigues', dob: '1974-07-22', genero: 'M', nif: '987654321', tel: '923456789', email: 'joao.rodrigues@email.com', subsistema: 'ADSE', diagnostico: 'Amputação transumeral direita', ultimaConsulta: '10 Mar 2026' },
+            'carlos-monteiro': { nome: 'Carlos Monteiro', dob: '1955-01-08', genero: 'M', nif: '456789123', tel: '934567891', email: 'carlos.monteiro@email.com', subsistema: 'SAMS', diagnostico: 'Amputação transtibial esquerda', ultimaConsulta: '13 Mar 2026' },
+            'maria-santos': { nome: 'Maria Santos', dob: '1962-09-30', genero: 'F', nif: '321654987', tel: '945678912', email: 'maria.santos@email.com', subsistema: 'SNS', diagnostico: 'Amputação transradial direita – fase inicial', ultimaConsulta: '12 Mar 2026' },
+            'sofia-costa': { nome: 'Sofia Costa', dob: '1981-05-14', genero: 'F', nif: '789123456', tel: '956789123', email: 'sofia.costa@email.com', subsistema: 'ADSE', diagnostico: 'Amputação parcial do pé esquerdo', ultimaConsulta: '9 Mar 2026' }
+        };
+
+        function abrirDetalhesPaciente(id) {
+            const p = dadosPacientes[id] || {};
+            const idade = p.dob ? Math.floor((Date.now() - new Date(p.dob)) / 3.156e10) : '-';
+            document.getElementById('detalhesPacienteContent').innerHTML = `
+                <p><strong>Nome:</strong> ${p.nome || '-'}</p>
+                <p><strong>Idade:</strong> ${idade} anos</p>
+                <p><strong>Género:</strong> ${p.genero === 'M' ? 'Masculino' : p.genero === 'F' ? 'Feminino' : 'Outro'}</p>
+                <p><strong>NIF:</strong> ${p.nif || '-'}</p>
+                <p><strong>Telefone:</strong> ${p.tel || '-'}</p>
+                <p><strong>Email:</strong> ${p.email || '-'}</p>
+                <p><strong>Subsistema:</strong> ${p.subsistema || '-'}</p>
+                <p><strong>Última consulta:</strong> ${p.ultimaConsulta || '-'}</p>
+                <p><strong>Diagnóstico:</strong> ${p.diagnostico || '-'}</p>
+            `;
+            document.getElementById('modalDetalhesPaciente').style.display = 'flex';
+        }
+
+        function abrirEditarPaciente(id) {
+            const p = dadosPacientes[id] || {};
+            document.getElementById('editNome').value = p.nome || '';
+            document.getElementById('editDataNasc').value = p.dob || '';
+            document.getElementById('editGenero').value = p.genero || 'M';
+            document.getElementById('editNif').value = p.nif || '';
+            document.getElementById('editTel').value = p.tel || '';
+            document.getElementById('editEmail').value = p.email || '';
+            document.getElementById('editDiagnostico').value = p.diagnostico || '';
+            document.getElementById('modalEditarPaciente').style.display = 'flex';
+        }
+
+        function guardarEdicaoPaciente() {
+            const nome = document.getElementById('editNome').value.trim();
+            const dataNasc = document.getElementById('editDataNasc').value;
+            const nif = document.getElementById('editNif').value;
+            const email = document.getElementById('editEmail').value;
+            const erroDiv = document.getElementById('editErro');
+            
+            if (nome.length < 3) { erroDiv.textContent = 'Nome deve ter pelo menos 3 caracteres.'; erroDiv.style.display='block'; return; }
+            if (dataNasc) {
+                const idade = Math.floor((Date.now() - new Date(dataNasc)) / 3.156e10);
+                if (idade < 0 || idade > 100) { erroDiv.textContent = 'Idade inválida (0-100 anos).'; erroDiv.style.display='block'; return; }
+            }
+            if (nif && !/^[0-9]{9}$/.test(nif)) { erroDiv.textContent = 'NIF deve ter 9 dígitos.'; erroDiv.style.display='block'; return; }
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { erroDiv.textContent = 'Email inválido.'; erroDiv.style.display='block'; return; }
+            
+            erroDiv.style.display='none';
+            document.getElementById('modalEditarPaciente').style.display = 'none';
+            alert('Dados do paciente guardados com sucesso!');
+        }
+
+        function abrirAgendarConsulta(paciente) {
+            const nomes = {
+                'ana-ferreira': 'Ana Ferreira', 'joao-rodrigues': 'João Rodrigues',
+                'carlos-monteiro': 'Carlos Monteiro', 'maria-santos': 'Maria Santos', 'sofia-costa': 'Sofia Costa'
+            };
+            document.getElementById('consultaPaciente').value = nomes[paciente] || paciente;
+            // Set min date to today
+            document.getElementById('consultaData').min = new Date().toISOString().split('T')[0];
+            document.getElementById('modalAgendarConsulta').style.display = 'flex';
+        }
+
+        function confirmarMarcacao() {
+            const data = document.getElementById('consultaData').value;
+            const hora = document.getElementById('consultaHora').value;
+            const erroDiv = document.getElementById('consultaErro');
+            
+            if (!data) { erroDiv.textContent = 'Selecione a data da consulta.'; erroDiv.style.display='block'; return; }
+            if (!hora) { erroDiv.textContent = 'Selecione a hora da consulta.'; erroDiv.style.display='block'; return; }
+            const dataConsulta = new Date(data + 'T' + hora);
+            if (dataConsulta <= new Date()) { erroDiv.textContent = 'A consulta deve ser agendada para uma data/hora futura.'; erroDiv.style.display='block'; return; }
+            
+            erroDiv.style.display='none';
+            document.getElementById('modalAgendarConsulta').style.display = 'none';
+            alert(`Consulta agendada com sucesso para ${new Date(data).toLocaleDateString('pt-PT')} às ${hora}!`);
         }
     </script>
 </body>

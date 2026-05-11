@@ -97,7 +97,7 @@
     <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
         <div class="sistema-nome">
             <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
-                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
                 <span class="fw-bold">RehabLink · Administrador</span>
             </a>
         </div>
@@ -109,7 +109,7 @@
                 <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
                 <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
@@ -147,7 +147,7 @@
                     <!-- Nome do Utente -->
                     <div class="col-md-6">
                         <label for="nomeUtente" class="form-label">Nome do Utente</label>
-                        <input type="text" class="form-control" id="nomeUtente" required placeholder="Nome completo do utente">
+                        <input type="text" class="form-control" id="nomeUtente" required minlength="3" maxlength="100" placeholder="Nome completo do utente">
                     </div>
 
                     <!-- NIF -->
@@ -198,13 +198,13 @@
                     <!-- Valor -->
                     <div class="col-md-3">
                         <label for="valor" class="form-label">Valor (€)</label>
-                        <input type="number" class="form-control" id="valor" step="0.01" required placeholder="0.00">
+                        <input type="number" class="form-control" id="valor" step="0.01" min="0.01" max="99999.99" required placeholder="0.00">
                     </div>
 
                     <!-- Data -->
                     <div class="col-md-3">
                         <label for="dataPagamento" class="form-label">Data</label>
-                        <input type="date" class="form-control" id="dataPagamento" required>
+                        <input type="date" class="form-control" id="dataPagamento" min="2020-01-01" required>
                     </div>
 
                     <!-- Método de Pagamento -->
@@ -298,7 +298,7 @@
                 alert('Por favor, preencha o nome do utente');
                 return false;
             }
-            if (!nif || nif.length !== 9) {
+            if (!nif || !/^[0-9]{9}$/.test(nif)) {
                 alert('Por favor, preencha um NIF válido com 9 dígitos');
                 return false;
             }
@@ -310,7 +310,7 @@
                 alert('Por favor, selecione um exame');
                 return false;
             }
-            if (!valor || valor <= 0) {
+            if (!valor || parseFloat(valor) <= 0 || parseFloat(valor) > 99999.99) {
                 alert('Por favor, preencha um valor válido');
                 return false;
             }
