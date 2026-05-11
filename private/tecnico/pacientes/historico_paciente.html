@@ -38,7 +38,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i
                             class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i
                             class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
@@ -330,7 +330,13 @@
         }
 
         function exportarHistorico() {
-            alert('A exportar histórico completo...');
+            const csv = ['Data,Evento,Tipo,Detalhes','15 Jan 2026,Início Reabilitação,Avaliação,Avaliação inicial','22 Jan 2026,Primeira Sessão,Sessão,5.1N','15 Fev 2026,Meta 7N atingida,Marco,Progresso','13 Mar 2026,Última Sessão,Sessão,8.2N'].join('
+');
+            const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download','historico_paciente.csv');
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         function filtrarHistorico() {

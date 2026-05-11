@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RehabLink | Editar Utilizador</title>
-    
     <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
     <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
     <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
+    <style>
+        .field-error { color:#8B0000; font-size:0.78rem; margin-top:3px; display:none; }
+    </style>
 </head>
-
 <body>
     <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
         <div class="sistema-nome">
             <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
-                <i class="fa-solid fa-shield-hal logo-icon"></i>
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
                 <span class="fw-bold">RehabLink · Administrador</span>
             </a>
         </div>
@@ -28,7 +28,7 @@
                 <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
                 <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../../../public/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
                 <li><a class="dropdown-item" href="../../../index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
@@ -57,68 +57,71 @@
 
             <h1 class="mb-4">Editar Utilizador</h1>
 
-            <form class="progress-card">
+            <form class="progress-card" id="formEditarUtilizador" novalidate>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Nome Completo</label>
-                        <input type="text" class="form-control" value="Ana Ferreira">
+                        <label class="form-label">Nome Completo <span style="color:#8B0000">*</span></label>
+                        <input type="text" id="nome" class="form-control" value="Ana Ferreira" required minlength="3" maxlength="100">
+                        <div class="field-error" id="errNome">Nome deve ter entre 3 e 100 caracteres</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="ana.ferreira@email.com">
+                        <label class="form-label">Email <span style="color:#8B0000">*</span></label>
+                        <input type="email" id="email" class="form-control" value="ana.ferreira@email.com" required maxlength="150">
+                        <div class="field-error" id="errEmail">Email inválido</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Nascimento <span style="color:#8B0000">*</span></label>
+                        <input type="date" id="dataNasc" class="form-control" value="1990-05-15" required>
+                        <div class="field-error" id="errDataNasc">Idade deve ser entre 18 e 100 anos</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Tipo de Utilizador</label>
-                        <select class="form-select">
+                        <select id="tipoUtilizador" class="form-select">
                             <option value="utente" selected>Utente</option>
                             <option value="fisioterapeuta">Fisioterapeuta</option>
                             <option value="medico">Médico</option>
                             <option value="admin">Administrador</option>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Estado</label>
-                        <select class="form-select">
-                            <option value="ativo" selected>Ativo</option>
-                            <option value="inativo">Inativo</option>
-                            <option value="pendente">Pendente</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Nova Password</label>
-                        <input type="password" class="form-control" placeholder="Deixar em branco para manter">
+                        <label class="form-label">Nova Password <small class="text-muted">(deixar em branco para manter)</small></label>
+                        <input type="password" id="password" class="form-control" placeholder="Mínimo 8 caracteres" maxlength="64">
+                        <div class="field-error" id="errPass">Password deve ter entre 8 e 64 caracteres</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Confirmar Password</label>
-                        <input type="password" class="form-control" placeholder="Deixar em branco para manter">
+                        <input type="password" id="confirmPass" class="form-control" placeholder="Repetir nova password">
+                        <div class="field-error" id="errConfirmPass">As passwords não coincidem</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">NIF</label>
-                        <input type="text" class="form-control" value="123456789">
+                        <input type="text" id="nif" class="form-control" value="123456789" pattern="[0-9]{9}" maxlength="9">
+                        <div class="field-error" id="errNif">NIF deve ter exatamente 9 dígitos</div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Telemóvel</label>
-                        <input type="tel" class="form-control" value="912 345 678">
+                        <input type="tel" id="telemovel" class="form-control" value="912345678" pattern="[0-9]{9}" maxlength="9">
+                        <div class="field-error" id="errTel">Telemóvel deve ter 9 dígitos</div>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Morada</label>
-                    <input type="text" class="form-control" value="Rua das Flores, 123, Porto">
+                    <input type="text" id="morada" class="form-control" value="Rua das Flores, 123, Porto" maxlength="200">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Notas</label>
-                    <textarea class="form-control" rows="3">Paciente desde Janeiro 2026. Boa evolução.</textarea>
+                    <textarea id="notas" class="form-control" rows="3" maxlength="500">Paciente desde Janeiro 2026. Boa evolução.</textarea>
                 </div>
 
                 <hr>
@@ -127,9 +130,9 @@
                     <button type="button" class="btn-danger" onclick="apagarUtilizador()">
                         <i class="fa-regular fa-trash-can me-2"></i>Apagar Utilizador
                     </button>
-                    <div>
+                    <div class="d-flex gap-2">
                         <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
-                        <button type="submit" class="btn-filter ms-2" onclick="guardarAlteracoes()">Guardar Alterações</button>
+                        <button type="button" class="btn-filter" onclick="guardarAlteracoes()">Guardar Alterações</button>
                     </div>
                 </div>
             </form>
@@ -139,25 +142,25 @@
                 <div class="table-container">
                     <table class="table">
                         <thead>
-                            32
+                            <tr>
                                 <th>Data</th>
                                 <th>Ação</th>
                                 <th>IP</th>
-                            32
+                            </tr>
                         </thead>
                         <tbody>
-                            32
-                                32<strong>20 Mar 2026 10:30</strong>32
-                                32Último acesso32
-                                32192.168.1.11032
-                            41
-                            32
-                                32<strong>19 Mar 2026 15:20</strong>32
-                                32Alteração de perfil32
-                                32192.168.1.11032
-                            41
+                            <tr>
+                                <td><strong>20 Mar 2026 10:30</strong></td>
+                                <td>Último acesso</td>
+                                <td>192.168.1.110</td>
+                            </tr>
+                            <tr>
+                                <td><strong>19 Mar 2026 15:20</strong></td>
+                                <td>Alteração de perfil</td>
+                                <td>192.168.1.110</td>
+                            </tr>
                         </tbody>
-                    90
+                    </table>
                 </div>
             </div>
         </main>
@@ -166,13 +169,59 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script>
+        function calcularIdade(dataNasc) {
+            const hoje = new Date();
+            const nasc = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nasc.getFullYear();
+            const m = hoje.getMonth() - nasc.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+            return idade;
+        }
+
+        function mostrarErro(id, mostrar) {
+            document.getElementById(id).style.display = mostrar ? 'block' : 'none';
+        }
+
         function guardarAlteracoes() {
+            let valido = true;
+
+            const nome = document.getElementById('nome').value.trim();
+            if (nome.length < 3 || nome.length > 100) { mostrarErro('errNome', true); valido = false; } else mostrarErro('errNome', false);
+
+            const email = document.getElementById('email').value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { mostrarErro('errEmail', true); valido = false; } else mostrarErro('errEmail', false);
+
+            const dataNasc = document.getElementById('dataNasc').value;
+            if (dataNasc) {
+                const idade = calcularIdade(dataNasc);
+                if (idade < 18 || idade > 100) { mostrarErro('errDataNasc', true); valido = false; } else mostrarErro('errDataNasc', false);
+            }
+
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPass').value;
+            if (pass) {
+                if (pass.length < 8 || pass.length > 64) { mostrarErro('errPass', true); valido = false; } else mostrarErro('errPass', false);
+                if (pass !== confirmPass) { mostrarErro('errConfirmPass', true); valido = false; } else mostrarErro('errConfirmPass', false);
+            } else {
+                mostrarErro('errPass', false);
+                mostrarErro('errConfirmPass', false);
+            }
+
+            const nif = document.getElementById('nif').value;
+            if (nif && !/^[0-9]{9}$/.test(nif)) { mostrarErro('errNif', true); valido = false; } else mostrarErro('errNif', false);
+
+            const tel = document.getElementById('telemovel').value;
+            if (tel && !/^[0-9]{9}$/.test(tel)) { mostrarErro('errTel', true); valido = false; } else mostrarErro('errTel', false);
+
+            if (!valido) return;
+
             alert('Alterações guardadas com sucesso!');
             window.location.href = 'lista_utilizadores.html';
         }
+
         function apagarUtilizador() {
-            if(confirm('Tem certeza que deseja apagar este utilizador? Esta ação não pode ser desfeita.')) {
-                alert('Utilizador apagado');
+            if (confirm('Tem certeza que deseja apagar este utilizador? Esta ação não pode ser desfeita.')) {
+                alert('Utilizador apagado com sucesso.');
                 window.location.href = 'lista_utilizadores.html';
             }
         }

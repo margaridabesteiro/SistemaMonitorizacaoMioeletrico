@@ -82,7 +82,7 @@
                 <i class="fa-regular fa-calendar-check me-2"></i>Consultas
             </a>
             <a href="prescricoes/lista_prescricoes.html" class="nav-link">
-                <i class="fa-solid fa-prescription me-2"></i>Prescrições
+                <i class="fa-solid fa-file-medical me-2"></i>Prescrições
             </a>
             <a href="pacientes/gestaoUtente.html" class="nav-link">
                 <i class="fa-solid fa-users me-2"></i>Pacientes
@@ -115,7 +115,7 @@
                     Nova Consulta
                 </button>
                 <button class="btn-acao" onclick="novaPrescricao()">
-                    <i class="fa-solid fa-prescription"></i>
+                    <i class="fa-solid fa-file-medical"></i>
                     Nova Prescrição
                 </button>
                 <button class="btn-acao" onclick="novoPaciente()">
@@ -223,7 +223,7 @@
                     <!-- Prescrições Recentes -->
                     <div class="progress-card">
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-prescription"></i> Prescrições Recentes</h3>
+                            <h3><i class="fa-solid fa-file-medical"></i> Prescrições Recentes</h3>
                             <a href="#">Ver todas</a>
                         </div>
 
@@ -565,13 +565,9 @@
         });
 
         // Funções de ação
-        function novaConsulta() {
-            alert('Abrir formulário de nova consulta');
-        }
+        function novaConsulta() { window.location.href = 'consultas/consulta.html'; }
 
-        function novaPrescricao() {
-            alert('Abrir formulário de nova prescrição');
-        }
+        function novaPrescricao() { window.location.href = 'prescricoes/nova_prescricao.html'; }
 
         function novoPaciente() {
             alert('Abrir formulário de novo paciente');
