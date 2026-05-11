@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Login</title>
+    <link rel="shortcut icon" href="assets/img/logo.jpg" type="image/jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+ 
+</head>
+<body>
+    <a href="../index.html" class="btn-voltar" title="Voltar à página inicial">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    
+    <div class="login-container">
+        <div class="login-card text-center">
+            <img src="assets/img/logo.jpg" alt="Logotipo RehabLink">
+            <h2>Bem-vindo de volta</h2>
+            <p class="subtitle">Aceda à sua área pessoal</p>
+            
+            <form action="../private/utilizadores.html" method="get">
+                <div class="mb-4 text-start">
+                    <label for="email" class="form-label">
+                        <i class="fa-regular fa-envelope me-2"></i>Email
+                    </label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="exemplo@email.com" required>
+                        <i class="fa-regular fa-envelope input-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="mb-4 text-start">
+                    <label for="password" class="form-label">
+                        <i class="fa-regular fa-lock me-2"></i>Password
+                    </label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                        <i class="fa-regular fa-eye input-icon" id="togglePassword" style="cursor: pointer;"></i>
+                    </div>
+                </div>
+                
+                <div class="login-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember"> 
+                        <span>Lembrar-me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Esqueceu a password?</a>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    Entrar
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+            
+            <div class="login-error">
+                <i class="fa-regular fa-circle-exclamation"></i>
+                <span>Erro: Utilizador ou password incorretos</span>
+            </div>
+            
+            <div class="register-link">
+                <strong>Ainda não tem conta?</strong>
+                <a href="registo_cliente.html">Registe-se aqui</a>
+                <i class="fa-regular fa-arrow-right ms-1"></i>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/esconder password
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+        
+        // Validação do formulário
+        const loginForm = document.querySelector('form');
+        const errorDiv = document.querySelector('.login-error');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', function (e) {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Exemplo: mostrar erro para credenciais específicas
+                if (email === 'erro@teste.com') {
+                    e.preventDefault();
+                    errorDiv.style.display = 'flex';
+                    setTimeout(() => {
+                        errorDiv.style.display = 'none';
+                    }, 5000);
+                }
+            });
+        }
+        
+        // Efeito de focus nos campos
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                const icon = this.parentElement.querySelector('.input-icon');
+                if (icon) icon.style.color = '#667eea';
+            });
+            input.addEventListener('blur', function () {
+                const icon = this.parentElement.querySelector('.input-icon');
+                if (icon) icon.style.color = '#a0aec0';
+            });
+        });
+    </script>
+</body>
+</html>

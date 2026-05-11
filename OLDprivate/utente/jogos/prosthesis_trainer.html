@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prosthesis Force Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --surface: #ffffff;
+    --surface2: #f7f8fa;
+    --accent: #00c896;
+    --accent2: #005eff;
+    --warn: #ff6b35;
+    --text: #0d0d0d;
+    --text2: #6b7280;
+    --border: rgba(0,0,0,0.08);
+    --shadow: 0 2px 20px rgba(0,0,0,0.06);
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 860px;
+    display: grid;
+    gap: 16px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .header-left { display: flex; align-items: center; gap: 14px; }
+
+  .logo-mark {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mark svg { width: 24px; height: 24px; }
+
+  .header h1 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .header h1 span {
+    display: block;
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: #e8faf4;
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .stat-card:nth-child(1)::before { background: var(--accent2); }
+  .stat-card:nth-child(2)::before { background: var(--accent); }
+  .stat-card:nth-child(3)::before { background: var(--warn); }
+  .stat-card:nth-child(4)::before { background: #9b5cf6; }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .stat-value sup {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text2);
+  }
+
+  .stat-card:nth-child(1) .stat-value { color: var(--accent2); }
+  .stat-card:nth-child(2) .stat-value { color: var(--accent); }
+  .stat-card:nth-child(3) .stat-value { color: var(--warn); }
+  .stat-card:nth-child(4) .stat-value { color: #9b5cf6; }
+
+  /* Canvas area */
+  .canvas-wrap {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    position: relative;
+  }
+
+  .canvas-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .canvas-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+  }
+
+  .status-pill.relax {
+    background: #fff8e6;
+    color: #d97706;
+  }
+
+  .status-pill.press {
+    background: #e8faf4;
+    color: var(--accent);
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    animation: pulse 1.4s infinite;
+  }
+
+  .status-pill.relax .status-dot { background: #d97706; }
+  .status-pill.press .status-dot { background: var(--accent); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  canvas {
+    width: 100%;
+    height: 360px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    display: block;
+    cursor: pointer;
+    background: #fafbfc;
+    touch-action: none;
+    user-select: none;
+  }
+
+  /* Instructions */
+  .instructions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .instr-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .instr-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+  }
+
+  .instr-icon.down { background: #fff8e6; }
+  .instr-icon.up { background: #e8faf4; }
+
+  .instr-text strong {
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .instr-text span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text2);
+  }
+
+  /* Action bar */
+  .action-bar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-start {
+    flex: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 14px;
+    background: var(--text);
+    color: #fff;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-start:hover {
+    background: #1a1a1a;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .btn-start:active { transform: translateY(0); }
+
+  .force-display {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 12px 24px;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .force-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    margin-bottom: 2px;
+  }
+
+  .force-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-value { font-size: 1.8rem; }
+    .instructions-row { grid-template-columns: 1fr; }
+    .action-bar { flex-direction: column; }
+  }
+
+  /* Results overlay */
+  .results-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .results-overlay.show { display: flex; }
+
+  .results-card {
+    background: var(--surface);
+    border-radius: 28px;
+    padding: 40px 48px;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+    max-width: 420px;
+    width: 90%;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .results-icon { font-size: 3rem; margin-bottom: 12px; }
+
+  .results-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .results-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .result-item {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .result-item .r-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+
+  .result-item .r-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  .btn-again {
+    width: 100%;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: var(--text);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-again:hover { background: #1a1a1a; transform: translateY(-1px); }
+
+  /* Timer urgency */
+  .timer-urgent { color: var(--warn) !important; }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3C12 3 7 7 7 13C7 16.3 9.2 19 12 19C14.8 19 17 16.3 17 13C17 7 12 3 12 3Z" fill="white" opacity="0.9"/>
+          <path d="M9 13H15M12 10V16" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Force Trainer<span>Prosthesis Rehab · v2.0</span></h1>
+      </div>
+    </div>
+    <div class="badge" id="badge">● PRONTO</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Nível</div>
+      <div class="stat-value" id="level">1</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pontos</div>
+      <div class="stat-value" id="points">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Precisão</div>
+      <div class="stat-value"><span id="accuracy">0</span><sup>%</sup></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Tempo</div>
+      <div class="stat-value" id="timerDisplay">1:00</div>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="canvas-wrap">
+    <div class="canvas-top">
+      <span class="canvas-title">Monitor de Força em Tempo Real</span>
+      <div class="status-pill relax" id="statusPill">
+        <div class="status-dot"></div>
+        <span id="statusText">Relaxado</span>
+      </div>
+    </div>
+    <canvas id="canvas" width="812" height="360"></canvas>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions-row">
+    <div class="instr-card">
+      <div class="instr-icon down">📉</div>
+      <div class="instr-text">
+        <strong>Linha em baixo</strong>
+        <span>Solte → relaxar o músculo</span>
+      </div>
+    </div>
+    <div class="instr-card">
+      <div class="instr-icon up">📈</div>
+      <div class="instr-text">
+        <strong>Linha a subir</strong>
+        <span>Pressione → apertar / contrair</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action bar -->
+  <div class="action-bar">
+    <div class="force-display">
+      <div class="force-label">Força</div>
+      <div class="force-value" id="forceVal">0<span style="font-size:0.8rem;font-weight:400">%</span></div>
+    </div>
+    <button class="btn-start" onclick="startGame()">Iniciar / Reiniciar</button>
+  </div>
+
+</div>
+
+<!-- Results overlay -->
+<div class="results-overlay" id="resultsOverlay">
+  <div class="results-card">
+    <div class="results-icon">🏁</div>
+    <div class="results-title">Treino Concluído!</div>
+    <div class="results-sub">Sessão de 60 segundos</div>
+    <div class="results-grid">
+      <div class="result-item">
+        <div class="r-label">Pontos</div>
+        <div class="r-value" id="rPoints">0</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Precisão</div>
+        <div class="r-value"><span id="rAccuracy">0</span>%</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Nível máx.</div>
+        <div class="r-value" id="rLevel">1</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Avaliação</div>
+        <div class="r-value" id="rGrade">—</div>
+      </div>
+    </div>
+    <button class="btn-again" onclick="closeResults()">Jogar novamente</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const W = 812, H = 360;
+
+let playerY = H * 0.82;
+let velocity = 0;
+let isPressing = false;
+let score = 0;
+let level = 1;
+let gameRunning = false;
+let accuracySum = 0;
+let accuracyCount = 0;
+let targetPoints = [];
+let time = 0;
+
+const GAME_DURATION = 60;
+let timeLeft = GAME_DURATION;
+let timerInterval = null;
+
+function getDifficulty() {
+  // Difficulty grows linearly with elapsed time (0→1 over 60s)
+  const elapsed = GAME_DURATION - timeLeft;
+  const t = Math.min(elapsed / GAME_DURATION, 1); // 0 at start, 1 at end
+  return {
+    amplitude: 70 + t * 110,       // 70px → 180px swing
+    speed:     0.018 + t * 0.038,  // slow → fast frequency
+    smoothing: 0.18 - t * 0.10     // less smoothing = sharper changes
+  };
+}
+
+function initTarget() {
+  targetPoints = [];
+  for (let i = 0; i < W; i += 2) {
+    let y = H/2 + Math.sin(i * 0.018) * 70;
+    y = Math.max(55, Math.min(H - 55, y));
+    targetPoints.push(y);
+  }
+}
+
+function getTargetAt(x) {
+  const idx = Math.floor(x / 2);
+  return (idx >= 0 && idx < targetPoints.length) ? targetPoints[idx] : H/2;
+}
+
+function updateTarget() {
+  targetPoints.shift();
+  const last = targetPoints[targetPoints.length - 1] || H/2;
+  const d = getDifficulty();
+  // Two sine waves combined so the path never flattens out
+  const wave = Math.sin(time * d.speed) * d.amplitude * 0.7
+             + Math.sin(time * d.speed * 1.7 + 1.2) * d.amplitude * 0.3;
+  let newY = last * d.smoothing + (H/2 + wave) * (1 - d.smoothing);
+  newY = Math.max(55, Math.min(H - 55, newY));
+  targetPoints.push(newY);
+  time++;
+
+  // Update level display based on time elapsed
+  const elapsed = GAME_DURATION - timeLeft;
+  const displayLevel = Math.floor(elapsed / 12) + 1; // level up every 12s
+  if (displayLevel !== level) {
+    level = displayLevel;
+    document.getElementById('level').textContent = level;
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid lines (subtle)
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += H/6) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+    ctx.stroke();
+  }
+  for (let x = 0; x < W; x += W/8) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, H);
+    ctx.stroke();
+  }
+
+  const playerX = 140;
+  const targetY = getTargetAt(playerX);
+  const distance = Math.abs(playerY - targetY);
+  const closeness = Math.max(0, 1 - distance / 100);
+
+  // Draw trail behind target line
+  const grad = ctx.createLinearGradient(0, 0, W, 0);
+  grad.addColorStop(0, 'rgba(0,200,150,0)');
+  grad.addColorStop(0.15, 'rgba(0,200,150,0.08)');
+  grad.addColorStop(1, 'rgba(0,200,150,0.25)');
+
+  // Target line fill area
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  for (let x = 0; x < W; x += 2) {
+    const y = getTargetAt(x);
+    if (x === 0) ctx.moveTo(x, y - 18);
+    else ctx.lineTo(x, y - 18);
+  }
+  for (let x = W - 2; x >= 0; x -= 2) {
+    const y = getTargetAt(x);
+    ctx.lineTo(x, y + 18);
+  }
+  ctx.closePath();
+  ctx.fill();
+
+  // Target line
+  ctx.strokeStyle = '#00c896';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = 'rgba(0,200,150,0.4)';
+  ctx.beginPath();
+  for (let x = 0; x < W; x += 2) {
+    const y = getTargetAt(x);
+    if (x === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Player trail
+  const trailGrad = ctx.createLinearGradient(playerX - 70, 0, playerX, 0);
+  trailGrad.addColorStop(0, 'rgba(0,94,255,0)');
+  trailGrad.addColorStop(1, `rgba(0,94,255,${0.15 + closeness * 0.2})`);
+  ctx.fillStyle = trailGrad;
+  ctx.fillRect(playerX - 70, playerY - 2, 70, 4);
+
+  // Player dot
+  const playerColor = closeness > 0.6
+    ? `rgba(0,200,150,${0.8 + closeness * 0.2})`
+    : closeness > 0.3
+    ? 'rgba(0,94,255,0.9)'
+    : 'rgba(255,107,53,0.9)';
+
+  // Outer glow ring
+  ctx.beginPath();
+  ctx.arc(playerX, playerY, 22, 0, Math.PI * 2);
+  ctx.fillStyle = playerColor.replace('0.9)', '0.12)').replace('0.8', '0.1').replace(/[\d.]+\)$/, '0.12)');
+  ctx.fill();
+
+  // Inner circle
+  ctx.beginPath();
+  ctx.arc(playerX, playerY, 12, 0, Math.PI * 2);
+  ctx.fillStyle = playerColor;
+  ctx.shadowBlur = closeness > 0.6 ? 18 : 8;
+  ctx.shadowColor = playerColor;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Center dot
+  ctx.beginPath();
+  ctx.arc(playerX, playerY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+
+  // Connector line from player to target
+  if (distance > 15) {
+    ctx.strokeStyle = `rgba(0,0,0,0.08)`;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(playerX, playerY);
+    ctx.lineTo(playerX, targetY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Force % text
+  const forcePercent = Math.round(100 - (playerY / H * 100));
+  document.getElementById('forceVal').textContent = forcePercent + '%';
+  document.getElementById('forceVal').style.color = closeness > 0.6 ? '#00c896' : closeness > 0.3 ? '#005eff' : '#ff6b35';
+
+  // Accuracy bar on right side
+  const barH = H - 80;
+  const barY = 40;
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.beginPath();
+  ctx.roundRect(W - 20, barY, 8, barH, 4);
+  ctx.fill();
+
+  ctx.fillStyle = playerColor;
+  const fillH = barH * closeness;
+  ctx.beginPath();
+  ctx.roundRect(W - 20, barY + barH - fillH, 8, fillH, 4);
+  ctx.fill();
+
+  // Label on right bar
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.font = '500 10px "DM Mono"';
+  ctx.textAlign = 'center';
+  ctx.fillText('FIT', W - 16, barY + barH + 16);
+
+  if (gameRunning) {
+    accuracySum += closeness * 100;
+    accuracyCount++;
+    document.getElementById('accuracy').textContent = Math.round(accuracySum / accuracyCount);
+    if (closeness > 0.5) score += closeness * 1.2;
+    document.getElementById('points').textContent = Math.floor(score);
+  }
+}
+
+function updateStatus(pressing) {
+  const pill = document.getElementById('statusPill');
+  const txt = document.getElementById('statusText');
+  if (pressing) {
+    pill.className = 'status-pill press';
+    txt.textContent = 'Pressionando';
+  } else {
+    pill.className = 'status-pill relax';
+    txt.textContent = 'Relaxado';
+  }
+}
+
+function gameLoop() {
+  if (gameRunning) {
+    if (isPressing) {
+      velocity -= 1.4;
+    } else {
+      velocity += 0.9;
+    }
+
+    velocity *= 0.86;
+    playerY += velocity;
+
+    if (playerY < 35) { playerY = 35; velocity = 2; }
+    if (playerY > H - 35) { playerY = H - 35; velocity = -2; }
+
+    updateTarget();
+
+  }
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+canvas.addEventListener('mousedown', () => { isPressing = true; updateStatus(true); });
+canvas.addEventListener('mouseup', () => { isPressing = false; updateStatus(false); });
+canvas.addEventListener('mouseleave', () => { isPressing = false; updateStatus(false); });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); isPressing = true; updateStatus(true); }, {passive:false});
+canvas.addEventListener('touchend', () => { isPressing = false; updateStatus(false); });
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = GAME_DURATION;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      endGame();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timerDisplay');
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  if (timeLeft <= 10) {
+    el.classList.add('timer-urgent');
+  } else {
+    el.classList.remove('timer-urgent');
+  }
+}
+
+function endGame() {
+  gameRunning = false;
+  isPressing = false;
+  updateStatus(false);
+
+  const finalAccuracy = accuracyCount > 0 ? Math.round(accuracySum / accuracyCount) : 0;
+  const grade = finalAccuracy >= 85 ? '⭐⭐⭐' : finalAccuracy >= 65 ? '⭐⭐' : '⭐';
+
+  document.getElementById('rPoints').textContent = Math.floor(score);
+  document.getElementById('rAccuracy').textContent = finalAccuracy;
+  document.getElementById('rLevel').textContent = level;
+  document.getElementById('rGrade').textContent = grade;
+  document.getElementById('resultsOverlay').classList.add('show');
+
+  document.getElementById('badge').textContent = '● CONCLUÍDO';
+  document.getElementById('badge').style.background = '#f3e8ff';
+  document.getElementById('badge').style.color = '#9b5cf6';
+}
+
+function closeResults() {
+  document.getElementById('resultsOverlay').classList.remove('show');
+  startGame();
+}
+
+function startGame() {
+  clearInterval(timerInterval);
+  gameRunning = true;
+  score = 0; level = 1; time = 0;
+  accuracySum = 0; accuracyCount = 0;
+  playerY = H * 0.82; velocity = 0;
+  document.getElementById('level').textContent = '1';
+  document.getElementById('points').textContent = '0';
+  document.getElementById('accuracy').textContent = '0';
+  document.getElementById('badge').textContent = '● A CORRER';
+  document.getElementById('badge').style.background = '#e8faf4';
+  document.getElementById('badge').style.color = '#00c896';
+  document.getElementById('resultsOverlay').classList.remove('show');
+  initTarget();
+  startTimer();
+}
+
+initTarget();
+gameLoop();
+</script>
+</body>
+</html>

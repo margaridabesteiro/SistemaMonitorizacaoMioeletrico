@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabLink | Novo Utilizador</title>
+    <link rel="shortcut icon" href="../../assets/img/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <style>
+        .modal-overlay { display:none; position:fixed; top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center; }
+        .modal-overlay.show { display:flex; }
+        .modal-box { background:#fff;border-radius:12px;padding:2rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto; }
+        .modal-box h4 { color:#8B0000; }
+        .terms-text { max-height:250px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:1rem;background:#f8fafc;font-size:0.85rem; }
+        .field-error { color:#8B0000; font-size:0.78rem; margin-top:3px; display:none; }
+    </style>
+</head>
+<body>
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="sistema-nome">
+            <a href="../index_admin.html" class="text-decoration-none d-flex align-items-center gap-3">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span class="fw-bold">RehabLink · Administrador</span>
+            </a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user-gear"></i> Admin
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="../configuracao/sistema.html"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+                <li><a class="dropdown-item" href="../seguranca/logs_acesso.html"><i class="fa-solid fa-shield me-2"></i>Logs</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../../private/login/login.html"><i class="fa-solid fa-key me-2"></i>Alterar password</a></li>
+                <li><a class="dropdown-item" href="../../../index.html"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <h2><i class="fa-solid fa-bars me-2"></i>Menu Administrativo</h2>
+            <a href="../index_admin.html" class="nav-link"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
+            <a href="lista_utilizadores.html" class="nav-link active"><i class="fa-solid fa-users me-2"></i>Utilizadores</a>
+            <a href="../profissionais_saude/gestao_PS.html" class="nav-link"><i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde</a>
+            <a href="../dispositivos/lista_dispositivos.html" class="nav-link"><i class="fa-solid fa-microchip me-2"></i>Dispositivos</a>
+            <a href="../faturacao/controlo_faturacao.html" class="nav-link"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Faturação</a>
+            <a href="../relatorios/relatorios_sistema.html" class="nav-link"><i class="fa-regular fa-file-lines me-2"></i>Relatórios</a>
+            <a href="../seguranca/logs_acesso.html" class="nav-link"><i class="fa-solid fa-shield me-2"></i>Segurança</a>
+            <a href="../configuracao/sistema.html" class="nav-link"><i class="fa-solid fa-gear me-2"></i>Configuração</a>
+        </nav>
+
+        <main class="content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_utilizadores.html">Utilizadores</a></li>
+                    <li class="breadcrumb-item active">Novo Utilizador</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Novo Utilizador</h1>
+
+            <form class="progress-card" id="formNovoUtilizador" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nome Completo <span style="color:#8B0000">*</span></label>
+                        <input type="text" id="nome" class="form-control" required minlength="3" maxlength="100" placeholder="Nome e apelido">
+                        <div class="field-error" id="errNome">Nome deve ter entre 3 e 100 caracteres</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email <span style="color:#8B0000">*</span></label>
+                        <input type="email" id="email" class="form-control" required maxlength="150" placeholder="utilizador@dominio.pt">
+                        <div class="field-error" id="errEmail">Email inválido</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Nascimento <span style="color:#8B0000">*</span></label>
+                        <input type="date" id="dataNasc" class="form-control" required>
+                        <div class="field-error" id="errDataNasc">Idade deve ser entre 18 e 100 anos</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Género</label>
+                        <select id="genero" class="form-select">
+                            <option value="">Não especificado</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                            <option value="O">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Utilizador <span style="color:#8B0000">*</span></label>
+                        <select id="tipoUtilizador" class="form-select" required>
+                            <option value="">Selecionar...</option>
+                            <option value="utente">Utente</option>
+                            <option value="fisioterapeuta">Fisioterapeuta</option>
+                            <option value="medico">Médico</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                        <div class="field-error" id="errTipo">Selecione um tipo de utilizador</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estado</label>
+                        <select id="estado" class="form-select">
+                            <option value="ativo">Ativo</option>
+                            <option value="pendente">Pendente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Password <span style="color:#8B0000">*</span></label>
+                        <input type="password" id="password" class="form-control" required minlength="8" maxlength="64" placeholder="Mínimo 8 caracteres">
+                        <div class="field-error" id="errPass">Password deve ter entre 8 e 64 caracteres</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Confirmar Password <span style="color:#8B0000">*</span></label>
+                        <input type="password" id="confirmPass" class="form-control" required placeholder="Repetir password">
+                        <div class="field-error" id="errConfirmPass">As passwords não coincidem</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">NIF</label>
+                        <input type="text" id="nif" class="form-control" pattern="[0-9]{9}" maxlength="9" placeholder="123456789">
+                        <div class="field-error" id="errNif">NIF deve ter exatamente 9 dígitos</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Telemóvel</label>
+                        <input type="tel" id="telemovel" class="form-control" pattern="[0-9]{9}" maxlength="9" placeholder="912345678">
+                        <div class="field-error" id="errTel">Telemóvel deve ter 9 dígitos</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Morada</label>
+                    <input type="text" id="morada" class="form-control" maxlength="200" placeholder="Rua, Nº, Código Postal, Cidade">
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="enviarEmail">
+                    <label class="form-check-label" for="enviarEmail">
+                        Enviar email de boas-vindas com credenciais
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="aceitarTermos" required>
+                    <label class="form-check-label" for="aceitarTermos">
+                        O utilizador aceita os <a href="#" onclick="mostrarTermos(event)" style="color:#8B0000;">Termos e Condições</a> <span style="color:#8B0000">*</span>
+                    </label>
+                    <div class="field-error" id="errTermos">É obrigatório aceitar os Termos e Condições</div>
+                </div>
+
+                <hr>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn-reset" onclick="history.back()">Cancelar</button>
+                    <button type="button" class="btn-filter" onclick="guardarUtilizador()">Criar Utilizador</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- MODAL TERMOS -->
+    <div class="modal-overlay" id="modalTermos">
+        <div class="modal-box">
+            <h4><i class="fa-solid fa-file-contract me-2"></i>Termos e Condições</h4>
+            <div class="terms-text">
+                <p><strong>1. Aceitação dos Termos</strong><br>Ao criar uma conta no sistema RehabLink, o utilizador aceita integralmente os presentes Termos e Condições.</p>
+                <p><strong>2. Proteção de Dados (RGPD)</strong><br>Os dados pessoais e clínicos são tratados de acordo com o RGPD. Todos os dados são encriptados em trânsito e em repouso.</p>
+                <p><strong>3. Confidencialidade</strong><br>O utilizador compromete-se a manter confidenciais as suas credenciais e a não partilhar informação clínica fora do âmbito da plataforma.</p>
+                <p><strong>4. Acesso Restrito</strong><br>O acesso é pessoal e intransmissível. Cada profissional tem acesso apenas aos utentes que lhe estão atribuídos.</p>
+                <p><strong>5. Segurança</strong><br>A plataforma utiliza encriptação AES-256 e TLS 1.3. Os logs de acesso são monitorizados continuamente.</p>
+            </div>
+            <div class="d-flex gap-2 justify-content-end mt-3">
+                <button class="btn-reset" onclick="fecharTermos()">Fechar</button>
+                <button class="btn-filter" onclick="aceitarTermos()">Aceitar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        function mostrarTermos(e) { e && e.preventDefault(); document.getElementById('modalTermos').classList.add('show'); }
+        function fecharTermos() { document.getElementById('modalTermos').classList.remove('show'); }
+        function aceitarTermos() { document.getElementById('aceitarTermos').checked = true; fecharTermos(); }
+
+        function calcularIdade(dataNasc) {
+            const hoje = new Date();
+            const nasc = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nasc.getFullYear();
+            const m = hoje.getMonth() - nasc.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+            return idade;
+        }
+
+        function mostrarErro(id, mostrar) {
+            document.getElementById(id).style.display = mostrar ? 'block' : 'none';
+        }
+
+        function guardarUtilizador() {
+            let valido = true;
+
+            const nome = document.getElementById('nome').value.trim();
+            if (nome.length < 3 || nome.length > 100) { mostrarErro('errNome', true); valido = false; } else mostrarErro('errNome', false);
+
+            const email = document.getElementById('email').value.trim();
+            const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRe.test(email)) { mostrarErro('errEmail', true); valido = false; } else mostrarErro('errEmail', false);
+
+            const dataNasc = document.getElementById('dataNasc').value;
+            if (dataNasc) {
+                const idade = calcularIdade(dataNasc);
+                if (idade < 18 || idade > 100) { mostrarErro('errDataNasc', true); valido = false; } else mostrarErro('errDataNasc', false);
+            } else { mostrarErro('errDataNasc', true); valido = false; }
+
+            const tipo = document.getElementById('tipoUtilizador').value;
+            if (!tipo) { mostrarErro('errTipo', true); valido = false; } else mostrarErro('errTipo', false);
+
+            const pass = document.getElementById('password').value;
+            if (pass.length < 8 || pass.length > 64) { mostrarErro('errPass', true); valido = false; } else mostrarErro('errPass', false);
+
+            const confirmPass = document.getElementById('confirmPass').value;
+            if (pass !== confirmPass) { mostrarErro('errConfirmPass', true); valido = false; } else mostrarErro('errConfirmPass', false);
+
+            const nif = document.getElementById('nif').value;
+            if (nif && !/^[0-9]{9}$/.test(nif)) { mostrarErro('errNif', true); valido = false; } else mostrarErro('errNif', false);
+
+            const tel = document.getElementById('telemovel').value;
+            if (tel && !/^[0-9]{9}$/.test(tel)) { mostrarErro('errTel', true); valido = false; } else mostrarErro('errTel', false);
+
+            if (!document.getElementById('aceitarTermos').checked) { mostrarErro('errTermos', true); valido = false; } else mostrarErro('errTermos', false);
+
+            if (!valido) return;
+
+            // Guardar em localStorage (simulação encriptada)
+            const utilizadores = JSON.parse(localStorage.getItem('rl_utilizadores') || '[]');
+            const novoUtilizador = {
+                id: Date.now(),
+                nome, email, tipo,
+                estado: document.getElementById('estado').value,
+                dataNasc,
+                nif, telemovel: tel,
+                morada: document.getElementById('morada').value,
+                dataCriacao: new Date().toLocaleDateString('pt-PT'),
+                termoAceite: true
+            };
+            utilizadores.push(novoUtilizador);
+            localStorage.setItem('rl_utilizadores', btoa(JSON.stringify(utilizadores)));
+
+            alert('Utilizador criado com sucesso!');
+            window.location.href = 'lista_utilizadores.html';
+        }
+    </script>
+</body>
+</html>
