@@ -4,6 +4,16 @@
 
 requirePerfil('medico');
 $nome_medico = h($_SESSION['nome'] ?? 'Médico');
+
+$_db_hdr = getDB();
+$_stmt_hdr = $_db_hdr->prepare("
+    SELECT u.email, p.especialidade, p.instituicao
+    FROM utilizadores u
+    LEFT JOIN profissionais p ON p.utilizador_id = u.id
+    WHERE u.id = ?
+");
+$_stmt_hdr->execute([$_SESSION['utilizador_id']]);
+$_prof_hdr = $_stmt_hdr->fetch() ?: [];
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -43,12 +53,61 @@ $nome_medico = h($_SESSION['nome'] ?? 'Médico');
                 <span><?= $nome_medico ?></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfilMedico">
+                    <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/medico/consultas/agenda.php">
+                    <i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
                     <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
             </ul>
         </div>
     </header>
+
+    <!-- Modal: Perfil do Médico -->
+    <div class="modal fade" id="modalPerfilMedico" tabindex="-1" aria-labelledby="modalPerfilMedicoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#8B0000;">
+                    <h5 class="modal-title text-white" id="modalPerfilMedicoLabel">
+                        <i class="fa-solid fa-user-doctor me-2"></i>Meu Perfil
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div style="width:64px;height:64px;border-radius:50%;background:#8B0000;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fa-solid fa-user-doctor fa-2x text-white"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold"><?= $nome_medico ?></h5>
+                            <span class="badge" style="background:#8B0000;">Médico</span>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr>
+                            <td class="text-muted fw-semibold" style="width:40%"><i class="fa-regular fa-envelope me-2"></i>Email</td>
+                            <td><?= h($_prof_hdr['email'] ?? '') ?></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted fw-semibold"><i class="fa-solid fa-stethoscope me-2"></i>Especialidade</td>
+                            <td><?= h($_prof_hdr['especialidade'] ?? 'Não definida') ?></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted fw-semibold"><i class="fa-solid fa-hospital me-2"></i>Instituição</td>
+                            <td><?= h($_prof_hdr['instituicao'] ?? 'Não definida') ?></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted fw-semibold"><i class="fa-solid fa-id-badge me-2"></i>Perfil</td>
+                            <td>Médico</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="wrapper">

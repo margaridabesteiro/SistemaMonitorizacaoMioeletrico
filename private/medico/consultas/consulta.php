@@ -25,7 +25,10 @@ if ($pid) {
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Consultas</h1>
-                <a href="#" class="btn btn-sm" style="background:#8B0000;color:#fff;"><i class="fa-regular fa-calendar-plus me-1"></i>Nova Consulta</a>
+                <div class="d-flex gap-2">
+                    <a href="nova_consulta.php" class="btn btn-sm" style="background:#8B0000;color:#fff;"><i class="fa-regular fa-calendar-plus me-1"></i>Nova Consulta</a>
+                    <a href="agenda.php" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-calendar me-1"></i>Minha Agenda</a>
+                </div>
             </div>
             <div class="d-flex gap-2 mb-4">
                 <?php foreach(['hoje'=>'Hoje','amanha'=>'Amanhã','semana'=>'Esta semana','pendente'=>'Pendentes','historico'=>'Histórico'] as $k=>$v): ?>
@@ -41,13 +44,80 @@ if ($pid) {
                         <tr>
                             <td><?= h(substr($c['data_hora'],0,16)) ?></td>
                             <td><?= h($c['paciente']) ?></td>
-                            <td><?= h($c['motivo'] ?? '—') ?></td>
+                            <td><?= h($c['motivo'] ?? '') ?></td>
                             <td><span class="badge bg-<?= ['agendada'=>'primary','realizada'=>'success','cancelada'=>'danger'][$c['estado']] ?? 'secondary' ?>"><?= h($c['estado']) ?></span></td>
-                            <td><button class="btn btn-xs btn-outline-primary"><i class="fa-regular fa-eye"></i></button></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary btn-ver-consulta"
+                                        data-id="<?= $c['id'] ?>"
+                                        data-paciente="<?= h($c['paciente']) ?>"
+                                        data-datahora="<?= h(substr($c['data_hora'],0,16)) ?>"
+                                        data-motivo="<?= h($c['motivo'] ?? '') ?>"
+                                        data-estado="<?= h($c['estado']) ?>"
+                                        data-notas="<?= h($c['notas'] ?? '') ?>"
+                                        data-bs-toggle="modal" data-bs-target="#modalVerConsulta">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>
                 </table>
             </div></div>
         </main>
+
+        <!-- Modal: Ver Consulta -->
+        <div class="modal fade" id="modalVerConsulta" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#8B0000;">
+                        <h5 class="modal-title text-white">
+                            <i class="fa-regular fa-calendar-check me-2"></i>Detalhes da Consulta
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="text-muted fw-semibold" style="width:35%"><i class="fa-solid fa-user me-2"></i>Paciente</td>
+                                <td id="mc-paciente"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold"><i class="fa-regular fa-clock me-2"></i>Data/Hora</td>
+                                <td id="mc-datahora"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold"><i class="fa-solid fa-notes-medical me-2"></i>Motivo</td>
+                                <td id="mc-motivo"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold"><i class="fa-solid fa-circle-info me-2"></i>Estado</td>
+                                <td id="mc-estado"></td>
+                            </tr>
+                            <tr id="mc-notas-row">
+                                <td class="text-muted fw-semibold"><i class="fa-regular fa-file-lines me-2"></i>Notas</td>
+                                <td id="mc-notas" class="fst-italic text-muted"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        const badges = {agendada:'primary', realizada:'success', cancelada:'danger'};
+        document.querySelectorAll('.btn-ver-consulta').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('mc-paciente').textContent  = this.dataset.paciente;
+                document.getElementById('mc-datahora').textContent  = this.dataset.datahora;
+                document.getElementById('mc-motivo').textContent    = this.dataset.motivo || '—';
+                const estado = this.dataset.estado;
+                document.getElementById('mc-estado').innerHTML = `<span class="badge bg-${badges[estado]||'secondary'}">${estado}</span>`;
+                const notas = this.dataset.notas;
+                document.getElementById('mc-notas').textContent = notas || 'Sem notas registadas.';
+            });
+        });
+        </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

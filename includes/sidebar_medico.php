@@ -18,6 +18,10 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuMedico('consultas', $pa) ?>">
                 <i class="fa-regular fa-calendar-check me-2"></i>Consultas
             </a>
+            <a href="<?= APP_URL ?>/private/medico/consultas/agenda.php"
+               class="nav-link<?= menuMedico('agenda', $pa) ?>">
+                <i class="fa-regular fa-calendar me-2"></i>Minha Agenda
+            </a>
             <a href="<?= APP_URL ?>/private/medico/prescricoes/lista_prescricoes.php"
                class="nav-link<?= menuMedico('prescricoes', $pa) ?>">
                 <i class="fa-solid fa-file-medical me-2"></i>Prescrições

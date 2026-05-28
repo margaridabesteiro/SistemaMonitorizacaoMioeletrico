@@ -66,7 +66,7 @@ if ($prof_id) {
             <div class="welcome-section mb-4">
                 <div class="welcome-text">
                     <h2>Bem-vindo, <?= h($_SESSION['nome']) ?></h2>
-                    <p><?= date('l, d \d\e F \d\e Y') ?> · <?= $n_consultas ?> consulta(s) agendada(s) para hoje</p>
+                    <p><?= dataPt() ?> · <?= $n_consultas ?> consulta(s) agendada(s) para hoje</p>
                 </div>
                 <div class="welcome-icon">
                     <i class="fa-solid fa-stethoscope fa-2x" style="color:#8B0000;"></i>
