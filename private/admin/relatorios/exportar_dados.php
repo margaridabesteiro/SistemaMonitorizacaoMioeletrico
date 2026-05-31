@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = getDB();
     $queries = [
         'utilizadores' => 'SELECT id,nome,email,perfil,ativo,criado_em,ultimo_login FROM utilizadores',
-        'sessoes'      => 'SELECT s.id, u.nome AS utente, s.data_hora, s.tipo, s.estado, s.duracao_min FROM sessoes s JOIN utentes ut ON ut.id=s.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id',
+        'sessoes'      => 'SELECT s.id, u.nome AS utente, s.data_hora, s.categoria, s.estado, s.duracao_min FROM sessoes s JOIN utentes ut ON ut.id=s.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id',
         'dispositivos' => 'SELECT * FROM dispositivos',
         'faturas'      => 'SELECT f.numero, u.nome AS utente, f.valor_eur, f.paga, f.data_emissao FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id',
         'logs'         => 'SELECT l.criado_em, u.nome, l.acao, l.ip FROM logs_acesso l LEFT JOIN utilizadores u ON u.id=l.utilizador_id ORDER BY l.criado_em DESC LIMIT 5000',

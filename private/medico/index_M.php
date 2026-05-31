@@ -41,7 +41,7 @@ if ($prof_id) {
 // Prescrições ativas
 $n_prescricoes = 0;
 if ($prof_id) {
-    $stmt = $db->prepare('SELECT COUNT(*) FROM prescricoes WHERE medico_id = ? AND ativa = 1');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM programas_tratamento WHERE medico_id = ? AND ativa = 1');
     $stmt->execute([$prof_id]);
     $n_prescricoes = (int)$stmt->fetchColumn();
 }

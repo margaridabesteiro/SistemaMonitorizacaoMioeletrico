@@ -15,7 +15,7 @@ if ($utid) {
 $pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 20; $offset = ($pagina_atual-1)*$por_pagina;
 $sessoes = [];
 if ($utid) {
-    $stmt2 = $db->prepare("SELECT s.*, u.nome AS tecnico, m.rms_uv, m.precisao_pct, m.score_jogo FROM sessoes s LEFT JOIN profissionais p ON p.id=s.tecnico_id LEFT JOIN utilizadores u ON u.id=p.utilizador_id LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT $por_pagina OFFSET $offset");
+    $stmt2 = $db->prepare("SELECT s.*, u.nome AS tecnico, m.rms_uv, m.percentagem_final, m.score_jogo FROM sessoes s LEFT JOIN profissionais p ON p.id=s.tecnico_id LEFT JOIN utilizadores u ON u.id=p.utilizador_id LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT $por_pagina OFFSET $offset");
     $stmt2->execute([$utid]); $sessoes = $stmt2->fetchAll();
 }
 ?>
@@ -39,7 +39,7 @@ if ($utid) {
                     <?php else: foreach ($sessoes as $s): ?>
                         <tr>
                             <td><?= h(substr($s['data_hora'],0,10)) ?></td>
-                            <td><?= h($s['tipo'] ?? '—') ?></td>
+                            <td><?= h($s['categoria'] ?? '—') ?></td>
                             <td><?= h($s['tecnico'] ?? '—') ?></td>
                             <td><?= $s['duracao_min'] ? h($s['duracao_min']).' min' : '—' ?></td>
                             <td><span class="badge bg-<?= ['concluida'=>'success','cancelada'=>'danger','agendada'=>'warning text-dark','em_curso'=>'primary'][$s['estado']] ?? 'secondary' ?>"><?= h($s['estado']) ?></span></td>

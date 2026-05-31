@@ -11,7 +11,7 @@ $n_pac = $pid ? (int)$db->prepare('SELECT COUNT(*) FROM utentes WHERE tecnico_id
 $stmt2 = $db->prepare('SELECT COUNT(*) FROM utentes WHERE tecnico_id=?'); $stmt2->execute([$pid]); $n_pac = (int)$stmt2->fetchColumn();
 $stmt3 = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE tecnico_id=? AND DATE(data_hora)=CURDATE() AND estado='agendada'"); $stmt3->execute([$pid]); $n_hoje = (int)$stmt3->fetchColumn();
 $stmt4 = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE tecnico_id=? AND estado='concluida'"); $stmt4->execute([$pid]); $n_concluidas = (int)$stmt4->fetchColumn();
-$proximas = $pid ? $db->prepare("SELECT s.data_hora, s.tipo, s.estado, u.nome AS paciente FROM sessoes s JOIN utentes ut ON ut.id=s.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id WHERE s.tecnico_id=? AND s.data_hora>=NOW() AND s.estado='agendada' ORDER BY s.data_hora LIMIT 5") : null;
+$proximas = $pid ? $db->prepare("SELECT s.data_hora, s.categoria, s.estado, u.nome AS paciente FROM sessoes s JOIN utentes ut ON ut.id=s.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id WHERE s.tecnico_id=? AND s.data_hora>=NOW() AND s.estado='agendada' ORDER BY s.data_hora LIMIT 5") : null;
 if ($proximas) { $proximas->execute([$pid]); $proximas = $proximas->fetchAll(); } else { $proximas = []; }
 ?>
         <main class="content">
@@ -29,7 +29,7 @@ if ($proximas) { $proximas->execute([$pid]); $proximas = $proximas->fetchAll(); 
                 <?php if(empty($proximas)): ?><p class="text-muted">Sem sessões agendadas.</p>
                 <?php else: ?>
                 <table class="table table-sm table-hover"><thead><tr><th>Data/Hora</th><th>Paciente</th><th>Tipo</th></tr></thead><tbody>
-                <?php foreach($proximas as $s): ?><tr><td><?= h(substr($s['data_hora'],0,16)) ?></td><td><?= h($s['paciente']) ?></td><td><?= h($s['tipo'] ?? '—') ?></td></tr><?php endforeach; ?>
+                <?php foreach($proximas as $s): ?><tr><td><?= h(substr($s['data_hora'],0,16)) ?></td><td><?= h($s['paciente']) ?></td><td><?= h($s['categoria'] ?? '—') ?></td></tr><?php endforeach; ?>
                 </tbody></table>
                 <?php endif; ?>
                 <a href="sessoes/lista_sessoes.php" class="btn btn-sm btn-outline-secondary mt-2">Ver todas</a>

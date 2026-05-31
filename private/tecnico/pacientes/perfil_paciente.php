@@ -11,8 +11,8 @@ $stmt = $db->prepare("SELECT ut.*, u.nome, u.email FROM utentes ut JOIN utilizad
 $stmt->execute([$id]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 $n_sessoes = (int)$db->query("SELECT COUNT(*) FROM sessoes WHERE utente_id=$id AND estado='concluida'")->fetchColumn();
-$metricas = $db->query("SELECT AVG(m.rms_uv), AVG(m.precisao_pct) FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=$id")->fetch(PDO::FETCH_NUM);
-$ultimas = $db->prepare("SELECT s.data_hora, s.tipo, s.duracao_min, s.estado FROM sessoes s WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 5");
+$metricas = $db->query("SELECT AVG(m.rms_uv), AVG(m.percentagem_final) FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=$id")->fetch(PDO::FETCH_NUM);
+$ultimas = $db->prepare("SELECT s.data_hora, s.categoria, s.duracao_min, s.estado FROM sessoes s WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 5");
 $ultimas->execute([$id]); $ultimas = $ultimas->fetchAll();
 ?>
         <main class="content">
@@ -38,7 +38,7 @@ $ultimas->execute([$id]); $ultimas = $ultimas->fetchAll();
             <div class="card p-3">
                 <h5>Últimas Sessões</h5>
                 <table class="table table-sm mt-2"><thead><tr><th>Data</th><th>Tipo</th><th>Duração</th><th>Estado</th></tr></thead><tbody>
-                <?php foreach($ultimas as $s): ?><tr><td><?= h(substr($s['data_hora'],0,16)) ?></td><td><?= h($s['tipo']??'—') ?></td><td><?= $s['duracao_min']?h($s['duracao_min']).' min':'—' ?></td><td><span class="badge bg-secondary"><?= h($s['estado']) ?></span></td></tr><?php endforeach; ?>
+                <?php foreach($ultimas as $s): ?><tr><td><?= h(substr($s['data_hora'],0,16)) ?></td><td><?= h($s['categoria']??'—') ?></td><td><?= $s['duracao_min']?h($s['duracao_min']).' min':'—' ?></td><td><span class="badge bg-secondary"><?= h($s['estado']) ?></span></td></tr><?php endforeach; ?>
                 <?php if(empty($ultimas)): ?><tr><td colspan="4" class="text-muted">Sem sessões.</td></tr><?php endif; ?>
                 </tbody></table>
             </div>

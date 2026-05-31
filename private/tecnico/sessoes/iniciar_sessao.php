@@ -28,7 +28,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <div class="card p-3 mb-4">
                 <div class="row align-items-center">
-                    <div class="col-md-8"><h4><?= h($s['paciente']) ?></h4><p class="text-muted mb-0"><?= h($s['tipo'] ?? '—') ?> · Dispositivo: <?= h($s['dispositivo'] ?? 'Nenhum') ?></p></div>
+                    <div class="col-md-8"><h4><?= h($s['paciente']) ?></h4><p class="text-muted mb-0"><?= h($s['categoria'] ?? '—') ?> · Dispositivo: <?= h($s['dispositivo'] ?? 'Nenhum') ?></p></div>
                     <div class="col-md-4 text-end"><span class="badge" style="background:#e8f5e9;color:#2c7a4d;padding:6px 14px;"><?= h($s['estado']) ?></span></div>
                 </div>
             </div>

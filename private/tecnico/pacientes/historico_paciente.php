@@ -8,7 +8,7 @@ $db = getDB(); $id = (int)($_GET['id'] ?? 0);
 if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 $stmt = $db->prepare("SELECT ut.*, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?"); $stmt->execute([$id]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
-$sessoes = $db->prepare("SELECT s.*, m.rms_uv, m.score_jogo, m.precisao_pct FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 50");
+$sessoes = $db->prepare("SELECT s.*, m.rms_uv, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 50");
 $sessoes->execute([$id]); $sessoes = $sessoes->fetchAll();
 ?>
         <main class="content">
@@ -22,7 +22,7 @@ $sessoes->execute([$id]); $sessoes = $sessoes->fetchAll();
                     <?php else: foreach($sessoes as $s): ?>
                         <tr>
                             <td><?= h(substr($s['data_hora'],0,16)) ?></td>
-                            <td><?= h($s['tipo'] ?? '—') ?></td>
+                            <td><?= h($s['categoria'] ?? '—') ?></td>
                             <td><?= $s['duracao_min'] ? h($s['duracao_min']).' min' : '—' ?></td>
                             <td><span class="badge bg-<?= ['concluida'=>'success','agendada'=>'primary','em_curso'=>'warning','cancelada'=>'danger'][$s['estado']] ?? 'secondary' ?>"><?= h($s['estado']) ?></span></td>
                             <td><?= $s['rms_uv'] ? number_format((float)$s['rms_uv'],2) : '—' ?></td>

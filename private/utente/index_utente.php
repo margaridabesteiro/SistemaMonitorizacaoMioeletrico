@@ -16,16 +16,17 @@ $db = getDB();
 $utilizador_id = (int)$_SESSION['utilizador_id'];
 
 // Obter utente
-$stmt = $db->prepare('SELECT id, diagnostico FROM utentes WHERE utilizador_id = ?');
+$stmt = $db->prepare('SELECT id, diagnostico, cobertura_saude FROM utentes WHERE utilizador_id = ?');
 $stmt->execute([$utilizador_id]);
 $utente = $stmt->fetch();
-$utente_id = $utente ? (int)$utente['id'] : 0;
+$utente_id       = $utente ? (int)$utente['id'] : 0;
+$cobertura_saude = $utente['cobertura_saude'] ?? 'SNS';
 
 // Próximas sessões
 $proximas_sessoes = [];
 if ($utente_id) {
     $stmt = $db->prepare('
-        SELECT s.data_hora, s.tipo, s.estado,
+        SELECT s.data_hora, s.categoria, s.estado,
                u.nome AS tecnico
         FROM sessoes s
         JOIN profissionais p ON p.id = s.tecnico_id
@@ -46,12 +47,19 @@ if ($utente_id) {
     $total_sessoes = (int)$stmt->fetchColumn();
 }
 
-// Faturas em aberto
+// Faturas em aberto (apenas para Particular e Seguro)
 $faturas_abertas = 0;
-if ($utente_id) {
+if ($utente_id && $cobertura_saude !== 'SNS') {
     $stmt = $db->prepare('SELECT COUNT(*) FROM faturas WHERE utente_id = ? AND paga = 0');
     $stmt->execute([$utente_id]);
     $faturas_abertas = (int)$stmt->fetchColumn();
+}
+
+// Próxima sessão/consulta com videochamada (≤ 30 min)
+$video_link = null;
+if ($utente_id) {
+    $sv = $db->prepare("SELECT link_videochamada FROM sessoes WHERE utente_id=? AND modalidade='remota' AND link_videochamada IS NOT NULL AND data_hora BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 30 MINUTE) AND estado='agendada' ORDER BY data_hora LIMIT 1");
+    $sv->execute([$utente_id]); $video_link = $sv->fetchColumn() ?: null;
 }
 
 // Mensagens não lidas
@@ -66,6 +74,13 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                     <p><?= dataPt() ?></p>
                 </div>
             </div>
+            <?php if ($video_link): ?>
+            <div class="alert alert-primary d-flex align-items-center gap-3 mb-4">
+                <i class="fa-solid fa-video fa-2x"></i>
+                <div class="flex-grow-1"><strong>Tens uma sessão por videochamada em breve!</strong><br><small>A tua sessão começa nos próximos 30 minutos.</small></div>
+                <a href="<?= h($video_link) ?>" target="_blank" class="btn btn-primary btn-sm"><i class="fa-solid fa-video me-1"></i>Entrar agora</a>
+            </div>
+            <?php endif; ?>
 
             <!-- Métricas rápidas -->
             <div class="row g-3 mb-4">
@@ -87,12 +102,14 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                         <div class="text-muted small">Mensagens Não Lidas</div>
                     </div>
                 </div>
+                <?php if ($cobertura_saude !== 'SNS'): ?>
                 <div class="col-md-3">
                     <div class="card text-center p-3 <?= $faturas_abertas > 0 ? 'border-danger' : '' ?>">
                         <div class="fs-2 fw-bold text-danger"><?= $faturas_abertas ?></div>
                         <div class="text-muted small">Faturas em Aberto</div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
 
             <!-- Próximas sessões -->
@@ -107,7 +124,7 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                         <?php foreach ($proximas_sessoes as $s): ?>
                             <tr>
                                 <td><?= h(substr($s['data_hora'],0,16)) ?></td>
-                                <td><?= h($s['tipo'] ?? '—') ?></td>
+                                <td><?= h($s['categoria'] ?? '—') ?></td>
                                 <td><?= h($s['tecnico']) ?></td>
                             </tr>
                         <?php endforeach; ?>

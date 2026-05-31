@@ -44,13 +44,14 @@ $total_registos = (int)$count_stmt->fetchColumn();
 $total_paginas  = (int)ceil($total_registos / $por_pagina);
 
 $stmt = $db->prepare("
-    SELECT s.id, s.data_hora, s.duracao_min, s.tipo, s.estado,
-           u.nome AS paciente,
+    SELECT s.id, s.data_hora, s.duracao_min, s.categoria, s.estado,
+           u.nome AS paciente, j.nome AS jogo, j.nivel AS jogo_nivel,
            d.codigo AS dispositivo
     FROM sessoes s
     JOIN utentes ut ON ut.id = s.utente_id
     JOIN utilizadores u ON u.id = ut.utilizador_id
     LEFT JOIN dispositivos d ON d.id = s.dispositivo_id
+    LEFT JOIN jogos j ON j.id = s.jogo_id
     $where
     ORDER BY s.data_hora DESC
     LIMIT $por_pagina OFFSET $offset
@@ -102,7 +103,7 @@ $cores_estado = [
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Data/Hora</th><th>Paciente</th><th>Tipo</th>
+                                <th>Data/Hora</th><th>Paciente</th><th>Jogo / Categoria</th>
                                 <th>Duração</th><th>Dispositivo</th><th>Estado</th><th>Ações</th>
                             </tr>
                         </thead>
@@ -114,7 +115,14 @@ $cores_estado = [
                             <tr>
                                 <td><?= h(substr($s['data_hora'],0,16)) ?></td>
                                 <td><?= h($s['paciente']) ?></td>
-                                <td><?= h($s['tipo'] ?? '—') ?></td>
+                                <td>
+                                    <?php if ($s['jogo']): ?>
+                                        <?php $nc = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'][$s['jogo_nivel']] ?? 'secondary'; ?>
+                                        <?= h($s['jogo']) ?> <span class="badge bg-<?= $nc ?> ms-1"><?= h($s['jogo_nivel']) ?></span>
+                                    <?php else: ?>
+                                        <span class="text-muted"><?= h(ucfirst(str_replace('_',' ',$s['categoria'] ?? '—'))) ?></span>
+                                    <?php endif; ?>
+                                </td>
                                 <td><?= $s['duracao_min'] ? h($s['duracao_min']).' min' : '—' ?></td>
                                 <td><?= h($s['dispositivo'] ?? '—') ?></td>
                                 <td>

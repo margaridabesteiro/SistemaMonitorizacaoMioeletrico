@@ -12,7 +12,7 @@ $pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 15; $offset = 
 $where = $pid ? 'WHERE ut.medico_id=?' : 'WHERE 1=0'; $params = $pid ? [$pid] : [];
 if ($pesquisa !== '') { $where .= ' AND (u.nome LIKE ? OR u.email LIKE ?)'; $params[] = "%$pesquisa%"; $params[] = "%$pesquisa%"; }
 $cnt = $db->prepare("SELECT COUNT(*) FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id $where"); $cnt->execute($params); $total = (int)$cnt->fetchColumn();
-$stmt2 = $db->prepare("SELECT ut.id, u.nome, u.email, ut.diagnostico, ut.data_nascimento FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY u.nome LIMIT $por_pagina OFFSET $offset");
+$stmt2 = $db->prepare("SELECT ut.id, u.nome, u.email, ut.diagnostico, ut.data_nascimento, ut.fase_tratamento FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY u.nome LIMIT $por_pagina OFFSET $offset");
 $stmt2->execute($params); $pacientes = $stmt2->fetchAll();
 ?>
         <main class="content">
@@ -23,7 +23,7 @@ $stmt2->execute($params); $pacientes = $stmt2->fetchAll();
             </form>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light"><tr><th>Nome</th><th>Email</th><th>Idade</th><th>Diagnóstico</th><th>Ações</th></tr></thead>
+                    <thead class="table-light"><tr><th>Nome</th><th>Email</th><th>Idade</th><th>Fase</th><th>Diagnóstico</th><th>Ações</th></tr></thead>
                     <tbody>
                     <?php if(empty($pacientes)): ?><tr><td colspan="5" class="text-center text-muted py-4">Sem pacientes.</td></tr>
                     <?php else: foreach($pacientes as $p): $idade = $p['data_nascimento'] ? (int)((time()-strtotime($p['data_nascimento']))/(365.25*86400)) : null; ?>
@@ -31,6 +31,12 @@ $stmt2->execute($params); $pacientes = $stmt2->fetchAll();
                             <td><?= h($p['nome']) ?></td>
                             <td><?= h($p['email']) ?></td>
                             <td><?= $idade ?? '—' ?></td>
+                            <td><?php
+                                $fase_c = ['avaliacao'=>'secondary','ativo'=>'primary','manutencao'=>'info','alta'=>'success'];
+                                $fase_l = ['avaliacao'=>'Avaliação','ativo'=>'Ativo','manutencao'=>'Manutenção','alta'=>'Alta'];
+                                $f = $p['fase_tratamento'] ?? 'avaliacao';
+                                echo '<span class="badge bg-'.($fase_c[$f]??'secondary').'">'.($fase_l[$f]??$f).'</span>';
+                            ?></td>
                             <td><small><?= h(substr($p['diagnostico']??'—',0,60)) ?></small></td>
                             <td><a href="<?= APP_URL ?>/private/medico/prescricoes/lista_prescricoes.php?utente=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary"><i class="fa-solid fa-file-medical"></i></a></td>
                         </tr>

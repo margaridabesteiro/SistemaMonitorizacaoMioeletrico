@@ -35,6 +35,9 @@ $faturacao_mes = $db->query('
     WHERE MONTH(data_emissao) = MONTH(NOW()) AND YEAR(data_emissao) = YEAR(NOW())
 ')->fetchColumn();
 
+// Dispositivos sem sync há +3 dias
+$disp_sem_sync = (int)$db->query("SELECT COUNT(*) FROM dispositivos WHERE ativo=1 AND (ultimo_sync IS NULL OR ultimo_sync < DATE_SUB(NOW(), INTERVAL 3 DAY))")->fetchColumn();
+
 // Últimos 5 logs de acesso
 $logs = $db->query('
     SELECT l.acao, l.ip, l.criado_em, u.nome
@@ -78,6 +81,14 @@ $logs = $db->query('
                         <div class="fs-2 fw-bold text-warning"><?= $sessoes_hoje ?></div>
                         <div class="text-muted small">Sessões Hoje</div>
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <a href="<?= APP_URL ?>/private/admin/dispositivos/lista_dispositivos.php" class="text-decoration-none">
+                        <div class="card text-center p-3 <?= $disp_sem_sync > 0 ? 'border-danger' : '' ?>">
+                            <div class="fs-2 fw-bold <?= $disp_sem_sync > 0 ? 'text-danger' : 'text-muted' ?>"><?= $disp_sem_sync ?></div>
+                            <div class="text-muted small">Disp. sem sync &gt;3 dias</div>
+                        </div>
+                    </a>
                 </div>
             </div>
 

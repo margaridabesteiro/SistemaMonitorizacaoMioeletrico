@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     $tipo_exame = trim($_POST['tipo_exame']  ?? '');
     $obs        = trim($_POST['observacoes'] ?? '');
     if ($utente_id && $tipo_exame) {
-        $db->prepare("INSERT INTO prescricoes (utente_id, medico_id, data_prescricao, tipo, observacoes, ativa) VALUES (?,?,CURDATE(),'Particular',?,1)")
+        $db->prepare("INSERT INTO programas_tratamento (utente_id, medico_id, data_prescricao, objetivos_clinicos, ativa) VALUES (?,?,CURDATE(),?,1)")
            ->execute([$utente_id, $pid, "Exame: {$tipo_exame}" . ($obs ? " — {$obs}" : '')]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>"Exame \"{$tipo_exame}\" prescrito com sucesso."];
         redirect(APP_URL . '/private/medico/exames/exames_disponiveis.php');

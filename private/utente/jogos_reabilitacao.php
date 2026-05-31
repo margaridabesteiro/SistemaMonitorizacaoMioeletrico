@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';
 $db = getDB(); $uid = (int)$_SESSION['utilizador_id'];
 $stmt = $db->prepare("SELECT id FROM utentes WHERE utilizador_id=?"); $stmt->execute([$uid]); $utid = (int)$stmt->fetchColumn();
-$stats = $utid ? $db->query("SELECT COUNT(*) as n_sess, MAX(m.score_jogo) as best_score FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=$utid AND (s.tipo LIKE '%jogo%' OR s.tipo='Sessão gamificada')")->fetch() : ['n_sess'=>0,'best_score'=>null];
+$stats = $utid ? $db->query("SELECT COUNT(*) as n_sess, MAX(m.score_jogo) as best_score FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=$utid AND (s.categoria LIKE '%jogo%' OR s.categoria='Sessão gamificada')")->fetch() : ['n_sess'=>0,'best_score'=>null];
 $jogos = [
     ['catch_game','Catch Game','Apanhe objetos em queda. Treina precisão e velocidade de resposta mioelétrica.','fa-hands-catching','#667eea'],
     ['flappy_trainer','Flappy Trainer','Controle um pássaro com força muscular. Treina modulação de força.','fa-feather-pointed','#f7c948'],
