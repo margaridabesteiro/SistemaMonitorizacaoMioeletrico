@@ -117,6 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Entrar
             </button>
         </form>
+        <div class="text-center mt-3">
+            <a href="esqueci_password.php" class="text-muted small">Esqueci a minha password</a>
+        </div>
     </div>
 </div>
 <script src="<?= APP_URL ?>/public/assets/bootstrap/bootstrap.bundle.min.js"></script>

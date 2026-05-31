@@ -96,6 +96,27 @@ function csrfVerify(): void {
 }
 
 /**
+ * Calcula a tendência de um utente num jogo face à sessão anterior.
+ * Diferença > +5% → melhoria | < -5% → regressao | resto → estavel
+ */
+function calcularTendencia(PDO $db, int $utente_id, ?int $jogo_id, ?float $percentagem_atual): ?string {
+    if ($jogo_id === null || $percentagem_atual === null) return null;
+    $s = $db->prepare("
+        SELECT m.percentagem_final FROM metricas_sessao m
+        JOIN sessoes s ON s.id = m.sessao_id
+        WHERE s.utente_id = ? AND s.jogo_id = ? AND s.estado = 'concluida'
+        ORDER BY s.data_hora DESC LIMIT 1
+    ");
+    $s->execute([$utente_id, $jogo_id]);
+    $anterior = $s->fetchColumn();
+    if ($anterior === false || $anterior === null) return 'estavel';
+    $diff = $percentagem_atual - (float)$anterior;
+    if ($diff > 5)  return 'melhoria';
+    if ($diff < -5) return 'regressao';
+    return 'estavel';
+}
+
+/**
  * Devolve a data atual formatada em português.
  * Ex: "quinta-feira, 28 de maio de 2026"
  */

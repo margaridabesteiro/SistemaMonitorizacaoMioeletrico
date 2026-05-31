@@ -47,16 +47,9 @@ if ($pid) {
                             <td><?= h($c['motivo'] ?? '') ?></td>
                             <td><span class="badge bg-<?= ['agendada'=>'primary','realizada'=>'success','cancelada'=>'danger'][$c['estado']] ?? 'secondary' ?>"><?= h($c['estado']) ?></span></td>
                             <td>
-                                <button class="btn btn-xs btn-outline-primary btn-ver-consulta"
-                                        data-id="<?= $c['id'] ?>"
-                                        data-paciente="<?= h($c['paciente']) ?>"
-                                        data-datahora="<?= h(substr($c['data_hora'],0,16)) ?>"
-                                        data-motivo="<?= h($c['motivo'] ?? '') ?>"
-                                        data-estado="<?= h($c['estado']) ?>"
-                                        data-notas="<?= h($c['notas'] ?? '') ?>"
-                                        data-bs-toggle="modal" data-bs-target="#modalVerConsulta">
+                                <a href="detalhe_consulta.php?id=<?= $c['id'] ?>" class="btn btn-xs btn-outline-primary" title="Ver detalhe">
                                     <i class="fa-regular fa-eye"></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; endif; ?>

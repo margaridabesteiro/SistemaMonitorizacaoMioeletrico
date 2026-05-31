@@ -46,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($dados['perfil'] === 'utente') {
                 $db->prepare('INSERT INTO utentes (utilizador_id) VALUES (?)')->execute([$novo_id]);
             }
+            // Criar preferências por defeito para todos os perfis
+            $db->prepare('INSERT IGNORE INTO preferencias_utilizador (utilizador_id) VALUES (?)')->execute([$novo_id]);
 
             $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => 'Utilizador criado com sucesso.'];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');

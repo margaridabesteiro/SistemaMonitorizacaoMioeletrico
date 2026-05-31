@@ -1,27 +1,54 @@
 <?php
-require_once __DIR__.'/../../../config/app.php';
-require_once __DIR__.'/../../../config/database.php';
-$pagina_titulo='Preferências'; $pagina_ativa='config';
-$sucesso=false;
-if($_SERVER['REQUEST_METHOD']==='POST'){
-    // As preferências são aplicadas via sessão; sem tabela dedicada nesta versão
-    $_SESSION['pref_notif_email'] = isset($_POST['notif_email'])?1:0;
-    $_SESSION['pref_notif_sessao'] = isset($_POST['notif_sessao'])?1:0;
-    $sucesso=true;
+require_once __DIR__ . '/../../../config/app.php';
+require_once __DIR__ . '/../../../config/database.php';
+requirePerfil('tecnico');
+$pagina_titulo = 'Preferências'; $pagina_ativa = 'preferencias';
+
+$db  = getDB();
+$uid = (int)$_SESSION['utilizador_id'];
+
+$stmt = $db->prepare('SELECT * FROM preferencias_utilizador WHERE utilizador_id=?');
+$stmt->execute([$uid]); $prefs = $stmt->fetch();
+if (!$prefs) {
+    $db->prepare('INSERT IGNORE INTO preferencias_utilizador (utilizador_id) VALUES (?)')->execute([$uid]);
+    $prefs = ['notif_email'=>1,'notif_inicio_sessao'=>1];
 }
-require_once __DIR__.'/../../../includes/header_tecnico.php';
-require_once __DIR__.'/../../../includes/sidebar_tecnico.php';
+
+$flash = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $notif_email  = isset($_POST['notif_email'])         ? 1 : 0;
+    $notif_sessao = isset($_POST['notif_inicio_sessao']) ? 1 : 0;
+    $db->prepare('UPDATE preferencias_utilizador SET notif_email=?, notif_inicio_sessao=? WHERE utilizador_id=?')
+       ->execute([$notif_email, $notif_sessao, $uid]);
+    $flash = ['tipo'=>'success','mensagem'=>'Preferências guardadas.'];
+    $prefs['notif_email'] = $notif_email;
+    $prefs['notif_inicio_sessao'] = $notif_sessao;
+}
+
+require_once __DIR__ . '/../../../includes/header_tecnico.php';
+require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
 ?>
-<main class="content">
-<h1 class="mb-4">Preferências</h1>
-<?php if($sucesso):?><div class="alert alert-success">Preferências guardadas.</div><?php endif;?>
-<div class="card p-4" style="max-width:500px;"><form method="POST">
-  <h6 class="mb-3 text-muted">Notificações</h6>
-  <div class="form-check mb-3"><input class="form-check-input" type="checkbox" name="notif_email" id="ne" <?=($_SESSION['pref_notif_email']??0)?'checked':''?>><label class="form-check-label" for="ne">Receber notificações por email</label></div>
-  <div class="form-check mb-4"><input class="form-check-input" type="checkbox" name="notif_sessao" id="ns" <?=($_SESSION['pref_notif_sessao']??1)?'checked':''?>><label class="form-check-label" for="ns">Alertas de início de sessão</label></div>
-  <h6 class="mb-3 text-muted">Idioma</h6>
-  <div class="mb-4"><select class="form-select" disabled><option>Português (PT)</option></select><div class="form-text">Apenas PT disponível.</div></div>
-  <button type="submit" class="btn" style="background:#8B0000;color:#fff;"><i class="fa-solid fa-floppy-disk me-1"></i>Guardar</button>
-</form></div>
-</main>
-<?php require_once __DIR__.'/../../../includes/footer.php'; ?>
+        <main class="content">
+            <h1 class="mb-4">Preferências</h1>
+            <?php if ($flash): ?><div class="alert alert-<?=h($flash['tipo'])?> py-2"><?=h($flash['mensagem'])?></div><?php endif; ?>
+            <div class="card p-4" style="max-width:500px;">
+                <form method="POST">
+                    <h5 class="mb-3">Notificações</h5>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="notif_email" id="notifEmail" <?=$prefs['notif_email']?'checked':''?>>
+                        <label class="form-check-label" for="notifEmail">Receber notificações por email</label>
+                    </div>
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" name="notif_inicio_sessao" id="notifSessao" <?=$prefs['notif_inicio_sessao']?'checked':''?>>
+                        <label class="form-check-label" for="notifSessao">Alertas de início de sessão</label>
+                    </div>
+                    <hr><h5 class="mb-3 mt-3">Idioma</h5>
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <span class="badge py-2 px-3" style="background:#1a5f8a;">PT — Português (PT)</span>
+                        <small class="text-muted">Apenas PT disponível</small>
+                    </div>
+                    <button type="submit" class="btn w-100" style="background:#1a5f8a;color:#fff;"><i class="fa-solid fa-floppy-disk me-1"></i>Guardar Alterações</button>
+                </form>
+            </div>
+        </main>
+<?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
