@@ -44,8 +44,6 @@ $nome_tecnico = h($_SESSION['nome'] ?? 'Técnico');
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="<?= APP_URL ?>/private/tecnico/perfil.php">
                     <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/tecnico/config/preferencias.php">
-                    <i class="fa-solid fa-gear me-2"></i>Preferências</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
                     <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>

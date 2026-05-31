@@ -34,6 +34,10 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuMedico('exames', $pa) ?>">
                 <i class="fa-solid fa-flask me-2"></i>Exames
             </a>
+            <a href="<?= APP_URL ?>/private/medico/consultas/lista_pedidos_exame.php"
+               class="nav-link<?= menuMedico('exames', $pa) ?>">
+                <i class="fa-solid fa-flask me-2"></i>Pedidos de Exame
+            </a>
             <a href="<?= APP_URL ?>/private/medico/exames/auditoria_exames.php"
                class="nav-link<?= menuMedico('auditoria', $pa) ?>">
                 <i class="fa-solid fa-clipboard-check me-2"></i>Auditoria

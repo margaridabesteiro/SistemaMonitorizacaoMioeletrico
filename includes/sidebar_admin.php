@@ -60,8 +60,4 @@ $pa = $pagina_ativa ?? '';
                 } catch (\Throwable $e) {}
                 ?>
             </a>
-            <a href="<?= APP_URL ?>/private/admin/preferencias.php"
-               class="nav-link<?= menuAdmin('preferencias', $pa) ?>">
-                <i class="fa-solid fa-sliders me-2"></i>Preferências
-            </a>
         </nav>

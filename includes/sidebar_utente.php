@@ -41,10 +41,6 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('pagamentos', $pa) ?>">
                 <i class="fa-solid fa-credit-card me-2"></i>Pagamentos
             </a>
-            <a href="<?= APP_URL ?>/private/utente/preferencias.php"
-               class="nav-link<?= menuUtente('preferencias', $pa) ?>">
-                <i class="fa-solid fa-sliders me-2"></i>Preferências
-            </a>
             <a href="<?= APP_URL ?>/private/utente/perfil.php"
                class="nav-link<?= menuUtente('perfil', $pa) ?>">
                 <i class="fa-regular fa-user me-2"></i>O Meu Perfil

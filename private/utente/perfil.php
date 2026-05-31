@@ -86,7 +86,9 @@ require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';
 ?>
         <main class="content">
-            <h1 class="mb-4">O Meu Perfil</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">O Meu Perfil</h1>
+            </div>
 
             <?php if ($sucesso): ?>
                 <div class="alert alert-success alert-dismissible fade show">
