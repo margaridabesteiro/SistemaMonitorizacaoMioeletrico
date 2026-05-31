@@ -136,6 +136,7 @@
     cursor: pointer; transition: all 0.2s;
   }
   .btn-play:hover { opacity: 0.88; transform: translateY(-1px); }
+  @keyframes calPulse { from{opacity:1} to{opacity:0.35} }
 </style>
 </head>
 <body>
@@ -151,7 +152,36 @@
 </div>
 
 <canvas id="canvas"></canvas>
-<div class="hint">Clica para bater as asas &nbsp;·&nbsp; tecla L</div>
+<div class="hint" id="hint">Aperta o sensor para bater as asas · flap por contração</div>
+
+<div style="width:100%;max-width:580px;display:flex;gap:8px;margin-top:8px">
+  <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.198.1.130"
+    style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;
+           color:var(--text);font-family:'Space Mono',monospace;font-size:0.75rem;
+           padding:8px 12px;outline:none"/>
+  <button onclick="connectFSR()"
+    style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;
+           padding:8px 16px;border:none;border-radius:10px;
+           background:var(--accent);color:var(--bg);cursor:pointer;">Ligar</button>
+</div>
+
+<div style="width:100%;max-width:580px;display:flex;align-items:center;gap:12px;
+            margin-top:8px;background:var(--surface);border:1px solid var(--border);
+            border-radius:12px;padding:10px 14px;">
+  <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+    <div id="wsDot" style="width:8px;height:8px;border-radius:50%;background:var(--accent2);transition:background 0.3s"></div>
+    <span id="wsLabel" style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
+  </div>
+  <div style="flex:1">
+    <div style="display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px">
+      <span>Força FSR</span><span id="forcePct">0%</span>
+    </div>
+    <div style="width:100%;height:7px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--border)">
+      <div id="forceFill" style="height:100%;width:0%;border-radius:99px;
+           background:linear-gradient(90deg,var(--good),var(--accent));transition:width 0.05s linear"></div>
+    </div>
+  </div>
+</div>
 
 <div class="overlay" id="overlay">
   <div class="modal">
@@ -164,13 +194,104 @@
       <div class="modal-item"><div class="m-lbl">Colisoes</div><div class="m-val" style="color:var(--accent2)" id="mHits">—</div></div>
       <div class="modal-item"><div class="m-lbl">Melhor seq.</div><div class="m-val" style="color:var(--text2)" id="mBest">—</div></div>
     </div>
-    <button class="btn-play" id="btnPlay" onclick="startGame()">Comecar</button>
+    <!-- IP input — só visível no ecrã inicial -->
+    <div id="ipBlock" style="display:none; margin-bottom:14px;">
+      <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--text2);
+                  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">
+        IP do ESP32
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input id="ipModal" type="text" placeholder="ex: 192.168.1.130"
+          style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;
+                 color:var(--text);font-family:'Space Mono',monospace;font-size:0.8rem;
+                 padding:10px 12px;outline:none;"/>
+        <button onclick="connectFromModal()"
+          style="background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+                 font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;
+                 padding:10px 16px;cursor:pointer;">Ligar</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+        <div id="modalWsDot" style="width:7px;height:7px;border-radius:50%;
+             background:var(--accent2);transition:background 0.3s;flex-shrink:0"></div>
+        <span id="modalWsLabel" style="font-family:'Space Mono',monospace;font-size:0.6rem;
+              color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
+      </div>
+    </div>
+    <button class="btn-play" id="btnPlay" onclick="startGame()">Começar</button>
   </div>
 </div>
 
 <script>
 const canvas = document.getElementById('canvas');
 const ctx    = canvas.getContext('2d');
+
+// ═══════════════════════════════════════════════════════
+//  SIGNAL PROCESSING (FSR)
+// ═══════════════════════════════════════════════════════
+var FILTER_SIZE = 6;
+var filterBuf = [], filterSum = 0;
+var baseline = 0, maxVal = 3000;
+var DEADZONE = 0.04, THRESHOLD = 0.18;
+var forceNorm = 0;
+
+function addSample(raw) {
+  filterBuf.push(raw); filterSum += raw;
+  if (filterBuf.length > FILTER_SIZE) filterSum -= filterBuf.shift();
+  var smoothed = filterSum / filterBuf.length;
+  var norm = (smoothed - baseline) / Math.max(1, maxVal - baseline);
+  norm = Math.max(0, Math.min(1, norm));
+  if (norm < DEADZONE) norm = 0;
+  forceNorm = norm;
+
+  var pct = Math.round(norm * 100);
+  document.getElementById('forceFill').style.width = pct + '%';
+  document.getElementById('forcePct').textContent = pct + '%';
+
+  // Controlo proporcional — forceNorm já está actualizado
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALIBRAÇÃO
+// ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+//  WEBSOCKET
+// ═══════════════════════════════════════════════════════
+var ws = null, wsReconnectTimer = null, wsReconnectDelay = 2000, wsIntentionalClose = false;
+
+function connectFSR() {
+  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  var ip = document.getElementById('ipInput').value.trim();
+  if (!ip) return;
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    wsIntentionalClose = true; try { ws.close(); } catch(e){}
+  }
+  wsIntentionalClose = false; wsReconnectDelay = 2000;
+  _openWS(ip);
+}
+
+function _openWS(ip) {
+  ws = new WebSocket('ws://' + ip + ':81');
+  ws.onopen = function() {
+    wsReconnectDelay = 2000;
+    document.getElementById('wsDot').style.background = 'var(--good)';
+    document.getElementById('wsLabel').textContent = 'ESP32 ligado · ' + ip;
+  };
+  ws.onmessage = function(e) {
+    var raw = parseInt(e.data); if (isNaN(raw)) return; addSample(raw);
+  };
+  ws.onclose = function() {
+    document.getElementById('wsDot').style.background = 'var(--accent2)';
+    if (wsIntentionalClose) return;
+    var delay = wsReconnectDelay;
+    wsReconnectDelay = Math.min(wsReconnectDelay * 1.5, 15000);
+    document.getElementById('wsLabel').textContent = 'Desligado — a reconectar em ' + Math.round(delay/1000) + 's…';
+    wsReconnectTimer = setTimeout(function(){ _openWS(ip); }, delay);
+  };
+  ws.onerror = function() { document.getElementById('wsLabel').textContent = 'Erro de ligação'; };
+}
+
+connectFSR();
 
 // ── Sizing ─────────────────────────────────────────────
 function resize() {
@@ -430,15 +551,18 @@ function gameLoop() {
     flashFrames--;
   }
 
-  // Bird physics
-  birdVel += GRAVITY;
-  birdY += birdVel;
+  // Física proporcional à força — igual ao Force Trainer
+  // forceNorm=0 → cai por gravidade, forceNorm=1 → sobe ao máximo
+  var BIRD_GRAVITY = 2.0;
+  var BIRD_LIFT    = 5.0;
+  var birdVelY = -(forceNorm * BIRD_LIFT * 2 - BIRD_GRAVITY);
+  birdY += birdVelY;
+  birdVel = birdVelY; // para o tilt visual
 
   // Ceiling & floor
-  if (birdY - BIRD_R < 0) { birdY = BIRD_R; birdVel = 1; }
+  if (birdY - BIRD_R < 0) { birdY = BIRD_R; }
   if (birdY + BIRD_R > H - 18) {
     birdY = H - 18 - BIRD_R;
-    birdVel = 0;
     if (invincible <= 0) registerHit(birdX, birdY);
   }
 
@@ -451,17 +575,22 @@ function gameLoop() {
     var p = pipes[i];
     p.x -= PIPE_SPEED;
 
-    // Score: passed through gap
+    // Score: passed through gap (só conta se o pássaro passou pelo gap, não pelo poste)
     if (!p.passed && p.x + PIPE_WIDTH < birdX) {
       p.passed = true;
-      passed++;
-      streak++;
-      bestStreak = Math.max(bestStreak, streak);
-      score += 10;
-      document.getElementById('scoreVal').textContent  = score;
-      document.getElementById('passedVal').textContent = passed;
-      burst(birdX+30, birdY, '#f7c948', 6);
-      playPass();
+      var inGap = birdY - BIRD_R > p.topH && birdY + BIRD_R < p.topH + PIPE_GAP;
+      if (inGap) {
+        passed++;
+        streak++;
+        bestStreak = Math.max(bestStreak, streak);
+        score += 10;
+        document.getElementById('scoreVal').textContent  = score;
+        document.getElementById('passedVal').textContent = passed;
+        burst(birdX+30, birdY, '#f7c948', 6);
+        playPass();
+      } else {
+        streak = 0;
+      }
     }
 
     // Collision
@@ -494,7 +623,11 @@ function gameLoop() {
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.font = '600 12px Space Mono';
   ctx.textAlign = 'center';
-  ctx.fillText('CLICA PARA BATER ASAS', W/2, H-4);
+  ctx.fillStyle = forceNorm > THRESHOLD ? '#e8c547' : 'rgba(255,255,255,0.15)';
+  var hudTxt = forceNorm > THRESHOLD
+    ? 'FORÇA: ' + Math.round(forceNorm*100) + '% — A SUBIR'
+    : 'RELAXA → DESCE · APERTA → SOBE';
+  ctx.fillText(hudTxt, W/2, H-4);
 
   animId = requestAnimationFrame(gameLoop);
 }
@@ -528,7 +661,7 @@ function startGame() {
   particles    = [];
   flashFrames  = 0;
   invincible   = 0;
-  birdY        = canvas.height / 2;
+  birdY        = canvas.height - 18 - BIRD_R;  // começa em baixo
   birdVel      = 0;
   wingAngle    = 0;
   wingDir      = 1;
@@ -562,21 +695,47 @@ function endGame() {
 }
 
 // ── Input ──────────────────────────────────────────────
-function doFlap() {
-  if (!gameRunning) return;
-  birdVel = FLAP_FORCE;
-  playFlap();
-}
-
-canvas.addEventListener('click', function(){ doFlap(); });
-canvas.addEventListener('touchstart', function(e){ e.preventDefault(); doFlap(); }, {passive:false});
-
-document.addEventListener('keydown', function(e) {
-  if ((e.key==='l'||e.key==='L') && !e.repeat) doFlap();
-});
+// Sem input de rato/teclado — só FSR controla a altura do pássaro
 
 // Show start screen
 document.getElementById('overlay').classList.add('show');
+document.getElementById('ipBlock').style.display = 'block';
+
+// ── IP modal logic ──────────────────────────────────
+function syncIP() {
+  var stored = localStorage.getItem('esp32_ip') || '10.198.1.130';
+  document.getElementById('ipInput').value = stored;
+  document.getElementById('ipModal').value = stored;
+}
+
+function connectFromModal() {
+  var ip = document.getElementById('ipModal').value.trim();
+  if (!ip) return;
+  document.getElementById('ipInput').value = ip;
+  localStorage.setItem('esp32_ip', ip);
+  connectFSR();
+}
+
+function updateModalWs() {
+  var connected = ws && ws.readyState === 1;
+  document.getElementById('modalWsDot').style.background =
+    connected ? 'var(--good)' : 'var(--accent2)';
+  document.getElementById('modalWsLabel').textContent =
+    connected ? 'Ligado · ' + document.getElementById('ipModal').value
+              : document.getElementById('wsLabel').textContent;
+}
+
+// Esconde ipBlock quando o jogo termina (mostra só resultados)
+var _origEndGame = endGame;
+endGame = function() {
+  _origEndGame();
+  document.getElementById('ipBlock').style.display = 'none';
+};
+
+syncIP();
+setInterval(function() {
+  if (document.getElementById('overlay').classList.contains('show')) updateModalWs();
+}, 500);
 </script>
 </body>
 </html>

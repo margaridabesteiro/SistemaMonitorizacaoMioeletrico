@@ -6,7 +6,7 @@ function menuUtente(string $chave, string $pagina_ativa): string {
 }
 $pa = $pagina_ativa ?? '';
 ?>
-        <nav class="sidebar">
+        <nav class="sidebar d-print-none">
             <h2><i class="fa-solid fa-bars me-2"></i>Menu Principal</h2>
 
             <a href="<?= APP_URL ?>/private/utente/index_utente.php"
@@ -33,7 +33,7 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('pagamentos', $pa) ?>">
                 <i class="fa-solid fa-credit-card me-2"></i>Pagamentos
             </a>
-            <a href="<?= APP_URL ?>/private/utente/detalhes.php"
+            <a href="<?= APP_URL ?>/private/utente/perfil.php"
                class="nav-link<?= menuUtente('perfil', $pa) ?>">
                 <i class="fa-regular fa-user me-2"></i>O Meu Perfil
             </a>

@@ -11,8 +11,17 @@ $stmt = $db->prepare("SELECT f.*, u.nome AS utente, ut2.nif FROM faturas f JOIN 
 $stmt->execute([$id]); $f = $stmt->fetch();
 if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
 ?>
+<style>
+@media print {
+    .topbar, .sidebar, .no-print, nav, .btn, a.btn { display: none !important; }
+    .wrapper { display: block !important; }
+    .content { margin: 0 !important; padding: 0 !important; }
+    body { background: white !important; }
+    .card { box-shadow: none !important; border: none !important; }
+}
+</style>
         <main class="content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 no-print">
                 <h1>Fatura <?= h($f['numero']) ?></h1>
                 <div class="d-flex gap-2">
                     <button onclick="window.print()" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-file-pdf me-1"></i>PDF / Imprimir</button>
@@ -32,11 +41,18 @@ if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
                 </div>
                 <hr>
                 <div class="row mb-3">
-                    <div class="col-md-6"><p><strong>Utente:</strong> <?= h($f['utente']) ?></p><p><strong>NIF:</strong> <?= h($f['nif'] ?? '—') ?></p></div>
-                    <div class="col-md-6 text-end"><p><strong>Valor:</strong> <span class="fs-4 fw-bold text-danger"><?= number_format((float)$f['valor_eur'],2,',','.') ?>€</span></p><?php if ($f['data_vencimento']): ?><p class="text-muted small">Vence: <?= h($f['data_vencimento']) ?></p><?php endif; ?></div>
+                    <div class="col-md-6">
+                        <p><strong>Utente:</strong> <?= h($f['utente']) ?></p>
+                        <p><strong>NIF:</strong> <?= h($f['nif'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p><strong>Valor:</strong> <span class="fs-4 fw-bold text-danger"><?= number_format((float)$f['valor_eur'],2,',','.') ?>€</span></p>
+                        <?php if ($f['data_vencimento']): ?><p class="text-muted small">Vence: <?= h($f['data_vencimento']) ?></p><?php endif; ?>
+                    </div>
                 </div>
                 <?php if ($f['notas']): ?><div class="alert alert-light"><strong>Notas:</strong> <?= h($f['notas']) ?></div><?php endif; ?>
                 <hr>
-                <a href="controlo_faturacao.php" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i>Voltar</a>
+                <a href="controlo_faturacao.php" class="btn btn-outline-secondary btn-sm no-print"><i class="fa-solid fa-arrow-left me-1"></i>Voltar</a>
             </div>
         </main>
+<?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

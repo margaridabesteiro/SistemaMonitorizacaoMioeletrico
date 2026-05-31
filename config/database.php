@@ -1,11 +1,12 @@
 <?php
 // config/database.php
-// Configuração da ligação à base de dados MySQL
+// Configuração da ligação à base de dados MySQL — XAMPP
+// Caminho: C:\xampp\htdocs\sistema_mioeletrico\SistemaMonitorizacaoMioeletrico\config\database.php
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');         // Utilizador padrão do XAMPP
-define('DB_PASS', '');             // Password vazia por padrão no XAMPP
-define('DB_NAME', 'rehablink');
+define('DB_HOST',    'localhost');
+define('DB_USER',    'root');       // Utilizador padrão do XAMPP
+define('DB_PASS',    '');           // Password vazia por padrão no XAMPP
+define('DB_NAME',    'sistema_mioeletrico');
 define('DB_CHARSET', 'utf8mb4');
 
 /**
@@ -28,10 +29,9 @@ function getDB(): PDO {
         try {
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $opcoes);
         } catch (PDOException $e) {
-            // Em produção, nunca expor detalhes do erro
             error_log('Erro de ligação BD: ' . $e->getMessage());
             http_response_code(500);
-            die(json_encode(['erro' => 'Falha na ligação à base de dados.']));
+            die(json_encode(['erro' => 'Falha na ligação à base de dados. Verifique se o MySQL está ativo no XAMPP.']));
         }
     }
     return $pdo;

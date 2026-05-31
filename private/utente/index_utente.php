@@ -63,10 +63,7 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
             <div class="welcome-section mb-4">
                 <div class="welcome-text">
                     <h2>Bem-vindo, <?= h($_SESSION['nome']) ?></h2>
-                    <p><?= date('l, d \d\e F \d\e Y') ?></p>
-                </div>
-                <div class="welcome-icon">
-                    <i class="fa-solid fa-hand-holding-heart fa-2x" style="color:#8B0000;"></i>
+                    <p><?= dataPt() ?></p>
                 </div>
             </div>
 

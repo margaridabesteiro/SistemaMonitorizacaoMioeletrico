@@ -42,3 +42,4 @@ $sessoes_por_dia = $db->query("SELECT DATE(data_hora) as dia, COUNT(*) as total 
             options:{responsive:true, plugins:{legend:{display:false}}}
         });
         </script>
+<?php require_once __DIR__ . "/../../../includes/footer.php"; ?>

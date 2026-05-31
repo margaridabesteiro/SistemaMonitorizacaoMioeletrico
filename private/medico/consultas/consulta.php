@@ -69,7 +69,7 @@ if ($pid) {
         <div class="modal fade" id="modalVerConsulta" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header" style="background:#8B0000;">
+                    <div class="modal-header" style="background:#198754;">
                         <h5 class="modal-title text-white">
                             <i class="fa-regular fa-calendar-check me-2"></i>Detalhes da Consulta
                         </h5>

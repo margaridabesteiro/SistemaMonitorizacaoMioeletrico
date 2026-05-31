@@ -1,21 +1,28 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
+requirePerfil('admin');
 $pagina_titulo = 'Faturação'; $pagina_ativa = 'faturacao';
 require_once __DIR__ . '/../../../includes/header_admin.php';
 require_once __DIR__ . '/../../../includes/sidebar_admin.php';
+
 $db = getDB();
-$filtro_estado = $_GET['estado'] ?? '';
+$filtro_estado  = $_GET['estado']  ?? '';
 $filtro_periodo = (int)($_GET['periodo'] ?? 30);
-$pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 20; $offset = ($pagina_atual-1)*$por_pagina;
+$pagina_atual   = max(1, (int)($_GET['pagina'] ?? 1));
+$por_pagina = 20; $offset = ($pagina_atual - 1) * $por_pagina;
+
 $where = "WHERE f.data_emissao >= DATE_SUB(NOW(), INTERVAL $filtro_periodo DAY)"; $params = [];
 if (in_array($filtro_estado, ['0','1'], true)) { $where .= ' AND f.paga = ?'; $params[] = $filtro_estado; }
-$total_val = $db->prepare("SELECT COALESCE(SUM(valor_eur),0), COUNT(*) FROM faturas f $where"); $total_val->execute($params); [$soma,$cnt] = $total_val->fetch(\PDO::FETCH_NUM);
-$pagas = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=1")->fetchColumn();
+
+$total_val = $db->prepare("SELECT COALESCE(SUM(valor_eur),0), COUNT(*) FROM faturas f $where");
+$total_val->execute($params);
+[$soma,$cnt] = $total_val->fetch(PDO::FETCH_NUM);
+$pagas    = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=1")->fetchColumn();
 $pendentes = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=0")->fetchColumn();
 $stmt = $db->prepare("SELECT f.*, u.nome AS utente FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY f.data_emissao DESC LIMIT $por_pagina OFFSET $offset");
 $stmt->execute($params); $faturas = $stmt->fetchAll();
-$flash = \$_SESSION['flash'] ?? null; unset(\$_SESSION['flash']);
+$flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 ?>
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -41,11 +48,9 @@ $flash = \$_SESSION['flash'] ?? null; unset(\$_SESSION['flash']);
                     <?php if(empty($faturas)): ?><tr><td colspan="7" class="text-center text-muted py-4">Sem faturas.</td></tr>
                     <?php else: foreach($faturas as $f): ?>
                         <tr>
-                            <td><?= h($f['numero']) ?></td>
-                            <td><?= h($f['utente']) ?></td>
+                            <td><?= h($f['numero']) ?></td><td><?= h($f['utente']) ?></td>
                             <td class="fw-bold"><?= number_format((float)$f['valor_eur'],2,',','.') ?>€</td>
-                            <td><?= h($f['data_emissao']) ?></td>
-                            <td><?= h($f['data_vencimento'] ?? '—') ?></td>
+                            <td><?= h($f['data_emissao']) ?></td><td><?= h($f['data_vencimento'] ?? '—') ?></td>
                             <td><?= $f['paga'] ? '<span class="badge bg-success">Paga</span>' : '<span class="badge bg-warning text-dark">Pendente</span>' ?></td>
                             <td>
                                 <a href="fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-primary me-1" title="Ver"><i class="fa-regular fa-eye"></i></a>
@@ -58,3 +63,4 @@ $flash = \$_SESSION['flash'] ?? null; unset(\$_SESSION['flash']);
                 </table>
             </div></div>
         </main>
+<?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

@@ -21,7 +21,7 @@ $faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND d
                 <div class="col-md-4"><div class="card p-3 text-center"><div class="fs-2 fw-bold text-warning"><?= number_format((float)$stats['pendente'],2,',','.') ?>€</div><div class="text-muted small"><?= $stats['n_pendentes'] ?> fatura(s) pendente(s)</div></div></div>
                 <div class="col-md-4"><div class="card p-3 text-center"><div class="fs-2 fw-bold text-secondary"><?= count($faturas) ?></div><div class="text-muted small">Faturas no período</div></div></div>
             </div>
-            <form method="GET" class="mb-3">
+            <form method="GET" class="mb-3 d-print-none">
                 <select name="periodo" class="form-select form-select-sm w-auto d-inline-block" onchange="this.form.submit()">
                     <option value="30" <?= $filtro==30?'selected':'' ?>>Últimos 30 dias</option>
                     <option value="90" <?= $filtro==90?'selected':'' ?>>Últimos 3 meses</option>
@@ -31,7 +31,7 @@ $faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND d
             </form>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light"><tr><th>Nº Fatura</th><th>Data</th><th>Valor</th><th>Vencimento</th><th>Estado</th><th>Ações</th></tr></thead>
+                    <thead class="table-light"><tr><th>Nº Fatura</th><th>Data</th><th>Valor</th><th>Vencimento</th><th>Estado</th><th class="d-print-none">Ações</th></tr></thead>
                     <tbody>
                     <?php if (empty($faturas)): ?>
                         <tr><td colspan="6" class="text-center text-muted py-4">Sem faturas.</td></tr>
@@ -42,7 +42,7 @@ $faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND d
                             <td class="fw-bold"><?= number_format((float)$f['valor_eur'],2,',','.') ?>€</td>
                             <td><?= h($f['data_vencimento'] ?? '—') ?></td>
                             <td><?= $f['paga'] ? '<span class="badge bg-success">Paga</span>' : '<span class="badge bg-warning text-dark">Pendente</span>' ?></td>
-                            <td><a href="detalhes.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-secondary"><i class="fa-regular fa-eye"></i></a></td>
+                            <td class="d-print-none"><a href="detalhes.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-secondary"><i class="fa-regular fa-eye"></i></a></td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>

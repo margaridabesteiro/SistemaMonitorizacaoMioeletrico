@@ -68,7 +68,7 @@ $_prof_hdr = $_stmt_hdr->fetch() ?: [];
     <div class="modal fade" id="modalPerfilMedico" tabindex="-1" aria-labelledby="modalPerfilMedicoLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background:#8B0000;">
+                <div class="modal-header" style="background:#198754;">
                     <h5 class="modal-title text-white" id="modalPerfilMedicoLabel">
                         <i class="fa-solid fa-user-doctor me-2"></i>Meu Perfil
                     </h5>
@@ -76,12 +76,12 @@ $_prof_hdr = $_stmt_hdr->fetch() ?: [];
                 </div>
                 <div class="modal-body">
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <div style="width:64px;height:64px;border-radius:50%;background:#8B0000;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <div style="width:64px;height:64px;border-radius:50%;background:#198754;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                             <i class="fa-solid fa-user-doctor fa-2x text-white"></i>
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold"><?= $nome_medico ?></h5>
-                            <span class="badge" style="background:#8B0000;">Médico</span>
+                            <span class="badge" style="background:#198754;">Médico</span>
                         </div>
                     </div>
                     <table class="table table-sm table-borderless mb-0">

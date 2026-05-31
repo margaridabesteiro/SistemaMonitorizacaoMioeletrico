@@ -29,7 +29,7 @@ $nome_utente = h($_SESSION['nome'] ?? 'Utente');
     <?php endif; ?>
 </head>
 <body>
-    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3">
+    <header class="topbar d-flex justify-content-between align-items-center px-4 py-3 d-print-none">
         <div class="sistema-nome">
             <a href="<?= APP_URL ?>/private/utente/index_utente.php" class="text-decoration-none d-flex align-items-center gap-3">
                 <i class="fa-solid fa-hand-holding-heart logo-icon"></i>
@@ -41,7 +41,7 @@ $nome_utente = h($_SESSION['nome'] ?? 'Utente');
                 <i class="fa-solid fa-user"></i> <?= $nome_utente ?>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/detalhes.php">
+                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/perfil.php">
                     <i class="fa-regular fa-user me-2"></i>O Meu Perfil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">

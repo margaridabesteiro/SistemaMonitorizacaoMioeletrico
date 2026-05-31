@@ -4,40 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prosthesis Force Trainer</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f0f2f5;
-    --surface: #ffffff;
-    --surface2: #f7f8fa;
-    --accent: #00c896;
-    --accent2: #005eff;
-    --warn: #ff6b35;
-    --text: #0d0d0d;
-    --text2: #6b7280;
-    --border: rgba(0,0,0,0.08);
-    --shadow: 0 2px 20px rgba(0,0,0,0.06);
-    --radius: 20px;
+    --bg: #0d1b2a;
+    --surface: #1b2838;
+    --surface2: #243447;
+    --accent: #4ecdc4;
+    --accent2: #e8c547;
+    --warn: #e05c5c;
+    --text: #f0f4f8;
+    --text2: #7a8fa6;
+    --border: rgba(255,255,255,0.07);
+    --shadow: 0 2px 20px rgba(0,0,0,0.3);
+    --radius: 16px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 32px 16px;
+    padding: 14px;
+    user-select: none;
+    overflow: hidden;
   }
 
   .container {
     width: 100%;
-    max-width: 860px;
+    max-width: 580px;
     display: grid;
-    gap: 16px;
+    gap: 10px;
   }
 
   /* Header */
@@ -45,50 +47,49 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 28px;
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    margin-bottom: 0;
   }
 
-  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-left { display: flex; align-items: center; gap: 10px; }
 
   .logo-mark {
-    width: 44px; height: 44px;
+    width: 36px; height: 36px;
     background: var(--accent);
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
 
-  .logo-mark svg { width: 24px; height: 24px; }
+  .logo-mark svg { width: 20px; height: 20px; }
 
   .header h1 {
     font-size: 1.35rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-weight: 900;
+    letter-spacing: -0.04em;
     line-height: 1;
+    color: var(--accent2);
   }
 
   .header h1 span {
     display: block;
-    font-size: 0.7rem;
-    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    font-family: 'Space Mono', monospace;
     font-weight: 400;
     color: var(--text2);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
   .badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 500;
-    background: #e8faf4;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    background: var(--surface);
     color: var(--accent);
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 50px;
+    border: 1px solid var(--border);
     letter-spacing: 0.04em;
   }
 
@@ -96,53 +97,39 @@
   .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 8px;
   }
 
   .stat-card {
     background: var(--surface);
     border-radius: var(--radius);
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    text-align: center;
   }
-
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    border-radius: var(--radius) var(--radius) 0 0;
-  }
-
-  .stat-card:nth-child(1)::before { background: var(--accent2); }
-  .stat-card:nth-child(2)::before { background: var(--accent); }
-  .stat-card:nth-child(3)::before { background: var(--warn); }
-  .stat-card:nth-child(4)::before { background: #9b5cf6; }
 
   .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
     color: var(--text2);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-bottom: 8px;
+    margin-bottom: 3px;
   }
 
   .stat-value {
-    font-size: 2.4rem;
-    font-weight: 800;
+    font-size: 1.6rem;
+    font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1;
     display: flex;
     align-items: baseline;
-    gap: 4px;
+    gap: 2px;
+    justify-content: center;
   }
 
   .stat-value sup {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text2);
   }
@@ -150,14 +137,10 @@
   .stat-card:nth-child(1) .stat-value { color: var(--accent2); }
   .stat-card:nth-child(2) .stat-value { color: var(--accent); }
   .stat-card:nth-child(3) .stat-value { color: var(--warn); }
-  .stat-card:nth-child(4) .stat-value { color: #9b5cf6; }
+  .stat-card:nth-child(4) .stat-value { color: #a78bfa; }
 
   /* Canvas area */
   .canvas-wrap {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px;
     position: relative;
   }
 
@@ -165,13 +148,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 6px;
   }
 
   .canvas-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 500;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
     color: var(--text2);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -180,32 +162,33 @@
   .status-pill {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
+    gap: 6px;
+    padding: 5px 12px;
     border-radius: 50px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    font-weight: 500;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
     transition: all 0.25s ease;
+    border: 1px solid var(--border);
   }
 
   .status-pill.relax {
-    background: #fff8e6;
-    color: #d97706;
+    background: var(--surface);
+    color: var(--text2);
   }
 
   .status-pill.press {
-    background: #e8faf4;
+    background: var(--surface);
     color: var(--accent);
   }
 
   .status-dot {
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     animation: pulse 1.4s infinite;
   }
 
-  .status-pill.relax .status-dot { background: #d97706; }
+  .status-pill.relax .status-dot { background: var(--text2); }
   .status-pill.press .status-dot { background: var(--accent); }
 
   @keyframes pulse {
@@ -215,12 +198,10 @@
 
   canvas {
     width: 100%;
-    height: 360px;
-    border-radius: 12px;
-    border: 1.5px solid var(--border);
+    max-width: 580px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
     display: block;
-    cursor: pointer;
-    background: #fafbfc;
     touch-action: none;
     user-select: none;
   }
@@ -229,87 +210,79 @@
   .instructions-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px;
   }
 
   .instr-card {
     background: var(--surface);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 18px 22px;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
   }
 
   .instr-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
+    width: 32px; height: 32px;
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
-  .instr-icon.down { background: #fff8e6; }
-  .instr-icon.up { background: #e8faf4; }
+  .instr-icon.down { background: rgba(224,92,92,0.15); }
+  .instr-icon.up   { background: rgba(78,205,196,0.15); }
 
   .instr-text strong {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 700;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
   }
 
   .instr-text span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
     color: var(--text2);
   }
 
   /* Action bar */
   .action-bar {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
   }
 
   .btn-start {
     flex: 1;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 1rem;
     font-weight: 700;
-    padding: 16px 32px;
+    padding: 14px 24px;
     border: none;
-    border-radius: 14px;
-    background: var(--text);
-    color: #fff;
+    border-radius: 12px;
+    background: var(--accent2);
+    color: var(--bg);
     cursor: pointer;
-    letter-spacing: -0.01em;
     transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
   }
 
-  .btn-start:hover {
-    background: #1a1a1a;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  }
-
+  .btn-start:hover { opacity: 0.88; transform: translateY(-1px); }
   .btn-start:active { transform: translateY(0); }
 
   .force-display {
     background: var(--surface);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    padding: 12px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 10px 18px;
     text-align: center;
-    min-width: 100px;
+    min-width: 80px;
   }
 
   .force-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--text2);
@@ -317,17 +290,16 @@
   }
 
   .force-value {
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
     color: var(--text);
     line-height: 1;
     transition: color 0.2s;
   }
 
-  @media (max-width: 600px) {
-    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .stat-value { font-size: 1.8rem; }
+  @media (max-width: 560px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
     .instructions-row { grid-template-columns: 1fr; }
     .action-bar { flex-direction: column; }
   }
@@ -337,8 +309,8 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(6px);
+    background: rgba(13,27,42,0.88);
+    backdrop-filter: blur(12px);
     z-index: 100;
     align-items: center;
     justify-content: center;
@@ -348,85 +320,88 @@
 
   .results-card {
     background: var(--surface);
-    border-radius: 28px;
-    padding: 40px 48px;
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 38px 42px;
     text-align: center;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
-    max-width: 420px;
+    max-width: 360px;
     width: 90%;
-    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
   }
 
   @keyframes popIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from { transform: scale(0.75); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
   }
 
-  .results-icon { font-size: 3rem; margin-bottom: 12px; }
+  .results-icon { font-size: 3rem; margin-bottom: 10px; }
 
   .results-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: 6px;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    margin-bottom: 4px;
   }
 
   .results-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
     color: var(--text2);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-bottom: 28px;
+    margin-bottom: 22px;
   }
 
   .results-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 8px;
+    margin-bottom: 22px;
   }
 
   .result-item {
     background: var(--bg);
-    border-radius: 14px;
-    padding: 14px;
+    border-radius: 12px;
+    padding: 12px;
   }
 
   .result-item .r-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--text2);
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .result-item .r-value {
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
     color: var(--text);
   }
 
   .btn-again {
     width: 100%;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 1rem;
     font-weight: 700;
-    padding: 16px;
+    padding: 14px;
     border: none;
-    border-radius: 14px;
-    background: var(--text);
-    color: #fff;
+    border-radius: 12px;
+    background: var(--accent2);
+    color: var(--bg);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
   }
 
-  .btn-again:hover { background: #1a1a1a; transform: translateY(-1px); }
+  .btn-again:hover { opacity: 0.88; transform: translateY(-1px); }
 
   /* Timer urgency */
   .timer-urgent { color: var(--warn) !important; }
+
+  /* Calibration button */
+  @keyframes calPulse { from { opacity: 1; } to { opacity: 0.4; } }
 
 </style>
 </head>
@@ -484,30 +459,88 @@
   <!-- Instructions -->
   <div class="instructions-row">
     <div class="instr-card">
-      <div class="instr-icon down">📉</div>
+      <div class="instr-icon down">⬆️</div>
       <div class="instr-text">
-        <strong>Linha em baixo</strong>
-        <span>Solte → relaxar o músculo</span>
+        <strong>Força = 0% → Desce</strong>
+        <span>Relaxa → ponto desce</span>
       </div>
     </div>
     <div class="instr-card">
-      <div class="instr-icon up">📈</div>
+      <div class="instr-icon up">⬇️</div>
       <div class="instr-text">
-        <strong>Linha a subir</strong>
-        <span>Pressione → apertar / contrair</span>
+        <strong>Força = 100% → Sobe</strong>
+        <span>Contrai → ponto sobe · ~50% = parado</span>
       </div>
+    </div>
+  </div>
+
+  <!-- IP / WS bar -->
+  <div class="action-bar" style="gap:8px">
+    <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.64.91.130"
+      style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+             color:var(--text);font-family:'DM Mono',monospace;font-size:0.8rem;
+             padding:10px 14px;outline:none;box-shadow:var(--shadow)"/>
+    <button onclick="connectFSR()" style="font-family:'Syne',sans-serif;font-size:0.9rem;
+      font-weight:700;padding:10px 20px;border:none;border-radius:10px;
+      background:var(--accent);color:var(--bg);cursor:pointer;">Ligar</button>
+  </div>
+
+  <!-- WS status + force bar -->
+  <div style="display:flex;align-items:center;gap:16px;background:var(--surface);
+              border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 20px;">
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <div id="wsDot" style="width:9px;height:9px;border-radius:50%;background:#ff6b35;transition:background 0.3s"></div>
+      <span id="wsLabel" style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
+    </div>
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">
+        <span>Força FSR</span><span id="forcePct">0%</span>
+      </div>
+      <div style="width:100%;height:8px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--border)">
+        <div id="forceFill" style="height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.05s linear"></div>
+      </div>
+    </div>
+    <div class="force-display" style="min-width:80px;text-align:center">
+      <div class="force-label">Força</div>
+      <div class="force-value" id="forceVal">0<span style="font-size:0.8rem;font-weight:400">%</span></div>
     </div>
   </div>
 
   <!-- Action bar -->
   <div class="action-bar">
-    <div class="force-display">
-      <div class="force-label">Força</div>
-      <div class="force-value" id="forceVal">0<span style="font-size:0.8rem;font-weight:400">%</span></div>
-    </div>
     <button class="btn-start" onclick="startGame()">Iniciar / Reiniciar</button>
   </div>
 
+</div>
+
+<!-- Welcome / IP overlay -->
+<div class="results-overlay" id="welcomeOverlay" style="display:flex">
+  <div class="results-card" style="max-width:380px">
+    <div class="results-icon">🧠</div>
+    <div class="results-title" style="font-size:1.5rem">Force Trainer</div>
+    <div class="results-sub">Prosthesis Rehab · v2.0</div>
+    <div style="margin-bottom:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:0.65rem;text-transform:uppercase;
+                  letter-spacing:0.1em;color:var(--text2);margin-bottom:8px;">IP do ESP32</div>
+      <div style="display:flex;gap:8px;">
+        <input id="ipModal" type="text" placeholder="ex: 192.168.1.130"
+          style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+                 color:var(--text);font-family:'DM Mono',monospace;font-size:0.8rem;
+                 padding:10px 12px;outline:none;"/>
+        <button onclick="connectFromModal()"
+          style="background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+                 font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;
+                 padding:10px 16px;cursor:pointer;">Ligar</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+        <div id="modalWsDot" style="width:7px;height:7px;border-radius:50%;
+             background:#ff6b35;transition:background 0.3s;flex-shrink:0"></div>
+        <span id="modalWsLabel" style="font-family:'DM Mono',monospace;font-size:0.62rem;
+              color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
+      </div>
+    </div>
+    <button class="btn-again" onclick="startFromWelcome()">Começar</button>
+  </div>
 </div>
 
 <!-- Results overlay -->
@@ -543,9 +576,87 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const W = 812, H = 360;
 
-let playerY = H * 0.82;
-let velocity = 0;
+// ═══════════════════════════════════════════
+//  FSR / SIGNAL PROCESSING
+// ═══════════════════════════════════════════
+var FILTER_SIZE = 8;
+var filterBuf = [], filterSum = 0;
+var baseline = -1, maxVal = 3000;  // -1 = ainda não inicializado
+var DEADZONE = 0.05, THRESHOLD = 0.05;
+var forceNorm = 0;
+var autoBaselineBuf = [], AUTO_BASELINE_N = 30; // primeiras 30 amostras = baseline automático
+
+function addSample(raw) {
+  // Auto-baseline: calcula baseline com as primeiras amostras em repouso
+  if (baseline < 0) {
+    autoBaselineBuf.push(raw);
+    if (autoBaselineBuf.length >= AUTO_BASELINE_N) {
+      baseline = autoBaselineBuf.reduce(function(a,b){return a+b;},0) / autoBaselineBuf.length;
+      // maxVal estimado: baseline + 2000 (ajustado depois pela calibração manual)
+      maxVal = baseline + 2000;
+    } else {
+      return; // ainda a acumular amostras iniciais
+    }
+  }
+
+  filterBuf.push(raw); filterSum += raw;
+  if (filterBuf.length > FILTER_SIZE) filterSum -= filterBuf.shift();
+  var smoothed = filterSum / filterBuf.length;
+  var norm = (smoothed - baseline) / Math.max(1, maxVal - baseline);
+  norm = Math.max(0, Math.min(1, norm));
+  if (norm < DEADZONE) norm = 0;
+  forceNorm = norm;
+  var pct = Math.round(norm * 100);
+  document.getElementById('forceFill').style.width = pct + '%';
+  document.getElementById('forcePct').textContent = pct + '%';
+}
+
+// ═══════════════════════════════════════════
+//  CALIBRAÇÃO
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+//  WEBSOCKET
+// ═══════════════════════════════════════════
+var ws = null, wsReconnectTimer = null, wsReconnectDelay = 2000, wsIntentionalClose = false;
+
+function connectFSR() {
+  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  var ip = document.getElementById('ipInput').value.trim();
+  if (!ip) return;
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    wsIntentionalClose = true; try { ws.close(); } catch(e){}
+  }
+  wsIntentionalClose = false; wsReconnectDelay = 2000;
+  _openWS(ip);
+}
+
+function _openWS(ip) {
+  ws = new WebSocket('ws://' + ip + ':81');
+  ws.onopen = function() {
+    wsReconnectDelay = 2000;
+    document.getElementById('wsDot').style.background = '#00c896';
+    document.getElementById('wsLabel').textContent = 'ESP32 ligado · ' + ip;
+  };
+  ws.onmessage = function(e) {
+    var raw = parseInt(e.data); if (isNaN(raw)) return; addSample(raw);
+  };
+  ws.onclose = function() {
+    document.getElementById('wsDot').style.background = '#ff6b35';
+    if (wsIntentionalClose) return;
+    var delay = wsReconnectDelay;
+    wsReconnectDelay = Math.min(wsReconnectDelay * 1.5, 15000);
+    document.getElementById('wsLabel').textContent = 'Desligado — a reconectar em ' + Math.round(delay/1000) + 's…';
+    wsReconnectTimer = setTimeout(function(){ _openWS(ip); }, delay);
+  };
+  ws.onerror = function() { document.getElementById('wsLabel').textContent = 'Erro de ligação'; };
+}
+
+connectFSR();
+
+let playerY = H - 35;  // começa em baixo
 let isPressing = false;
+var fallbackForce = 0;  // -0.5 = desce, 0 = neutro, +0.5 = sobe
 let score = 0;
 let level = 1;
 let gameRunning = false;
@@ -559,13 +670,13 @@ let timeLeft = GAME_DURATION;
 let timerInterval = null;
 
 function getDifficulty() {
-  // Difficulty grows linearly with elapsed time (0→1 over 60s)
+  // Dificuldade cresce muito lentamente — a linha nunca deve ser impossível de seguir
   const elapsed = GAME_DURATION - timeLeft;
-  const t = Math.min(elapsed / GAME_DURATION, 1); // 0 at start, 1 at end
+  const t = Math.min(elapsed / GAME_DURATION, 1);
   return {
-    amplitude: 70 + t * 110,       // 70px → 180px swing
-    speed:     0.018 + t * 0.038,  // slow → fast frequency
-    smoothing: 0.18 - t * 0.10     // less smoothing = sharper changes
+    amplitude: 35 + t * 45,        // 35px → 80px (oscilações suaves e pequenas)
+    speed:     0.008 + t * 0.010,  // muito lento → ligeiramente menos lento
+    smoothing: 0.92 - t * 0.05     // alta suavização sempre (0.92 → 0.87)
   };
 }
 
@@ -606,9 +717,11 @@ function updateTarget() {
 
 function draw() {
   ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0d1b2a';
+  ctx.fillRect(0, 0, W, H);
 
   // Grid lines (subtle)
-  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
   ctx.lineWidth = 1;
   for (let y = 0; y < H; y += H/6) {
     ctx.beginPath();
@@ -702,7 +815,7 @@ function draw() {
 
   // Connector line from player to target
   if (distance > 15) {
-    ctx.strokeStyle = `rgba(0,0,0,0.08)`;
+    ctx.strokeStyle = `rgba(255,255,255,0.12)`;
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
@@ -713,14 +826,14 @@ function draw() {
   }
 
   // Force % text
-  const forcePercent = Math.round(100 - (playerY / H * 100));
+  const forcePercent = Math.round(forceNorm * 100);
   document.getElementById('forceVal').textContent = forcePercent + '%';
   document.getElementById('forceVal').style.color = closeness > 0.6 ? '#00c896' : closeness > 0.3 ? '#005eff' : '#ff6b35';
 
   // Accuracy bar on right side
   const barH = H - 80;
   const barY = 40;
-  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
   ctx.beginPath();
   ctx.roundRect(W - 20, barY, 8, barH, 4);
   ctx.fill();
@@ -732,11 +845,12 @@ function draw() {
   ctx.fill();
 
   // Label on right bar
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.font = '500 10px "DM Mono"';
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.font = '500 10px "Space Mono"';
   ctx.textAlign = 'center';
   ctx.fillText('FIT', W - 16, barY + barH + 16);
 
+  updateStatus(isPressing);
   if (gameRunning) {
     accuracySum += closeness * 100;
     accuracyCount++;
@@ -749,41 +863,38 @@ function draw() {
 function updateStatus(pressing) {
   const pill = document.getElementById('statusPill');
   const txt = document.getElementById('statusText');
-  if (pressing) {
+  const pct = Math.round(forceNorm * 100);
+  if (pressing || forceNorm > THRESHOLD) {
     pill.className = 'status-pill press';
-    txt.textContent = 'Pressionando';
+    txt.textContent = forceNorm > 0.55 ? 'Sobe ↑ ' + pct + '%'
+                    : forceNorm < 0.45 ? 'Desce ↓ ' + pct + '%'
+                    : 'Neutro · ' + pct + '%';
   } else {
     pill.className = 'status-pill relax';
-    txt.textContent = 'Relaxado';
+    txt.textContent = 'Relaxado · Desce ↓';
   }
 }
 
+const MAX_SPEED_Y = 3.5; // px/frame à força máxima (igual ao catch)
+
 function gameLoop() {
+  // Lógica idêntica ao catch: (forceNorm - 0.5) * 2 * MAX_SPEED
+  // forceNorm=0 → desce, forceNorm=0.5 → parado, forceNorm=1 → sobe
+  // forceNorm=0 → desce por gravidade, forceNorm=1 → sobe ao máximo
+  var GRAVITY = 2.0;  // velocidade de queda quando força=0
+  var vel = -(forceNorm * MAX_SPEED_Y * 2 - GRAVITY);
+  playerY += vel;
+  if (playerY < 35) { playerY = 35; }
+  if (playerY > H - 35) { playerY = H - 35; }
+
   if (gameRunning) {
-    if (isPressing) {
-      velocity -= 1.4;
-    } else {
-      velocity += 0.9;
-    }
-
-    velocity *= 0.86;
-    playerY += velocity;
-
-    if (playerY < 35) { playerY = 35; velocity = 2; }
-    if (playerY > H - 35) { playerY = H - 35; velocity = -2; }
-
     updateTarget();
-
   }
   draw();
   requestAnimationFrame(gameLoop);
 }
 
-canvas.addEventListener('mousedown', () => { isPressing = true; updateStatus(true); });
-canvas.addEventListener('mouseup', () => { isPressing = false; updateStatus(false); });
-canvas.addEventListener('mouseleave', () => { isPressing = false; updateStatus(false); });
-canvas.addEventListener('touchstart', e => { e.preventDefault(); isPressing = true; updateStatus(true); }, {passive:false});
-canvas.addEventListener('touchend', () => { isPressing = false; updateStatus(false); });
+// Sem fallback de rato/teclado — só o sensor FSR controla o ponto
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -840,7 +951,7 @@ function startGame() {
   gameRunning = true;
   score = 0; level = 1; time = 0;
   accuracySum = 0; accuracyCount = 0;
-  playerY = H * 0.82; velocity = 0;
+  playerY = H - 35;  // começa em baixo
   document.getElementById('level').textContent = '1';
   document.getElementById('points').textContent = '0';
   document.getElementById('accuracy').textContent = '0';
@@ -854,6 +965,40 @@ function startGame() {
 
 initTarget();
 gameLoop();
+
+// ── IP modal logic ──────────────────────────────────
+function syncIP() {
+  var stored = localStorage.getItem('esp32_ip') || '10.64.91.130';
+  document.getElementById('ipInput').value = stored;
+  document.getElementById('ipModal').value = stored;
+}
+
+function connectFromModal() {
+  var ip = document.getElementById('ipModal').value.trim();
+  if (!ip) return;
+  document.getElementById('ipInput').value = ip;
+  localStorage.setItem('esp32_ip', ip);
+  connectFSR();
+}
+
+function startFromWelcome() {
+  document.getElementById('welcomeOverlay').style.display = 'none';
+  startGame();
+}
+
+function updateModalWs() {
+  var connected = ws && ws.readyState === 1;
+  document.getElementById('modalWsDot').style.background =
+    connected ? 'var(--accent)' : '#ff6b35';
+  document.getElementById('modalWsLabel').textContent =
+    connected ? 'Ligado · ' + document.getElementById('ipModal').value
+              : document.getElementById('wsLabel').textContent;
+}
+
+syncIP();
+setInterval(function() {
+  if (document.getElementById('welcomeOverlay').style.display !== 'none') updateModalWs();
+}, 500);
 </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ $pagina_titulo = 'Editar Utilizador'; $pagina_ativa = 'utilizadores';
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
 $db = getDB(); $erros = [];
-$stmt = $db->prepare('SELECT id,nome,email,perfil,ativo FROM utilizadores WHERE id=?');
+$stmt = $db->prepare('SELECT u.id, u.nome, u.email, u.perfil, u.ativo, ut.nif FROM utilizadores u LEFT JOIN utentes ut ON ut.utilizador_id = u.id WHERE u.id=?');
 $stmt->execute([$id]); $dados = $stmt->fetch();
 if (!$dados) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+// Handle NIF update for utentes
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $dados['perfil'] === 'utente' && isset($_POST['nif'])) {
+    $nif_novo = trim($_POST['nif'] ?? '');
+    $db->prepare('UPDATE utentes SET nif = ? WHERE utilizador_id = ?')->execute([$nif_novo ?: null, $id]);
+}
 require_once __DIR__ . '/../../../includes/header_admin.php';
 require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 ?>
@@ -51,6 +56,9 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <div class="mb-3"><label class="form-label fw-semibold">Perfil *</label>
                         <select name="perfil" class="form-select" required><?php foreach(['admin','medico','tecnico','utente'] as $p):?><option value="<?=$p?>" <?=$dados['perfil']===$p?'selected':''?>><?=ucfirst($p)?></option><?php endforeach;?></select>
                     </div>
+                    <?php if ($dados['perfil'] === 'utente'): ?>
+                    <div class="mb-3"><label class="form-label fw-semibold">NIF</label><input type="text" name="nif" class="form-control" value="<?= h($dados['nif'] ?? '') ?>" placeholder="NIF do utente" maxlength="20"></div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nova Password</label><input type="password" name="password" class="form-control" placeholder="Vazio = manter atual"></div>
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Confirmar Password</label><input type="password" name="password_conf" class="form-control"></div>

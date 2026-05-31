@@ -63,14 +63,6 @@
   .ws-dot.connected { background: var(--good); }
 
   /* Calibration button */
-  .btn-cal {
-    font-family: 'Space Mono', monospace; font-size: 0.6rem;
-    padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--text2); cursor: pointer;
-    text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.2s;
-  }
-  .btn-cal:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-cal.calibrating { border-color: var(--accent2); color: var(--accent2); animation: pulse 0.6s infinite alternate; }
   @keyframes pulse { from { opacity: 1; } to { opacity: 0.4; } }
 
   /* Stats */
@@ -122,7 +114,6 @@
     <div class="ws-dot" id="wsDot"></div>
     <span id="wsLabel">Desligado</span>
   </div>
-  <button class="btn-cal" id="btnCal" onclick="startCalibration()">Calibrar</button>
 </div>
 
 <div class="stats">
@@ -237,46 +228,7 @@ function addSample(raw) {
 
 // ═══════════════════════════════════════════════════════
 //  CALIBRAÇÃO
-// ═══════════════════════════════════════════════════════
-var calState    = 'idle';   // idle | baseline | max
-var calSamples  = [];
-var CAL_SAMPLES = 40;       // ~2s a 50ms
-
-function startCalibration() {
-  if (calState !== 'idle') return;
-  calState   = 'baseline';
-  calSamples = [];
-  var btn = document.getElementById('btnCal');
-  btn.classList.add('calibrating');
-  btn.textContent = 'Relaxa… (2s)';
-  document.getElementById('hint').textContent = 'Relaxa o músculo completamente…';
-}
-
-function processCal(raw) {
-  if (calState === 'idle') return;
-
-  calSamples.push(raw);
-
-  if (calState === 'baseline' && calSamples.length >= CAL_SAMPLES) {
-    // Baseline = média das amostras em repouso
-    baseline   = calSamples.reduce(function(a,b){ return a+b; }, 0) / calSamples.length;
-    calSamples = [];
-    calState   = 'max';
-    var btn = document.getElementById('btnCal');
-    btn.textContent = 'Contrai max… (2s)';
-    document.getElementById('hint').textContent = 'Contrai ao máximo durante 2 segundos…';
-  } else if (calState === 'max' && calSamples.length >= CAL_SAMPLES) {
-    // Max = valor máximo observado durante contração
-    maxVal   = Math.max.apply(null, calSamples);
-    calState = 'idle';
-    filterBuf = []; filterSum = 0;
-    var btn = document.getElementById('btnCal');
-    btn.classList.remove('calibrating');
-    btn.textContent = 'Calibrar';
-    document.getElementById('hint').textContent =
-      'Calibrado! Baseline=' + Math.round(baseline) + ' Max=' + Math.round(maxVal);
-  }
-}
+// ═══════════════════════════════════════════════════════   // idle | baseline | max       // ~2s a 50ms
 
 // ═══════════════════════════════════════════════════════
 //  WEBSOCKET
@@ -320,7 +272,6 @@ function _openWS(ip) {
   ws.onmessage = function(e) {
     var raw = parseInt(e.data);
     if (isNaN(raw)) return;
-    processCal(raw);
     addSample(raw);
   };
 
