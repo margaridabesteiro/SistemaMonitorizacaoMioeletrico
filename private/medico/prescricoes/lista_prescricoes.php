@@ -1,12 +1,22 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
-$pagina_titulo = 'Prescrições'; $pagina_ativa = 'prescricoes';
-require_once __DIR__ . '/../../../includes/header_medico.php';
-require_once __DIR__ . '/../../../includes/sidebar_medico.php';
-$db = getDB();
+
+$db  = getDB();
 $uid = (int)$_SESSION['utilizador_id'];
-$stmt = $db->prepare('SELECT id FROM profissionais WHERE utilizador_id=?'); $stmt->execute([$uid]); $pid = (int)($stmt->fetchColumn() ?: 0);
+$stmt = $db->prepare('SELECT id FROM profissionais WHERE utilizador_id=?');
+$stmt->execute([$uid]); $pid = (int)($stmt->fetchColumn() ?: 0);
+
+// Toggle ativa/inativa — tem de correr ANTES de qualquer output HTML
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_id']) && $pid) {
+    $toggle_id = (int)$_POST['toggle_id'];
+    $db->prepare('UPDATE prescricoes SET ativa = NOT ativa WHERE id=? AND medico_id=?')->execute([$toggle_id, $pid]);
+    $stmt_nova = $db->prepare('SELECT ativa FROM prescricoes WHERE id=?'); $stmt_nova->execute([$toggle_id]);
+    $nova = (int)$stmt_nova->fetchColumn();
+    $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Prescrição ' . ($nova ? 'ativada' : 'inativada') . ' com sucesso.'];
+        redirect(APP_URL . '/private/medico/prescricoes/lista_prescricoes.php');
+}
+
 $filtro_estado = $_GET['estado'] ?? '';
 $pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 15; $offset = ($pagina_atual-1)*$por_pagina;
 $where = $pid ? 'WHERE p.medico_id=?' : 'WHERE 1=0'; $params = $pid ? [$pid] : [];
@@ -16,6 +26,10 @@ $cnt = $db->prepare("SELECT COUNT(*) FROM prescricoes p $where"); $cnt->execute(
 $stmt2 = $db->prepare("SELECT p.*, u.nome AS paciente FROM prescricoes p JOIN utentes ut ON ut.id=p.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY p.data_prescricao DESC LIMIT $por_pagina OFFSET $offset");
 $stmt2->execute($params); $prescricoes = $stmt2->fetchAll();
 $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
+
+$pagina_titulo = 'Prescrições'; $pagina_ativa = 'prescricoes';
+require_once __DIR__ . '/../../../includes/header_medico.php';
+require_once __DIR__ . '/../../../includes/sidebar_medico.php';
 ?>
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -40,9 +54,16 @@ $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
                             <td><?= h($p['data_validade'] ?? '—') ?></td>
                             <td><span class="badge bg-<?= ['Baixa'=>'success','Media'=>'info','Alta'=>'warning','Urgente'=>'danger'][$p['prioridade']] ?? 'secondary' ?>"><?= h($p['prioridade']) ?></span></td>
                             <td><?= $p['ativa'] ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-secondary">Inativa</span>' ?></td>
-                            <td>
-                                <a href="detalhes_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary me-1"><i class="fa-regular fa-eye"></i></a>
-                                <a href="editar_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-secondary"><i class="fa-regular fa-pen-to-square"></i></a>
+                            <td class="d-flex gap-1 align-items-center">
+                                <a href="detalhes_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary" title="Ver"><i class="fa-regular fa-eye"></i></a>
+                                <a href="editar_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-secondary" title="Editar"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <form method="POST" class="d-inline m-0">
+                                    <input type="hidden" name="toggle_id" value="<?= $p['id'] ?>">
+                                    <button type="submit" class="btn btn-xs <?= $p['ativa'] ? 'btn-outline-warning' : 'btn-outline-success' ?>"
+                                            title="<?= $p['ativa'] ? 'Inativar' : 'Ativar' ?>">
+                                        <i class="fa-solid <?= $p['ativa'] ? 'fa-ban' : 'fa-circle-check' ?>"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; endif; ?>

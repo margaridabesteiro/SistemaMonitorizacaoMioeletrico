@@ -11,21 +11,53 @@ $stmt->execute([$id]); $p = $stmt->fetch();
 if (!$p) redirect(APP_URL . '/private/medico/prescricoes/lista_prescricoes.php');
 ?>
         <main class="content">
-            <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="lista_prescricoes.php">Prescrições</a></li><li class="breadcrumb-item active">#<?= $p['id'] ?></li></ol></nav>
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="lista_prescricoes.php">Prescrições</a></li>
+                    <li class="breadcrumb-item active">#<?= $p['id'] ?></li>
+                </ol>
+            </nav>
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Detalhes da Prescrição</h1>
                 <div class="d-flex gap-2">
-                    <a href="editar_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-pen-to-square me-1"></i>Editar</a>
-                    <?= $p['ativa'] ? '<span class="badge bg-success p-2">Ativa</span>' : '<span class="badge bg-secondary p-2">Inativa</span>' ?>
+                    <a href="lista_prescricoes.php" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Voltar
+                    </a>
+                    <a href="editar_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa-regular fa-pen-to-square me-1"></i>Editar
+                    </a>
                 </div>
             </div>
+
             <div class="card p-4" style="max-width:700px;">
-                <div class="row">
-                    <div class="col-md-6"><p><strong>Paciente:</strong> <?= h($p['paciente']) ?></p><p><strong>Médico:</strong> <?= h($p['medico']) ?></p><p><strong>Tipo:</strong> <?= h($p['tipo']) ?></p></div>
-                    <div class="col-md-6"><p><strong>Data:</strong> <?= h($p['data_prescricao']) ?></p><p><strong>Validade:</strong> <?= h($p['data_validade'] ?? '—') ?></p><p><strong>Prioridade:</strong> <?= h($p['prioridade']) ?></p></div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Paciente:</strong> <?= h($p['paciente']) ?></p>
+                        <p><strong>Médico:</strong> <?= h($p['medico']) ?></p>
+                        <p><strong>Tipo:</strong> <?= h($p['tipo']) ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data:</strong> <?= h($p['data_prescricao']) ?></p>
+                        <p><strong>Validade:</strong> <?= h($p['data_validade'] ?? '—') ?></p>
+                        <p><strong>Prioridade:</strong>
+                            <span class="badge bg-<?= ['Baixa'=>'success','Media'=>'info','Alta'=>'warning','Urgente'=>'danger'][$p['prioridade']] ?? 'secondary' ?>">
+                                <?= h($p['prioridade']) ?>
+                            </span>
+                        </p>
+                    </div>
                 </div>
-                <?php if ($p['observacoes']): ?><hr><p><strong>Observações:</strong><br><?= h($p['observacoes']) ?></p><?php endif; ?>
+                <hr>
+                <p class="mb-0">
+                    <strong>Estado:</strong>
+                    <?= $p['ativa']
+                        ? '<span class="badge bg-success">Ativa</span>'
+                        : '<span class="badge bg-secondary">Inativa</span>' ?>
+                </p>
+                <?php if ($p['observacoes']): ?>
+                    <hr>
+                    <p class="mb-0"><strong>Observações:</strong><br><?= h($p['observacoes']) ?></p>
+                <?php endif; ?>
             </div>
-            <a href="lista_prescricoes.php" class="btn btn-outline-secondary mt-3"><i class="fa-solid fa-arrow-left me-1"></i>Voltar</a>
         </main>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
