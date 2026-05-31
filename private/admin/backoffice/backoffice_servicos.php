@@ -99,7 +99,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 <button type="submit" class="btn px-4" style="background:#8B0000;color:#fff;">
                     <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Alterações
                 </button>
-                <a href="<?= APP_URL ?>/index.php" target="_blank" class="btn btn-outline-secondary ms-2">
+                <a href="<?= APP_URL ?>/index.php?preview=1" target="_blank" class="btn btn-outline-secondary ms-2">
                     <i class="fa-solid fa-eye me-1"></i>Ver página
                 </a>
             </form>

@@ -40,10 +40,6 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuAdmin('seguranca', $pa) ?>">
                 <i class="fa-solid fa-shield me-2"></i>Segurança
             </a>
-            <a href="<?= APP_URL ?>/private/admin/configuracao/sistema.php"
-               class="nav-link<?= menuAdmin('configuracao', $pa) ?>">
-                <i class="fa-solid fa-gear me-2"></i>Configuração
-            </a>
             <hr class="my-3">
             <a href="<?= APP_URL ?>/private/admin/backoffice/backoffice_quem_somos.php"
                class="nav-link<?= menuAdmin('backoffice', $pa) ?>">
