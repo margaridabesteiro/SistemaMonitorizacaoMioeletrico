@@ -2,6 +2,13 @@
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 requirePerfil('utente');
+// Utentes SNS não têm faturação — redirecionar
+$_db_pag = getDB();
+$_cob = $_db_pag->prepare('SELECT cobertura_saude FROM utentes WHERE utilizador_id=?');
+$_cob->execute([(int)$_SESSION['utilizador_id']]);
+if (($_cob->fetchColumn() ?: 'SNS') === 'SNS') {
+    redirect(APP_URL . '/private/utente/index_utente.php');
+}
 $pagina_titulo = 'Pagamentos'; $pagina_ativa = 'pagamentos';
 require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';

@@ -29,9 +29,21 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('mensagens', $pa) ?>">
                 <i class="fa-regular fa-envelope me-2"></i>Mensagens
             </a>
+            <a href="<?= APP_URL ?>/private/utente/exames.php"
+               class="nav-link<?= menuUtente('exames', $pa) ?>">
+                <i class="fa-solid fa-flask me-2"></i>Os Meus Exames
+            </a>
+            <a href="<?= APP_URL ?>/private/utente/medicacao.php"
+               class="nav-link<?= menuUtente('medicacao', $pa) ?>">
+                <i class="fa-solid fa-pills me-2"></i>Medicação
+            </a>
             <a href="<?= APP_URL ?>/private/utente/pagamentos.php"
                class="nav-link<?= menuUtente('pagamentos', $pa) ?>">
                 <i class="fa-solid fa-credit-card me-2"></i>Pagamentos
+            </a>
+            <a href="<?= APP_URL ?>/private/utente/preferencias.php"
+               class="nav-link<?= menuUtente('preferencias', $pa) ?>">
+                <i class="fa-solid fa-sliders me-2"></i>Preferências
             </a>
             <a href="<?= APP_URL ?>/private/utente/perfil.php"
                class="nav-link<?= menuUtente('perfil', $pa) ?>">
