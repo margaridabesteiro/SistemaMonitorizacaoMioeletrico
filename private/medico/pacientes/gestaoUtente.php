@@ -38,7 +38,10 @@ $stmt2->execute($params); $pacientes = $stmt2->fetchAll();
                                 echo '<span class="badge bg-'.($fase_c[$f]??'secondary').'">'.($fase_l[$f]??$f).'</span>';
                             ?></td>
                             <td><small><?= h(substr($p['diagnostico']??'—',0,60)) ?></small></td>
-                            <td><a href="<?= APP_URL ?>/private/medico/prescricoes/lista_prescricoes.php?utente=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary"><i class="fa-solid fa-file-medical"></i></a></td>
+                            <td>
+                                <a href="perfil_paciente.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary me-1" title="Perfil"><i class="fa-regular fa-user"></i></a>
+                                <a href="<?= APP_URL ?>/private/medico/prescricoes/lista_prescricoes.php?utente=<?= $p['id'] ?>" class="btn btn-xs btn-outline-secondary" title="Programas"><i class="fa-solid fa-file-medical"></i></a>
+                            </td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>

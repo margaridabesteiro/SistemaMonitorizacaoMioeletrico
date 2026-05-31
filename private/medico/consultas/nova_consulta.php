@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     }
 }
 
+$utente_pre = (int)($_GET['utente_id'] ?? 0);
 $pagina_titulo = 'Nova Consulta'; $pagina_ativa = 'consultas';
 require_once __DIR__ . '/../../../includes/header_medico.php';
 require_once __DIR__ . '/../../../includes/sidebar_medico.php';
@@ -56,7 +57,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
                             <select name="utente_id" class="form-select" required>
                                 <option value="">— Selecionar —</option>
                                 <?php foreach ($utentes as $ut): ?>
-                                    <option value="<?= $ut['id'] ?>" <?= (($_POST['utente_id']??0)==$ut['id'])?'selected':'' ?>><?= h($ut['nome']) ?></option>
+                                    <option value="<?= $ut['id'] ?>" <?= (($_POST['utente_id'] ?? $utente_pre) == $ut['id']) ? 'selected' : '' ?>><?= h($ut['nome']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <?php if (empty($utentes)): ?><div class="form-text text-warning">Sem pacientes associados.</div><?php endif; ?>

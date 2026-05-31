@@ -121,6 +121,17 @@ unset($_SESSION['flash']);
                                        class="btn btn-xs btn-outline-primary me-1" title="Editar">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
+                                    <?php if ($u['perfil'] === 'utente'): ?>
+                                    <a href="perfil_utente.php?id=<?= $u['id'] ?>"
+                                       class="btn btn-xs btn-outline-info me-1" title="Perfil Clínico">
+                                        <i class="fa-solid fa-stethoscope"></i>
+                                    </a>
+                                    <?php elseif (in_array($u['perfil'], ['medico','tecnico'], true)): ?>
+                                    <a href="editar_utilizador.php?id=<?= $u['id'] ?>#password"
+                                       class="btn btn-xs btn-outline-warning me-1" title="Alterar Password">
+                                        <i class="fa-solid fa-key"></i>
+                                    </a>
+                                    <?php endif; ?>
                                     <a href="<?= APP_URL ?>/api/admin/utilizadores/toggle_ativo.php?id=<?= $u['id'] ?>"
                                        class="btn btn-xs btn-outline-<?= $u['ativo'] ? 'danger' : 'success' ?>"
                                        title="<?= $u['ativo'] ? 'Desativar' : 'Ativar' ?>">
