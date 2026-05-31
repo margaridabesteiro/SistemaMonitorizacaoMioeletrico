@@ -22,7 +22,6 @@ $acoes = $db->query("SELECT DISTINCT acao FROM logs_acesso ORDER BY acao")->fetc
                 <div class="col-md-3"><select name="acao" class="form-select form-select-sm"><option value="">Todas as ações</option><?php foreach($acoes as $a): ?><option value="<?= h($a) ?>" <?= $filtro_acao===$a?'selected':'' ?>><?= h($a) ?></option><?php endforeach; ?></select></div>
                 <div class="col-md-3"><input type="date" name="data" class="form-control form-control-sm" value="<?= h($filtro_data) ?>"></div>
                 <div class="col-md-2"><button type="submit" class="btn btn-sm btn-secondary w-100">Filtrar</button></div>
-                <div class="col-md-2"><a href="logs_acesso.php" class="btn btn-sm btn-outline-secondary w-100">Limpar</a></div>
             </form>
             <div class="card"><div class="table-responsive">
                 <table class="table table-sm table-hover mb-0">

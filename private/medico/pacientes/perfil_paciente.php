@@ -15,6 +15,15 @@ $stmt->execute([$uid]); $pid = (int)($stmt->fetchColumn() ?: 0);
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) redirect(APP_URL . '/private/medico/pacientes/gestaoUtente.php');
 
+// Atribuir técnico ao paciente
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_acao'] ?? '') === 'assign_tecnico') {
+    $tecnico_id = (int)($_POST['tecnico_id'] ?? 0) ?: null;
+    $db->prepare('UPDATE utentes SET tecnico_id=? WHERE id=? AND medico_id=?')
+       ->execute([$tecnico_id, $id, $pid]);
+    $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Técnico atribuído com sucesso.'];
+    redirect(APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $id);
+}
+
 $stmt = $db->prepare("
     SELECT ut.*, u.nome, u.email
     FROM utentes ut
@@ -23,6 +32,23 @@ $stmt = $db->prepare("
 ");
 $stmt->execute([$id, $pid]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/medico/pacientes/gestaoUtente.php');
+
+// Técnico atualmente atribuído
+$tecnico_atual_nome = null;
+if ($pac['tecnico_id']) {
+    $t = $db->prepare('SELECT u.nome FROM profissionais p JOIN utilizadores u ON u.id=p.utilizador_id WHERE p.id=?');
+    $t->execute([$pac['tecnico_id']]);
+    $tecnico_atual_nome = $t->fetchColumn() ?: null;
+}
+
+// Lista de técnicos ativos
+$tecnicos_lista = $db->query("
+    SELECT p.id, u.nome
+    FROM profissionais p
+    JOIN utilizadores u ON u.id = p.utilizador_id
+    WHERE u.perfil = 'tecnico' AND u.ativo = 1
+    ORDER BY u.nome
+")->fetchAll();
 
 // Contagens gerais
 $n_sessoes   = (int)$db->query("SELECT COUNT(*) FROM sessoes WHERE utente_id=$id AND estado='concluida'")->fetchColumn();
@@ -66,6 +92,8 @@ $fase_cores  = ['avaliacao' => 'secondary', 'ativo' => 'primary', 'manutencao' =
 $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success', 'urgente' => 'danger'];
 ?>
         <main class="content">
+            <?php $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']); ?>
+            <?php if ($flash): ?><div class="alert alert-<?= h($flash['tipo']) ?> py-2"><?= h($flash['mensagem']) ?></div><?php endif; ?>
             <div class="d-flex justify-content-between align-items-start mb-4">
                 <div class="d-flex align-items-center gap-3">
                     <div style="width:70px;height:70px;border-radius:50%;background:#fce8e8;display:flex;align-items:center;justify-content:center;font-size:2rem;">
@@ -112,6 +140,44 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                     <div class="card text-center p-3">
                         <div class="fs-2 fw-bold text-secondary"><?= count($medicacao) ?></div>
                         <div class="text-muted small">Medicações Ativas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equipa de Tratamento -->
+            <div class="card p-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="fw-bold mb-0"><i class="fa-solid fa-user-doctor me-2" style="color:#8B0000;"></i>Equipa de Tratamento</h6>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">Médico responsável</small>
+                        <span class="fw-semibold"><?= h($_SESSION['nome'] ?? '—') ?></span>
+                    </div>
+                    <div class="col-md-8">
+                        <small class="text-muted d-block mb-1">Técnico atribuído</small>
+                        <?php if ($tecnico_atual_nome): ?>
+                            <span class="badge bg-success me-2"><i class="fa-solid fa-user-gear me-1"></i><?= h($tecnico_atual_nome) ?></span>
+                        <?php else: ?>
+                            <span class="badge bg-warning text-dark me-2">Sem técnico atribuído</span>
+                        <?php endif; ?>
+                        <button class="btn btn-xs btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#formTecnico">
+                            <i class="fa-solid fa-pen me-1"></i><?= $tecnico_atual_nome ? 'Alterar' : 'Atribuir' ?>
+                        </button>
+                        <div class="collapse mt-2" id="formTecnico">
+                            <form method="POST" class="d-flex gap-2 align-items-center">
+                                <input type="hidden" name="_acao" value="assign_tecnico">
+                                <select name="tecnico_id" class="form-select form-select-sm" style="max-width:250px;">
+                                    <option value="">— Sem técnico —</option>
+                                    <?php foreach ($tecnicos_lista as $t): ?>
+                                        <option value="<?= $t['id'] ?>" <?= $pac['tecnico_id'] == $t['id'] ? 'selected' : '' ?>>
+                                            <?= h($t['nome']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit" class="btn btn-sm" style="background:#8B0000;color:#fff;">Guardar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

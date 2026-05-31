@@ -54,14 +54,14 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Utente <span class="text-danger">*</span></label>
-                            <select name="utente_id" class="form-select" required>
+                            <select name="utente_id" id="sel-utente" class="form-select" required>
                                 <option value="">— Selecionar —</option>
                                 <?php foreach($utentes as $u): ?><option value="<?= $u['id'] ?>"><?= h($u['nome']) ?></option><?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Técnico responsável</label>
-                            <select name="tecnico_id" class="form-select">
+                            <label class="form-label fw-semibold">Técnico responsável <span class="text-muted small fw-normal" id="tecnico-hint"></span></label>
+                            <select name="tecnico_id" id="sel-tecnico" class="form-select">
                                 <option value="">— Nenhum —</option>
                                 <?php foreach($tecnicos as $t): ?><option value="<?= $t['id'] ?>"><?= h($t['nome']) ?></option><?php endforeach; ?>
                             </select>
@@ -88,4 +88,24 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 </form>
             </div>
         </main>
+        <script>
+        document.getElementById('sel-utente').addEventListener('change', function () {
+            const utenteId = this.value;
+            const selTecnico = document.getElementById('sel-tecnico');
+            const hint = document.getElementById('tecnico-hint');
+            if (!utenteId) { hint.textContent = ''; return; }
+            fetch('<?= APP_URL ?>/api/admin/utentes/get_tecnico.php?id=' + utenteId)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.tecnico_id) {
+                        selTecnico.value = data.tecnico_id;
+                        hint.textContent = '(pré-preenchido do utente)';
+                    } else {
+                        selTecnico.value = '';
+                        hint.textContent = '(sem técnico atribuído ao utente)';
+                    }
+                })
+                .catch(() => { hint.textContent = ''; });
+        });
+        </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

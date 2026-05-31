@@ -45,6 +45,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $db->prepare('INSERT INTO profissionais (utilizador_id) VALUES (?)')->execute([$novo_id]);
             } elseif ($dados['perfil'] === 'utente') {
                 $db->prepare('INSERT INTO utentes (utilizador_id) VALUES (?)')->execute([$novo_id]);
+                $utente_row_id = (int)$db->lastInsertId();
+                // Auto-atribuir ao médico ativo com menos utentes (distribuição equilibrada; desempate aleatório)
+                $medico = $db->query("
+                    SELECT p.id
+                    FROM profissionais p
+                    JOIN utilizadores u ON u.id = p.utilizador_id
+                    WHERE u.perfil = 'medico' AND u.ativo = 1
+                    ORDER BY (SELECT COUNT(*) FROM utentes WHERE medico_id = p.id) ASC, RAND()
+                    LIMIT 1
+                ")->fetch();
+                if ($medico) {
+                    $db->prepare('UPDATE utentes SET medico_id=? WHERE id=?')
+                       ->execute([$medico['id'], $utente_row_id]);
+                }
             }
             // Criar preferências por defeito para todos os perfis
             $db->prepare('INSERT IGNORE INTO preferencias_utilizador (utilizador_id) VALUES (?)')->execute([$novo_id]);

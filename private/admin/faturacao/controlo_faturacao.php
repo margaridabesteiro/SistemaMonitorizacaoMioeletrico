@@ -55,6 +55,11 @@ $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
                             <td>
                                 <a href="fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-primary me-1" title="Ver"><i class="fa-regular fa-eye"></i></a>
                                 <a href="editar_fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-secondary me-1" title="Editar"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="<?= APP_URL ?>/api/admin/faturacao/toggle_paga.php?id=<?= $f['id'] ?>"
+                                   class="btn btn-xs <?= $f['paga'] ? 'btn-outline-warning' : 'btn-outline-success' ?> me-1"
+                                   title="<?= $f['paga'] ? 'Marcar pendente' : 'Marcar paga' ?>">
+                                    <i class="fa-solid fa-<?= $f['paga'] ? 'rotate-left' : 'check' ?>"></i>
+                                </a>
                                 <a href="apagar_fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-danger" title="Apagar"><i class="fa-regular fa-trash-can"></i></a>
                             </td>
                         </tr>
