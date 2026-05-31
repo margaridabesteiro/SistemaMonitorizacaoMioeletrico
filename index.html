@@ -419,7 +419,7 @@
                     </div>
                     <div class="contact-text">
                         <h4>Email</h4>
-                        <p>geral@rehablink.pt<br>apoio.cliente@rehablink.pt</p>
+                        <p><a href="mailto:geral@rehablink.pt" style="text-decoration:none; color:inherit;">geral@rehablink.pt</a></p>
                     </div>
                 </div>
                 <div class="contact-detail">
@@ -443,18 +443,24 @@
             </div>
             <div class="contact-form">
                 <h3>Envie-nos uma mensagem</h3>
+                <div id="contactSucesso" style="display:none;" class="alert alert-success">
+                    <i class="fa-solid fa-circle-check me-2"></i>Mensagem enviada com sucesso! Entraremos em contacto brevemente.
+                </div>
+                <div id="contactErro" style="display:none;" class="alert alert-danger">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i><span id="contactErroTexto"></span>
+                </div>
                 <form id="contactForm">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="O seu nome" required>
+                        <input type="text" name="nome" class="form-control" placeholder="O seu nome" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" placeholder="O seu email" required>
+                        <input type="email" name="email" class="form-control" placeholder="O seu email" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" class="form-control" placeholder="O seu telefone">
+                        <input type="tel" name="telefone" class="form-control" placeholder="O seu telefone">
                     </div>
                     <div class="form-group">
-                        <select class="form-control">
+                        <select name="assunto" class="form-control">
                             <option value="">Assunto</option>
                             <option value="marcacao">Marcação de consulta</option>
                             <option value="informacao">Pedido de informação</option>
@@ -463,9 +469,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="A sua mensagem" required></textarea>
+                        <textarea name="mensagem" class="form-control" placeholder="A sua mensagem" required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                    <button type="submit" class="submit-btn" id="btnEnviar">Enviar Mensagem</button>
                 </form>
             </div>
         </div>
@@ -528,11 +534,41 @@
             });
         });
 
-        // Formulário de contacto
+        // Formulário de contacto — envia para a API e guarda na base de dados
         document.getElementById('contactForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Mensagem enviada com sucesso! Entraremos em contacto brevemente.');
-            this.reset();
+            const btn    = document.getElementById('btnEnviar');
+            const sucesso = document.getElementById('contactSucesso');
+            const erro    = document.getElementById('contactErro');
+            const erroTxt = document.getElementById('contactErroTexto');
+
+            btn.disabled = true;
+            btn.textContent = 'A enviar...';
+            sucesso.style.display = 'none';
+            erro.style.display    = 'none';
+
+            fetch('api/contacto/enviar.php', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.sucesso) {
+                    sucesso.style.display = 'block';
+                    this.reset();
+                } else {
+                    erroTxt.textContent = data.erro || 'Erro ao enviar mensagem.';
+                    erro.style.display  = 'block';
+                }
+            })
+            .catch(() => {
+                erroTxt.textContent = 'Erro de ligação. Tente novamente.';
+                erro.style.display  = 'block';
+            })
+            .finally(() => {
+                btn.disabled    = false;
+                btn.textContent = 'Enviar Mensagem';
+            });
         });
 
         // Navbar scroll effect
