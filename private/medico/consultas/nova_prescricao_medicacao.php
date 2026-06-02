@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     if (!$posologia)$erros[] = 'Posologia obrigatória.';
 
     if (empty($erros)) {
-        $db->prepare('INSERT INTO prescricoes_medicacao (consulta_id,utente_id,medico_id,medicamento,dosagem,posologia,data_inicio,data_fim,observacoes,ativa) VALUES (?,?,?,?,?,?,?,?,?,1)')
-           ->execute([$consulta_id,$utente_id,$pid,$med,$dosagem,$posologia,$inicio,$fim,$obs]);
+        $db->prepare('INSERT INTO prescricoes_medicacao (consulta_id,medicamento,dosagem,posologia,data_inicio,data_fim,observacoes,ativa) VALUES (?,?,?,?,?,?,?,1)')
+           ->execute([$consulta_id,$med,$dosagem,$posologia,$inicio,$fim,$obs]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Medicação adicionada.'];
         redirect(APP_URL . '/private/medico/consultas/detalhe_consulta.php?id='.$consulta_id);
     }

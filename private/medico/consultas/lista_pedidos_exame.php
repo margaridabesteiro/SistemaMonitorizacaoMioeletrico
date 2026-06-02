@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exame_id'])) {
     $exame_id  = (int)$_POST['exame_id'];
     $resultado = trim($_POST['resultado'] ?? '');
     $estado    = $_POST['estado']         ?? 'realizado';
-    $db->prepare('UPDATE pedidos_exame SET resultado=?, estado=?, data_realizacao=CURDATE() WHERE id=? AND medico_id=?')
+    $db->prepare('UPDATE pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id SET pe.resultado=?, pe.estado=?, pe.data_realizacao=CURDATE() WHERE pe.id=? AND c.medico_id=?')
        ->execute([$resultado, $estado, $exame_id, $pid]);
     $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Exame atualizado.'];
     redirect(APP_URL . '/private/medico/consultas/lista_pedidos_exame.php?utente_id='.$utente_id);
@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exame_id'])) {
 
 $exames = [];
 if ($pid) {
-    $where = $utente_id ? 'WHERE pe.medico_id=? AND pe.utente_id=?' : 'WHERE pe.medico_id=?';
+    $where = $utente_id ? 'c.medico_id=? AND c.utente_id=?' : 'c.medico_id=?';
     $params = $utente_id ? [$pid, $utente_id] : [$pid];
-    $s = $db->prepare("SELECT pe.*, u.nome AS paciente FROM pedidos_exame pe JOIN utentes ut ON ut.id=pe.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY pe.data_pedido DESC LIMIT 100");
+    $s = $db->prepare("SELECT pe.*, u.nome AS paciente FROM pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id JOIN utentes ut ON ut.id=c.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id WHERE $where ORDER BY pe.data_pedido DESC LIMIT 100");
     $s->execute($params); $exames = $s->fetchAll();
 }
 

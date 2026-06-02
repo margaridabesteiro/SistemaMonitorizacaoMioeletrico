@@ -32,7 +32,7 @@ $nivel_badges = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
             </div>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" style="color:#212529;background:#fff;">
-                    <thead class="table-light">
+                    <thead style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;">
                         <tr><th>Data</th><th>Hora</th><th>Jogo / Categoria</th><th>Técnico</th><th>Modalidade</th><th>Duração</th><th>Estado</th></tr>
                     </thead>
                     <tbody>

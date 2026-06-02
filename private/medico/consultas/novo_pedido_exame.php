@@ -21,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     if (!$tipo) $erros[] = 'Tipo de exame obrigatório.';
 
     if (empty($erros)) {
-        $db->prepare('INSERT INTO pedidos_exame (consulta_id,utente_id,medico_id,tipo_exame,categoria,urgencia,estado,data_pedido,observacoes) VALUES (?,?,?,?,?,?,\'pendente\',CURDATE(),?)')
-           ->execute([$consulta_id,$utente_id,$pid,$tipo,$categoria,$urgencia,$obs]);
+        $db->prepare('INSERT INTO pedidos_exame (consulta_id,tipo_exame,categoria,urgencia,estado,data_pedido,observacoes) VALUES (?,?,?,?,\'pendente\',CURDATE(),?)')
+           ->execute([$consulta_id,$tipo,$categoria,$urgencia,$obs]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Pedido de exame registado.'];
         redirect(APP_URL . '/private/medico/consultas/detalhe_consulta.php?id='.$consulta_id);
     }

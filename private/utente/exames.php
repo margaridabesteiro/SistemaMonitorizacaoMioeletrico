@@ -14,9 +14,10 @@ if ($utid) {
     $s = $db->prepare("
         SELECT pe.*, um.nome AS medico
         FROM pedidos_exame pe
-        JOIN profissionais pm ON pm.id=pe.medico_id
+        JOIN consultas c ON c.id=pe.consulta_id
+        JOIN profissionais pm ON pm.id=c.medico_id
         JOIN utilizadores um ON um.id=pm.utilizador_id
-        WHERE pe.utente_id=?
+        WHERE c.utente_id=?
         ORDER BY pe.data_pedido DESC
     ");
     $s->execute([$utid]); $exames = $s->fetchAll();

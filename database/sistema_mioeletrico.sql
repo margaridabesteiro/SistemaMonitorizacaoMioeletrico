@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS utentes (
     utilizador_id           INT UNSIGNED        NOT NULL UNIQUE,
     data_nascimento         DATE                NULL,
     sexo                    ENUM('M','F','O')   NULL,
-    nif                     VARCHAR(9)          NULL,
+    nif                     CHAR(9)             NULL UNIQUE,
     morada                  VARCHAR(255)        NULL,
     codigo_postal           VARCHAR(8)          NULL,
     localidade              VARCHAR(100)        NULL,
@@ -162,8 +162,7 @@ CREATE TABLE IF NOT EXISTS sessoes (
 -- MÉTRICAS CALCULADAS (por sessão — métricas de jogo, não EMG)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS metricas_sessao (
-    id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    sessao_id         INT UNSIGNED        NOT NULL UNIQUE,
+    sessao_id         INT UNSIGNED        NOT NULL,
     percentagem_final FLOAT               NULL
                       COMMENT 'Percentagem final atingida no jogo (0-100)',
     score_jogo        INT                 NULL,
@@ -173,6 +172,7 @@ CREATE TABLE IF NOT EXISTS metricas_sessao (
     tendencia         ENUM('melhoria','estavel','regressao') NULL
                       COMMENT 'Calculado automaticamente vs última sessão com o mesmo jogo_id',
     calculado_em      DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (sessao_id),
     FOREIGN KEY (sessao_id) REFERENCES sessoes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -217,7 +217,9 @@ CREATE TABLE IF NOT EXISTS consultas (
                       COMMENT 'URL Google Meet / Jitsi / Teams — preenchido pelo médico',
     estado            ENUM('agendada','realizada','cancelada') NOT NULL DEFAULT 'agendada',
     FOREIGN KEY (utente_id) REFERENCES utentes(id)       ON DELETE CASCADE,
-    FOREIGN KEY (medico_id) REFERENCES profissionais(id) ON DELETE RESTRICT
+    FOREIGN KEY (medico_id) REFERENCES profissionais(id) ON DELETE RESTRICT,
+    INDEX idx_utente (utente_id),
+    INDEX idx_medico (medico_id)
 ) ENGINE=InnoDB;
 
 -- ============================================================
@@ -226,8 +228,6 @@ CREATE TABLE IF NOT EXISTS consultas (
 CREATE TABLE IF NOT EXISTS prescricoes_medicacao (
     id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     consulta_id     INT UNSIGNED NOT NULL COMMENT 'Consulta onde foi emitida a prescrição',
-    utente_id       INT UNSIGNED NOT NULL,
-    medico_id       INT UNSIGNED NOT NULL,
     medicamento     VARCHAR(150) NOT NULL,
     dosagem         VARCHAR(80)  NOT NULL  COMMENT 'ex: 500mg',
     posologia       TEXT         NOT NULL  COMMENT 'ex: 1 comprimido de 8 em 8 horas às refeições',
@@ -237,10 +237,7 @@ CREATE TABLE IF NOT EXISTS prescricoes_medicacao (
     ativa           BOOLEAN      NOT NULL DEFAULT TRUE,
     observacoes     TEXT NULL,
     criada_em       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (consulta_id) REFERENCES consultas(id)      ON DELETE RESTRICT,
-    FOREIGN KEY (utente_id)   REFERENCES utentes(id)        ON DELETE CASCADE,
-    FOREIGN KEY (medico_id)   REFERENCES profissionais(id)  ON DELETE RESTRICT,
-    INDEX idx_utente   (utente_id),
+    FOREIGN KEY (consulta_id) REFERENCES consultas(id) ON DELETE RESTRICT,
     INDEX idx_consulta (consulta_id)
 ) ENGINE=InnoDB;
 
@@ -250,8 +247,6 @@ CREATE TABLE IF NOT EXISTS prescricoes_medicacao (
 CREATE TABLE IF NOT EXISTS pedidos_exame (
     id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     consulta_id      INT UNSIGNED NOT NULL,
-    utente_id        INT UNSIGNED NOT NULL,
-    medico_id        INT UNSIGNED NOT NULL,
     tipo_exame       VARCHAR(100) NOT NULL   COMMENT 'ex: RMN Crânio-Encefálica, EMG do coto',
     categoria        ENUM('imagiologia','laboratorial','funcional','neurologico','outro')
                      NOT NULL DEFAULT 'outro',
@@ -262,11 +257,9 @@ CREATE TABLE IF NOT EXISTS pedidos_exame (
     resultado        TEXT NULL COMMENT 'Preenchido após realização',
     observacoes      TEXT NULL,
     criada_em        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (consulta_id) REFERENCES consultas(id)     ON DELETE RESTRICT,
-    FOREIGN KEY (utente_id)   REFERENCES utentes(id)       ON DELETE CASCADE,
-    FOREIGN KEY (medico_id)   REFERENCES profissionais(id) ON DELETE RESTRICT,
-    INDEX idx_utente (utente_id),
-    INDEX idx_estado (estado)
+    FOREIGN KEY (consulta_id) REFERENCES consultas(id) ON DELETE RESTRICT,
+    INDEX idx_consulta (consulta_id),
+    INDEX idx_estado   (estado)
 ) ENGINE=InnoDB;
 
 -- ============================================================
@@ -299,8 +292,12 @@ CREATE TABLE IF NOT EXISTS faturas (
     data_emissao    DATE                NOT NULL,
     data_vencimento DATE                NULL,
     notas           TEXT                NULL,
-    FOREIGN KEY (utente_id) REFERENCES utentes(id)   ON DELETE RESTRICT,
-    FOREIGN KEY (sessao_id) REFERENCES sessoes(id)   ON DELETE SET NULL
+    CONSTRAINT chk_valor_positivo CHECK (valor_eur > 0),
+    CONSTRAINT chk_vencimento    CHECK (data_vencimento IS NULL OR data_vencimento >= data_emissao),
+    FOREIGN KEY (utente_id) REFERENCES utentes(id)  ON DELETE RESTRICT,
+    FOREIGN KEY (sessao_id) REFERENCES sessoes(id)  ON DELETE SET NULL,
+    INDEX idx_utente      (utente_id),
+    INDEX idx_data_emissao (data_emissao)
 ) ENGINE=InnoDB;
 
 -- ============================================================
@@ -310,7 +307,7 @@ CREATE TABLE IF NOT EXISTS preferencias_utilizador (
     utilizador_id       INT UNSIGNED PRIMARY KEY,
     notif_email         BOOLEAN NOT NULL DEFAULT TRUE,
     notif_inicio_sessao BOOLEAN NOT NULL DEFAULT TRUE,
-    idioma              ENUM('pt') NOT NULL DEFAULT 'pt',
+    idioma              VARCHAR(5) NOT NULL DEFAULT 'pt',
     atualizado_em       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                         ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (utilizador_id) REFERENCES utilizadores(id) ON DELETE CASCADE
