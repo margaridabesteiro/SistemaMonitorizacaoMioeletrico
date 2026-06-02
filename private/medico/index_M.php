@@ -59,6 +59,30 @@ if ($prof_id) {
 }
 
 $tipo_badge = ['inicial'=>'info','rotina'=>'secondary','alta'=>'success','urgente'=>'danger'];
+
+// Alertas clínicos: pacientes com tendência de regressão ou % final < 50 nos últimos 7 dias
+$alertas_clinicos = [];
+if ($prof_id) {
+    try {
+        $sa = $db->prepare("
+            SELECT u.nome AS paciente, s.id AS sessao_id,
+                   DATE_FORMAT(s.data_hora,'%d/%m %H:%i') AS quando,
+                   m.percentagem_final, m.tendencia
+            FROM sessoes s
+            JOIN metricas_sessao m ON m.sessao_id = s.id
+            JOIN utentes ut ON ut.id = s.utente_id
+            JOIN utilizadores u ON u.id = ut.utilizador_id
+            WHERE ut.medico_id = ?
+              AND s.estado = 'concluida'
+              AND s.data_hora >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+              AND (m.tendencia = 'regressao' OR m.percentagem_final < 50)
+            ORDER BY s.data_hora DESC
+            LIMIT 5
+        ");
+        $sa->execute([$prof_id]);
+        $alertas_clinicos = $sa->fetchAll();
+    } catch (\Throwable $e) { $alertas_clinicos = []; }
+}
 ?>
         <main class="content">
             <div class="welcome-section mb-4">
@@ -70,6 +94,32 @@ $tipo_badge = ['inicial'=>'info','rotina'=>'secondary','alta'=>'success','urgent
                     <i class="fa-solid fa-stethoscope fa-2x" style="color:#8B0000;"></i>
                 </div>
             </div>
+
+            <?php if (!empty($alertas_clinicos)): ?>
+            <div class="card border-danger mb-4">
+                <div class="card-header bg-danger text-white py-2 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <strong>Alertas Clínicos — Pacientes</strong>
+                    <span class="badge bg-white text-danger ms-1"><?= count($alertas_clinicos) ?></span>
+                    <small class="ms-auto opacity-75">Últimos 7 dias · Regressão ou % &lt; 50</small>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-light"><tr><th>Paciente</th><th>Data</th><th>% Final</th><th>Tendência</th></tr></thead>
+                        <tbody>
+                        <?php foreach ($alertas_clinicos as $al): ?>
+                            <tr>
+                                <td class="fw-semibold"><?= h($al['paciente']) ?></td>
+                                <td><?= h($al['quando']) ?></td>
+                                <td><?= $al['percentagem_final'] !== null ? '<span class="text-danger fw-bold">'.number_format((float)$al['percentagem_final'],1).'%</span>' : '—' ?></td>
+                                <td><?= $al['tendencia'] === 'regressao' ? '<span class="badge bg-danger"><i class="fa-solid fa-arrow-trend-down me-1"></i>Regressão</span>' : '<span class="badge bg-secondary">'.$al['tendencia'].'</span>' ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
 
             <?php if ($video_proxima): ?>
             <div class="alert alert-primary d-flex align-items-center gap-3 mb-4">

@@ -29,33 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
-    // Atualizar dados pessoais
-    if ($acao === 'dados') {
-        $nome         = trim($_POST['nome']         ?? '');
-        $morada       = trim($_POST['morada']       ?? '');
-        $cod_postal   = trim($_POST['codigo_postal']?? '');
-        $localidade   = trim($_POST['localidade']   ?? '');
-
-        if ($nome === '') {
-            $erro = 'O nome não pode estar vazio.';
-        } else {
-            $db->prepare("UPDATE utilizadores SET nome = ? WHERE id = ?")
-               ->execute([$nome, $uid]);
-            $db->prepare("
-                UPDATE utentes SET morada = ?, codigo_postal = ?, localidade = ?
-                WHERE utilizador_id = ?
-            ")->execute([$morada ?: null, $cod_postal ?: null, $localidade ?: null, $uid]);
-
-            $_SESSION['nome'] = $nome;
-            $sucesso = 'Dados atualizados com sucesso.';
-
-            // Recarregar dados
-            $stmt->execute([$uid]);
-            $dados = $stmt->fetch();
-        }
-    }
-
-    // Alterar password
+    // Alterar password (única operação permitida ao utente)
     if ($acao === 'password') {
         $atual   = $_POST['password_atual']    ?? '';
         $nova    = $_POST['password_nova']     ?? '';
@@ -79,6 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+// Carregar dados RGPD
+$consentimento = null;
+$pedido_eliminacao = null;
+try {
+    $rc = $db->prepare("SELECT criado_em, detalhes FROM rgpd_consentimentos WHERE utilizador_id=? AND tipo='registo' ORDER BY criado_em ASC LIMIT 1");
+    $rc->execute([$uid]); $consentimento = $rc->fetch();
+    $rp = $db->prepare("SELECT estado, criado_em FROM rgpd_pedidos WHERE utilizador_id=? AND tipo='eliminacao' ORDER BY criado_em DESC LIMIT 1");
+    $rp->execute([$uid]); $pedido_eliminacao = $rp->fetch();
+} catch (\Throwable $e) {}
+
+$flash_rgpd = $_SESSION['flash_rgpd'] ?? null; unset($_SESSION['flash_rgpd']);
 
 $pagina_titulo = 'O Meu Perfil';
 $pagina_ativa  = 'perfil';
@@ -105,49 +91,27 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
 
             <div class="row g-4">
 
-                <!-- Dados pessoais -->
+                <!-- Dados pessoais — só leitura -->
                 <div class="col-lg-7">
                     <div class="card p-4">
                         <h5 class="mb-3"><i class="fa-regular fa-user me-2"></i>Dados Pessoais</h5>
-                        <form method="POST">
-                            <input type="hidden" name="acao" value="dados">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Nome completo</label>
-                                <input type="text" name="nome" class="form-control"
-                                       value="<?= h($dados['nome'] ?? '') ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Email</label>
-                                <input type="email" class="form-control"
-                                       value="<?= h($dados['email'] ?? '') ?>" disabled>
-                                <div class="form-text">O email não pode ser alterado aqui.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Morada</label>
-                                <input type="text" name="morada" class="form-control"
-                                       value="<?= h($dados['morada'] ?? '') ?>">
-                            </div>
-                            <div class="row">
-                                <div class="col-5 mb-3">
-                                    <label class="form-label fw-semibold">Código Postal</label>
-                                    <input type="text" name="codigo_postal" class="form-control"
-                                           placeholder="0000-000"
-                                           value="<?= h($dados['codigo_postal'] ?? '') ?>">
-                                </div>
-                                <div class="col-7 mb-3">
-                                    <label class="form-label fw-semibold">Localidade</label>
-                                    <input type="text" name="localidade" class="form-control"
-                                           value="<?= h($dados['localidade'] ?? '') ?>">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Alterações
-                            </button>
-                        </form>
+                        <p class="text-muted small mb-3"><i class="fa-solid fa-circle-info me-1"></i>Para alterar os seus dados pessoais, contacte o administrador.</p>
+                        <dl class="row mb-0">
+                            <dt class="col-4 text-muted">Nome</dt>
+                            <dd class="col-8"><?= h($dados['nome'] ?? '—') ?></dd>
+                            <dt class="col-4 text-muted">Email</dt>
+                            <dd class="col-8"><?= h($dados['email'] ?? '—') ?></dd>
+                            <dt class="col-4 text-muted">Morada</dt>
+                            <dd class="col-8"><?= h($dados['morada'] ?? '—') ?></dd>
+                            <dt class="col-4 text-muted">Código Postal</dt>
+                            <dd class="col-8"><?= h($dados['codigo_postal'] ?? '—') ?></dd>
+                            <dt class="col-4 text-muted">Localidade</dt>
+                            <dd class="col-8"><?= h($dados['localidade'] ?? '—') ?></dd>
+                        </dl>
                     </div>
                 </div>
 
-                <!-- Info clínica (só leitura) + password -->
+                <!-- Info clínica + password -->
                 <div class="col-lg-5 d-flex flex-column gap-4">
 
                     <!-- Info clínica -->
@@ -202,6 +166,71 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                         </form>
                     </div>
 
+                </div>
+            </div>
+            <!-- Secção RGPD -->
+            <div class="row mt-4" id="rgpd">
+                <div class="col-12">
+                    <div class="card p-4 border-warning">
+                        <h5 class="mb-3"><i class="fa-solid fa-shield-halved me-2" style="color:#8B0000;"></i>Privacidade e Proteção de Dados (RGPD)</h5>
+
+                        <?php if ($flash_rgpd): ?>
+                            <div class="alert alert-<?= h($flash_rgpd['tipo']) ?> py-2 mb-3"><?= h($flash_rgpd['msg']) ?></div>
+                        <?php endif; ?>
+
+                        <div class="row g-3">
+                            <!-- Consentimento -->
+                            <div class="col-md-4">
+                                <div class="card bg-light p-3 h-100">
+                                    <h6 class="fw-bold"><i class="fa-solid fa-file-signature me-1 text-success"></i>Consentimento</h6>
+                                    <?php if ($consentimento): ?>
+                                        <p class="small text-muted mb-0">Consentimento registado em <strong><?= h(date('d/m/Y', strtotime($consentimento['criado_em']))) ?></strong> ao abrigo do RGPD Art.&nbsp;9(2)(h).</p>
+                                    <?php else: ?>
+                                        <p class="small text-muted mb-0">Consentimento registado no momento da criação da conta.</p>
+                                    <?php endif; ?>
+                                    <a href="<?= APP_URL ?>/public/privacidade.php" target="_blank" class="btn btn-sm btn-outline-secondary mt-2">
+                                        <i class="fa-solid fa-book me-1"></i>Política de Privacidade
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Exportar dados (portabilidade) -->
+                            <div class="col-md-4">
+                                <div class="card bg-light p-3 h-100">
+                                    <h6 class="fw-bold"><i class="fa-solid fa-download me-1 text-primary"></i>Os Meus Dados (Art.&nbsp;20)</h6>
+                                    <p class="small text-muted mb-2">Descarregue todos os seus dados pessoais, sessões e métricas em formato JSON.</p>
+                                    <a href="<?= APP_URL ?>/api/utente/rgpd_exportar.php" class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-download me-1"></i>Descarregar os meus dados
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Eliminação (direito a ser esquecido) -->
+                            <div class="col-md-4">
+                                <div class="card bg-light p-3 h-100">
+                                    <h6 class="fw-bold"><i class="fa-solid fa-trash-can me-1 text-danger"></i>Eliminação (Art.&nbsp;17)</h6>
+                                    <?php if ($pedido_eliminacao && $pedido_eliminacao['estado'] === 'pendente'): ?>
+                                        <div class="alert alert-warning py-1 small mb-2">Pedido de eliminação <strong>pendente</strong> desde <?= h(date('d/m/Y', strtotime($pedido_eliminacao['criado_em']))) ?>. Em processamento.</div>
+                                    <?php elseif ($pedido_eliminacao && $pedido_eliminacao['estado'] === 'processado'): ?>
+                                        <div class="alert alert-success py-1 small mb-2">Pedido processado — dados pessoais anonimizados.</div>
+                                    <?php else: ?>
+                                        <p class="small text-muted mb-2">Pode solicitar a eliminação/anonimização dos seus dados pessoais. Dados clínicos são mantidos por obrigação legal (mín. 5 anos).</p>
+                                        <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="collapse" data-bs-target="#formEliminacao">
+                                            <i class="fa-solid fa-trash-can me-1"></i>Pedir eliminação
+                                        </button>
+                                        <div class="collapse mt-2" id="formEliminacao">
+                                            <form method="POST" action="<?= APP_URL ?>/api/utente/rgpd_pedir_eliminacao.php">
+                                                <textarea name="mensagem" class="form-control form-control-sm mb-2" rows="2" placeholder="Motivo (opcional)"></textarea>
+                                                <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Confirma o pedido de eliminação dos seus dados pessoais?')">
+                                                    Confirmar pedido
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

@@ -30,8 +30,8 @@ $nivel_badges = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="mb-0">Próximas Sessões</h1>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+            <div class="card"><div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" style="color:#212529;background:#fff;">
                     <thead class="table-light">
                         <tr><th>Data</th><th>Hora</th><th>Jogo / Categoria</th><th>Técnico</th><th>Modalidade</th><th>Duração</th><th>Estado</th></tr>
                     </thead>
@@ -65,6 +65,6 @@ $nivel_badges = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
                     <?php endforeach; endif; ?>
                     </tbody>
                 </table>
-            </div>
+            </div></div>
         </main>
 <?php require_once __DIR__ . '/../../includes/footer.php'; ?>

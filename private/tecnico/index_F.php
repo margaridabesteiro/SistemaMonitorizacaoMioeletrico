@@ -28,6 +28,30 @@ if ($pid) {
 
 // Último sync dos dispositivos dos pacientes deste técnico
 $ultimo_sync = $pid ? $db->query("SELECT d.codigo, d.ultimo_sync FROM dispositivos d JOIN emprestimos_dispositivos e ON e.dispositivo_id=d.id JOIN utentes ut ON ut.id=e.utente_id WHERE ut.tecnico_id=$pid AND e.data_devolucao IS NULL ORDER BY d.ultimo_sync DESC LIMIT 3")->fetchAll() : [];
+
+// Alertas clínicos: pacientes com tendência de regressão ou % final < 50 nos últimos 7 dias
+$alertas_clinicos = [];
+if ($pid) {
+    try {
+        $sa = $db->prepare("
+            SELECT u.nome AS paciente, s.id AS sessao_id,
+                   DATE_FORMAT(s.data_hora,'%d/%m %H:%i') AS quando,
+                   m.percentagem_final, m.tendencia, m.rms_uv
+            FROM sessoes s
+            JOIN metricas_sessao m ON m.sessao_id = s.id
+            JOIN utentes ut ON ut.id = s.utente_id
+            JOIN utilizadores u ON u.id = ut.utilizador_id
+            WHERE s.tecnico_id = ?
+              AND s.estado = 'concluida'
+              AND s.data_hora >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+              AND (m.tendencia = 'regressao' OR m.percentagem_final < 50)
+            ORDER BY s.data_hora DESC
+            LIMIT 5
+        ");
+        $sa->execute([$pid]);
+        $alertas_clinicos = $sa->fetchAll();
+    } catch (\Throwable $e) { $alertas_clinicos = []; }
+}
 ?>
         <main class="content">
             <div class="welcome-section mb-4" style="display:flex;justify-content:space-between;align-items:center;">
@@ -37,6 +61,33 @@ $ultimo_sync = $pid ? $db->query("SELECT d.codigo, d.ultimo_sync FROM dispositiv
                 </div>
                 <i class="fa-solid fa-hand-holding-heart fa-2x" style="color:#1a5f8a;"></i>
             </div>
+
+            <?php if (!empty($alertas_clinicos)): ?>
+            <div class="card border-danger mb-4">
+                <div class="card-header bg-danger text-white py-2 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <strong>Alertas Clínicos</strong>
+                    <span class="badge bg-white text-danger ms-1"><?= count($alertas_clinicos) ?></span>
+                    <small class="ms-auto opacity-75">Últimos 7 dias · RMS baixo ou tendência de regressão</small>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-light"><tr><th>Paciente</th><th>Sessão</th><th>% Final</th><th>Tendência</th><th>RMS (µV)</th></tr></thead>
+                        <tbody>
+                        <?php foreach ($alertas_clinicos as $al): ?>
+                            <tr>
+                                <td class="fw-semibold"><?= h($al['paciente']) ?></td>
+                                <td><a href="sessoes/detalhes_sessao.php?id=<?= $al['sessao_id'] ?>" class="text-decoration-none"><?= h($al['quando']) ?></a></td>
+                                <td><?= $al['percentagem_final'] !== null ? '<span class="text-danger fw-bold">'.number_format((float)$al['percentagem_final'],1).'%</span>' : '—' ?></td>
+                                <td><?= $al['tendencia'] === 'regressao' ? '<span class="badge bg-danger"><i class="fa-solid fa-arrow-trend-down me-1"></i>Regressão</span>' : '<span class="badge bg-secondary">'.$al['tendencia'].'</span>' ?></td>
+                                <td><?= $al['rms_uv'] !== null ? number_format((float)$al['rms_uv'],1).' µV' : '—' ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
 
             <?php if ($video_proxima): ?>
             <div class="alert alert-primary d-flex align-items-center gap-3 mb-4">

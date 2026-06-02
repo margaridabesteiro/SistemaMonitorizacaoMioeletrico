@@ -11,7 +11,10 @@ $utentes=$db->prepare('SELECT ut.id,u.nome FROM utentes ut JOIN utilizadores u O
 $sel=(int)($_GET['utente_id']??($utentes[0]['id']??0));
 $evol=[];
 if($sel){
-    $s=$db->prepare('SELECT s.data_hora,ms.rms_uv,ms.score_jogo FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado="concluida" ORDER BY s.data_hora ASC LIMIT 20'); $s->execute([$sel]); $evol=$s->fetchAll();
+    try {
+        $s=$db->prepare("SELECT s.data_hora,ms.rms_uv,ms.score_jogo FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado='concluida' ORDER BY s.data_hora ASC LIMIT 20");
+        $s->execute([$sel]); $evol=$s->fetchAll();
+    } catch (\Throwable $e) { $evol=[]; }
 }
 ?>
 <main class="content">

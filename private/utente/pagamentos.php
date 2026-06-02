@@ -6,9 +6,7 @@ requirePerfil('utente');
 $_db_pag = getDB();
 $_cob = $_db_pag->prepare('SELECT cobertura_saude FROM utentes WHERE utilizador_id=?');
 $_cob->execute([(int)$_SESSION['utilizador_id']]);
-if (($_cob->fetchColumn() ?: 'SNS') === 'SNS') {
-    redirect(APP_URL . '/private/utente/index_utente.php');
-}
+$_cobertura = $_cob->fetchColumn() ?: 'SNS';
 $pagina_titulo = 'Pagamentos'; $pagina_ativa = 'pagamentos';
 require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';
@@ -20,9 +18,18 @@ $faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND d
 ?>
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="mb-0">Histórico de Pagamentos</h1>
+                <h1 class="mb-0">Pagamentos</h1>
+                <?php if ($_cobertura !== 'SNS'): ?>
                 <button class="btn btn-sm btn-outline-secondary" onclick="window.print()"><i class="fa-solid fa-print me-1"></i>Imprimir Extrato</button>
+                <?php endif; ?>
             </div>
+            <?php if ($_cobertura === 'SNS'): ?>
+            <div class="card p-4 text-center" style="max-width:500px;margin:0 auto;">
+                <i class="fa-solid fa-hand-holding-medical fa-3x mb-3" style="color:#8B0000;"></i>
+                <h5>Cobertura SNS</h5>
+                <p class="text-muted mb-0">O seu tratamento está coberto pelo <strong>Serviço Nacional de Saúde (SNS)</strong>. Não existem faturas ou pagamentos associados à sua conta.</p>
+            </div>
+            <?php else: ?>
             <div class="row g-3 mb-4">
                 <div class="col-md-4"><div class="card p-3 text-center"><div class="fs-2 fw-bold text-success"><?= number_format((float)$stats['total_pago'],2,',','.') ?>€</div><div class="text-muted small">Total Pago</div></div></div>
                 <div class="col-md-4"><div class="card p-3 text-center"><div class="fs-2 fw-bold text-warning"><?= number_format((float)$stats['pendente'],2,',','.') ?>€</div><div class="text-muted small"><?= $stats['n_pendentes'] ?> fatura(s) pendente(s)</div></div></div>
@@ -55,5 +62,6 @@ $faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND d
                     </tbody>
                 </table>
             </div></div>
+            <?php endif; ?>
         </main>
 <?php require_once __DIR__ . '/../../includes/footer.php'; ?>

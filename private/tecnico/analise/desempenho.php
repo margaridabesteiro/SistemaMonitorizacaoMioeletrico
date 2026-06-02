@@ -16,9 +16,10 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
             $dados_emg = [];
             if ($sel) {
-                $dados_emg = $db->prepare("SELECT s.data_hora, m.rms_uv, m.mav_uv, m.precisao_pct, m.score_jogo FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 20")->execute([$sel]) ? [] : [];
-                $st2 = $db->prepare("SELECT s.data_hora, m.rms_uv, m.precisao_pct FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=? ORDER BY s.data_hora LIMIT 20");
-                $st2->execute([$sel]); $dados_emg = $st2->fetchAll();
+                try {
+                    $st2 = $db->prepare("SELECT s.data_hora, m.rms_uv, m.precisao_pct FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=? ORDER BY s.data_hora LIMIT 20");
+                    $st2->execute([$sel]); $dados_emg = $st2->fetchAll();
+                } catch (\Throwable $e) { $dados_emg = []; }
             }
             ?>
             <h1 class="mb-4">Análise de Desempenho</h1>

@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($dados['perfil'], ['admin','medico','tecnico','utente'], true)) $erros[] = 'Perfil inválido.';
     if (strlen($password) < 8)   $erros[] = 'A password deve ter pelo menos 8 caracteres.';
     if ($password !== $password_conf) $erros[] = 'As passwords não coincidem.';
+    if ($dados['perfil'] === 'utente' && empty($_POST['rgpd_consentimento'])) $erros[] = 'É obrigatório confirmar o consentimento RGPD do utente.';
 
     if (empty($erros)) {
         $db = getDB();
@@ -59,6 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $db->prepare('UPDATE utentes SET medico_id=? WHERE id=?')
                        ->execute([$medico['id'], $utente_row_id]);
                 }
+                // Registar consentimento RGPD
+                try {
+                    $db->prepare('INSERT INTO rgpd_consentimentos (utilizador_id, tipo, registado_por, ip, detalhes) VALUES (?,?,?,?,?)')
+                       ->execute([$novo_id, 'registo', $_SESSION['utilizador_id'], $_SERVER['REMOTE_ADDR'] ?? null,
+                           'Consentimento RGPD Art.9(2)(h) registado pelo administrador na criação de conta']);
+                } catch (\Throwable $e) {}
             }
             // Criar preferências por defeito para todos os perfis
             $db->prepare('INSERT IGNORE INTO preferencias_utilizador (utilizador_id) VALUES (?)')->execute([$novo_id]);
@@ -122,10 +129,22 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <input type="password" name="password_conf" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-check mb-4">
+                    <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" name="ativo" id="ativo"
                                <?= $dados['ativo'] ? 'checked' : '' ?>>
                         <label class="form-check-label" for="ativo">Conta ativa</label>
+                    </div>
+                    <div id="bloco-rgpd" class="alert alert-warning py-2 mb-3" style="display:none;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="rgpd_consentimento" id="rgpd_consentimento">
+                            <label class="form-check-label small" for="rgpd_consentimento">
+                                <i class="fa-solid fa-shield-halved me-1"></i>
+                                <strong>Consentimento RGPD</strong> — Confirmo que o utente prestou consentimento informado
+                                para o tratamento dos seus dados de saúde ao abrigo do
+                                <strong>RGPD Art.&nbsp;9.º, n.º&nbsp;2, al.&nbsp;h)</strong>
+                                (cuidados de saúde e telerreabilitação).
+                            </label>
+                        </div>
                     </div>
                     <button type="submit" class="btn" style="background:#8B0000;color:#fff;">
                         <i class="fa-solid fa-floppy-disk me-1"></i>Guardar
@@ -134,4 +153,9 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             </div>
         </main>
 
+<script>
+document.querySelector('select[name="perfil"]').addEventListener('change', function() {
+    document.getElementById('bloco-rgpd').style.display = this.value === 'utente' ? 'block' : 'none';
+});
+</script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

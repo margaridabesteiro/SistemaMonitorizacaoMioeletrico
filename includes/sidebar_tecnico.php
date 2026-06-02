@@ -37,9 +37,4 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuTecnico('calibracao', $pa) ?>">
                 <i class="fa-solid fa-sliders me-2"></i>Calibração
             </a>
-            <hr class="my-3" style="border-color:#e2e8f0;">
-            <a href="<?= APP_URL ?>/private/tecnico/ajuda/faq.php"
-               class="nav-link<?= menuTecnico('ajuda', $pa) ?>">
-                <i class="fa-regular fa-circle-question me-2"></i>Ajuda
-            </a>
         </nav>

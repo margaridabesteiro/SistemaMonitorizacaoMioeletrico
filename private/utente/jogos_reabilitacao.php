@@ -9,7 +9,7 @@ $db = getDB(); $uid = (int)$_SESSION['utilizador_id'];
 $stmt = $db->prepare("SELECT id FROM utentes WHERE utilizador_id=?"); $stmt->execute([$uid]); $utid = (int)$stmt->fetchColumn();
 $stats = $utid ? $db->query("SELECT COUNT(*) as n_sess, MAX(m.score_jogo) as best_score FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=$utid AND (s.categoria LIKE '%jogo%' OR s.categoria='Sessão gamificada')")->fetch() : ['n_sess'=>0,'best_score'=>null];
 $jogos = [
-    ['catch_game','Catch Game','Apanhe objetos em queda. Treina precisão e velocidade de resposta mioelétrica.','fa-hands-catching','#667eea'],
+    ['catch_game','Catch Game','Apanhe objetos em queda. Treina precisão e velocidade de resposta mioelétrica.','fa-bullseye','#667eea'],
     ['flappy_trainer','Flappy Trainer','Controle um pássaro com força muscular. Treina modulação de força.','fa-feather-pointed','#f7c948'],
     ['prosthesis_trainer','Prosthesis Trainer','Simulação completa de uso protésico — sequências e tarefas de vida diária.','fa-hand','#5cdb95'],
 ];

@@ -79,8 +79,8 @@ for ($i = 1; $i <= 4; $i++) {
         <div class="hero-pattern"></div>
         <div class="hero-content">
             <span class="hero-badge">
-                <i class="fa-regular fa-hand"></i>
-                Inovação em Reabilitação
+                <i class="fa-solid fa-wifi"></i>
+                Telerreabilitação · Telemonitorização
             </span>
             <h1>
                 <?= h($c['hero_titulo'] ?? 'Tecnologia e Humanização') ?>
@@ -414,7 +414,12 @@ for ($i = 1; $i <= 4; $i++) {
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <?= date('Y') ?> RehabLink. Todos os direitos reservados.</p>
+            <p>
+                &copy; <?= date('Y') ?> RehabLink. Todos os direitos reservados. &nbsp;|&nbsp;
+                <a href="public/privacidade.php" style="color:inherit;text-decoration:underline;">Política de Privacidade (RGPD)</a>
+                &nbsp;|&nbsp; Sistema classificado como <strong>Telerreabilitação</strong> + <strong>Telemonitorização</strong>
+                com comunicação <em>store-and-forward</em> (assíncrona)
+            </p>
         </div>
     </footer>
 

@@ -20,6 +20,20 @@ if (!$s) redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
 $metricas = $db->prepare("SELECT * FROM metricas_sessao WHERE sessao_id=?");
 $metricas->execute([$id]); $m = $metricas->fetch();
 
+// Waveform EMG: amostrar até 400 pontos da sessão (canal 1)
+$total_leituras = (int)$db->query("SELECT COUNT(*) FROM leituras_emg WHERE sessao_id=$id AND canal=1")->fetchColumn();
+$step = max(1, (int)floor($total_leituras / 400));
+$waveform = $db->query("
+    SELECT timestamp_ms, amplitude_uv FROM leituras_emg
+    WHERE sessao_id=$id AND canal=1
+    ORDER BY timestamp_ms
+")->fetchAll();
+// Decimação manual para não sobrecarregar o gráfico
+$wf_dec = [];
+foreach ($waveform as $i => $row) {
+    if ($i % $step === 0) $wf_dec[] = $row;
+}
+
 $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
 $tendencia_icons = ['melhoria'=>'fa-arrow-trend-up text-success','estavel'=>'fa-minus text-secondary','regressao'=>'fa-arrow-trend-down text-danger'];
 ?>
@@ -104,5 +118,65 @@ $tendencia_icons = ['melhoria'=>'fa-arrow-trend-up text-success','estavel'=>'fa-
                 </div>
                 <?php endif; ?>
             </div>
+
+            <!-- Waveform EMG -->
+            <div class="card p-3 mt-3">
+                <h5 class="mb-1"><i class="fa-solid fa-wave-square me-2" style="color:#8B0000;"></i>Sinal EMG — Waveform (Canal 1)</h5>
+                <small class="text-muted d-block mb-3">
+                    <?php if ($total_leituras > 0): ?>
+                        <?= number_format($total_leituras) ?> amostras · exibindo <?= count($wf_dec) ?> pontos (decimação 1:<?= $step ?>)
+                        · Banda útil: 20–500 Hz · Filtro notch 50 Hz aplicado no ESP32
+                    <?php else: ?>
+                        Sem leituras EMG registadas nesta sessão
+                    <?php endif; ?>
+                </small>
+                <?php if (!empty($wf_dec)): ?>
+                    <canvas id="chartWaveform" style="max-height:220px;"></canvas>
+                <?php else: ?>
+                    <div class="text-center text-muted py-4">
+                        <i class="fa-solid fa-wave-square fa-3x mb-2 opacity-25"></i>
+                        <p class="mb-0">Sem dados de sinal EMG para esta sessão.</p>
+                        <small>O ESP32 envia leituras via BLE → Wi-Fi → API durante a sessão ativa.</small>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <a href="lista_sessoes.php" class="btn btn-outline-secondary mt-3">
+                <i class="fa-solid fa-arrow-left me-1"></i>Voltar
+            </a>
         </main>
+
+<?php if (!empty($wf_dec)):
+    $wf_labels = array_map(fn($r) => round($r['timestamp_ms'] / 1000, 2), $wf_dec);
+    $wf_values = array_map(fn($r) => round((float)$r['amplitude_uv'], 2), $wf_dec);
+?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('chartWaveform'), {
+    type: 'line',
+    data: {
+        labels: <?= json_encode($wf_labels) ?>,
+        datasets: [{
+            label: 'Amplitude EMG (µV)',
+            data: <?= json_encode($wf_values) ?>,
+            borderColor: '#8B0000',
+            backgroundColor: 'rgba(139,0,0,0.05)',
+            borderWidth: 1,
+            pointRadius: 0,
+            tension: 0,
+            fill: true,
+        }]
+    },
+    options: {
+        responsive: true,
+        animation: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            x: { title: { display: true, text: 'Tempo (s)' } },
+            y: { title: { display: true, text: 'Amplitude (µV)' } }
+        }
+    }
+});
+</script>
+<?php endif; ?>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
