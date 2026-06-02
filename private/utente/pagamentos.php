@@ -12,9 +12,16 @@ require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';
 $db = getDB(); $uid = (int)$_SESSION['utilizador_id'];
 $stmt = $db->prepare("SELECT id FROM utentes WHERE utilizador_id=?"); $stmt->execute([$uid]); $utid = (int)$stmt->fetchColumn();
-$stats = $utid ? $db->query("SELECT COALESCE(SUM(CASE WHEN paga=1 THEN valor_eur END),0) AS total_pago, COALESCE(SUM(CASE WHEN paga=0 THEN valor_eur END),0) AS pendente, COUNT(CASE WHEN paga=0 THEN 1 END) AS n_pendentes FROM faturas WHERE utente_id=$utid")->fetch() : ['total_pago'=>0,'pendente'=>0,'n_pendentes'=>0];
 $filtro = (int)($_GET['periodo'] ?? 365);
-$faturas = $utid ? $db->query("SELECT * FROM faturas WHERE utente_id=$utid AND data_emissao >= DATE_SUB(NOW(), INTERVAL $filtro DAY) ORDER BY data_emissao DESC")->fetchAll() : [];
+if ($utid) {
+    $s = $db->prepare("SELECT COALESCE(SUM(CASE WHEN paga=1 THEN valor_eur END),0) AS total_pago, COALESCE(SUM(CASE WHEN paga=0 THEN valor_eur END),0) AS pendente, COUNT(CASE WHEN paga=0 THEN 1 END) AS n_pendentes FROM faturas WHERE utente_id=?");
+    $s->execute([$utid]); $stats = $s->fetch();
+    $s = $db->prepare("SELECT * FROM faturas WHERE utente_id=? AND data_emissao >= DATE_SUB(NOW(), INTERVAL ? DAY) ORDER BY data_emissao DESC");
+    $s->execute([$utid, $filtro]); $faturas = $s->fetchAll();
+} else {
+    $stats = ['total_pago'=>0,'pendente'=>0,'n_pendentes'=>0];
+    $faturas = [];
+}
 ?>
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4">

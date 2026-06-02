@@ -27,7 +27,11 @@ if ($pid) {
 }
 
 // Último sync dos dispositivos dos pacientes deste técnico
-$ultimo_sync = $pid ? $db->query("SELECT d.codigo, d.ultimo_sync FROM dispositivos d JOIN emprestimos_dispositivos e ON e.dispositivo_id=d.id JOIN utentes ut ON ut.id=e.utente_id WHERE ut.tecnico_id=$pid AND e.data_devolucao IS NULL ORDER BY d.ultimo_sync DESC LIMIT 3")->fetchAll() : [];
+$ultimo_sync = [];
+if ($pid) {
+    $s = $db->prepare("SELECT d.codigo, d.ultimo_sync FROM dispositivos d JOIN emprestimos_dispositivos e ON e.dispositivo_id=d.id JOIN utentes ut ON ut.id=e.utente_id WHERE ut.tecnico_id=? AND e.data_devolucao IS NULL ORDER BY d.ultimo_sync DESC LIMIT 3");
+    $s->execute([$pid]); $ultimo_sync = $s->fetchAll();
+}
 
 // Alertas clínicos: pacientes com tendência de regressão ou % final < 50 nos últimos 7 dias
 $alertas_clinicos = [];

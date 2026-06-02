@@ -14,7 +14,8 @@ $db = getDB();
             $stmt = $db->prepare("SELECT d.*, u.nome AS paciente FROM dispositivos d LEFT JOIN utentes ut ON ut.id = d.utente_id LEFT JOIN utilizadores u ON u.id = ut.utilizador_id WHERE d.id = ?");
             $stmt->execute([$id]); $dev = $stmt->fetch();
             if (!$dev) redirect(APP_URL . '/private/admin/dispositivos/lista_dispositivos.php');
-            $n_leituras = (int)$db->prepare("SELECT COUNT(*) FROM leituras_emg l JOIN sessoes s ON s.id = l.sessao_id WHERE s.dispositivo_id = ?")->execute([$id]) ? $db->query("SELECT COUNT(*) FROM leituras_emg l JOIN sessoes s ON s.id = l.sessao_id WHERE s.dispositivo_id = $id")->fetchColumn() : 0;
+            $sl = $db->prepare("SELECT COUNT(*) FROM leituras_emg l JOIN sessoes s ON s.id = l.sessao_id WHERE s.dispositivo_id = ?");
+            $sl->execute([$id]); $n_leituras = (int)$sl->fetchColumn();
             ?>
             <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="lista_dispositivos.php">Dispositivos</a></li><li class="breadcrumb-item active"><?= h($dev['codigo']) ?></li></ol></nav>
             <h1 class="mb-4">Dispositivo <?= h($dev['codigo']) ?></h1>

@@ -51,9 +51,12 @@ $tecnicos_lista = $db->query("
 ")->fetchAll();
 
 // Contagens gerais
-$n_sessoes   = (int)$db->query("SELECT COUNT(*) FROM sessoes WHERE utente_id=$id AND estado='concluida'")->fetchColumn();
-$n_consultas = (int)$db->query("SELECT COUNT(*) FROM consultas WHERE utente_id=$id AND medico_id=$pid")->fetchColumn();
-$n_exames    = (int)$db->query("SELECT COUNT(*) FROM pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id WHERE c.utente_id=$id AND pe.estado='pendente'")->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE utente_id=? AND estado='concluida'");
+$s->execute([$id]); $n_sessoes = (int)$s->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM consultas WHERE utente_id=? AND medico_id=?");
+$s->execute([$id, $pid]); $n_consultas = (int)$s->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id WHERE c.utente_id=? AND pe.estado='pendente'");
+$s->execute([$id]); $n_exames = (int)$s->fetchColumn();
 
 // Evolução percentagem_final ao longo das sessões concluídas
 $evolucao = $db->query("

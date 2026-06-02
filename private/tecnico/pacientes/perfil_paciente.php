@@ -20,14 +20,11 @@ $stmt = $db->prepare("
 $stmt->execute([$id]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 
-$n_sessoes = (int)$db->query("SELECT COUNT(*) FROM sessoes WHERE utente_id=$id AND estado='concluida'")->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE utente_id=? AND estado='concluida'");
+$s->execute([$id]); $n_sessoes = (int)$s->fetchColumn();
 
-$media_pct = $db->query("
-    SELECT ROUND(AVG(m.percentagem_final), 1)
-    FROM metricas_sessao m
-    JOIN sessoes s ON s.id = m.sessao_id
-    WHERE s.utente_id = $id AND m.percentagem_final IS NOT NULL
-")->fetchColumn();
+$s = $db->prepare("SELECT ROUND(AVG(m.percentagem_final), 1) FROM metricas_sessao m JOIN sessoes s ON s.id = m.sessao_id WHERE s.utente_id=? AND m.percentagem_final IS NOT NULL");
+$s->execute([$id]); $media_pct = $s->fetchColumn();
 
 $ultimas = $db->prepare("
     SELECT s.data_hora, s.categoria, s.duracao_min, s.estado,

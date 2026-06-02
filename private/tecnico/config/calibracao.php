@@ -34,7 +34,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         <h5>Dispositivo Associado</h5>
                         <?php
                         $sel = $pacientes[0]['id'] ?? 0;
-                        if ($sel) { $d = $db->query("SELECT d.codigo, d.tipo, d.ultimo_sync, d.ativo FROM dispositivos d JOIN utentes ut ON ut.id=d.utente_id WHERE ut.id=$sel LIMIT 1")->fetch(); }
+                        if ($sel) { $sd = $db->prepare("SELECT d.codigo, d.tipo, d.ultimo_sync, d.ativo FROM dispositivos d JOIN utentes ut ON ut.id=d.utente_id WHERE ut.id=? LIMIT 1"); $sd->execute([$sel]); $d = $sd->fetch(); }
                         if (!empty($d)): ?>
                         <p><strong>Código:</strong> <?= h($d['codigo']) ?></p>
                         <p><strong>Tipo:</strong> <?= h($d['tipo']) ?></p>

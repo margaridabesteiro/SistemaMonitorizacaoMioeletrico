@@ -7,9 +7,12 @@ require_once __DIR__ . '/../../../includes/header_admin.php';
 require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 $db = getDB();
 $periodo = (int)($_GET['periodo'] ?? 30);
-$sessoes_periodo = (int)$db->query("SELECT COUNT(*) FROM sessoes WHERE data_hora >= DATE_SUB(NOW(), INTERVAL $periodo DAY)")->fetchColumn();
-$utentes_novos = (int)$db->query("SELECT COUNT(*) FROM utilizadores WHERE perfil='utente' AND criado_em >= DATE_SUB(NOW(), INTERVAL $periodo DAY)")->fetchColumn();
-$fat_periodo = $db->query("SELECT COALESCE(SUM(valor_eur),0) FROM faturas WHERE data_emissao >= DATE_SUB(NOW(), INTERVAL $periodo DAY)")->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE data_hora >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+$s->execute([$periodo]); $sessoes_periodo = (int)$s->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM utilizadores WHERE perfil='utente' AND criado_em >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+$s->execute([$periodo]); $utentes_novos = (int)$s->fetchColumn();
+$s = $db->prepare("SELECT COALESCE(SUM(valor_eur),0) FROM faturas WHERE data_emissao >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+$s->execute([$periodo]); $fat_periodo = $s->fetchColumn();
 $sessoes_por_dia = $db->query("SELECT DATE(data_hora) as dia, COUNT(*) as total FROM sessoes WHERE data_hora >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY dia ORDER BY dia")->fetchAll();
 ?>
         <main class="content">

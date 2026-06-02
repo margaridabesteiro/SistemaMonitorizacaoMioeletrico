@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($valor <= 0) $erros[] = 'Valor inválido.';
     if (empty($erros)) {
         $db = getDB();
-        $ano = date('Y'); $cnt = (int)$db->query("SELECT COUNT(*)+1 FROM faturas WHERE YEAR(data_emissao)=$ano")->fetchColumn();
+        $ano = date('Y'); $sf = $db->prepare("SELECT COUNT(*)+1 FROM faturas WHERE YEAR(data_emissao)=?"); $sf->execute([$ano]); $cnt = (int)$sf->fetchColumn();
         $numero = sprintf('FT%d/%03d', $ano, $cnt);
         $db->prepare('INSERT INTO faturas (numero,utente_id,valor_eur,paga,data_emissao,data_vencimento,notas) VALUES (?,?,?,0,?,?,?)')->execute([$numero,$utente_id,$valor,$data_emissao,$data_venc?:null,$notas]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>"Fatura $numero criada."]; redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');

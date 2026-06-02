@@ -21,13 +21,11 @@ $metricas = $db->prepare("SELECT * FROM metricas_sessao WHERE sessao_id=?");
 $metricas->execute([$id]); $m = $metricas->fetch();
 
 // Waveform EMG: amostrar até 400 pontos da sessão (canal 1)
-$total_leituras = (int)$db->query("SELECT COUNT(*) FROM leituras_emg WHERE sessao_id=$id AND canal=1")->fetchColumn();
+$s = $db->prepare("SELECT COUNT(*) FROM leituras_emg WHERE sessao_id=? AND canal=1");
+$s->execute([$id]); $total_leituras = (int)$s->fetchColumn();
 $step = max(1, (int)floor($total_leituras / 400));
-$waveform = $db->query("
-    SELECT timestamp_ms, amplitude_uv FROM leituras_emg
-    WHERE sessao_id=$id AND canal=1
-    ORDER BY timestamp_ms
-")->fetchAll();
+$s = $db->prepare("SELECT timestamp_ms, amplitude_uv FROM leituras_emg WHERE sessao_id=? AND canal=1 ORDER BY timestamp_ms");
+$s->execute([$id]); $waveform = $s->fetchAll();
 // Decimação manual para não sobrecarregar o gráfico
 $wf_dec = [];
 foreach ($waveform as $i => $row) {

@@ -9,8 +9,13 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
         <main class="content">
             <?php
             $db = getDB(); $id = (int)($_GET['utente_id'] ?? 0);
-            $pac = $id ? $db->query("SELECT u.nome FROM utilizadores u JOIN utentes ut ON ut.utilizador_id=u.id WHERE ut.id=$id")->fetch() : null;
-            $hist = $id ? $db->query("SELECT s.data_hora, s.categoria, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=$id AND s.categoria='jogo' OR s.categoria='jogo' ORDER BY s.data_hora DESC LIMIT 30")->fetchAll() : [];
+            $pac = null; $hist = [];
+            if ($id) {
+                $sp = $db->prepare("SELECT u.nome FROM utilizadores u JOIN utentes ut ON ut.utilizador_id=u.id WHERE ut.id=?");
+                $sp->execute([$id]); $pac = $sp->fetch();
+                $sh = $db->prepare("SELECT s.data_hora, s.categoria, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? AND s.categoria='jogo' ORDER BY s.data_hora DESC LIMIT 30");
+                $sh->execute([$id]); $hist = $sh->fetchAll();
+            }
             ?>
             <h1 class="mb-4">Histórico de Jogos<?= $pac ? ' — ' . h($pac['nome']) : '' ?></h1>
             <div class="card"><div class="table-responsive">

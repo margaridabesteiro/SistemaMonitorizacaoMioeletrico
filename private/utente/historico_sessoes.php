@@ -11,8 +11,8 @@ $stmt->execute([$uid]); $utid = (int)$stmt->fetchColumn();
 
 $stats = [0,0,0,0];
 if ($utid) {
-    $r = $db->query("SELECT COUNT(*), SUM(estado='concluida'), SUM(estado='cancelada'), COALESCE(SUM(duracao_min),0) FROM sessoes WHERE utente_id=$utid")->fetch(PDO::FETCH_NUM);
-    $stats = $r;
+    $s = $db->prepare("SELECT COUNT(*), SUM(estado='concluida'), SUM(estado='cancelada'), COALESCE(SUM(duracao_min),0) FROM sessoes WHERE utente_id=?");
+    $s->execute([$utid]); $stats = $s->fetch(PDO::FETCH_NUM);
 }
 $pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 20; $offset = ($pagina_atual-1)*$por_pagina;
 $sessoes = [];

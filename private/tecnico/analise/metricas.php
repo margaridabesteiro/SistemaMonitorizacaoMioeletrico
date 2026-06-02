@@ -14,7 +14,8 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             $pacientes = $pid ? $db->prepare("SELECT ut.id, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.tecnico_id=? ORDER BY u.nome") : null;
             if ($pacientes) { $pacientes->execute([$pid]); $pacientes = $pacientes->fetchAll(); } else { $pacientes = []; }
             $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
-            $agg = $sel ? $db->query("SELECT COUNT(*) as n_sessoes, AVG(m.rms_uv) as rms, AVG(m.mav_uv) as mav, AVG(m.frequencia_hz) as freq, AVG(m.precisao_pct) as prec, AVG(m.score_jogo) as score FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=$sel")->fetch() : null;
+            $agg = null;
+            if ($sel) { $sa = $db->prepare("SELECT COUNT(*) as n_sessoes, AVG(m.rms_uv) as rms, AVG(m.mav_uv) as mav, AVG(m.frequencia_hz) as freq, AVG(m.precisao_pct) as prec, AVG(m.score_jogo) as score FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=?"); $sa->execute([$sel]); $agg = $sa->fetch(); }
             ?>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Métricas Avançadas</h1>
