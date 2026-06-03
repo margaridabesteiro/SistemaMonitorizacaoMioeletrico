@@ -8,6 +8,14 @@ $db = getDB(); $erros = [];
 $stmt = $db->prepare('SELECT u.id, u.nome, u.email, u.perfil, u.ativo, ut.nif, ut.cobertura_saude FROM utilizadores u LEFT JOIN utentes ut ON ut.utilizador_id = u.id WHERE u.id=?');
 $stmt->execute([$id]); $dados = $stmt->fetch();
 
+// Dados profissionais (médico/técnico)
+$prof = ['numero_ordem'=>'','especialidade'=>'','instituicao'=>'','contacto'=>''];
+if ($dados && in_array($dados['perfil'], ['medico','tecnico'], true)) {
+    $sp = $db->prepare('SELECT numero_ordem, especialidade, instituicao, contacto FROM profissionais WHERE utilizador_id=?');
+    $sp->execute([$id]); $prof_db = $sp->fetch();
+    if ($prof_db) $prof = $prof_db;
+}
+
 // Dados RGPD (apenas para utentes)
 $rgpd_consentimentos = []; $rgpd_pedidos = [];
 if ($dados && $dados['perfil'] === 'utente') {
@@ -60,6 +68,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $db->prepare('UPDATE utentes SET nif=?, cobertura_saude=? WHERE utilizador_id=?')
                    ->execute([$nif, $cobertura, $id]);
             }
+            // Dados profissionais (médico/técnico)
+            if (in_array($dados['perfil'], ['medico','tecnico'], true)) {
+                $prof['numero_ordem']  = trim($_POST['numero_ordem']  ?? '') ?: null;
+                $prof['especialidade'] = trim($_POST['especialidade'] ?? '') ?: null;
+                $prof['instituicao']   = trim($_POST['instituicao']   ?? '') ?: null;
+                $prof['contacto']      = trim($_POST['contacto']      ?? '') ?: null;
+                // Upsert: atualiza se existe, insere se não
+                $existe_prof = $db->prepare('SELECT id FROM profissionais WHERE utilizador_id=?');
+                $existe_prof->execute([$id]);
+                if ($existe_prof->fetch()) {
+                    $db->prepare('UPDATE profissionais SET numero_ordem=?, especialidade=?, instituicao=?, contacto=? WHERE utilizador_id=?')
+                       ->execute([$prof['numero_ordem'], $prof['especialidade'], $prof['instituicao'], $prof['contacto'], $id]);
+                } else {
+                    $db->prepare('INSERT INTO profissionais (utilizador_id, numero_ordem, especialidade, instituicao, contacto) VALUES (?,?,?,?,?)')
+                       ->execute([$id, $prof['numero_ordem'], $prof['especialidade'], $prof['instituicao'], $prof['contacto']]);
+                }
+            }
             $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Utilizador atualizado.'];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
         }
@@ -82,7 +107,39 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <select name="perfil" class="form-select" required><?php foreach(['admin','medico','tecnico','utente'] as $p):?><option value="<?=$p?>" <?=$dados['perfil']===$p?'selected':''?>><?=ucfirst($p)?></option><?php endforeach;?></select>
                     </div>
 
-                    <?php if ($dados['perfil'] === 'utente'): ?>
+                    <?php if (in_array($dados['perfil'], ['medico','tecnico'], true)): ?>
+                    <div class="card p-3 mb-3 border-primary">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-id-card me-2" style="color:#8B0000;"></i>Dados Profissionais</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Nº Cédula / Ordem</label>
+                                <input type="text" name="numero_ordem" class="form-control"
+                                       placeholder="Ex: OM-12345"
+                                       value="<?= h($prof['numero_ordem'] ?? '') ?>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Especialidade</label>
+                                <input type="text" name="especialidade" class="form-control"
+                                       placeholder="Ex: Fisioterapia Mioeléctrica"
+                                       value="<?= h($prof['especialidade'] ?? '') ?>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-semibold">Instituição</label>
+                                <input type="text" name="instituicao" class="form-control"
+                                       placeholder="Ex: RehabLink"
+                                       value="<?= h($prof['instituicao'] ?? '') ?>">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-semibold">Contacto</label>
+                                <input type="text" name="contacto" class="form-control"
+                                       placeholder="Ex: 912 000 001"
+                                       value="<?= h($prof['contacto'] ?? '') ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <?php elseif ($dados['perfil'] === 'utente'): ?>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">NIF</label>
                         <input type="text" name="nif" class="form-control" value="<?=h($dados['nif']??'')?>" maxlength="20">

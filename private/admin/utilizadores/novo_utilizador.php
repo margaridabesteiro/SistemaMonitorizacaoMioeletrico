@@ -10,6 +10,7 @@ $pagina_ativa  = 'utilizadores';
 
 $erros  = [];
 $dados  = ['nome'=>'','email'=>'','perfil'=>'','ativo'=>1];
+$prof   = ['numero_ordem'=>'','especialidade'=>'','instituicao'=>'','contacto'=>''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dados['nome']    = trim($_POST['nome']     ?? '');
@@ -18,6 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dados['ativo']   = isset($_POST['ativo'])  ? 1 : 0;
     $password         = $_POST['password']      ?? '';
     $password_conf    = $_POST['password_conf'] ?? '';
+
+    // Campos profissionais (só para médico/técnico)
+    $prof['numero_ordem']  = trim($_POST['numero_ordem']  ?? '') ?: null;
+    $prof['especialidade'] = trim($_POST['especialidade'] ?? '') ?: null;
+    $prof['instituicao']   = trim($_POST['instituicao']   ?? '') ?: null;
+    $prof['contacto']      = trim($_POST['contacto']      ?? '') ?: null;
 
     // Validação
     if ($dados['nome'] === '')   $erros[] = 'O nome é obrigatório.';
@@ -40,10 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare('INSERT INTO utilizadores (nome, email, password_hash, perfil, ativo) VALUES (?,?,?,?,?)');
             $stmt->execute([$dados['nome'], $dados['email'], $hash, $dados['perfil'], $dados['ativo']]);
 
-            // Se for médico ou técnico, criar registo em profissionais
+            // Se for médico ou técnico, criar registo em profissionais com dados profissionais
             $novo_id = (int)$db->lastInsertId();
             if (in_array($dados['perfil'], ['medico', 'tecnico'], true)) {
-                $db->prepare('INSERT INTO profissionais (utilizador_id) VALUES (?)')->execute([$novo_id]);
+                $db->prepare('INSERT INTO profissionais (utilizador_id, numero_ordem, especialidade, instituicao, contacto) VALUES (?,?,?,?,?)')
+                   ->execute([$novo_id, $prof['numero_ordem'], $prof['especialidade'], $prof['instituicao'], $prof['contacto']]);
             } elseif ($dados['perfil'] === 'utente') {
                 $db->prepare('INSERT INTO utentes (utilizador_id) VALUES (?)')->execute([$novo_id]);
                 $utente_row_id = (int)$db->lastInsertId();
@@ -134,6 +142,39 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                <?= $dados['ativo'] ? 'checked' : '' ?>>
                         <label class="form-check-label" for="ativo">Conta ativa</label>
                     </div>
+                    <!-- Campos profissionais — visíveis só para médico/técnico -->
+                    <div id="bloco-profissional" class="card p-3 mb-3 border-primary" style="display:none;">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-id-card me-2" style="color:#8B0000;"></i>Dados Profissionais</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Nº Cédula / Ordem</label>
+                                <input type="text" name="numero_ordem" class="form-control"
+                                       placeholder="Ex: OM-12345"
+                                       value="<?= h($prof['numero_ordem'] ?? '') ?>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Especialidade</label>
+                                <input type="text" name="especialidade" class="form-control"
+                                       placeholder="Ex: Medicina Física e Reabilitação"
+                                       value="<?= h($prof['especialidade'] ?? '') ?>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-semibold">Instituição</label>
+                                <input type="text" name="instituicao" class="form-control"
+                                       placeholder="Ex: RehabLink"
+                                       value="<?= h($prof['instituicao'] ?? '') ?>">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-semibold">Contacto</label>
+                                <input type="text" name="contacto" class="form-control"
+                                       placeholder="Ex: 912 000 001"
+                                       value="<?= h($prof['contacto'] ?? '') ?>">
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="bloco-rgpd" class="alert alert-warning py-2 mb-3" style="display:none;">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="rgpd_consentimento" id="rgpd_consentimento">
@@ -154,8 +195,13 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
         </main>
 
 <script>
-document.querySelector('select[name="perfil"]').addEventListener('change', function() {
-    document.getElementById('bloco-rgpd').style.display = this.value === 'utente' ? 'block' : 'none';
-});
+function atualizarBlocos() {
+    var perfil = document.querySelector('select[name="perfil"]').value;
+    document.getElementById('bloco-profissional').style.display = (perfil === 'medico' || perfil === 'tecnico') ? 'block' : 'none';
+    document.getElementById('bloco-rgpd').style.display = perfil === 'utente' ? 'block' : 'none';
+}
+document.querySelector('select[name="perfil"]').addEventListener('change', atualizarBlocos);
+// Mostrar blocos se a página recarregar com dados (erro de validação)
+atualizarBlocos();
 </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
