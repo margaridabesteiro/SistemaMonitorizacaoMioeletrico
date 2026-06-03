@@ -20,10 +20,6 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuAdmin('utilizadores', $pa) ?>">
                 <i class="fa-solid fa-users me-2"></i>Utilizadores
             </a>
-            <a href="<?= APP_URL ?>/private/admin/profissionais_saude/gestao_PS.php"
-               class="nav-link<?= menuAdmin('profissionais', $pa) ?>">
-                <i class="fa-solid fa-user-doctor me-2"></i>Profissionais Saúde
-            </a>
             <a href="<?= APP_URL ?>/private/admin/dispositivos/lista_dispositivos.php"
                class="nav-link<?= menuAdmin('dispositivos', $pa) ?>">
                 <i class="fa-solid fa-microchip me-2"></i>Dispositivos
