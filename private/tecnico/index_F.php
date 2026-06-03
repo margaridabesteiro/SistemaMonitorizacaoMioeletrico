@@ -40,7 +40,7 @@ if ($pid) {
         $sa = $db->prepare("
             SELECT u.nome AS paciente, s.id AS sessao_id,
                    DATE_FORMAT(s.data_hora,'%d/%m %H:%i') AS quando,
-                   m.percentagem_final, m.tendencia, m.rms_uv
+                   m.percentagem_final, m.tendencia
             FROM sessoes s
             JOIN metricas_sessao m ON m.sessao_id = s.id
             JOIN utentes ut ON ut.id = s.utente_id

@@ -20,17 +20,7 @@ if (!$s) redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
 $metricas = $db->prepare("SELECT * FROM metricas_sessao WHERE sessao_id=?");
 $metricas->execute([$id]); $m = $metricas->fetch();
 
-// Waveform EMG: amostrar até 400 pontos da sessão (canal 1)
-$s = $db->prepare("SELECT COUNT(*) FROM leituras_emg WHERE sessao_id=? AND canal=1");
-$s->execute([$id]); $total_leituras = (int)$s->fetchColumn();
-$step = max(1, (int)floor($total_leituras / 400));
-$s = $db->prepare("SELECT timestamp_ms, amplitude_uv FROM leituras_emg WHERE sessao_id=? AND canal=1 ORDER BY timestamp_ms");
-$s->execute([$id]); $waveform = $s->fetchAll();
-// Decimação manual para não sobrecarregar o gráfico
 $wf_dec = [];
-foreach ($waveform as $i => $row) {
-    if ($i % $step === 0) $wf_dec[] = $row;
-}
 
 $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
 $tendencia_icons = ['melhoria'=>'fa-arrow-trend-up text-success','estavel'=>'fa-minus text-secondary','regressao'=>'fa-arrow-trend-down text-danger'];

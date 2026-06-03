@@ -8,7 +8,7 @@ $db = getDB(); $id = (int)($_GET['id'] ?? 0);
 if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 $stmt = $db->prepare("SELECT ut.*, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?"); $stmt->execute([$id]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
-$sessoes = $db->prepare("SELECT s.*, m.rms_uv, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 50");
+$sessoes = $db->prepare("SELECT s.*, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 50");
 $sessoes->execute([$id]); $sessoes = $sessoes->fetchAll();
 ?>
         <main class="content">
@@ -16,18 +16,17 @@ $sessoes->execute([$id]); $sessoes = $sessoes->fetchAll();
             <h1 class="mb-4">Histórico — <?= h($pac['nome']) ?></h1>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light"><tr><th>Data/Hora</th><th>Tipo</th><th>Duração</th><th>Estado</th><th>RMS (µV)</th><th>Score</th><th>Precisão</th></tr></thead>
+                    <thead class="table-light"><tr><th>Data/Hora</th><th>Tipo</th><th>Duração</th><th>Estado</th><th>Score</th><th>Precisão</th></tr></thead>
                     <tbody>
-                    <?php if(empty($sessoes)): ?><tr><td colspan="7" class="text-center text-muted py-4">Sem sessões.</td></tr>
+                    <?php if(empty($sessoes)): ?><tr><td colspan="6" class="text-center text-muted py-4">Sem sessões.</td></tr>
                     <?php else: foreach($sessoes as $s): ?>
                         <tr>
                             <td><?= h(substr($s['data_hora'],0,16)) ?></td>
                             <td><?= h($s['categoria'] ?? '—') ?></td>
                             <td><?= $s['duracao_min'] ? h($s['duracao_min']).' min' : '—' ?></td>
                             <td><span class="badge bg-<?= ['concluida'=>'success','agendada'=>'primary','em_curso'=>'warning','cancelada'=>'danger'][$s['estado']] ?? 'secondary' ?>"><?= h($s['estado']) ?></span></td>
-                            <td><?= $s['rms_uv'] ? number_format((float)$s['rms_uv'],2) : '—' ?></td>
                             <td><?= $s['score_jogo'] ?? '—' ?></td>
-                            <td><?= $s['precisao_pct'] ? number_format((float)$s['precisao_pct'],1).'%' : '—' ?></td>
+                            <td><?= $s['percentagem_final'] ? number_format((float)$s['percentagem_final'],1).'%' : '—' ?></td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>

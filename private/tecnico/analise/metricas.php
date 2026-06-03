@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             if ($pacientes) { $pacientes->execute([$pid]); $pacientes = $pacientes->fetchAll(); } else { $pacientes = []; }
             $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
             $agg = null;
-            if ($sel) { $sa = $db->prepare("SELECT COUNT(*) as n_sessoes, AVG(m.rms_uv) as rms, AVG(m.mav_uv) as mav, AVG(m.frequencia_hz) as freq, AVG(m.precisao_pct) as prec, AVG(m.score_jogo) as score FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=?"); $sa->execute([$sel]); $agg = $sa->fetch(); }
+            if ($sel) { $sa = $db->prepare("SELECT COUNT(*) as n_sessoes, AVG(m.score_jogo) as score, AVG(m.percentagem_final) as prec FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=?"); $sa->execute([$sel]); $agg = $sa->fetch(); }
             ?>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Métricas Avançadas</h1>
@@ -28,7 +28,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </form>
             <?php if ($agg && $agg['n_sessoes'] > 0): ?>
             <div class="row g-3">
-                <?php foreach([['Sessões Analisadas',$agg['n_sessoes'],'secondary',''],['RMS Médio',number_format((float)$agg['rms'],2),'primary',' µV'],['MAV Médio',number_format((float)$agg['mav'],2),'info',' µV'],['Precisão Média',number_format((float)$agg['prec'],1),'success','%'],['Score Médio',$agg['score']?number_format((float)$agg['score'],0):'—','warning',''],] as [$lbl,$val,$cor,$suf]): ?>
+                <?php foreach([['Sessões Analisadas',$agg['n_sessoes'],'secondary',''],['Score Médio',$agg['score']?number_format((float)$agg['score'],0):'—','warning',''],['Precisão Média',$agg['prec']?number_format((float)$agg['prec'],1).'%':'—','success',''],] as [$lbl,$val,$cor,$suf]): ?>
                 <div class="col-md-4"><div class="card text-center p-3"><div class="fs-2 fw-bold text-<?= $cor ?>"><?= $val ?><?= $suf ?></div><div class="text-muted small"><?= $lbl ?></div></div></div>
                 <?php endforeach; ?>
             </div>

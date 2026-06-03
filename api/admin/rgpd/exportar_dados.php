@@ -19,14 +19,17 @@ if (!$pessoais) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizador
 $utente_row = $db->prepare("SELECT id FROM utentes WHERE utilizador_id=?");
 $utente_row->execute([$id]); $utid = (int)$utente_row->fetchColumn();
 
-$sess = $utid ? $db->query("SELECT data_hora, categoria, estado, duracao_min, notas FROM sessoes WHERE utente_id=$utid ORDER BY data_hora DESC")->fetchAll(PDO::FETCH_ASSOC) : [];
-$met  = $utid ? $db->query("SELECT s.data_hora, m.rms_uv, m.mav_uv, m.frequencia_hz, m.score_jogo, m.precisao_pct FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=$utid ORDER BY s.data_hora DESC")->fetchAll(PDO::FETCH_ASSOC) : [];
-$logs = $db->query("SELECT acao, ip, criado_em FROM logs_acesso WHERE utilizador_id=$id ORDER BY criado_em DESC LIMIT 100")->fetchAll(PDO::FETCH_ASSOC);
+$s1 = $db->prepare("SELECT data_hora, categoria, estado, duracao_min, notas FROM sessoes WHERE utente_id=? ORDER BY data_hora DESC");
+$s1->execute([$utid]); $sess = $utid ? $s1->fetchAll(PDO::FETCH_ASSOC) : [];
+$s2 = $db->prepare("SELECT s.data_hora, m.score_jogo, m.percentagem_final, m.passou_nivel, m.tendencia FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=? ORDER BY s.data_hora DESC");
+$s2->execute([$utid]); $met = $utid ? $s2->fetchAll(PDO::FETCH_ASSOC) : [];
+$s3 = $db->prepare("SELECT acao, ip, criado_em FROM logs_acesso WHERE utilizador_id=? ORDER BY criado_em DESC LIMIT 100");
+$s3->execute([$id]); $logs = $s3->fetchAll(PDO::FETCH_ASSOC);
 
 $export = [
     'dados_pessoais'   => $pessoais,
     'sessoes_treino'   => $sess,
-    'metricas_emg'     => $met,
+    'metricas_jogo'    => $met,
     'logs_acesso'      => $logs,
     'exportado_por'    => $_SESSION['nome'] ?? 'Admin',
     'gerado_em'        => date('c'),

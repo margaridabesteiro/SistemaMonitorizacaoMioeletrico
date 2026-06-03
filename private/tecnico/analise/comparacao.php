@@ -12,7 +12,7 @@ $id1=(int)($_GET['p1']??0); $id2=(int)($_GET['p2']??0);
 $dados=[];
 foreach([$id1,$id2] as $uid){
     if(!$uid) continue;
-    $s=$db->prepare('SELECT ms.rms_uv,ms.score_jogo,s.data_hora FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado="concluida" ORDER BY s.data_hora DESC LIMIT 10'); $s->execute([$uid]); $dados[$uid]=$s->fetchAll();
+    $s=$db->prepare('SELECT ms.score_jogo,ms.percentagem_final,s.data_hora FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado="concluida" ORDER BY s.data_hora DESC LIMIT 10'); $s->execute([$uid]); $dados[$uid]=$s->fetchAll();
 }
 ?>
 <main class="content">
@@ -29,8 +29,8 @@ foreach([$id1,$id2] as $uid){
 <script>
 const labels = <?=json_encode(array_map(fn($r)=>substr($r['data_hora'],0,10), $dados[$id1]??[]))?>;
 new Chart(document.getElementById('chartComp'),{type:'line',data:{labels,datasets:[
-  {label:'Paciente A - RMS (µV)',data:<?=json_encode(array_map(fn($r)=>round($r['rms_uv'],2),$dados[$id1]??[]))?>,borderColor:'#8B0000',tension:0.3,fill:false},
-  {label:'Paciente B - RMS (µV)',data:<?=json_encode(array_map(fn($r)=>round($r['rms_uv'],2),$dados[$id2]??[]))?>,borderColor:'#1a5f8a',tension:0.3,fill:false}
+  {label:'Paciente A - Score',data:<?=json_encode(array_map(fn($r)=>$r['score_jogo'],$dados[$id1]??[]))?>,borderColor:'#8B0000',tension:0.3,fill:false},
+  {label:'Paciente B - Score',data:<?=json_encode(array_map(fn($r)=>$r['score_jogo'],$dados[$id2]??[]))?>,borderColor:'#1a5f8a',tension:0.3,fill:false}
 ]},options:{responsive:true,plugins:{legend:{position:'top'}}}});
 </script>
 <?php elseif($id1||$id2):?><div class="alert alert-info">Selecione dois pacientes para comparar.</div><?php endif;?>

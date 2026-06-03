@@ -12,7 +12,7 @@ $sel=(int)($_GET['utente_id']??($utentes[0]['id']??0));
 $evol=[];
 if($sel){
     try {
-        $s=$db->prepare("SELECT s.data_hora,ms.rms_uv,ms.score_jogo FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado='concluida' ORDER BY s.data_hora ASC LIMIT 20");
+        $s=$db->prepare("SELECT s.data_hora,ms.score_jogo,ms.percentagem_final FROM metricas_sessao ms JOIN sessoes s ON s.id=ms.sessao_id WHERE s.utente_id=? AND s.estado='concluida' ORDER BY s.data_hora ASC LIMIT 20");
         $s->execute([$sel]); $evol=$s->fetchAll();
     } catch (\Throwable $e) { $evol=[]; }
 }
@@ -28,12 +28,15 @@ if($sel){
 <script>
 new Chart(document.getElementById('chartEvol'),{type:'line',data:{
   labels:<?=json_encode(array_map(fn($r)=>substr($r['data_hora'],0,10),$evol))?>,
-  datasets:[{label:'RMS (µV)',data:<?=json_encode(array_map(fn($r)=>round((float)$r['rms_uv'],2),$evol))?>,borderColor:'#8B0000',tension:0.3,fill:false}]
-},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{title:{display:true,text:'µV'}}}}});
+  datasets:[
+    {label:'Score',data:<?=json_encode(array_map(fn($r)=>$r['score_jogo'],$evol))?>,borderColor:'#8B0000',tension:0.3,fill:false},
+    {label:'Precisão (%)',data:<?=json_encode(array_map(fn($r)=>$r['percentagem_final']?round((float)$r['percentagem_final'],1):null,$evol))?>,borderColor:'#1a5f8a',tension:0.3,fill:false}
+  ]
+},options:{responsive:true,plugins:{legend:{position:'top'}}}});
 </script>
 <div class="card"><div class="table-responsive"><table class="table table-sm mb-0">
-  <thead class="table-light"><tr><th>Data</th><th>RMS (µV)</th><th>Score Jogo</th></tr></thead>
-  <tbody><?php foreach($evol as $r):?><tr><td><?=h(substr($r['data_hora'],0,10))?></td><td><?=number_format((float)$r['rms_uv'],2)?></td><td><?=h($r['score_jogo']??'—')?></td></tr><?php endforeach;?></tbody>
+  <thead class="table-light"><tr><th>Data</th><th>Score</th><th>Precisão</th></tr></thead>
+  <tbody><?php foreach($evol as $r):?><tr><td><?=h(substr($r['data_hora'],0,10))?></td><td><?=h($r['score_jogo']??'—')?></td><td><?=$r['percentagem_final']?number_format((float)$r['percentagem_final'],1).'%':'—'?></td></tr><?php endforeach;?></tbody>
 </table></div></div>
 <?php elseif($sel):?><div class="alert alert-info">Sem dados de evolução para este paciente.</div><?php endif;?>
 </main>

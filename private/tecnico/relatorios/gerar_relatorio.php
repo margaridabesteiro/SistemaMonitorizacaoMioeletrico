@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
             $rel = null;
             if ($sel) {
-                $stmt2 = $db->prepare("SELECT u.nome, ut.diagnostico, COUNT(s.id) as n_sessoes, AVG(m.rms_uv) as rms, AVG(m.precisao_pct) as prec FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id LEFT JOIN sessoes s ON s.utente_id=ut.id AND s.estado='concluida' LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE ut.id=? GROUP BY ut.id");
+                $stmt2 = $db->prepare("SELECT u.nome, ut.diagnostico, COUNT(s.id) as n_sessoes, AVG(m.score_jogo) as score, AVG(m.percentagem_final) as prec FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id LEFT JOIN sessoes s ON s.utente_id=ut.id AND s.estado='concluida' LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE ut.id=? GROUP BY ut.id");
                 $stmt2->execute([$sel]); $rel = $stmt2->fetch();
             }
             ?>

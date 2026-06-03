@@ -21,7 +21,7 @@ $sess = $db->prepare("SELECT s.data_hora, s.categoria, s.estado, s.duracao_min, 
 $sess->execute([$utid]); $sessoes = $sess->fetchAll(PDO::FETCH_ASSOC);
 
 // Métricas
-$met = $db->prepare("SELECT s.data_hora, m.rms_uv, m.mav_uv, m.frequencia_hz, m.score_jogo, m.precisao_pct
+$met = $db->prepare("SELECT s.data_hora, m.score_jogo, m.percentagem_final, m.passou_nivel, m.tendencia
                      FROM metricas_sessao m JOIN sessoes s ON s.id=m.sessao_id WHERE s.utente_id=? ORDER BY s.data_hora DESC");
 $met->execute([$utid]); $metricas = $met->fetchAll(PDO::FETCH_ASSOC);
 
