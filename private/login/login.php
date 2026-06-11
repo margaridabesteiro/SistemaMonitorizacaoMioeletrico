@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .login-card { background: #fff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 4px 24px rgba(0,0,0,.08); width: 100%; max-width: 420px; }
         .login-logo { text-align: center; margin-bottom: 2rem; }
         .login-logo img { height: 56px; }
-        .login-logo h1 { font-size: 1.4rem; font-weight: 700; color: #8B0000; margin-top: .5rem; }
-        .btn-login { background: #8B0000; border: none; color: #fff; width: 100%; padding: .75rem; border-radius: 8px; font-weight: 600; }
-        .btn-login:hover { background: #6a0000; color: #fff; }
+        .login-logo h1 { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: .5rem; }
+        .btn-login { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: #fff; width: 100%; padding: .75rem; border-radius: 8px; font-weight: 600; }
+        .btn-login:hover { background: linear-gradient(135deg, #5a6fd6 0%, #6a3d94 100%); color: #fff; }
     </style>
 </head>
 <body>

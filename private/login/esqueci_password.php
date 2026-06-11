@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="d-flex align-items-center justify-content-center min-vh-100">
     <div class="card p-4 shadow-sm" style="max-width:420px;width:100%;">
         <div class="text-center mb-4">
-            <h4 class="fw-bold" style="color:#8B0000;">RehabLink</h4>
+            <h4 class="fw-bold" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">RehabLink</h4>
             <p class="text-muted">Recuperar Password</p>
         </div>
         <?php if ($mensagem): ?>
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="email" name="email" class="form-control" placeholder="email@exemplo.pt" required autofocus>
                 <div class="form-text">Apenas disponível para utentes.</div>
             </div>
-            <button type="submit" class="btn w-100 text-white" style="background:#8B0000;">Enviar Link de Recuperação</button>
+            <button type="submit" class="btn w-100 text-white" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;">Enviar Link de Recuperação</button>
         </form>
         <div class="text-center mt-3">
             <a href="login.php" class="text-muted small">Voltar ao login</a>
