@@ -384,12 +384,6 @@ for ($i = 1; $i <= 4; $i++) {
             <div class="footer-col">
                 <h4>RehabLink</h4>
                 <p>Inovação e humanização na reabilitação. A tecnologia ao serviço da sua recuperação.</p>
-                <div class="footer-social">
-                    <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                </div>
             </div>
             <div class="footer-col">
                 <h4>Links Úteis</h4>
@@ -416,9 +410,9 @@ for ($i = 1; $i <= 4; $i++) {
         <div class="footer-bottom">
             <p>
                 &copy; <?= date('Y') ?> RehabLink. Todos os direitos reservados. &nbsp;|&nbsp;
-                <a href="public/privacidade.php" style="color:inherit;text-decoration:underline;">Política de Privacidade (RGPD)</a>
-                &nbsp;|&nbsp; Sistema classificado como <strong>Telerreabilitação</strong> + <strong>Telemonitorização</strong>
-                com comunicação <em>store-and-forward</em> (assíncrona)
+                <a href="public/privacidade.php" style="color:inherit;text-decoration:underline;">Política de Privacidade</a>
+                &nbsp;|&nbsp; Sistema classificado como <strong>Telerreabilitação</strong> + <strong>Telemonitorização</strong>,
+                suportando comunicação em tempo real e <em>store-and-forward</em>
             </p>
         </div>
     </footer>
