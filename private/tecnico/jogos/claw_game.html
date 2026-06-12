@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garra – Prosthesis Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1b2a;
+    --surface: #1b2838;
+    --accent: #e8c547;
+    --accent2: #e05c5c;
+    --good: #4ecdc4;
+    --text: #f0f4f8;
+    --text2: #7a8fa6;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .header {
+    width: 100%; max-width: 580px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .brand { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.04em; color: var(--accent); }
+  .brand span { display: block; font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text2); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; margin-top: 2px; }
+
+  .timer {
+    font-family: 'Space Mono', monospace; font-size: 1.3rem; font-weight: 700;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 50px; padding: 6px 16px; transition: color 0.3s;
+  }
+  .timer.urgent { color: var(--accent2); }
+
+  .stats {
+    width: 100%; max-width: 580px;
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .stat {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 10px 14px; text-align: center;
+  }
+  .stat-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+
+  /* Force bar */
+  .force-wrap { width: 100%; max-width: 580px; margin-bottom: 8px; }
+  .force-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .force-track { width: 100%; height: 8px; background: var(--surface); border-radius: 99px; border: 1px solid var(--border); overflow: hidden; }
+  .force-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg,var(--good),var(--accent)); transition: width 0.05s linear; }
+
+  canvas {
+    width: 100%; max-width: 580px;
+    border-radius: 18px; border: 1px solid var(--border);
+    display: block; touch-action: none;
+  }
+
+  .hint { margin-top: 8px; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
+
+  /* WS bar */
+  .ws-bar {
+    width: 100%; max-width: 580px;
+    display: flex; gap: 8px; margin-bottom: 8px;
+  }
+  .ws-bar input {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; padding: 8px 12px; outline: none;
+  }
+  .ws-bar button {
+    background: var(--accent); color: var(--bg); border: none;
+    border-radius: 10px; font-family: 'Outfit', sans-serif;
+    font-weight: 700; font-size: 0.85rem; padding: 8px 14px; cursor: pointer;
+  }
+  @keyframes calPulse { from{opacity:1} to{opacity:0.35} }
+
+  .ws-status { display: flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; margin-bottom: 6px; }
+  .ws-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); transition: background 0.3s; }
+  .ws-dot.connected { background: var(--good); }
+
+  /* Overlay */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(13,27,42,0.88); backdrop-filter: blur(12px); z-index: 100; align-items: center; justify-content: center; }
+  .overlay.show { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 26px; padding: 36px 40px; text-align: center; max-width: 360px; width: 90%; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from{transform:scale(0.75);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-emoji { font-size: 3rem; margin-bottom: 10px; }
+  .modal-title { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 4px; }
+  .modal-sub { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .modal-item { background: var(--bg); border-radius: 12px; padding: 12px; }
+  .m-lbl { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .m-val { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; }
+  .btn-play { width: 100%; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; padding: 14px; border: none; border-radius: 12px; background: var(--accent); color: var(--bg); cursor: pointer; transition: all 0.2s; margin-top: 0; }
+  .btn-play:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* IP block inside modal */
+  .ip-block { display: none; margin-bottom: 16px; }
+  .ip-block-lbl { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .ip-row { display: flex; gap: 8px; }
+  .ip-row input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.8rem; padding: 10px 12px; outline: none; }
+  .ip-row button { background: var(--accent); color: var(--bg); border: none; border-radius: 10px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 10px 14px; cursor: pointer; }
+  .modal-ws { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+  .modal-ws-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); transition: background 0.3s; flex-shrink: 0; }
+  .modal-ws-lbl { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">Garra!<span>Prosthesis Rehab · Nível 1</span></div>
+  <div class="timer" id="timer">1:00</div>
+</div>
+
+<div class="ws-bar">
+  <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.198.1.130"/>
+  <button onclick="connectFSR()">Ligar</button>
+</div>
+
+<div class="ws-status">
+  <div class="ws-dot" id="wsDot"></div>
+  <span id="wsLabel">Desligado</span>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-lbl">Pontos</div><div class="stat-val" style="color:var(--accent)" id="scoreVal">0</div></div>
+  <div class="stat"><div class="stat-lbl">Apanhadas</div><div class="stat-val" style="color:var(--good)" id="caughtVal">0</div></div>
+  <div class="stat"><div class="stat-lbl">Falhadas</div><div class="stat-val" style="color:var(--accent2)" id="missedVal">0</div></div>
+</div>
+
+<div class="force-wrap">
+  <div class="force-lbl"><span>Força de aperto</span><span id="forcePct">0%</span></div>
+  <div class="force-track"><div class="force-fill" id="forceFill"></div></div>
+</div>
+
+<canvas id="canvas"></canvas>
+<div class="hint" id="hint">Aperta o sensor quando o objeto estiver sob a garra</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-emoji" id="mEmoji">🦾</div>
+    <div class="modal-title" id="mTitle">Garra!</div>
+    <div class="modal-sub" id="mSub">60 segundos · Nível 1</div>
+    <div class="modal-grid">
+      <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">—</div></div>
+      <div class="modal-item"><div class="m-lbl">Apanhadas</div><div class="m-val" style="color:var(--good)" id="mCaught">—</div></div>
+      <div class="modal-item"><div class="m-lbl">Falhadas</div><div class="m-val" style="color:var(--accent2)" id="mMissed">—</div></div>
+      <div class="modal-item"><div class="m-lbl">Precisão</div><div class="m-val" style="color:var(--text2)" id="mAcc">—</div></div>
+    </div>
+    <div class="ip-block" id="ipBlock">
+      <div class="ip-block-lbl">IP do ESP32</div>
+      <div class="ip-row">
+        <input type="text" id="ipModal" placeholder="ex: 192.168.1.130"/>
+        <button onclick="connectFromModal()">Ligar</button>
+      </div>
+      <div class="modal-ws">
+        <div class="modal-ws-dot" id="modalWsDot"></div>
+        <span class="modal-ws-lbl" id="modalWsLabel">Desligado</span>
+      </div>
+    </div>
+    <div id="guardarBox" style="display:none;margin-bottom:12px;">
+      <select id="utenteSelect" style="width:100%;padding:10px;border-radius:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:8px;">
+        <option value="">Selecionar utente...</option>
+      </select>
+      <button id="btnGuardar" onclick="guardarResultado()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--good);color:var(--bg);font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:8px;">💾 Guardar resultado</button>
+      <div id="savedIndicator" style="display:none;padding:8px;border-radius:10px;background:rgba(78,205,196,0.15);border:1px solid var(--good);font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--good);letter-spacing:0.08em;text-align:center;">✓ RESULTADO GUARDADO</div>
+    </div>
+    <button class="btn-play" id="btnPlay" onclick="startGame()">Começar</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CANVAS
+// ═══════════════════════════════════════════════════════
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  var maxW = Math.min(window.innerWidth - 28, 580);
+  canvas.width  = maxW;
+  canvas.height = Math.min(window.innerHeight - 260, 280);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ═══════════════════════════════════════════════════════
+//  FSR / SIGNAL
+// ═══════════════════════════════════════════════════════
+var FILTER_SIZE = 6, filterBuf = [], filterSum = 0;
+var baseline = 0, maxVal = 3000;
+var DEADZONE = 0.04, THRESHOLD = 0.15;
+var forceNorm = 0;
+
+function addSample(raw) {
+  filterBuf.push(raw); filterSum += raw;
+  if (filterBuf.length > FILTER_SIZE) filterSum -= filterBuf.shift();
+  var smoothed = filterSum / filterBuf.length;
+  var norm = (smoothed - baseline) / Math.max(1, maxVal - baseline);
+  norm = Math.max(0, Math.min(1, norm));
+  if (norm < DEADZONE) norm = 0;
+  forceNorm = norm;
+  var pct = Math.round(norm * 100);
+  document.getElementById('forceFill').style.width = pct + '%';
+  document.getElementById('forcePct').textContent = pct + '%';
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALIBRAÇÃO
+// ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+//  WEBSOCKET
+// ═══════════════════════════════════════════════════════
+var ws = null, wsReconnectTimer = null, wsReconnectDelay = 2000, wsIntentionalClose = false;
+
+function connectFSR() {
+  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  var ip = document.getElementById('ipInput').value.trim();
+  if (!ip) return;
+  localStorage.setItem('esp32_ip', ip);
+  var m = document.getElementById('ipModal'); if (m) m.value = ip;
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    wsIntentionalClose = true; try { ws.close(); } catch(e){}
+  }
+  wsIntentionalClose = false; wsReconnectDelay = 2000;
+  _openWS(ip);
+}
+
+function _openWS(ip) {
+  ws = new WebSocket('ws://' + ip + ':81');
+  ws.onopen = function() {
+    wsReconnectDelay = 2000;
+    document.getElementById('wsDot').classList.add('connected');
+    document.getElementById('wsLabel').textContent = 'ESP32 ligado · ' + ip;
+  };
+  ws.onmessage = function(e) {
+    var raw = parseInt(e.data); if (isNaN(raw)) return; addSample(raw);
+  };
+  ws.onclose = function() {
+    document.getElementById('wsDot').classList.remove('connected');
+    if (wsIntentionalClose) return;
+    var delay = wsReconnectDelay;
+    wsReconnectDelay = Math.min(wsReconnectDelay * 1.5, 15000);
+    document.getElementById('wsLabel').textContent = 'Desligado — a reconectar em ' + Math.round(delay/1000) + 's…';
+    wsReconnectTimer = setTimeout(function(){ _openWS(ip); }, delay);
+  };
+  ws.onerror = function() { document.getElementById('wsLabel').textContent = 'Erro de ligação'; };
+}
+
+// ═══════════════════════════════════════════════════════
+//  IP MODAL
+// ═══════════════════════════════════════════════════════
+function syncIP() {
+  var stored = localStorage.getItem('esp32_ip') || '10.198.1.130';
+  document.getElementById('ipInput').value = stored;
+  document.getElementById('ipModal').value = stored;
+}
+function connectFromModal() {
+  var ip = document.getElementById('ipModal').value.trim();
+  if (!ip) return;
+  document.getElementById('ipInput').value = ip;
+  localStorage.setItem('esp32_ip', ip);
+  connectFSR();
+}
+setInterval(function() {
+  if (!document.getElementById('overlay').classList.contains('show')) return;
+  var connected = ws && ws.readyState === 1;
+  document.getElementById('modalWsDot').style.background = connected ? 'var(--good)' : 'var(--accent2)';
+  document.getElementById('modalWsLabel').textContent = connected
+    ? 'Ligado · ' + document.getElementById('ipModal').value
+    : document.getElementById('wsLabel').textContent;
+}, 500);
+
+// ═══════════════════════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════════════════════
+var audioCtx;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function playTone(freq,type,dur,vol) {
+  try {
+    var a=getAudio(),o=a.createOscillator(),g=a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol||0.18,a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);
+    o.start(); o.stop(a.currentTime+dur);
+  } catch(e){}
+}
+function playCatch() { playTone(520,'sine',0.08,0.2); setTimeout(function(){ playTone(780,'sine',0.1,0.18); },70); }
+function playMiss()  { playTone(140,'sawtooth',0.25,0.2); }
+function playGrab()  { playTone(300,'sine',0.06,0.15); }
+
+// ═══════════════════════════════════════════════════════
+//  GAME CONFIG
+// ═══════════════════════════════════════════════════════
+const GAME_DURATION = 60;
+const CLAW_X_FRAC   = 0.5;    // garra centrada
+const CLAW_OPEN_W   = 38;     // abertura máx da garra (px cada lado)
+const CLAW_CLOSE_W  = 6;      // abertura mín (apertada)
+const CLAW_Y        = 40;     // Y base da garra
+const CABLE_TOP     = 0;      // topo do cabo
+const GRAB_RANGE    = 22;     // distância X máxima para apanhar
+const GRAB_FORCE    = 0.45;   // força mínima para apanhar
+
+// Tapete rolante
+const BELT_SPEED_BASE = 1.4;
+const ITEM_INTERVAL   = 110;  // frames entre items
+const ITEM_SIZE       = 28;
+
+var gameRunning = false, animId = null, timerInt = null;
+var timeLeft = GAME_DURATION;
+var score = 0, caught = 0, missed = 0;
+var items = [], particles = [];
+var itemCounter = 0, flashFrames = 0, flashColor = '';
+
+// Claw state
+var clawDescend = 0;     // 0=cima, 1=baixo
+var clawY = CLAW_Y;      // posição Y actual da garra
+var clawGrabbing = false;
+var grabbedItem = null;
+var clawCooldown = 0;    // frames de cooldown após tentativa
+
+// ═══════════════════════════════════════════════════════
+//  PARTICLES
+// ═══════════════════════════════════════════════════════
+function burst(x, y, color, n) {
+  for (var i = 0; i < n; i++) {
+    var a = Math.random()*Math.PI*2, spd = 1.5+Math.random()*3.5;
+    particles.push({ x:x, y:y, vx:Math.cos(a)*spd, vy:Math.sin(a)*spd-2,
+      r:2+Math.random()*4, color:color, life:1, decay:0.04+Math.random()*0.03 });
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ITEMS
+// ═══════════════════════════════════════════════════════
+var SHAPES = ['circle','rect','triangle','star','diamond'];
+var COLORS = ['#f7c948','#ff6b6b','#4ecdc4','#7eb8f7','#d4a5f5','#ff9f43'];
+
+function spawnItem() {
+  var shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+  var color = COLORS[Math.floor(Math.random()*COLORS.length)];
+  items.push({ x: -ITEM_SIZE, shape: shape, color: color, angle: 0, grabbed: false });
+}
+
+function drawShape(ctx, x, y, size, shape, color, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha || 1;
+  ctx.fillStyle = color;
+  ctx.shadowBlur = 10; ctx.shadowColor = color + '88';
+  if (shape === 'circle') {
+    ctx.beginPath(); ctx.arc(x, y, size/2, 0, Math.PI*2); ctx.fill();
+  } else if (shape === 'rect') {
+    ctx.beginPath(); ctx.roundRect(x-size/2, y-size/2, size, size, 5); ctx.fill();
+  } else if (shape === 'triangle') {
+    ctx.beginPath();
+    ctx.moveTo(x, y-size/2); ctx.lineTo(x+size/2, y+size/2); ctx.lineTo(x-size/2, y+size/2);
+    ctx.closePath(); ctx.fill();
+  } else if (shape === 'star') {
+    ctx.beginPath();
+    for (var i = 0; i < 5; i++) {
+      var a = (i*4*Math.PI/5) - Math.PI/2;
+      var b = (i*4*Math.PI/5 + 2*Math.PI/5) - Math.PI/2;
+      if (i===0) ctx.moveTo(x+Math.cos(a)*size/2, y+Math.sin(a)*size/2);
+      else ctx.lineTo(x+Math.cos(a)*size/2, y+Math.sin(a)*size/2);
+      ctx.lineTo(x+Math.cos(b)*size*0.22, y+Math.sin(b)*size*0.22);
+    }
+    ctx.closePath(); ctx.fill();
+  } else if (shape === 'diamond') {
+    ctx.beginPath();
+    ctx.moveTo(x, y-size/2); ctx.lineTo(x+size/2, y); ctx.lineTo(x, y+size/2); ctx.lineTo(x-size/2, y);
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.shadowBlur = 0; ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRAW CLAW
+// ═══════════════════════════════════════════════════════
+function drawClaw(cx, cy, openAmount, grabbing) {
+  // openAmount: 0=fechada, 1=aberta
+  var armW = CLAW_CLOSE_W + openAmount * (CLAW_OPEN_W - CLAW_CLOSE_W);
+  var armLen = 28;
+  var fingerH = 18;
+
+  ctx.save();
+
+  // Cable
+  ctx.strokeStyle = '#7a8fa6'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(cx, CABLE_TOP); ctx.lineTo(cx, cy - armLen); ctx.stroke();
+
+  // Claw body (top housing)
+  var houseW = 28, houseH = 16;
+  var grd = ctx.createLinearGradient(cx, cy-armLen-houseH, cx, cy-armLen);
+  grd.addColorStop(0, '#8a9ab0'); grd.addColorStop(1, '#5a6a7a');
+  ctx.fillStyle = grd;
+  ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(0,0,0,0.4)';
+  ctx.beginPath(); ctx.roundRect(cx-houseW/2, cy-armLen-houseH, houseW, houseH, 4); ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Left arm
+  ctx.save();
+  ctx.translate(cx - armW, cy - armLen);
+  var leftGrd = ctx.createLinearGradient(0,0,0,armLen+fingerH);
+  leftGrd.addColorStop(0, grabbing ? '#e8c547' : '#8a9ab0');
+  leftGrd.addColorStop(1, grabbing ? '#c8a030' : '#5a6a7a');
+  ctx.fillStyle = leftGrd;
+  ctx.shadowBlur = grabbing ? 12 : 4; ctx.shadowColor = grabbing ? '#e8c547aa' : 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(-6, armLen); ctx.lineTo(-6, armLen+fingerH);
+  ctx.lineTo(2, armLen+fingerH); ctx.lineTo(6, armLen); ctx.lineTo(6, 0);
+  ctx.closePath(); ctx.fill();
+  // Finger tip curve
+  ctx.beginPath(); ctx.arc(-2, armLen+fingerH, 5, 0, Math.PI); ctx.fill();
+  ctx.shadowBlur = 0; ctx.restore();
+
+  // Right arm
+  ctx.save();
+  ctx.translate(cx + armW, cy - armLen);
+  var rightGrd = ctx.createLinearGradient(0,0,0,armLen+fingerH);
+  rightGrd.addColorStop(0, grabbing ? '#e8c547' : '#8a9ab0');
+  rightGrd.addColorStop(1, grabbing ? '#c8a030' : '#5a6a7a');
+  ctx.fillStyle = rightGrd;
+  ctx.shadowBlur = grabbing ? 12 : 4; ctx.shadowColor = grabbing ? '#e8c547aa' : 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(-6, armLen); ctx.lineTo(-6, armLen+fingerH);
+  ctx.lineTo(2, armLen+fingerH); ctx.lineTo(6, armLen+fingerH);
+  ctx.lineTo(6, armLen); ctx.lineTo(6, 0);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.arc(2, armLen+fingerH, 5, 0, Math.PI); ctx.fill();
+  ctx.shadowBlur = 0; ctx.restore();
+
+
+
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRAW BELT
+// ═══════════════════════════════════════════════════════
+function drawBelt(W, H) {
+  var beltY = H - 60;
+  var beltH = 40;
+
+  // Belt shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillRect(0, beltY - 4, W, 4);
+
+  // Belt body
+  var beltGrd = ctx.createLinearGradient(0, beltY, 0, beltY+beltH);
+  beltGrd.addColorStop(0, '#2a3a4a');
+  beltGrd.addColorStop(1, '#1a2530');
+  ctx.fillStyle = beltGrd;
+  ctx.fillRect(0, beltY, W, beltH);
+
+  // Belt stripes (moving)
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 8;
+  var offset = (Date.now() / 18) % 40;
+  for (var x = -40 + offset; x < W + 40; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, beltY); ctx.lineTo(x + 20, beltY + beltH); ctx.stroke();
+  }
+
+  // Belt top edge highlight
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, beltY); ctx.lineTo(W, beltY); ctx.stroke();
+
+  // Left/right rollers
+  var rollerR = beltH / 2;
+  for (var rx of [rollerR, W - rollerR]) {
+    ctx.beginPath();
+    ctx.arc(rx, beltY + rollerR, rollerR, 0, Math.PI*2);
+    var rg = ctx.createRadialGradient(rx-4, beltY+rollerR-4, 2, rx, beltY+rollerR, rollerR);
+    rg.addColorStop(0, '#4a5a6a'); rg.addColorStop(1, '#1a2530');
+    ctx.fillStyle = rg; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1; ctx.stroke();
+  }
+
+  return beltY;
+}
+
+// ═══════════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════════
+function startTimer() {
+  clearInterval(timerInt); timeLeft = GAME_DURATION; updateTimer();
+  timerInt = setInterval(function(){
+    timeLeft--; updateTimer();
+    if (timeLeft <= 0) { clearInterval(timerInt); endGame(); }
+  }, 1000);
+}
+function updateTimer() {
+  var m = Math.floor(timeLeft/60), s = timeLeft%60;
+  var el = document.getElementById('timer');
+  el.textContent = m+':'+(s<10?'0':'')+s;
+  el.className = 'timer'+(timeLeft<=10?' urgent':'');
+}
+
+// ═══════════════════════════════════════════════════════
+//  GAME LOOP
+// ═══════════════════════════════════════════════════════
+function gameLoop() {
+  if (!gameRunning) return;
+  var W = canvas.width, H = canvas.height;
+  var cx = Math.round(W * CLAW_X_FRAC);
+  var beltY = H - 60;
+  var itemY = beltY - ITEM_SIZE / 2 - 2; // items sit on belt
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background gradient
+  var bgGrd = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrd.addColorStop(0, '#0d1b2a'); bgGrd.addColorStop(1, '#1b2838');
+  ctx.fillStyle = bgGrd; ctx.fillRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.02)'; ctx.lineWidth = 1;
+  for (var gx = 0; gx < W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+  for (var gy = 0; gy < H; gy += 40) { ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+
+  // Flash
+  if (flashFrames > 0) { ctx.fillStyle = flashColor; ctx.fillRect(0,0,W,H); flashFrames--; }
+
+  // ── CLAW PHYSICS ──
+  var isGrabbing = forceNorm >= GRAB_FORCE;
+  var openAmount = 1 - forceNorm; // 0=fechada, 1=aberta
+
+  if (clawCooldown > 0) {
+    clawCooldown--;
+  } else if (grabbedItem) {
+    // Sobe com o item
+    clawY = Math.max(CLAW_Y, clawY - 8);
+    if (clawY <= CLAW_Y) {
+      // Chegou ao topo — sucesso!
+      caught++;
+      score += 10 + Math.round(forceNorm * 5);
+      document.getElementById('scoreVal').textContent = score;
+      document.getElementById('caughtVal').textContent = caught;
+      burst(cx, clawY, grabbedItem.color, 14);
+      flashFrames = 4; flashColor = 'rgba(78,205,196,0.1)';
+      playCatch();
+      grabbedItem = null;
+      clawCooldown = 30;
+    }
+  } else if (isGrabbing) {
+    // Desce para tentar apanhar
+    var maxDescent = beltY - CLAW_Y - 34;  // ponta da garra toca no nível dos objetos
+    clawY = Math.min(CLAW_Y + maxDescent, clawY + 7);
+
+    // Só apanha quando a garra está completamente descida (>= 95% do percurso)
+    var fullyDown = clawY >= CLAW_Y + maxDescent * 0.95;
+    if (fullyDown) {
+      for (var i = items.length-1; i >= 0; i--) {
+        var it = items[i];
+        if (it.grabbed) continue;
+        var dist = Math.abs(it.x - cx);
+        if (dist < GRAB_RANGE) {
+          it.grabbed = true;
+          grabbedItem = it;
+          items.splice(i, 1);
+          playGrab();
+          break;
+        }
+      }
+    }
+  } else {
+    // Volta ao topo quando larga
+    clawY = Math.max(CLAW_Y, clawY - 8);
+  }
+
+
+
+  // ── BELT ──
+  drawBelt(W, H);
+
+  // ── SPAWN ITEMS ──
+  if (gameRunning) {
+    itemCounter++;
+    var interval = Math.max(60, ITEM_INTERVAL - Math.floor((GAME_DURATION - timeLeft) / 12) * 10);
+    if (itemCounter >= interval) { spawnItem(); itemCounter = 0; }
+  }
+
+  // ── MOVE & DRAW ITEMS ──
+  var speed = BELT_SPEED_BASE + (GAME_DURATION - timeLeft) * 0.02;
+  for (var j = items.length-1; j >= 0; j--) {
+    var it = items[j];
+    it.x += speed;
+    it.angle += 0.01;
+
+    // Missed
+    if (it.x - ITEM_SIZE > W) {
+      items.splice(j, 1);
+      missed++;
+      document.getElementById('missedVal').textContent = missed;
+      flashFrames = 5; flashColor = 'rgba(224,92,92,0.1)';
+      playMiss(); continue;
+    }
+
+    // Highlight if in grab zone
+    var inZone = Math.abs(it.x - cx) < GRAB_RANGE;
+    if (inZone) {
+      ctx.save();
+      ctx.globalAlpha = 0.15 + forceNorm * 0.2;
+      ctx.beginPath(); ctx.arc(it.x, itemY, ITEM_SIZE * 0.8, 0, Math.PI*2);
+      ctx.fillStyle = it.color; ctx.fill();
+      ctx.restore();
+    }
+
+    drawShape(ctx, it.x, itemY, ITEM_SIZE, it.shape, it.color, 1);
+  }
+
+  // ── GRABBED ITEM (moves with claw) ──
+  if (grabbedItem) {
+    drawShape(ctx, cx, clawY + 30, ITEM_SIZE, grabbedItem.shape, grabbedItem.color, 1);
+  }
+
+  // ── PARTICLES ──
+  for (var k = particles.length-1; k >= 0; k--) {
+    var p = particles[k];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life -= p.decay;
+    if (p.life <= 0) { particles.splice(k,1); continue; }
+    ctx.globalAlpha = p.life;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r*p.life, 0, Math.PI*2);
+    ctx.fillStyle = p.color; ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // ── CLAW ──
+  drawClaw(cx, clawY, openAmount, isGrabbing);
+
+  // ── HUD ──
+  ctx.fillStyle = forceNorm > THRESHOLD ? '#e8c547' : 'rgba(255,255,255,0.15)';
+  ctx.font = 'bold 11px Space Mono'; ctx.textAlign = 'center';
+  var fullyDownHud = clawY >= CLAW_Y + (beltY - CLAW_Y - 20) * 0.95;
+  var hudTxt = forceNorm >= GRAB_FORCE
+    ? (fullyDownHud ? '✓ GARRA NO FUNDO · APANHA!' : '▼ A DESCER · ' + Math.round(forceNorm*100) + '%')
+    : forceNorm > THRESHOLD ? '○ FORÇA INSUFICIENTE · ' + Math.round(forceNorm*100) + '%'
+    : 'RELAXA · APERTA PARA AGARRAR';
+  ctx.fillText(hudTxt, W/2, H - 8);
+
+  animId = requestAnimationFrame(gameLoop);
+}
+
+var _lastPct = 0, _lastScore = 0;
+
+// ═══════════════════════════════════════════════════════
+//  GAME FLOW
+// ═══════════════════════════════════════════════════════
+function startGame() {
+  cancelAnimationFrame(animId); clearInterval(timerInt);
+  gameRunning = true;
+  score = 0; caught = 0; missed = 0;
+  items = []; particles = []; itemCounter = 0; flashFrames = 0;
+  clawY = CLAW_Y; clawCooldown = 0; grabbedItem = null;
+  forceNorm = 0;
+  document.getElementById('scoreVal').textContent  = '0';
+  document.getElementById('caughtVal').textContent = '0';
+  document.getElementById('missedVal').textContent = '0';
+  document.getElementById('guardarBox').style.display = 'none';
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('hint').textContent = 'Aperta o sensor quando o objeto estiver sob a garra';
+  startTimer();
+  animId = requestAnimationFrame(gameLoop);
+}
+
+function endGame() {
+  gameRunning = false; cancelAnimationFrame(animId);
+  var total = caught + missed;
+  var acc = total > 0 ? Math.round(caught/total*100) : 0;
+  var emoji = caught >= 15 ? '🏆' : caught >= 8 ? '💪' : caught >= 3 ? '👍' : '😅';
+  document.getElementById('mEmoji').textContent  = emoji;
+  document.getElementById('mTitle').textContent  = caught >= 8 ? 'Excelente!' : caught >= 3 ? 'Bom trabalho!' : 'Continua!';
+  document.getElementById('mSub').textContent    = '60 s · Nível 1';
+  document.getElementById('mScore').textContent  = score;
+  document.getElementById('mCaught').textContent = caught;
+  document.getElementById('mMissed').textContent = missed;
+  document.getElementById('mAcc').textContent    = acc + '%';
+  document.getElementById('btnPlay').textContent = 'Jogar novamente';
+  document.getElementById('ipBlock').style.display = 'none';
+  _lastPct   = acc;
+  _lastScore = score;
+  document.getElementById('savedIndicator').style.display = 'none';
+  document.getElementById('btnGuardar').style.display     = 'block';
+  document.getElementById('btnGuardar').disabled          = false;
+  document.getElementById('btnGuardar').textContent       = '💾 Guardar resultado';
+  document.getElementById('guardarBox').style.display     = 'block';
+  var sel = document.getElementById('utenteSelect');
+  if (sel.options.length <= 1) {
+    fetch('../../../api/sessoes/utentes_tecnico.php')
+      .then(function(r){ return r.json(); })
+      .then(function(list){
+        list.forEach(function(u){
+          var o = document.createElement('option');
+          o.value = u.id; o.textContent = u.nome; sel.appendChild(o);
+        });
+      }).catch(function(){});
+  }
+  setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 300);
+}
+
+function guardarResultado() {
+  var utenteId = document.getElementById('utenteSelect').value;
+  if (!utenteId) { alert('Selecione um utente.'); return; }
+  var btn = document.getElementById('btnGuardar');
+  btn.disabled = true; btn.textContent = '⏳ A guardar...';
+  var fd = new FormData();
+  fd.append('jogo_id', 2);
+  fd.append('percentagem', _lastPct);
+  fd.append('score', _lastScore);
+  fd.append('utente_id', utenteId);
+  fetch('../../../api/sessoes/guardar_resultado_jogo.php', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        document.getElementById('guardarBox').style.display     = 'none';
+        document.getElementById('savedIndicator').style.display = 'block';
+      } else {
+        btn.disabled = false; btn.textContent = '💾 Guardar resultado';
+      }
+    })
+    .catch(function(){ btn.disabled = false; btn.textContent = '💾 Guardar resultado'; });
+}
+
+// ═══════════════════════════════════════════════════════
+//  FALLBACK INPUT (sem ESP32)
+// ═══════════════════════════════════════════════════════
+canvas.addEventListener('mousedown',  function(){ if(!ws||ws.readyState!==1) forceNorm=0.8; });
+canvas.addEventListener('mouseup',    function(){ if(!ws||ws.readyState!==1) forceNorm=0; });
+canvas.addEventListener('mouseleave', function(){ if(!ws||ws.readyState!==1) forceNorm=0; });
+canvas.addEventListener('touchstart', function(e){ e.preventDefault(); if(!ws||ws.readyState!==1) forceNorm=0.8; },{passive:false});
+canvas.addEventListener('touchend',   function(e){ e.preventDefault(); if(!ws||ws.readyState!==1) forceNorm=0; },{passive:false});
+document.addEventListener('keydown', function(e){
+  if((e.key===' '||e.key==='l'||e.key==='L')&&(!ws||ws.readyState!==1)) forceNorm=0.8;
+});
+document.addEventListener('keyup', function(e){
+  if(e.key===' '||e.key==='l'||e.key==='L') forceNorm=0;
+});
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+syncIP();
+connectFSR();
+
+// Start screen
+document.getElementById('overlay').classList.add('show');
+document.getElementById('ipBlock').style.display = 'block';
+document.getElementById('mTitle').textContent  = 'Garra!';
+document.getElementById('mSub').textContent    = 'Controlo de preensão · FSR calibrado';
+document.getElementById('mEmoji').textContent  = '🦾';
+document.getElementById('mScore').textContent  = '—';
+document.getElementById('mCaught').textContent = '—';
+document.getElementById('mMissed').textContent = '—';
+document.getElementById('mAcc').textContent    = '—';
+document.getElementById('btnPlay').textContent = 'Começar';
+</script>
+</body>
+</html>

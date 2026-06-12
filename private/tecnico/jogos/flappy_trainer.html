@@ -141,7 +141,7 @@
 <body>
 
 <div class="header">
-  <div class="brand">Flappy<span>Prosthesis Rehab · Nivel 2</span></div>
+  <div class="brand">Flappy<span>Prosthesis Rehab · Nível 3</span></div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
@@ -157,12 +157,19 @@
   <div class="modal">
     <div class="modal-emoji" id="mEmoji">🐦</div>
     <div class="modal-title" id="mTitle">Flappy!</div>
-    <div class="modal-sub" id="mSub">60 segundos · Nivel 2</div>
+    <div class="modal-sub" id="mSub">60 segundos · Nível 3</div>
     <div class="modal-grid">
       <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">—</div></div>
       <div class="modal-item"><div class="m-lbl">Passagens</div><div class="m-val" style="color:var(--good)" id="mPassed">—</div></div>
       <div class="modal-item"><div class="m-lbl">Colisoes</div><div class="m-val" style="color:var(--accent2)" id="mHits">—</div></div>
       <div class="modal-item"><div class="m-lbl">Melhor seq.</div><div class="m-val" style="color:var(--text2)" id="mBest">—</div></div>
+    </div>
+    <div id="guardarBox" style="display:none;margin-bottom:12px;">
+      <select id="utenteSelect" style="width:100%;padding:10px;border-radius:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:8px;">
+        <option value="">Selecionar utente...</option>
+      </select>
+      <button id="btnGuardar" onclick="guardarResultado()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--good);color:var(--bg);font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:8px;">💾 Guardar resultado</button>
+      <div id="savedIndicator" style="display:none;padding:8px;border-radius:10px;background:rgba(78,205,196,0.15);border:1px solid var(--good);font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--good);letter-spacing:0.08em;text-align:center;">✓ RESULTADO GUARDADO</div>
     </div>
     <button class="btn-play" id="btnPlay" onclick="startGame()">Comecar</button>
   </div>
@@ -535,6 +542,7 @@ function startGame() {
 
   document.getElementById('scoreVal').textContent  = '0';
   document.getElementById('passedVal').textContent = '0';
+  document.getElementById('guardarBox').style.display = 'none';
   document.getElementById('overlay').classList.remove('show');
 
   startTimer();
@@ -546,17 +554,38 @@ function endGame() {
   cancelAnimationFrame(animId);
 
   var pct   = passed + hits > 0 ? Math.round(passed / Math.max(1, passed+hits) * 100) : 0;
+  _lastPct   = pct;
+  _lastScore = score;
   var emoji = passed >= 15 ? '\uD83C\uDFC6' : passed >= 8 ? '\uD83D\uDCAA' : passed >= 3 ? '\uD83D\uDC4D' : '\uD83D\uDE05';
   var title = passed >= 15 ? 'Excelente controlo!' : passed >= 8 ? 'Muito bem!' : passed >= 3 ? 'Bom esforco!' : 'Continua a treinar!';
 
   document.getElementById('mEmoji').textContent  = emoji;
   document.getElementById('mTitle').textContent  = title;
-  document.getElementById('mSub').textContent    = '60 segundos · Nivel 2';
+  document.getElementById('mSub').textContent    = '60 segundos · Nível 3';
   document.getElementById('mScore').textContent  = score;
   document.getElementById('mPassed').textContent = passed;
   document.getElementById('mHits').textContent   = hits;
   document.getElementById('mBest').textContent   = bestStreak;
   document.getElementById('btnPlay').textContent = 'Jogar novamente';
+
+  // Mostrar seletor de utente para guardar resultado
+  document.getElementById('savedIndicator').style.display = 'none';
+  document.getElementById('btnGuardar').style.display     = 'block';
+  document.getElementById('btnGuardar').disabled          = false;
+  document.getElementById('btnGuardar').textContent       = '💾 Guardar resultado';
+  document.getElementById('guardarBox').style.display     = 'block';
+
+  var sel = document.getElementById('utenteSelect');
+  if (sel.options.length <= 1) {
+    fetch('../../../api/sessoes/utentes_tecnico.php')
+      .then(function(r){ return r.json(); })
+      .then(function(list){
+        list.forEach(function(u){
+          var o = document.createElement('option');
+          o.value = u.id; o.textContent = u.nome; sel.appendChild(o);
+        });
+      }).catch(function(){});
+  }
 
   setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 300);
 }
@@ -574,6 +603,32 @@ canvas.addEventListener('touchstart', function(e){ e.preventDefault(); doFlap();
 document.addEventListener('keydown', function(e) {
   if ((e.key==='l'||e.key==='L') && !e.repeat) doFlap();
 });
+
+// ── Guardar resultado (técnico) ────────────────────────
+var _lastPct = 0, _lastScore = 0;
+
+function guardarResultado() {
+  var utenteId = document.getElementById('utenteSelect').value;
+  if (!utenteId) { alert('Selecione um utente.'); return; }
+  var btn = document.getElementById('btnGuardar');
+  btn.disabled = true; btn.textContent = 'A guardar...';
+  var fd = new FormData();
+  fd.append('jogo_id', 3);
+  fd.append('percentagem', _lastPct);
+  fd.append('score', _lastScore);
+  fd.append('utente_id', utenteId);
+  fetch('../../../api/sessoes/guardar_resultado_jogo.php', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        btn.style.display = 'none';
+        document.getElementById('savedIndicator').style.display = 'block';
+      } else {
+        btn.disabled = false; btn.textContent = '💾 Guardar resultado';
+        alert('Erro: ' + (d.erro || 'desconhecido'));
+      }
+    }).catch(function(){ btn.disabled = false; btn.textContent = '💾 Guardar resultado'; });
+}
 
 // Show start screen
 document.getElementById('overlay').classList.add('show');

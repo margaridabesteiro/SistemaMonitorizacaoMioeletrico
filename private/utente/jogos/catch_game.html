@@ -167,6 +167,7 @@
               color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
       </div>
     </div>
+    <div id="savedIndicator" style="display:none;margin-bottom:12px;padding:8px 12px;border-radius:10px;background:rgba(92,219,149,0.15);border:1px solid #5cdb95;font-family:'Space Mono',monospace;font-size:0.65rem;color:#5cdb95;letter-spacing:0.08em;text-align:center;">✓ RESULTADO GUARDADO</div>
     <button class="btn-play" id="btnPlay" onclick="startGame()">Jogar</button>
   </div>
 </div>
@@ -569,11 +570,21 @@ function updateModalWs() {
               : document.getElementById('wsLabel').textContent;
 }
 
-// Quando o jogo termina, esconde o ipBlock (mostra só resultados)
+// Quando o jogo termina, esconde o ipBlock (mostra só resultados) + regista resultado
 var _origEndGame = endGame;
 endGame = function() {
   _origEndGame();
   document.getElementById('ipBlock').style.display = 'none';
+  document.getElementById('savedIndicator').style.display = 'none';
+  var acc = Math.round(caught / Math.max(1, caught + missed) * 100);
+  var fd = new FormData();
+  fd.append('jogo_id', 1);
+  fd.append('percentagem', acc);
+  fd.append('score', score);
+  fetch('../../../api/sessoes/guardar_resultado_jogo.php', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (d.ok) document.getElementById('savedIndicator').style.display = 'block'; })
+    .catch(function(){});
 };
 
 // Ecrã inicial

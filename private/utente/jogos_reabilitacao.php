@@ -13,9 +13,9 @@ if ($utid) {
     $s->execute([$utid]); $stats = $s->fetch() ?: $stats;
 }
 $jogos = [
+    ['claw_game','Claw Game','Controla uma garra com força muscular. Apanha objetos no tapete rolante.','fa-hand-fist','#4ecdc4'],
     ['catch_game','Catch Game','Apanhe objetos em queda. Treina precisão e velocidade de resposta mioelétrica.','fa-bullseye','#667eea'],
     ['flappy_trainer','Flappy Trainer','Controle um pássaro com força muscular. Treina modulação de força.','fa-feather-pointed','#f7c948'],
-    ['prosthesis_trainer','Prosthesis Trainer','Simulação completa de uso protésico — sequências e tarefas de vida diária.','fa-hand','#5cdb95'],
 ];
 ?>
         <main class="content">

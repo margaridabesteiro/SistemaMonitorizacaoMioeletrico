@@ -142,7 +142,7 @@
 <body>
 
 <div class="header">
-  <div class="brand">Flappy<span>Prosthesis Rehab · Nivel 2</span></div>
+  <div class="brand">Flappy<span>Prosthesis Rehab · Nível 3</span></div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
@@ -187,12 +187,12 @@
   <div class="modal">
     <div class="modal-emoji" id="mEmoji">🐦</div>
     <div class="modal-title" id="mTitle">Flappy!</div>
-    <div class="modal-sub" id="mSub">60 segundos · Nivel 2</div>
+    <div class="modal-sub" id="mSub">60 segundos · Nível 3</div>
     <div class="modal-grid">
       <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">—</div></div>
       <div class="modal-item"><div class="m-lbl">Passagens</div><div class="m-val" style="color:var(--good)" id="mPassed">—</div></div>
       <div class="modal-item"><div class="m-lbl">Colisoes</div><div class="m-val" style="color:var(--accent2)" id="mHits">—</div></div>
-      <div class="modal-item"><div class="m-lbl">Melhor seq.</div><div class="m-val" style="color:var(--text2)" id="mBest">—</div></div>
+      <div class="modal-item"><div class="m-lbl">Taxa acerto</div><div class="m-val" style="color:var(--good)" id="mAcc">—</div></div>
     </div>
     <!-- IP input — só visível no ecrã inicial -->
     <div id="ipBlock" style="display:none; margin-bottom:14px;">
@@ -217,6 +217,8 @@
               color:var(--text2);text-transform:uppercase;letter-spacing:0.06em">Desligado</span>
       </div>
     </div>
+    <button id="btnGuardar" onclick="guardarResultado()" style="display:none;width:100%;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;padding:14px;border:none;border-radius:12px;background:var(--good);color:var(--bg);cursor:pointer;margin-bottom:12px;transition:all 0.2s;">💾 Guardar resultado</button>
+    <div id="savedIndicator" style="display:none;margin-bottom:12px;padding:8px 12px;border-radius:10px;background:rgba(92,219,149,0.15);border:1px solid #5cdb95;font-family:'Space Mono',monospace;font-size:0.65rem;color:#5cdb95;letter-spacing:0.08em;text-align:center;">✓ RESULTADO GUARDADO</div>
     <button class="btn-play" id="btnPlay" onclick="startGame()">Começar</button>
   </div>
 </div>
@@ -644,6 +646,8 @@ function registerHit(x, y) {
   playHit();
 }
 
+var _lastPct = 0, _lastScore = 0;
+
 // ── Game flow ──────────────────────────────────────────
 function startGame() {
   cancelAnimationFrame(animId);
@@ -666,8 +670,10 @@ function startGame() {
   wingAngle    = 0;
   wingDir      = 1;
 
-  document.getElementById('scoreVal').textContent  = '0';
-  document.getElementById('passedVal').textContent = '0';
+  document.getElementById('scoreVal').textContent       = '0';
+  document.getElementById('passedVal').textContent      = '0';
+  document.getElementById('btnGuardar').style.display   = 'none';
+  document.getElementById('savedIndicator').style.display = 'none';
   document.getElementById('overlay').classList.remove('show');
 
   startTimer();
@@ -684,14 +690,46 @@ function endGame() {
 
   document.getElementById('mEmoji').textContent  = emoji;
   document.getElementById('mTitle').textContent  = title;
-  document.getElementById('mSub').textContent    = '60 segundos · Nivel 2';
+  document.getElementById('mSub').textContent    = '60 segundos · Nível 3';
   document.getElementById('mScore').textContent  = score;
   document.getElementById('mPassed').textContent = passed;
   document.getElementById('mHits').textContent   = hits;
-  document.getElementById('mBest').textContent   = bestStreak;
+  document.getElementById('mAcc').textContent    = pct + '%';
   document.getElementById('btnPlay').textContent = 'Jogar novamente';
 
+  _lastPct   = pct;
+  _lastScore = score;
+  document.getElementById('ipBlock').style.display      = 'none';
+  document.getElementById('savedIndicator').style.display = 'none';
+  document.getElementById('btnGuardar').style.display   = 'block';
+  document.getElementById('btnGuardar').disabled        = false;
+  document.getElementById('btnGuardar').textContent     = '💾 Guardar resultado';
+
   setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 300);
+}
+
+function guardarResultado() {
+  document.getElementById('btnGuardar').disabled    = true;
+  document.getElementById('btnGuardar').textContent = '⏳ A guardar...';
+  var fd = new FormData();
+  fd.append('jogo_id', 3);
+  fd.append('percentagem', _lastPct);
+  fd.append('score', _lastScore);
+  fetch('../../../api/sessoes/guardar_resultado_jogo.php', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        document.getElementById('btnGuardar').style.display     = 'none';
+        document.getElementById('savedIndicator').style.display = 'block';
+      } else {
+        document.getElementById('btnGuardar').disabled    = false;
+        document.getElementById('btnGuardar').textContent = '💾 Guardar resultado';
+      }
+    })
+    .catch(function(){
+      document.getElementById('btnGuardar').disabled    = false;
+      document.getElementById('btnGuardar').textContent = '💾 Guardar resultado';
+    });
 }
 
 // ── Input ──────────────────────────────────────────────
@@ -724,13 +762,6 @@ function updateModalWs() {
     connected ? 'Ligado · ' + document.getElementById('ipModal').value
               : document.getElementById('wsLabel').textContent;
 }
-
-// Esconde ipBlock quando o jogo termina (mostra só resultados)
-var _origEndGame = endGame;
-endGame = function() {
-  _origEndGame();
-  document.getElementById('ipBlock').style.display = 'none';
-};
 
 syncIP();
 setInterval(function() {

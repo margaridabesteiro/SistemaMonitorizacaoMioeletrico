@@ -13,7 +13,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             $pacientes = $pid ? $db->prepare("SELECT ut.id, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.tecnico_id=? ORDER BY u.nome") : null;
             if ($pacientes) { $pacientes->execute([$pid]); $pacientes = $pacientes->fetchAll(); } else { $pacientes = []; }
             $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
-            $jogos = [['catch_game','Catch Game','Apanhe objetos com a prótese — treina precisão e velocidade de resposta.','fa-hands-catching'],['flappy_trainer','Flappy Trainer','Controle um pássaro com força muscular — treina modulação de força.','fa-feather-pointed'],['prosthesis_trainer','Prosthesis Trainer','Simulação completa de uso protésico — sequências e tarefas.','fa-hand'],];
+            $jogos = [['claw_game','Claw Game','Controla uma garra com força muscular — apanha objetos no tapete rolante.','fa-hand-fist'],['catch_game','Catch Game','Apanhe objetos com a prótese — treina precisão e velocidade de resposta.','fa-bullseye'],['flappy_trainer','Flappy Trainer','Controle um pássaro com força muscular — treina modulação de força.','fa-feather-pointed'],];
             ?>
             <h1 class="mb-4">Jogos de Reabilitação</h1>
             <form method="GET" class="mb-4">

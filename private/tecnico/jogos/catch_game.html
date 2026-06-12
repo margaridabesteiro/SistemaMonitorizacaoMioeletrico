@@ -191,6 +191,13 @@
       <div class="modal-item"><div class="m-lbl">Perdidas</div><div class="m-val" style="color:var(--accent2)" id="mMissed">0</div></div>
       <div class="modal-item"><div class="m-lbl">Taxa acerto</div><div class="m-val" style="color:var(--text2)" id="mLevel">0</div></div>
     </div>
+    <div id="guardarBox" style="display:none;margin-bottom:12px;">
+      <select id="utenteSelect" style="width:100%;padding:10px;border-radius:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:8px;">
+        <option value="">Selecionar utente...</option>
+      </select>
+      <button id="btnGuardar" onclick="guardarResultado()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--good);color:var(--bg);font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;margin-bottom:8px;">💾 Guardar resultado</button>
+      <div id="savedIndicator" style="display:none;padding:8px;border-radius:10px;background:rgba(92,219,149,0.15);border:1px solid var(--good);font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--good);letter-spacing:0.08em;text-align:center;">✓ RESULTADO GUARDADO</div>
+    </div>
     <button class="btn-play" id="btnPlay" onclick="startGame()">Jogar</button>
   </div>
 </div>
@@ -516,6 +523,7 @@ function startGame() {
 
   document.getElementById('scoreVal').textContent = '0';
   document.getElementById('hint').textContent = 'Toca e segura para mover o cesto para a direita';
+  document.getElementById('guardarBox').style.display = 'none';
   document.getElementById('overlay').classList.remove('show');
 
   startTimer();
@@ -536,6 +544,27 @@ function endGame() {
   document.getElementById('mLevel').textContent  = Math.round(caught / Math.max(1, caught + missed) * 100) + '%';
   document.getElementById('btnPlay').textContent = 'Jogar novamente';
 
+  // Mostrar seletor de utente para guardar resultado
+  document.getElementById('savedIndicator').style.display = 'none';
+  document.getElementById('btnGuardar').style.display     = 'block';
+  document.getElementById('btnGuardar').disabled          = false;
+  document.getElementById('btnGuardar').textContent       = '💾 Guardar resultado';
+  document.getElementById('guardarBox').style.display     = 'block';
+  _lastPct   = Math.round(caught / Math.max(1, caught + missed) * 100);
+  _lastScore = score;
+
+  var sel = document.getElementById('utenteSelect');
+  if (sel.options.length <= 1) {
+    fetch('../../../api/sessoes/utentes_tecnico.php')
+      .then(function(r){ return r.json(); })
+      .then(function(list){
+        list.forEach(function(u){
+          var o = document.createElement('option');
+          o.value = u.id; o.textContent = u.nome; sel.appendChild(o);
+        });
+      }).catch(function(){});
+  }
+
   setTimeout(function(){ document.getElementById('overlay').classList.add('show'); }, 400);
 }
 
@@ -554,6 +583,32 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('keyup', function(e) {
   if (e.key === 'l' || e.key === 'L') pressing = false;
 });
+
+// ── Guardar resultado (técnico) ────────────────────────
+var _lastPct = 0, _lastScore = 0;
+
+function guardarResultado() {
+  var utenteId = document.getElementById('utenteSelect').value;
+  if (!utenteId) { alert('Selecione um utente.'); return; }
+  var btn = document.getElementById('btnGuardar');
+  btn.disabled = true; btn.textContent = 'A guardar...';
+  var fd = new FormData();
+  fd.append('jogo_id', 1);
+  fd.append('percentagem', _lastPct);
+  fd.append('score', _lastScore);
+  fd.append('utente_id', utenteId);
+  fetch('../../../api/sessoes/guardar_resultado_jogo.php', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        btn.style.display = 'none';
+        document.getElementById('savedIndicator').style.display = 'block';
+      } else {
+        btn.disabled = false; btn.textContent = '💾 Guardar resultado';
+        alert('Erro: ' + (d.erro || 'desconhecido'));
+      }
+    }).catch(function(){ btn.disabled = false; btn.textContent = '💾 Guardar resultado'; });
+}
 
 // Show start screen
 document.getElementById('overlay').classList.add('show');
