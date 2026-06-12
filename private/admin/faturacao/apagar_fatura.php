@@ -3,13 +3,13 @@ require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 $pagina_titulo = 'Apagar Fatura'; $pagina_ativa = 'faturacao';
 $db = getDB();
-$id = (int)($_GET['id'] ?? 0);
-if (!$id) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
-$stmt = $db->prepare("SELECT f.*, u.nome AS utente FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id WHERE f.id=?");
-$stmt->execute([$id]); $f = $stmt->fetch();
+$num = trim($_GET['num'] ?? '');
+if (!$num) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
+$stmt = $db->prepare("SELECT f.*, u.nome AS utente FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id WHERE f.numero=?");
+$stmt->execute([$num]); $f = $stmt->fetch();
 if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmar'])) {
-    $db->prepare('DELETE FROM faturas WHERE id=?')->execute([$id]);
+    $db->prepare('DELETE FROM faturas WHERE numero=?')->execute([$f['numero']]);
     $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Fatura eliminada.']; redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
 }
 require_once __DIR__ . '/../../../includes/header_admin.php';

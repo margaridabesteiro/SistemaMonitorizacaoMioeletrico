@@ -3,6 +3,8 @@
 // Configurações globais da aplicação
 // Caminho: C:\xampp\htdocs\sistema_mioeletrico\SistemaMonitorizacaoMioeletrico\config\app.php
 
+date_default_timezone_set('Europe/Lisbon');
+
 define('APP_NAME', 'RehabLink');
 define('APP_URL',  'http://localhost/sistema_mioeletrico/SistemaMonitorizacaoMioeletrico');
 define('APP_ROOT', __DIR__ . '/..');

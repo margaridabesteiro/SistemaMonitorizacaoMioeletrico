@@ -103,14 +103,13 @@ $logs = $db->query('
                 <h5 class="mb-3">Últimos Acessos</h5>
                 <table class="table table-sm table-hover">
                     <thead>
-                        <tr><th>Utilizador</th><th>Ação</th><th>IP</th><th>Data/Hora</th></tr>
+                        <tr><th>Utilizador</th><th>Ação</th><th>Data/Hora</th></tr>
                     </thead>
                     <tbody>
                         <?php foreach ($logs as $log): ?>
                         <tr>
                             <td><?= h($log['nome'] ?? 'Anónimo') ?></td>
                             <td><?= h($log['acao']) ?></td>
-                            <td><?= h($log['ip']) ?></td>
                             <td><?= h($log['criado_em']) ?></td>
                         </tr>
                         <?php endforeach; ?>

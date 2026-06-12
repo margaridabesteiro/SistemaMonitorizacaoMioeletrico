@@ -5,10 +5,10 @@ $pagina_titulo = 'Fatura'; $pagina_ativa = 'faturacao';
 require_once __DIR__ . '/../../../includes/header_admin.php';
 require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 $db = getDB();
-$id = (int)($_GET['id'] ?? 0);
-if (!$id) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
-$stmt = $db->prepare("SELECT f.*, u.nome AS utente, ut2.nif FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id LEFT JOIN utentes ut2 ON ut2.id=f.utente_id WHERE f.id=?");
-$stmt->execute([$id]); $f = $stmt->fetch();
+$num = trim($_GET['num'] ?? '');
+if (!$num) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
+$stmt = $db->prepare("SELECT f.*, u.nome AS utente, ut2.nif FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id LEFT JOIN utentes ut2 ON ut2.id=f.utente_id WHERE f.numero=?");
+$stmt->execute([$num]); $f = $stmt->fetch();
 if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
 ?>
 <style>
@@ -26,7 +26,7 @@ if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
                 <div class="d-flex gap-2">
                     <button onclick="window.print()" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-file-pdf me-1"></i>PDF / Imprimir</button>
                     <?php if (!$f['paga']): ?>
-                    <a href="<?= APP_URL ?>/api/admin/faturacao/marcar_paga.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-success"><i class="fa-solid fa-check me-1"></i>Marcar Paga</a>
+                    <a href="<?= APP_URL ?>/api/admin/faturacao/marcar_paga.php?num=<?= urlencode($f['numero']) ?>" class="btn btn-sm btn-success"><i class="fa-solid fa-check me-1"></i>Marcar Paga</a>
                     <?php endif; ?>
                 </div>
             </div>

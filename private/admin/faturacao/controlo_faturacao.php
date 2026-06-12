@@ -20,7 +20,7 @@ $total_val->execute($params);
 [$soma,$cnt] = $total_val->fetch(PDO::FETCH_NUM);
 $pagas    = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=1")->fetchColumn();
 $pendentes = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=0")->fetchColumn();
-$stmt = $db->prepare("SELECT f.*, u.nome AS utente FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY f.data_emissao DESC LIMIT $por_pagina OFFSET $offset");
+$stmt = $db->prepare("SELECT f.*, u.nome AS utente, ut.cobertura_saude FROM faturas f JOIN utentes ut ON ut.id=f.utente_id JOIN utilizadores u ON u.id=ut.utilizador_id $where ORDER BY f.data_emissao DESC LIMIT $por_pagina OFFSET $offset");
 $stmt->execute($params); $faturas = $stmt->fetchAll();
 $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 ?>
@@ -53,14 +53,16 @@ $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
                             <td><?= h($f['data_emissao']) ?></td><td><?= h($f['data_vencimento'] ?? '—') ?></td>
                             <td><?= $f['paga'] ? '<span class="badge bg-success">Paga</span>' : '<span class="badge bg-warning text-dark">Pendente</span>' ?></td>
                             <td>
-                                <a href="fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-primary me-1" title="Ver"><i class="fa-regular fa-eye"></i></a>
-                                <a href="editar_fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-secondary me-1" title="Editar"><i class="fa-regular fa-pen-to-square"></i></a>
-                                <a href="<?= APP_URL ?>/api/admin/faturacao/toggle_paga.php?id=<?= $f['id'] ?>"
+                                <a href="fatura.php?num=<?= urlencode($f['numero']) ?>" class="btn btn-xs btn-outline-primary me-1" title="Ver"><i class="fa-regular fa-eye"></i></a>
+                                <a href="editar_fatura.php?num=<?= urlencode($f['numero']) ?>" class="btn btn-xs btn-outline-secondary me-1" title="Editar"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <?php if ($f['cobertura_saude'] !== 'SNS'): ?>
+                                <a href="<?= APP_URL ?>/api/admin/faturacao/toggle_paga.php?num=<?= urlencode($f['numero']) ?>"
                                    class="btn btn-xs <?= $f['paga'] ? 'btn-outline-warning' : 'btn-outline-success' ?> me-1"
                                    title="<?= $f['paga'] ? 'Marcar pendente' : 'Marcar paga' ?>">
                                     <i class="fa-solid fa-<?= $f['paga'] ? 'rotate-left' : 'check' ?>"></i>
                                 </a>
-                                <a href="apagar_fatura.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-danger" title="Apagar"><i class="fa-regular fa-trash-can"></i></a>
+                                <?php endif; ?>
+                                <a href="apagar_fatura.php?num=<?= urlencode($f['numero']) ?>" class="btn btn-xs btn-outline-danger" title="Apagar"><i class="fa-regular fa-trash-can"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; endif; ?>

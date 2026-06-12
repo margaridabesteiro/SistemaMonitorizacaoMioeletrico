@@ -3,9 +3,9 @@ require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 $pagina_titulo = 'Editar Fatura'; $pagina_ativa = 'faturacao';
 $db = getDB();
-$id = (int)($_GET['id'] ?? 0);
-if (!$id) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
-$stmt = $db->prepare('SELECT * FROM faturas WHERE id=?'); $stmt->execute([$id]); $f = $stmt->fetch();
+$num = trim($_GET['num'] ?? '');
+if (!$num) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
+$stmt = $db->prepare('SELECT * FROM faturas WHERE numero=?'); $stmt->execute([$num]); $f = $stmt->fetch();
 if (!$f) redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paga = isset($_POST['paga']) ? 1 : 0;
     if ($valor <= 0) $erros[] = 'Valor inválido.';
     if (empty($erros)) {
-        $db->prepare('UPDATE faturas SET valor_eur=?,data_emissao=?,data_vencimento=?,notas=?,paga=? WHERE id=?')->execute([$valor,$data_emissao,$data_venc,$notas,$paga,$id]);
+        $db->prepare('UPDATE faturas SET valor_eur=?,data_emissao=?,data_vencimento=?,notas=?,paga=? WHERE numero=?')->execute([$valor,$data_emissao,$data_venc,$notas,$paga,$f['numero']]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Fatura atualizada.']; redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');
     }
 }

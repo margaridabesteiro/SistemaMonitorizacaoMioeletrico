@@ -25,19 +25,19 @@ $acoes = $db->query("SELECT DISTINCT acao FROM logs_acesso ORDER BY acao")->fetc
             </form>
             <div class="card"><div class="table-responsive">
                 <table class="table table-sm table-hover mb-0">
-                    <thead class="table-light"><tr><th>Data/Hora</th><th>Utilizador</th><th>Ação</th><th>IP</th><th>Detalhes</th></tr></thead>
+                    <thead class="table-light"><tr><th>Data/Hora</th><th>Utilizador</th><th>Ação</th><th>Detalhes</th></tr></thead>
                     <tbody>
-                    <?php if(empty($logs)): ?><tr><td colspan="5" class="text-center text-muted py-4">Sem registos.</td></tr>
+                    <?php if(empty($logs)): ?><tr><td colspan="4" class="text-center text-muted py-4">Sem registos.</td></tr>
                     <?php else: foreach($logs as $l): ?>
                         <tr>
                             <td><?= h(substr($l['criado_em'],0,16)) ?></td>
                             <td><?= h($l['nome'] ?? '<em>Anónimo</em>') ?></td>
-                            <td><span class="badge bg-<?= str_contains($l['acao'],'falh')||str_contains($l['acao'],'neg')?'danger':'secondary' ?>"><?= h($l['acao']) ?></span></td>
-                            <td><?= h($l['ip']) ?></td>
+                            <td><span class="badge bg-<?= str_contains($l['acao'],'falh')||str_contains($l['acao'],'neg')?'danger':(str_contains($l['acao'],'login')?'success':'secondary') ?>"><?= h($l['acao']) ?></span></td>
                             <td><small class="text-muted"><?= h(substr($l['detalhes']??'',0,60)) ?></small></td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>
                 </table>
             </div></div>
-        </main>
+
+<?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
