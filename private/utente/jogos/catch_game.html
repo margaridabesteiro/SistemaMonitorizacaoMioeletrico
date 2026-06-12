@@ -100,12 +100,12 @@
 <body>
 
 <div class="header">
-  <div class="brand">Catch!<span>Prosthesis Rehab v2</span></div>
+  <div class="brand">Catch Game<span>Nível 2</span></div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
 <div class="ip-bar">
-  <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.198.1.130"/>
+  <input type="text" id="ipInput" placeholder="IP do sensor" value="10.198.1.130"/>
   <button onclick="connectFSR()">Ligar</button>
 </div>
 
@@ -124,7 +124,7 @@
 
 <div class="force-wrap">
   <div class="force-lbl">
-    <span>Força FSR</span>
+    <span>Força</span>
     <span id="forcePct">0%</span>
   </div>
   <div class="force-track"><div class="force-fill" id="forceFill"></div></div>
@@ -137,7 +137,7 @@
   <div class="modal">
     <div class="modal-emoji" id="mEmoji">🏆</div>
     <div class="modal-title" id="mTitle">Sessao terminada!</div>
-    <div class="modal-sub" id="mSub">60 s · Catch! v2</div>
+    <div class="modal-sub" id="mSub">1m · Nível 2</div>
     <div class="modal-grid">
       <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">0</div></div>
       <div class="modal-item"><div class="m-lbl">Apanhadas</div><div class="m-val" style="color:var(--good)" id="mCaught">0</div></div>
@@ -148,7 +148,7 @@
     <div id="ipBlock" style="display:none; margin-bottom:14px;">
       <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--text2);
                   text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">
-        IP do ESP32
+        IP do sensor
       </div>
       <div style="display:flex;gap:8px;">
         <input id="ipModal" type="text" placeholder="ex: 192.168.1.130"
@@ -267,7 +267,7 @@ function _openWS(ip) {
   ws.onopen = function() {
     wsReconnectDelay = 2000; // reset ao conectar com sucesso
     document.getElementById('wsDot').classList.add('connected');
-    document.getElementById('wsLabel').textContent = 'ESP32 ligado · ' + ip;
+    document.getElementById('wsLabel').textContent = 'Sensor ligado · ' + ip;
   };
 
   ws.onmessage = function(e) {
@@ -511,7 +511,7 @@ function endGame() {
   var emoji=caught>=20?'🏆':caught>=10?'💪':caught>=5?'👍':'😅';
   document.getElementById('mEmoji').textContent=emoji;
   document.getElementById('mTitle').textContent='Sessao terminada!';
-  document.getElementById('mSub').textContent='60 s · Catch! v2';
+  document.getElementById('mSub').textContent='1m · Nível 2';
   document.getElementById('mScore').textContent=score;
   document.getElementById('mCaught').textContent=caught;
   document.getElementById('mMissed').textContent=missed;
@@ -589,8 +589,8 @@ endGame = function() {
 
 // Ecrã inicial
 document.getElementById('overlay').classList.add('show');
-document.getElementById('mTitle').textContent = 'Catch! v2';
-document.getElementById('mSub').textContent   = 'Controlo proporcional · FSR calibrado';
+document.getElementById('mTitle').textContent = 'Catch Game';
+document.getElementById('mSub').textContent   = '1m · Nível 2';
 document.getElementById('mEmoji').textContent = '🧠';
 document.getElementById('mScore').textContent = '—';
 document.getElementById('mCaught').textContent= '—';

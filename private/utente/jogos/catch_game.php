@@ -105,20 +105,20 @@ $stmt2->execute(); $jogo_id = (int)$stmt2->fetchColumn();
 <div class="topbar">
   <div>
     <a href="../jogos_reabilitacao.php" class="back-btn">← Jogos</a>
-    <div class="brand" style="margin-top:4px;">Catch!<span>Prosthesis Rehab · RehabLink</span></div>
+    <div class="brand" style="margin-top:4px;">Catch Game<span>Nível 2</span></div>
   </div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
 <div class="ip-bar">
-  <input type="text" id="ipInput" placeholder="IP do ESP32 (opcional)" value="10.198.1.130"/>
+  <input type="text" id="ipInput" placeholder="IP do sensor" value="10.198.1.130"/>
   <button onclick="connectFSR()">Ligar</button>
 </div>
 
 <div class="status-bar">
   <div class="ws-status">
     <div class="ws-dot" id="wsDot"></div>
-    <span id="wsLabel">Sem ESP32 — usar rato/teclado</span>
+    <span id="wsLabel">Desligado</span>
   </div>
 </div>
 
@@ -129,19 +129,19 @@ $stmt2->execute(); $jogo_id = (int)$stmt2->fetchColumn();
 </div>
 
 <div class="force-wrap">
-  <div class="force-lbl"><span>Força FSR</span><span id="forcePct">0%</span></div>
+  <div class="force-lbl"><span>Força</span><span id="forcePct">0%</span></div>
   <div class="force-track"><div class="force-fill" id="forceFill"></div></div>
 </div>
 
 <canvas id="canvas"></canvas>
-<div class="hint" id="hint">← Rato/Teclado para jogar sem ESP32 · Setas para mover o cesto →</div>
+<div class="hint" id="hint"></div>
 
 <!-- Overlay (ecrã inicial + fim de jogo) -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-emoji" id="mEmoji">🧠</div>
-    <div class="modal-title" id="mTitle">Catch! v2</div>
-    <div class="modal-sub" id="mSub">Controlo proporcional · FSR calibrado</div>
+    <div class="modal-title" id="mTitle">Catch Game</div>
+    <div class="modal-sub" id="mSub">1m · Nível 2</div>
     <div class="modal-grid">
       <div class="modal-item"><div class="m-lbl">Pontos</div><div class="m-val" style="color:var(--accent)" id="mScore">—</div></div>
       <div class="modal-item"><div class="m-lbl">Apanhadas</div><div class="m-val" style="color:var(--good)" id="mCaught">—</div></div>
@@ -150,7 +150,7 @@ $stmt2->execute(); $jogo_id = (int)$stmt2->fetchColumn();
     </div>
     <!-- IP input — só no ecrã inicial -->
     <div id="ipBlock" style="margin-bottom:14px;">
-      <div style="font-family:'Space Mono',monospace;font-size:.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">IP do ESP32 (opcional)</div>
+      <div style="font-family:'Space Mono',monospace;font-size:.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">IP do sensor</div>
       <div style="display:flex;gap:8px;">
         <input id="ipModal" type="text" placeholder="ex: 192.168.1.130"
           style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Space Mono',monospace;font-size:.8rem;padding:10px 12px;outline:none;"/>
@@ -209,7 +209,7 @@ function connectFSR() {
 }
 function _openWS(ip) {
   ws=new WebSocket('ws://'+ip+':81');
-  ws.onopen=function(){wsReconnectDelay=2000;document.getElementById('wsDot').classList.add('connected');document.getElementById('wsLabel').textContent='ESP32 ligado · '+ip;};
+  ws.onopen=function(){wsReconnectDelay=2000;document.getElementById('wsDot').classList.add('connected');document.getElementById('wsLabel').textContent='Sensor ligado · '+ip;};
   ws.onmessage=function(e){var r=parseInt(e.data);if(!isNaN(r))addSample(r);};
   ws.onclose=function(){document.getElementById('wsDot').classList.remove('connected');if(wsIntentionalClose)return;var d=wsReconnectDelay;wsReconnectDelay=Math.min(wsReconnectDelay*1.5,15000);document.getElementById('wsLabel').textContent='Desligado — a reconectar em '+Math.round(d/1000)+'s…';wsReconnectTimer=setTimeout(function(){_openWS(ip);},d);};
   ws.onerror=function(){document.getElementById('wsLabel').textContent='Erro de ligação';};
@@ -316,7 +316,7 @@ function startGame(){
   document.getElementById('savedMsg').style.display='none';
   document.getElementById('btnSave').style.display='none';
   document.getElementById('btnSave').disabled=false;
-  document.getElementById('hint').textContent='← Rato/Teclado para jogar sem ESP32 · Setas para mover o cesto →';
+  document.getElementById('hint').textContent='';
   document.getElementById('overlay').classList.remove('show');
   startTimer();
   animId=requestAnimationFrame(gameLoop);
@@ -328,7 +328,7 @@ function endGame(){
   var emoji=caught>=20?'🏆':caught>=10?'💪':caught>=5?'👍':'😅';
   document.getElementById('mEmoji').textContent=emoji;
   document.getElementById('mTitle').textContent='Sessão terminada!';
-  document.getElementById('mSub').textContent='60 s · Catch! · '+new Date().toLocaleDateString('pt-PT');
+  document.getElementById('mSub').textContent='1m · Nível 2';
   document.getElementById('mScore').textContent=score;
   document.getElementById('mCaught').textContent=caught;
   document.getElementById('mMissed').textContent=missed;

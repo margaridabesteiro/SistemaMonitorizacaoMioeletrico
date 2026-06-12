@@ -125,12 +125,12 @@
 <body>
 
 <div class="header">
-  <div class="brand">Garra!<span>Prosthesis Rehab · Nível 1</span></div>
+  <div class="brand">Garra!<span>Nível 1</span></div>
   <div class="timer" id="timer">1:00</div>
 </div>
 
 <div class="ws-bar">
-  <input type="text" id="ipInput" placeholder="IP do ESP32" value="10.198.1.130"/>
+  <input type="text" id="ipInput" placeholder="IP do sensor" value="10.198.1.130"/>
   <button onclick="connectFSR()">Ligar</button>
 </div>
 
@@ -146,7 +146,7 @@
 </div>
 
 <div class="force-wrap">
-  <div class="force-lbl"><span>Força de aperto</span><span id="forcePct">0%</span></div>
+  <div class="force-lbl"><span>Força</span><span id="forcePct">0%</span></div>
   <div class="force-track"><div class="force-fill" id="forceFill"></div></div>
 </div>
 
@@ -165,7 +165,7 @@
       <div class="modal-item"><div class="m-lbl">Precisão</div><div class="m-val" style="color:var(--text2)" id="mAcc">—</div></div>
     </div>
     <div class="ip-block" id="ipBlock">
-      <div class="ip-block-lbl">IP do ESP32</div>
+      <div class="ip-block-lbl">IP do sensor</div>
       <div class="ip-row">
         <input type="text" id="ipModal" placeholder="ex: 192.168.1.130"/>
         <button onclick="connectFromModal()">Ligar</button>
@@ -748,7 +748,7 @@ connectFSR();
 document.getElementById('overlay').classList.add('show');
 document.getElementById('ipBlock').style.display = 'block';
 document.getElementById('mTitle').textContent  = 'Garra!';
-document.getElementById('mSub').textContent    = 'Controlo de preensão · FSR calibrado';
+document.getElementById('mSub').textContent    = '60 s · Nível 1';
 document.getElementById('mEmoji').textContent  = '🦾';
 document.getElementById('mScore').textContent  = '—';
 document.getElementById('mCaught').textContent = '—';
