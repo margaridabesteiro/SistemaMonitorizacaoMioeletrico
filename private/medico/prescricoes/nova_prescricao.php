@@ -27,6 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
              num_sessoes_prescritas, objetivos_clinicos, membro_afetado, observacoes, ativa)
             VALUES (?,?,?,?,?,?,?,?,1)')
            ->execute([$utente_id, $pid, $data_p, $data_v, $num_s, $objetivos, $membro, $obs]);
+        registarAuditoria('CRIAR', 'Prescricao', (int)$db->lastInsertId(), 'Programa de tratamento criado para utente_id=' . $utente_id);
+        // Notificar técnico atribuído ao utente
+        try {
+            $tq = $db->prepare("
+                SELECT u.id FROM utentes ut
+                JOIN profissionais p ON p.id = ut.tecnico_id
+                JOIN utilizadores u ON u.id = p.utilizador_id
+                WHERE ut.id=? AND u.ativo=1
+            ");
+            $tq->execute([$utente_id]);
+            $tecnico_uid = $tq->fetchColumn();
+            if ($tecnico_uid) {
+                notificar((int)$tecnico_uid, 'prescricao',
+                    'Nova prescrição de tratamento',
+                    'O Dr. ' . ($_SESSION['nome'] ?? '') . ' criou um novo programa. Verifique e agende as sessões.',
+                    APP_URL . '/private/tecnico/relatorios/gerar_relatorio.php'
+                );
+            }
+        } catch (\Throwable $e) {}
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Programa de tratamento criado.'];
         redirect(APP_URL . '/private/medico/prescricoes/lista_prescricoes.php');
     }

@@ -37,17 +37,20 @@ $nome_tecnico = h($_SESSION['nome'] ?? 'Técnico');
                 <span class="fw-bold">RehabLink · Técnico</span>
             </a>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-nurse"></i> <?= $nome_tecnico ?>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/tecnico/perfil.php">
-                    <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
-            </ul>
+        <div class="d-flex align-items-center gap-2">
+            <?php require_once __DIR__ . '/notificacoes_bell.php'; ?>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user-nurse"></i> <?= $nome_tecnico ?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/tecnico/perfil.php">
+                        <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+                </ul>
+            </div>
         </div>
     </header>
     <div class="wrapper">

@@ -13,6 +13,10 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('dashboard', $pa) ?>">
                 <i class="fa-solid fa-chart-line me-2"></i>Página do Utente
             </a>
+            <a href="<?= APP_URL ?>/private/utente/agenda.php"
+               class="nav-link<?= menuUtente('agenda', $pa) ?>">
+                <i class="fa-regular fa-calendar me-2"></i>Agenda
+            </a>
             <a href="<?= APP_URL ?>/private/utente/sessoes_agendadas.php"
                class="nav-link<?= menuUtente('sessoes', $pa) ?>">
                 <i class="fa-solid fa-calendar-check me-2"></i>Sessões de Treino
@@ -24,6 +28,21 @@ $pa = $pagina_ativa ?? '';
             <a href="<?= APP_URL ?>/private/utente/jogos_reabilitacao.php"
                class="nav-link<?= menuUtente('jogos', $pa) ?>">
                 <i class="fa-solid fa-gamepad me-2"></i>Jogos de Reabilitação
+            </a>
+            <a href="<?= APP_URL ?>/private/utente/meu_progresso.php"
+               class="nav-link<?= menuUtente('progresso', $pa) ?>">
+                <i class="fa-solid fa-chart-line me-2"></i>O Meu Progresso
+            </a>
+            <a href="<?= APP_URL ?>/private/utente/mensagens_equipa.php"
+               class="nav-link<?= menuUtente('mensagens_equipa', $pa) ?>">
+                <i class="fa-regular fa-comments me-2"></i>Equipa de Tratamento
+                <?php
+                try {
+                    $_db_sb_ut = getDB();
+                    $_n_msg_ut = (int)$_db_sb_ut->query("SELECT COUNT(*) FROM mensagens WHERE destinatario_id=" . (int)($_SESSION['utilizador_id']??0) . " AND lida=0")->fetchColumn();
+                    if ($_n_msg_ut > 0) echo '<span class="badge bg-danger ms-auto">' . $_n_msg_ut . '</span>';
+                } catch (\Throwable $e) {}
+                ?>
             </a>
             <a href="<?= APP_URL ?>/private/utente/mensagens.php"
                class="nav-link<?= menuUtente('mensagens', $pa) ?>">

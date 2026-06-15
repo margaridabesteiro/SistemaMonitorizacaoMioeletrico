@@ -47,20 +47,23 @@ $_prof_hdr = $_stmt_hdr->fetch() ?: [];
                 <span class="fw-bold">RehabLink · Médico</span>
             </a>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user-doctor"></i>
-                <span><?= $nome_medico ?></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfilMedico">
-                    <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/medico/consultas/agenda.php">
-                    <i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
-            </ul>
+        <div class="d-flex align-items-center gap-2">
+            <?php require_once __DIR__ . '/notificacoes_bell.php'; ?>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <span><?= $nome_medico ?></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfilMedico">
+                        <i class="fa-regular fa-user me-2"></i>Meu Perfil</a></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/medico/consultas/agenda.php">
+                        <i class="fa-regular fa-calendar me-2"></i>Minha Agenda</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+                </ul>
+            </div>
         </div>
     </header>
 

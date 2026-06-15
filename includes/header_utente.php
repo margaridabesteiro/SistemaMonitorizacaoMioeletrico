@@ -36,17 +36,26 @@ $nome_utente = h($_SESSION['nome'] ?? 'Utente');
                 <span class="fw-bold">RehabLink</span>
             </a>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-user"></i> <?= $nome_utente ?>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/perfil.php">
-                    <i class="fa-regular fa-user me-2"></i>O Meu Perfil</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
-            </ul>
+        <div class="d-flex align-items-center gap-2">
+            <?php require_once __DIR__ . '/notificacoes_bell.php'; ?>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user"></i> <?= $nome_utente ?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/perfil.php">
+                        <i class="fa-regular fa-user me-2"></i>O Meu Perfil</a></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/agenda.php">
+                        <i class="fa-regular fa-calendar me-2"></i>Agenda</a></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/meu_progresso.php">
+                        <i class="fa-solid fa-chart-line me-2"></i>O Meu Progresso</a></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/private/utente/mensagens_equipa.php">
+                        <i class="fa-regular fa-comments me-2"></i>Equipa de Tratamento</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="<?= APP_URL ?>/api/auth/logout.php">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a></li>
+                </ul>
+            </div>
         </div>
     </header>
     <div class="wrapper">

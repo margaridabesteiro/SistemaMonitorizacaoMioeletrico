@@ -53,6 +53,26 @@ $tecnicos_lista = $db->query("
 // Contagens gerais
 $s = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE utente_id=? AND estado='concluida'");
 $s->execute([$id]); $n_sessoes = (int)$s->fetchColumn();
+
+// Sessões do utente para o médico ver (Feature 7)
+$sessoes_medico = [];
+try {
+    $sq = $db->prepare("
+        SELECT s.id, s.data_hora, s.estado, s.modalidade, s.link_videochamada,
+               s.notas, s.categoria,
+               j.nome AS jogo,
+               u.nome AS tecnico,
+               s.progressao, s.esforco_score, s.analise_tecnica
+        FROM sessoes s
+        LEFT JOIN jogos j ON j.id = s.jogo_id
+        LEFT JOIN profissionais p ON p.id = s.tecnico_id
+        LEFT JOIN utilizadores u ON u.id = p.utilizador_id
+        WHERE s.utente_id = ?
+        ORDER BY s.data_hora DESC LIMIT 30
+    ");
+    $sq->execute([$id]);
+    $sessoes_medico = $sq->fetchAll();
+} catch (\Throwable $e) {}
 $s = $db->prepare("SELECT COUNT(*) FROM consultas WHERE utente_id=? AND medico_id=?");
 $s->execute([$id, $pid]); $n_consultas = (int)$s->fetchColumn();
 $s = $db->prepare("SELECT COUNT(*) FROM pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id WHERE c.utente_id=? AND pe.estado='pendente'");
@@ -267,7 +287,118 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                     </div>
                 </div>
             </div>
+
+            <!-- Sessões do paciente (Feature 7 + 10) -->
+            <?php
+            $prog_cor_m   = ['melhoria'=>'#198754','estavel'=>'#6c757d','regressao'=>'#dc3545'];
+            $prog_icon_m  = ['melhoria'=>'fa-arrow-trend-up','estavel'=>'fa-minus','regressao'=>'fa-arrow-trend-down'];
+            $prog_label_m = ['melhoria'=>'Melhoria','estavel'=>'Estável','regressao'=>'Regressão'];
+            $estado_cor_m = ['agendada'=>'warning text-dark','em_curso'=>'info text-dark','concluida'=>'success','cancelada'=>'secondary'];
+            ?>
+            <div class="card p-3 mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fa-solid fa-calendar-check me-2" style="color:#8B0000;"></i>Sessões</h5>
+                    <small class="text-muted">Últimas 30 · clique para detalhes</small>
+                </div>
+                <?php if (empty($sessoes_medico)): ?>
+                <p class="text-muted small">Sem sessões registadas.</p>
+                <?php else: ?>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0" style="font-size:.85rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Data</th><th>Sessão</th><th>Técnico</th><th>Estado</th>
+                                <th>Progressão</th><th>Esforço</th><th>Teleconsulta</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($sessoes_medico as $sv):
+                            $prog_s = $sv['progressao'] ?? null;
+                        ?>
+                        <tr>
+                            <td class="text-nowrap"><?= date('d/m/Y', strtotime($sv['data_hora'])) ?><br>
+                                <small class="text-muted"><?= date('H:i', strtotime($sv['data_hora'])) ?></small>
+                            </td>
+                            <td><?= h($sv['jogo'] ?? ucfirst(str_replace('_',' ',$sv['categoria']??'—'))) ?></td>
+                            <td><?= h($sv['tecnico'] ?? '—') ?></td>
+                            <td><span class="badge bg-<?= $estado_cor_m[$sv['estado']] ?? 'secondary' ?>"><?= h($sv['estado']) ?></span></td>
+                            <td>
+                                <?php if ($prog_s): ?>
+                                <span class="badge" style="background:<?= $prog_cor_m[$prog_s] ?>;">
+                                    <i class="fa-solid <?= $prog_icon_m[$prog_s] ?> me-1"></i><?= $prog_label_m[$prog_s] ?>
+                                </span>
+                                <?php else: ?><span class="text-muted">—</span><?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($sv['esforco_score']): ?>
+                                <span style="color:#ffc107;font-size:.9rem;">
+                                    <?= str_repeat('★',(int)$sv['esforco_score']) ?><?= str_repeat('☆',5-(int)$sv['esforco_score']) ?>
+                                </span>
+                                <?php else: ?><span class="text-muted">—</span><?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($sv['link_videochamada']): ?>
+                                    <a href="<?= h($sv['link_videochamada']) ?>" target="_blank" class="btn btn-xs btn-primary" title="Entrar">
+                                        <i class="fa-solid fa-video"></i>
+                                    </a>
+                                <?php endif; ?>
+                                <?php if (in_array($sv['estado'], ['agendada','em_curso'])): ?>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary ms-1"
+                                            onclick="abrirModalLink(<?= $sv['id'] ?>,'<?= h(addslashes($sv['link_videochamada']??'')) ?>')"
+                                            title="<?= $sv['link_videochamada'] ? 'Alterar link' : 'Adicionar link' ?>">
+                                        <i class="fa-solid fa-<?= $sv['link_videochamada'] ? 'pen' : 'plus' ?>"></i>
+                                    </button>
+                                <?php elseif (!$sv['link_videochamada']): ?>
+                                    <span class="text-muted">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($sv['analise_tecnica']): ?>
+                                <button type="button" class="btn btn-xs btn-outline-primary"
+                                        onclick="verAnalise(<?= $sv['id'] ?>)"
+                                        title="Ver análise técnica">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php if ($sv['analise_tecnica']): ?>
+                        <tr id="analise-<?= $sv['id'] ?>" style="display:none;">
+                            <td colspan="8" class="ps-4" style="background:#f8f9fa;">
+                                <small class="text-muted fw-semibold">Análise técnica:</small>
+                                <p class="mb-0 small mt-1"><?= nl2br(h($sv['analise_tecnica'])) ?></p>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php endif; ?>
+            </div>
         </main>
+
+<!-- Modal: Definir Link Teleconsulta -->
+<div class="modal fade" id="modalLink" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#8B0000;color:#fff;">
+                <h6 class="modal-title mb-0"><i class="fa-solid fa-video me-2"></i>Link de Teleconsulta</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="linkSessaoId">
+                <label class="form-label small fw-semibold">URL da videochamada</label>
+                <input type="url" id="linkInput" class="form-control" placeholder="https://meet.google.com/...">
+                <div id="linkErro" class="text-danger small mt-1" style="display:none;"></div>
+            </div>
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="guardarLink('')">Remover link</button>
+                <button type="button" class="btn btn-sm" style="background:#8B0000;color:#fff;" onclick="guardarLink(document.getElementById('linkInput').value)">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php if (!empty($evolucao)):
     $labels = array_column($evolucao, 'data');
@@ -298,4 +429,44 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
         });
         </script>
 <?php endif; ?>
+<script>
+function verAnalise(id) {
+    var row = document.getElementById('analise-' + id);
+    if (row) row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
+var _linkModal = null;
+function abrirModalLink(sessaoId, linkAtual) {
+    document.getElementById('linkSessaoId').value = sessaoId;
+    document.getElementById('linkInput').value = linkAtual || '';
+    document.getElementById('linkErro').style.display = 'none';
+    if (!_linkModal) _linkModal = new bootstrap.Modal(document.getElementById('modalLink'));
+    _linkModal.show();
+}
+
+function guardarLink(link) {
+    var sessaoId = document.getElementById('linkSessaoId').value;
+    var erroEl   = document.getElementById('linkErro');
+    erroEl.style.display = 'none';
+    fetch('<?= APP_URL ?>/api/medico/sessao/definir_link.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'sessao_id=' + encodeURIComponent(sessaoId) + '&link=' + encodeURIComponent(link)
+    })
+    .then(r => r.json())
+    .then(function(data) {
+        if (data.ok) {
+            if (_linkModal) _linkModal.hide();
+            location.reload();
+        } else {
+            erroEl.textContent = data.erro || 'Erro ao guardar.';
+            erroEl.style.display = '';
+        }
+    })
+    .catch(function() {
+        erroEl.textContent = 'Erro de rede.';
+        erroEl.style.display = '';
+    });
+}
+</script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
