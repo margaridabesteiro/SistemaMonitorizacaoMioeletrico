@@ -103,7 +103,7 @@ $estado_badge = [
                                     <form method="POST" class="d-inline">
                                         <input type="hidden" name="_acao" value="disponivel">
                                         <input type="hidden" name="disp_id" value="<?= $d['id'] ?>">
-                                        <button type="submit" class="btn btn-xs btn-outline-success" title="Marcar como bom/disponível" onclick="return confirm('Marcar <?= h($d[\'codigo\']) ?> como disponível?')"><i class="fa-solid fa-check me-1"></i>Bom</button>
+                                        <button type="submit" class="btn btn-xs btn-outline-success" title="Marcar como bom/disponível" onclick="return confirm('Marcar dispositivo como disponível?')"><i class="fa-solid fa-check me-1"></i>Bom</button>
                                     </form>
                                 <?php endif; ?>
                             </td>

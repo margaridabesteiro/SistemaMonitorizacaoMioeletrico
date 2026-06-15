@@ -6,6 +6,11 @@ $pagina_titulo = 'Novo Dispositivo'; $pagina_ativa = 'dispositivos';
 $db = getDB();
 $erros = [];
 
+// Calcular próximo código EMG
+$ultimo_cod = $db->query("SELECT codigo FROM dispositivos WHERE codigo REGEXP '^EMG-[0-9]+$' ORDER BY CAST(SUBSTRING(codigo,5) AS UNSIGNED) DESC LIMIT 1")->fetchColumn();
+$proximo_num = $ultimo_cod ? ((int)ltrim(substr($ultimo_cod, 4), '0') ?: 0) + 1 : 1;
+$proximo_codigo = 'EMG-' . str_pad($proximo_num, 4, '0', STR_PAD_LEFT);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigo = trim($_POST['codigo'] ?? '');
     $notas  = trim($_POST['notas']  ?? '') ?: null;
@@ -36,7 +41,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 <form method="POST">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Código <span class="text-danger">*</span></label>
-                        <input type="text" name="codigo" class="form-control" placeholder="Ex: ESP32-001" required value="<?= h($_POST['codigo'] ?? '') ?>">
+                        <input type="text" name="codigo" class="form-control" required value="<?= h($_POST['codigo'] ?? $proximo_codigo) ?>">
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Notas</label>
