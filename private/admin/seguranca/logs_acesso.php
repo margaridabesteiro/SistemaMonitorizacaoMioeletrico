@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 $db = getDB();
 $filtro_acao = $_GET['acao'] ?? '';
 $filtro_data = $_GET['data'] ?? '';
-$pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 25; $offset = ($pagina_atual-1)*$por_pagina;
+$pagina_atual = max(1,(int)($_GET['pagina'] ?? 1)); $por_pagina = 15; $offset = ($pagina_atual-1)*$por_pagina;
 $where = 'WHERE 1=1'; $params = [];
 if ($filtro_acao !== '') { $where .= ' AND l.acao = ?'; $params[] = $filtro_acao; }
 if ($filtro_data !== '') { $where .= ' AND DATE(l.criado_em) = ?'; $params[] = $filtro_data; }
@@ -39,5 +39,47 @@ $acoes = $db->query("SELECT DISTINCT acao FROM logs_acesso ORDER BY acao")->fetc
                     </tbody>
                 </table>
             </div></div>
+            <?php
+            $total_paginas = max(1, (int)ceil($total / $por_pagina));
+            if ($total_paginas > 1):
+            ?>
+            <nav class="mt-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="small text-muted">
+                    Página <?= $pagina_atual ?> de <?= $total_paginas ?> &mdash; <?= number_format($total) ?> registos
+                </div>
+                <ul class="pagination pagination-sm mb-0">
+                    <?php if ($pagina_atual > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['pagina' => $pagina_atual - 1])) ?>">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php
+                    $ini = max(1, $pagina_atual - 2);
+                    $fim = min($total_paginas, $pagina_atual + 2);
+                    if ($ini > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['pagina' => 1])) ?>">1</a></li>
+                        <?php if ($ini > 2): ?><li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
+                    <?php endif; ?>
+                    <?php for ($p = $ini; $p <= $fim; $p++): ?>
+                        <li class="page-item <?= $p === $pagina_atual ? 'active' : '' ?>">
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['pagina' => $p])) ?>"><?= $p ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <?php if ($fim < $total_paginas):
+                        if ($fim < $total_paginas - 1): ?><li class="page-item disabled"><span class="page-link">…</span></li><?php endif; ?>
+                        <li class="page-item"><a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['pagina' => $total_paginas])) ?>"><?= $total_paginas ?></a></li>
+                    <?php endif; ?>
+                    <?php if ($pagina_atual < $total_paginas): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['pagina' => $pagina_atual + 1])) ?>">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+            <?php endif; ?>
 
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
