@@ -35,13 +35,14 @@ foreach ($perfil_labels as $key => $label) {
     $logins_data[]   = (int)($logins_perfil_raw[$key] ?? 0);
 }
 
-// Gráfico 3 — Pacientes atendidos por médico (inclui médicos com 0 consultas)
+// Gráfico 3 — Pacientes atendidos por médico (parte de utilizadores para incluir todos)
 $s = $db->prepare("
     SELECT u.nome, COUNT(DISTINCT c.utente_id) as total
-    FROM profissionais p
-    JOIN utilizadores u ON u.id = p.utilizador_id AND u.perfil = 'medico' AND u.ativo = 1
+    FROM utilizadores u
+    LEFT JOIN profissionais p ON p.utilizador_id = u.id
     LEFT JOIN consultas c ON c.medico_id = p.id AND c.data_hora >= DATE_SUB(NOW(), INTERVAL ? DAY)
-    GROUP BY p.id, u.nome
+    WHERE u.perfil = 'medico' AND u.ativo = 1
+    GROUP BY u.id, u.nome
     ORDER BY total DESC, u.nome ASC
 ");
 $s->execute([$periodo]); $pacientes_medico = $s->fetchAll();
@@ -51,11 +52,12 @@ $s = $db->query("
     SELECT u.nome AS medico_nome,
            COUNT(ut.id) AS total_utentes,
            GROUP_CONCAT(um.nome ORDER BY um.nome SEPARATOR '|') AS utentes_nomes
-    FROM profissionais p
-    JOIN utilizadores u ON u.id = p.utilizador_id AND u.perfil = 'medico' AND u.ativo = 1
+    FROM utilizadores u
+    LEFT JOIN profissionais p ON p.utilizador_id = u.id
     LEFT JOIN utentes ut ON ut.medico_id = p.id
     LEFT JOIN utilizadores um ON um.id = ut.utilizador_id AND um.ativo = 1
-    GROUP BY p.id, u.nome
+    WHERE u.perfil = 'medico' AND u.ativo = 1
+    GROUP BY u.id, u.nome
     ORDER BY total_utentes DESC, u.nome ASC
 ");
 $utentes_por_medico = $s->fetchAll();

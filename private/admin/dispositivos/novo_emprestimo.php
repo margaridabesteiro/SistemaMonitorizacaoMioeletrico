@@ -99,7 +99,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 .then(data => {
                     if (data.tecnico_id) {
                         selTecnico.value = data.tecnico_id;
-                        hint.textContent = '(pré-preenchido do utente)';
+                        hint.textContent = '';
                     } else {
                         selTecnico.value = '';
                         hint.textContent = '(sem técnico atribuído ao utente)';
