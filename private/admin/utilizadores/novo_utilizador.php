@@ -236,7 +236,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
-                                <input type="text" name="cedula" class="form-control" placeholder="Ex: OM-12345" value="<?= h($_POST['cedula'] ?? '') ?>">
+                                <input type="text" name="cedula" class="form-control" placeholder="Ex: 12345" value="<?= h($_POST['cedula'] ?? '') ?>">
                             </div>
                         </div>
                     </div>

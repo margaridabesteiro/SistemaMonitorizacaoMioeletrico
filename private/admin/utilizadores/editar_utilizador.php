@@ -132,7 +132,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
                                 <input type="text" name="numero_ordem" class="form-control"
-                                       placeholder="Ex: OM-12345"
+                                       placeholder="Ex: 12345"
                                        value="<?= h($prof['numero_ordem'] ?? '') ?>">
                             </div>
                             <div class="col-md-6 mb-3">

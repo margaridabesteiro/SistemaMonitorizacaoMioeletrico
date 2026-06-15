@@ -7,8 +7,8 @@ $db = getDB();
 $erros = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $codigo   = trim($_POST['codigo']   ?? '');
-    $firmware = trim($_POST['firmware'] ?? '') ?: null;
+    $codigo = trim($_POST['codigo'] ?? '');
+    $notas  = trim($_POST['notas']  ?? '') ?: null;
 
     if ($codigo === '') $erros[] = 'Código obrigatório.';
     if (empty($erros)) {
@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (empty($erros)) {
         $token = bin2hex(random_bytes(32));
-        $db->prepare("INSERT INTO dispositivos (codigo, tipo, firmware_versao, estado, token_api, ativo) VALUES (?,?,?,\'disponivel\',?,1)")
-           ->execute([$codigo, 'ESP32-FSR406', $firmware, $token]);
+        $db->prepare("INSERT INTO dispositivos (codigo, tipo, firmware_versao, estado, token_api, ativo) VALUES (?,?,?,'disponivel',?,1)")
+           ->execute([$codigo, 'ESP32-FSR406', $notas, $token]);
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Dispositivo registado com sucesso.'];
         redirect(APP_URL . '/private/admin/dispositivos/lista_dispositivos.php');
     }
@@ -39,8 +39,8 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <input type="text" name="codigo" class="form-control" placeholder="Ex: ESP32-001" required value="<?= h($_POST['codigo'] ?? '') ?>">
                     </div>
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">Versão Firmware</label>
-                        <input type="text" name="firmware" class="form-control" placeholder="Ex: 2.1.0" value="<?= h($_POST['firmware'] ?? '') ?>">
+                        <label class="form-label fw-semibold">Notas</label>
+                        <input type="text" name="notas" class="form-control" placeholder="Opcional" value="<?= h($_POST['notas'] ?? '') ?>">
                     </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn" style="background:#8B0000;color:#fff;"><i class="fa-solid fa-floppy-disk me-1"></i>Registar</button>
