@@ -24,6 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_acao'] ?? '') === 'assign
     redirect(APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $id);
 }
 
+// Editar informação clínica (diagnóstico)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_acao'] ?? '') === 'edit_clinica') {
+    $diagnostico = trim($_POST['diagnostico'] ?? '') ?: null;
+    $observacoes = trim($_POST['observacoes'] ?? '') ?: null;
+    $db->prepare('UPDATE utentes SET diagnostico=?, observacoes=? WHERE id=? AND medico_id=?')
+       ->execute([$diagnostico, $observacoes, $id, $pid]);
+    registarAuditoria('ATUALIZAR', 'Utente', $id, 'Informação clínica atualizada pelo médico');
+    $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Informação clínica atualizada.'];
+    redirect(APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $id);
+}
+
 $stmt = $db->prepare("
     SELECT ut.*, u.nome, u.email
     FROM utentes ut
@@ -207,8 +218,13 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
 
             <!-- Info clínica -->
             <div class="card p-3 mb-4">
-                <h6 class="fw-bold mb-2">Informação Clínica</h6>
-                <div class="row">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="fw-bold mb-0"><i class="fa-solid fa-stethoscope me-2" style="color:#8B0000;"></i>Informação Clínica</h6>
+                    <button class="btn btn-xs btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#formClinica">
+                        <i class="fa-solid fa-pen me-1"></i>Editar
+                    </button>
+                </div>
+                <div class="row mb-2">
                     <div class="col-md-6">
                         <p class="mb-1"><strong>Diagnóstico:</strong> <span class="text-muted"><?= h($pac['diagnostico'] ?? '—') ?></span></p>
                         <?php if ($pac['categoria_clinica']): ?>
@@ -222,7 +238,32 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                         <?php if ($pac['data_inicio_tratamento']): ?>
                             <p class="mb-1"><strong>Início tratamento:</strong> <?= h($pac['data_inicio_tratamento']) ?></p>
                         <?php endif; ?>
+                        <?php if (!empty($pac['observacoes'])): ?>
+                            <p class="mb-1"><strong>Observações:</strong> <span class="text-muted"><?= nl2br(h($pac['observacoes'])) ?></span></p>
+                        <?php endif; ?>
                     </div>
+                </div>
+                <div class="collapse" id="formClinica">
+                    <hr class="my-2">
+                    <form method="POST" class="row g-2">
+                        <input type="hidden" name="_acao" value="edit_clinica">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Diagnóstico</label>
+                            <input type="text" name="diagnostico" class="form-control form-control-sm"
+                                   placeholder="Ex: AVC com hemiplegia esquerda"
+                                   value="<?= h($pac['diagnostico'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Observações clínicas</label>
+                            <textarea name="observacoes" class="form-control form-control-sm" rows="2"
+                                      placeholder="Notas clínicas adicionais..."><?= h($pac['observacoes'] ?? '') ?></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-sm" style="background:#8B0000;color:#fff;">
+                                <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Informação Clínica
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 

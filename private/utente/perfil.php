@@ -188,7 +188,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                                     <?php else: ?>
                                         <p class="small text-muted mb-0">Consentimento registado no momento da criação da conta.</p>
                                     <?php endif; ?>
-                                    <a href="<?= APP_URL ?>/public/privacidade.php" target="_blank" class="btn btn-sm btn-outline-secondary mt-2">
+                                    <a href="<?= APP_URL ?>/public/privacidade.php" target="_blank" class="btn btn-sm mt-2" style="background:#764ba2;color:#fff;">
                                         <i class="fa-solid fa-book me-1"></i>Política de Privacidade
                                     </a>
                                 </div>
@@ -205,30 +205,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                                 </div>
                             </div>
 
-                            <!-- Eliminação (direito a ser esquecido) -->
-                            <div class="col-md-4">
-                                <div class="card bg-light p-3 h-100">
-                                    <h6 class="fw-bold"><i class="fa-solid fa-trash-can me-1 text-danger"></i>Eliminação (Art.&nbsp;17)</h6>
-                                    <?php if ($pedido_eliminacao && $pedido_eliminacao['estado'] === 'pendente'): ?>
-                                        <div class="alert alert-warning py-1 small mb-2">Pedido de eliminação <strong>pendente</strong> desde <?= h(date('d/m/Y', strtotime($pedido_eliminacao['criado_em']))) ?>. Em processamento.</div>
-                                    <?php elseif ($pedido_eliminacao && $pedido_eliminacao['estado'] === 'processado'): ?>
-                                        <div class="alert alert-success py-1 small mb-2">Pedido processado — dados pessoais anonimizados.</div>
-                                    <?php else: ?>
-                                        <p class="small text-muted mb-2">Pode solicitar a eliminação/anonimização dos seus dados pessoais. Dados clínicos são mantidos por obrigação legal (mín. 5 anos).</p>
-                                        <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="collapse" data-bs-target="#formEliminacao">
-                                            <i class="fa-solid fa-trash-can me-1"></i>Pedir eliminação
-                                        </button>
-                                        <div class="collapse mt-2" id="formEliminacao">
-                                            <form method="POST" action="<?= APP_URL ?>/api/utente/rgpd_pedir_eliminacao.php">
-                                                <textarea name="mensagem" class="form-control form-control-sm mb-2" rows="2" placeholder="Motivo (opcional)"></textarea>
-                                                <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Confirma o pedido de eliminação dos seus dados pessoais?')">
-                                                    Confirmar pedido
-                                                </button>
-                                            </form>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

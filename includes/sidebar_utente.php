@@ -17,9 +17,9 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('agenda', $pa) ?>">
                 <i class="fa-regular fa-calendar me-2"></i>Agenda
             </a>
-            <a href="<?= APP_URL ?>/private/utente/sessoes_agendadas.php"
+            <a href="<?= APP_URL ?>/private/utente/sessoes_consultas.php"
                class="nav-link<?= menuUtente('sessoes', $pa) ?>">
-                <i class="fa-solid fa-calendar-check me-2"></i>Sessões de Treino
+                <i class="fa-solid fa-calendar-check me-2"></i>Sessões / Consultas
             </a>
             <a href="<?= APP_URL ?>/private/utente/historico_sessoes.php"
                class="nav-link<?= menuUtente('historico', $pa) ?>">
@@ -28,10 +28,6 @@ $pa = $pagina_ativa ?? '';
             <a href="<?= APP_URL ?>/private/utente/jogos_reabilitacao.php"
                class="nav-link<?= menuUtente('jogos', $pa) ?>">
                 <i class="fa-solid fa-gamepad me-2"></i>Jogos de Reabilitação
-            </a>
-            <a href="<?= APP_URL ?>/private/utente/meu_progresso.php"
-               class="nav-link<?= menuUtente('progresso', $pa) ?>">
-                <i class="fa-solid fa-chart-line me-2"></i>O Meu Progresso
             </a>
             <a href="<?= APP_URL ?>/private/utente/mensagens_equipa.php"
                class="nav-link<?= menuUtente('mensagens_equipa', $pa) ?>">
@@ -44,17 +40,9 @@ $pa = $pagina_ativa ?? '';
                 } catch (\Throwable $e) {}
                 ?>
             </a>
-            <a href="<?= APP_URL ?>/private/utente/mensagens.php"
-               class="nav-link<?= menuUtente('mensagens', $pa) ?>">
-                <i class="fa-regular fa-envelope me-2"></i>Mensagens
-            </a>
             <a href="<?= APP_URL ?>/private/utente/exames.php"
                class="nav-link<?= menuUtente('exames', $pa) ?>">
                 <i class="fa-solid fa-flask me-2"></i>Os Meus Exames
-            </a>
-            <a href="<?= APP_URL ?>/private/utente/medicacao.php"
-               class="nav-link<?= menuUtente('medicacao', $pa) ?>">
-                <i class="fa-solid fa-pills me-2"></i>Medicação
             </a>
             <a href="<?= APP_URL ?>/private/utente/pagamentos.php"
                class="nav-link<?= menuUtente('pagamentos', $pa) ?>">

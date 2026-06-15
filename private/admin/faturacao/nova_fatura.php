@@ -132,10 +132,10 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Valor (€) *</label>
                             <div class="input-group">
-                                <input type="number" name="valor" id="valor" class="form-control" step="0.01" min="0.01" required>
+                                <input type="number" name="valor" id="valor" class="form-control" step="0.01" min="0.01" required readonly>
                                 <span class="input-group-text">€</span>
                             </div>
-                            <div class="form-text" id="preco_hint"></div>
+                            <div class="form-text" id="preco_hint">Selecione o utente e o tipo de serviço para obter o valor automaticamente.</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Data Emissão *</label>
@@ -198,7 +198,8 @@ function onTipoChange() {
             : 'Preço automático da tabela — pode ser ajustado';
     } else {
         document.getElementById('valor').value = '';
-        document.getElementById('preco_hint').textContent = 'Introduza o valor manualmente';
+        document.getElementById('valor').removeAttribute('readonly');
+        document.getElementById('preco_hint').textContent = 'Preço não encontrado na tabela — introduza manualmente.';
     }
 }
 </script>

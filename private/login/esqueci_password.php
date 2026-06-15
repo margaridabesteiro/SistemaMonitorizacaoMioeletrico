@@ -25,15 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Em produção: mail($email, 'Recuperar Password — RehabLink', APP_URL . '/private/login/reset_password.php?token=' . $token);
         $mensagem = 'Pedido registado. Receberá indicações de recuperação em breve.';
 
-    } elseif ($user && in_array($user['perfil'], ['medico', 'tecnico'], true)) {
-        // Profissional: notificar administração via tabela contactos
-        $db->prepare("INSERT INTO contactos (nome, email, assunto, mensagem) VALUES (?,?,?,?)")
-           ->execute([
-               $user['nome'],
-               $email,
-               'pedido_password',
-               "O utilizador {$user['nome']} (perfil: {$user['perfil']}) solicitou recuperação de acesso. Por favor reponha a palavra-passe em Utilizadores.",
-           ]);
+    } elseif ($user && in_array($user['perfil'], ['medico', 'tecnico', 'admin'], true)) {
+        // Profissional/admin: notificar todos os admins via notificações internas
+        $admins = $db->query("SELECT id FROM utilizadores WHERE perfil='admin' AND ativo=1")->fetchAll();
+        foreach ($admins as $adm) {
+            if ($adm['id'] == ($user['id'] ?? 0)) continue;
+            notificar((int)$adm['id'], 'info',
+                'Pedido de recuperação de password',
+                $user['nome'] . ' (' . ucfirst($user['perfil']) . ') solicitou recuperação de acesso.',
+                APP_URL . '/private/admin/utilizadores/editar_utilizador.php?id=' . $user['id']
+            );
+        }
         $mensagem = 'Pedido enviado à administração. Será contactado brevemente para repor o acesso.';
 
     } else {

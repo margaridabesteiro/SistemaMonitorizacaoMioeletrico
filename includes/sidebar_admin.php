@@ -70,15 +70,4 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuAdmin('backoffice', $pa) ?>">
                 <i class="fa-solid fa-globe me-2"></i>Backoffice
             </a>
-            <a href="<?= APP_URL ?>/private/admin/contactos/lista_contactos.php"
-               class="nav-link<?= menuAdmin('contactos', $pa) ?>">
-                <i class="fa-regular fa-envelope me-2"></i>Contactos
-                <?php
-                try {
-                    $db_sb = getDB();
-                    $n_sb  = (int)$db_sb->query("SELECT COUNT(*) FROM contactos WHERE lida=0")->fetchColumn();
-                    if ($n_sb > 0) echo '<span class="badge bg-danger ms-auto">' . $n_sb . '</span>';
-                } catch (\Throwable $e) {}
-                ?>
-            </a>
         </nav>

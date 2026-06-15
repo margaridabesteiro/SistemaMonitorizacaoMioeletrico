@@ -70,11 +70,11 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Data de Entrega <span class="text-danger">*</span></label>
-                            <input type="date" name="data_entrega" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                            <input type="date" name="data_entrega" class="form-control" value="<?= date('Y-m-d') ?>" readonly required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Devolução Prevista</label>
-                            <input type="date" name="data_prevista_devolucao" class="form-control">
+                            <input type="date" name="data_prevista_devolucao" class="form-control" min="<?= date('Y-m-d') ?>">
                         </div>
                     </div>
                     <div class="mb-4">

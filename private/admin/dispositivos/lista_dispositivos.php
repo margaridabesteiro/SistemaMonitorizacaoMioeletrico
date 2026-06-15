@@ -46,18 +46,16 @@ $estado_badge = [
             </div>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light"><tr><th>Código</th><th>Tipo</th><th>Estado</th><th>Utente Atual</th><th>Último Sync</th><th>Ações</th></tr></thead>
+                    <thead class="table-light"><tr><th>Código</th><th>Estado</th><th>Utente Atual</th><th>Último Sync</th><th>Ações</th></tr></thead>
                     <tbody>
-                    <?php if(empty($dispositivos)): ?><tr><td colspan="6" class="text-center text-muted py-4">Sem dispositivos.</td></tr>
+                    <?php if(empty($dispositivos)): ?><tr><td colspan="5" class="text-center text-muted py-4">Sem dispositivos.</td></tr>
                     <?php else: foreach($dispositivos as $d): ?>
                         <tr>
                             <td><strong><?= h($d['codigo']) ?></strong><br><small class="text-muted">FW: <?= h($d['firmware_versao'] ?? '—') ?></small></td>
-                            <td><?= h($d['tipo']) ?></td>
                             <td><span class="badge bg-<?= $estado_badge[$d['estado']] ?? 'secondary' ?>"><?= h(ucfirst($d['estado'])) ?></span></td>
                             <td><?= $d['paciente'] ? h($d['paciente']) : '<span class="text-muted">—</span>' ?></td>
                             <td><?= $d['ultimo_sync'] ? h(substr($d['ultimo_sync'],0,16)) : '<span class="text-muted">Nunca</span>' ?></td>
                             <td class="d-flex gap-1">
-                                <a href="detalhes_dispositivo.php?id=<?= $d['id'] ?>" class="btn btn-xs btn-outline-primary" title="Ver"><i class="fa-regular fa-eye"></i></a>
                                 <?php if ($d['estado'] === 'disponivel'): ?>
                                     <a href="novo_emprestimo.php?disp=<?= $d['id'] ?>" class="btn btn-xs btn-outline-success" title="Emprestar"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                                 <?php elseif ($d['estado'] === 'emprestado'): ?>

@@ -78,58 +78,82 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 </div>
             </div>
 
-            <div class="card p-0 overflow-hidden" style="height:600px;">
-                <div class="row g-0 h-100">
-                    <div class="col-md-4 border-end h-100 overflow-auto">
+            <div class="card p-0 overflow-hidden" style="height:620px;">
+                <div style="display:grid;grid-template-columns:300px 1fr;height:100%;overflow:hidden;">
+                    <!-- Lista de conversas -->
+                    <div style="border-right:1px solid #dee2e6;overflow-y:auto;display:flex;flex-direction:column;">
+                        <div style="padding:12px 16px;background:#f8f9fa;border-bottom:1px solid #dee2e6;font-size:.8rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">
+                            Conversas Internas
+                        </div>
                         <?php foreach ($conversas as $c): ?>
-                        <a href="?com=<?= $c['outro_id'] ?>" class="d-flex align-items-center gap-3 p-3 text-decoration-none <?= $c['outro_id']==$sel?'bg-light':'' ?> border-bottom">
+                        <a href="?com=<?= $c['outro_id'] ?>"
+                           style="display:flex;align-items:center;gap:12px;padding:14px 16px;text-decoration:none;border-bottom:1px solid #f0f0f0;background:<?= $c['outro_id']==$sel?'#f3e5e5':'' ?>;transition:background .15s;"
+                           onmouseover="if(<?= $c['outro_id']!=$sel?'true':'false' ?>)this.style.background='#faf5f5'"
+                           onmouseout="if(<?= $c['outro_id']!=$sel?'true':'false' ?>)this.style.background=''">
                             <div style="width:40px;height:40px;border-radius:50%;background:#f3e5e5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <i class="fa-regular fa-user" style="color:#8B0000;"></i>
+                                <i class="fa-regular fa-user" style="color:#8B0000;font-size:.9rem;"></i>
                             </div>
-                            <div class="flex-grow-1 min-w-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <strong class="text-truncate"><?= h($c['outro_nome']) ?></strong>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <span style="font-weight:600;font-size:.88rem;color:#212529;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><?= h($c['outro_nome']) ?></span>
                                     <?php if ($c['nao_lidas'] > 0): ?>
-                                        <span class="badge bg-danger ms-1"><?= $c['nao_lidas'] ?></span>
+                                        <span class="badge bg-danger ms-1" style="font-size:.68rem;"><?= $c['nao_lidas'] ?></span>
                                     <?php endif; ?>
                                 </div>
-                                <div class="text-muted small">
-                                    <span class="badge bg-secondary" style="font-size:.65rem;"><?= h(ucfirst($c['outro_perfil'])) ?></span>
+                                <div style="font-size:.75rem;color:#adb5bd;">
+                                    <span class="badge bg-secondary" style="font-size:.62rem;"><?= h(ucfirst($c['outro_perfil'])) ?></span>
                                     <?= h(date('d/m/Y', strtotime($c['ultima']))) ?>
                                 </div>
                             </div>
                         </a>
                         <?php endforeach; ?>
                         <?php if (empty($conversas)): ?>
-                            <p class="p-3 text-muted small">Sem conversas internas ainda.</p>
+                            <p style="padding:16px;font-size:.82rem;color:#adb5bd;">Sem conversas internas ainda.</p>
                         <?php endif; ?>
                     </div>
 
-                    <div class="col-md-8 d-flex flex-column h-100">
+                    <!-- Área de mensagens -->
+                    <div style="display:flex;flex-direction:column;overflow:hidden;">
                         <?php if ($sel): ?>
-                        <div class="p-3 border-bottom fw-semibold bg-light">
-                            <i class="fa-regular fa-user me-2" style="color:#8B0000;"></i><?= h($sel_nome) ?>
+                        <div style="padding:14px 18px;border-bottom:1px solid #dee2e6;background:#f8f9fa;font-weight:600;display:flex;align-items:center;gap:8px;">
+                            <div style="width:36px;height:36px;border-radius:50%;background:#f3e5e5;display:flex;align-items:center;justify-content:center;">
+                                <i class="fa-regular fa-user" style="color:#8B0000;font-size:.85rem;"></i>
+                            </div>
+                            <span><?= h($sel_nome) ?></span>
                         </div>
-                        <div class="flex-grow-1 p-3 overflow-auto" id="msg-area">
-                            <?php foreach ($msgs as $msg): ?>
-                            <div class="mb-3 <?= $msg['remetente_id']==$uid?'text-end':'' ?>">
-                                <div class="d-inline-block px-3 py-2 rounded-3"
-                                     style="background:<?= $msg['remetente_id']==$uid?'#8B0000;color:#fff':'#f1f3f4' ?>;max-width:70%;word-break:break-word;">
-                                    <?= h($msg['corpo']) ?>
+                        <div style="flex:1;overflow-y:auto;padding:20px;" id="msg-area">
+                            <?php if (empty($msgs)): ?>
+                            <p style="text-align:center;color:#adb5bd;font-size:.85rem;margin-top:40px;">Ainda sem mensagens.</p>
+                            <?php endif; ?>
+                            <?php foreach ($msgs as $msg):
+                                $proprio = $msg['remetente_id'] == $uid;
+                            ?>
+                            <div style="margin-bottom:14px;display:flex;flex-direction:column;align-items:<?= $proprio?'flex-end':'flex-start' ?>;">
+                                <div style="max-width:70%;padding:10px 14px;border-radius:<?= $proprio?'18px 18px 4px 18px':'18px 18px 18px 4px' ?>;
+                                     background:<?= $proprio?'#8B0000':'#fff' ?>;
+                                     color:<?= $proprio?'#fff':'#212529' ?>;
+                                     <?= $proprio?'':'border:1px solid #dee2e6;' ?>
+                                     word-break:break-word;font-size:.9rem;line-height:1.5;">
+                                    <?= nl2br(h($msg['corpo'])) ?>
                                 </div>
-                                <div class="text-muted" style="font-size:.72rem;"><?= h(date('H:i', strtotime($msg['enviada_em']))) ?></div>
+                                <span style="font-size:.68rem;color:#adb5bd;margin-top:3px;"><?= date('H:i', strtotime($msg['enviada_em'])) ?></span>
                             </div>
                             <?php endforeach; ?>
-                            <?php if (empty($msgs)): ?><p class="text-muted small">Sem mensagens ainda.</p><?php endif; ?>
                         </div>
-                        <form method="POST" class="p-3 border-top d-flex gap-2">
+                        <form method="POST" style="padding:14px 16px;border-top:1px solid #dee2e6;display:flex;gap:8px;background:#fff;">
                             <input type="hidden" name="destinatario_id" value="<?= $sel ?>">
-                            <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus required>
-                            <button type="submit" class="btn" style="background:#8B0000;color:#fff;"><i class="fa-solid fa-paper-plane"></i></button>
+                            <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus required
+                                   style="border-radius:24px;padding:8px 16px;">
+                            <button type="submit" class="btn" style="background:#8B0000;color:#fff;border-radius:50%;width:42px;height:42px;flex-shrink:0;padding:0;">
+                                <i class="fa-solid fa-paper-plane" style="font-size:.85rem;"></i>
+                            </button>
                         </form>
                         <?php else: ?>
-                        <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                            <div class="text-center"><i class="fa-regular fa-comment-dots fa-3x mb-3 d-block"></i>Selecione uma conversa ou inicie uma nova.</div>
+                        <div style="flex:1;display:flex;align-items:center;justify-content:center;color:#adb5bd;">
+                            <div style="text-align:center;">
+                                <i class="fa-regular fa-comment-dots" style="font-size:3rem;display:block;margin-bottom:12px;opacity:.4;"></i>
+                                Selecione uma conversa ou inicie uma nova.
+                            </div>
                         </div>
                         <?php endif; ?>
                     </div>

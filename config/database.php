@@ -28,6 +28,7 @@ function getDB(): PDO {
         ];
         try {
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $opcoes);
+            $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
         } catch (PDOException $e) {
             error_log('Erro de ligação BD: ' . $e->getMessage());
             http_response_code(500);

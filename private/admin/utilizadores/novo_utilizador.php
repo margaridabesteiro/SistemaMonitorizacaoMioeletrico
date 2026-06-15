@@ -6,11 +6,9 @@ $pagina_titulo = 'Novo Utilizador';
 $pagina_ativa  = 'utilizadores';
 requirePerfil('admin');
 
-$erros  = [];
-$dados  = ['nome'=>'','email'=>'','perfil'=>'','ativo'=>1];
-$prof   = ['numero_ordem'=>'','especialidade'=>'','instituicao'=>'','contacto'=>''];
+$erros = [];
+$dados = ['nome'=>'','email'=>'','perfil'=>'','ativo'=>1];
 
-// Gerar password automática (só em GET; em POST usa o valor submetido)
 $chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
 $len   = strlen($chars);
 $senha_gerada = '';
@@ -19,24 +17,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $dados['nome']    = trim($_POST['nome']     ?? '');
-    $dados['email']   = trim($_POST['email']    ?? '');
-    $dados['perfil']  = $_POST['perfil']        ?? '';
-    $dados['ativo']   = isset($_POST['ativo'])  ? 1 : 0;
-    $password         = $_POST['password']      ?? '';
+    $dados['nome']    = trim($_POST['nome']    ?? '');
+    $dados['email']   = trim($_POST['email']   ?? '');
+    $dados['perfil']  = $_POST['perfil']       ?? '';
+    $dados['ativo']   = isset($_POST['ativo']) ? 1 : 0;
+    $password         = $_POST['password']     ?? '';
 
-    $prof['numero_ordem']  = trim($_POST['numero_ordem']  ?? '') ?: null;
-    $prof['especialidade'] = trim($_POST['especialidade'] ?? '') ?: null;
-    $prof['instituicao']   = trim($_POST['instituicao']   ?? '') ?: null;
-    $prof['contacto']      = trim($_POST['contacto']      ?? '') ?: null;
+    $data_nascimento  = trim($_POST['data_nascimento'] ?? '') ?: null;
+    $sexo             = trim($_POST['sexo']            ?? '') ?: null;
+    $telemovel        = trim($_POST['telemovel']       ?? '') ?: null;
+    $especialidade    = trim($_POST['especialidade']   ?? '') ?: null;
+    $instituicao      = trim($_POST['instituicao']     ?? '') ?: null;
+    $nif              = trim($_POST['nif']             ?? '') ?: null;
+    $morada           = trim($_POST['morada']          ?? '') ?: null;
+    $codigo_postal    = trim($_POST['codigo_postal']   ?? '') ?: null;
+    $localidade       = trim($_POST['localidade']      ?? '') ?: null;
 
-    if ($dados['nome'] === '')   $erros[] = 'O nome é obrigatório.';
+    if ($dados['nome'] === '')  $erros[] = 'O nome é obrigatório.';
     if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
     if (!in_array($dados['perfil'], ['admin','medico','tecnico','utente'], true)) $erros[] = 'Perfil inválido.';
-    if (strlen($password) < 8)   $erros[] = 'Password inválida (mínimo 8 caracteres).';
+    if (strlen($password) < 8) $erros[] = 'Password inválida (mínimo 8 caracteres).';
     if ($dados['perfil'] === 'utente' && empty($_POST['rgpd_consentimento'])) $erros[] = 'É obrigatório confirmar o consentimento RGPD do utente.';
+    if ($data_nascimento && $data_nascimento > date('Y-m-d')) $erros[] = 'Data de nascimento não pode ser futura.';
 
-    // Guardar password submetida para repopular o form em caso de erro
     $senha_gerada = $password;
 
     if (empty($erros)) {
@@ -52,9 +55,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$dados['nome'], $dados['email'], $hash, $deve_alterar, $dados['perfil'], $dados['ativo']]);
             $novo_id = (int)$db->lastInsertId();
 
-            if (in_array($dados['perfil'], ['medico','tecnico'], true)) {
-                $db->prepare('INSERT INTO profissionais (utilizador_id, numero_ordem, especialidade, instituicao, contacto) VALUES (?,?,?,?,?)')
-                   ->execute([$novo_id, $prof['numero_ordem'], $prof['especialidade'], $prof['instituicao'], $prof['contacto']]);
+            if ($dados['perfil'] === 'medico') {
+                $db->prepare('INSERT INTO profissionais (utilizador_id, especialidade, instituicao, contacto) VALUES (?,?,?,?)')
+                   ->execute([$novo_id, $especialidade, $instituicao, $telemovel]);
+                try {
+                    $db->prepare('UPDATE profissionais SET data_nascimento=?, sexo=? WHERE utilizador_id=?')
+                       ->execute([$data_nascimento, $sexo, $novo_id]);
+                } catch (\Throwable $e) {}
+
+            } elseif ($dados['perfil'] === 'tecnico') {
+                $db->prepare('INSERT INTO profissionais (utilizador_id, contacto) VALUES (?,?)')
+                   ->execute([$novo_id, $telemovel]);
+                try {
+                    $db->prepare('UPDATE profissionais SET data_nascimento=?, sexo=? WHERE utilizador_id=?')
+                       ->execute([$data_nascimento, $sexo, $novo_id]);
+                } catch (\Throwable $e) {}
+
             } elseif ($dados['perfil'] === 'utente') {
                 $seg_id    = (int)($_POST['seguradora_id'] ?? 0) ?: null;
                 $cobertura = 'Particular';
@@ -64,21 +80,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($tipo_seg === 'SNS')    $cobertura = 'SNS';
                     elseif ($tipo_seg === 'Seguro') $cobertura = 'Seguro';
                 }
-                $db->prepare('INSERT INTO utentes (utilizador_id, cobertura_saude, seguradora_id) VALUES (?,?,?)')->execute([$novo_id, $cobertura, $seg_id]);
+                try {
+                    $db->prepare('INSERT INTO utentes (utilizador_id, cobertura_saude, seguradora_id, nif, morada, codigo_postal, localidade, data_nascimento, sexo) VALUES (?,?,?,?,?,?,?,?,?)')
+                       ->execute([$novo_id, $cobertura, $seg_id, $nif, $morada, $codigo_postal, $localidade, $data_nascimento, $sexo]);
+                } catch (\Throwable $e) {
+                    $db->prepare('INSERT INTO utentes (utilizador_id, cobertura_saude, seguradora_id) VALUES (?,?,?)')
+                       ->execute([$novo_id, $cobertura, $seg_id]);
+                }
                 $utente_row_id = (int)$db->lastInsertId();
-                $medico = $db->query("
-                    SELECT p.id FROM profissionais p
-                    JOIN utilizadores u ON u.id = p.utilizador_id
-                    WHERE u.perfil='medico' AND u.ativo=1
-                    ORDER BY (SELECT COUNT(*) FROM utentes WHERE medico_id=p.id) ASC, RAND() LIMIT 1
-                ")->fetch();
+                if ($utente_row_id) {
+                    try {
+                        $db->prepare('UPDATE utentes SET telemovel=? WHERE id=?')->execute([$telemovel, $utente_row_id]);
+                    } catch (\Throwable $e) {}
+                }
+                $medico = $db->query("SELECT p.id FROM profissionais p JOIN utilizadores u ON u.id=p.utilizador_id WHERE u.perfil='medico' AND u.ativo=1 ORDER BY (SELECT COUNT(*) FROM utentes WHERE medico_id=p.id) ASC, RAND() LIMIT 1")->fetch();
                 if ($medico) {
-                    $db->prepare('UPDATE utentes SET medico_id=? WHERE id=?')->execute([$medico['id'], $utente_row_id]);
+                    $db->prepare('UPDATE utentes SET medico_id=? WHERE utilizador_id=?')->execute([$medico['id'], $novo_id]);
                 }
                 try {
                     $db->prepare('INSERT INTO rgpd_consentimentos (utilizador_id, tipo, registado_por, ip, detalhes) VALUES (?,?,?,?,?)')
-                       ->execute([$novo_id,'registo',$_SESSION['utilizador_id'],$_SERVER['REMOTE_ADDR']??null,
-                           'Consentimento RGPD Art.9(2)(h) registado pelo administrador na criação de conta']);
+                       ->execute([$novo_id,'registo',$_SESSION['utilizador_id'],$_SERVER['REMOTE_ADDR']??null,'Consentimento RGPD Art.9(2)(h) registado pelo administrador na criação de conta']);
+                } catch (\Throwable $e) {}
+
+            } elseif ($dados['perfil'] === 'admin') {
+                try {
+                    $db->prepare('UPDATE utilizadores SET data_nascimento=?, sexo=?, telemovel=? WHERE id=?')
+                       ->execute([$data_nascimento, $sexo, $telemovel, $novo_id]);
                 } catch (\Throwable $e) {}
             }
 
@@ -115,27 +142,67 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 </div>
             <?php endif; ?>
 
-            <div class="card p-4" style="max-width:600px;">
-                <form method="POST" action="">
+            <div class="card p-4" style="max-width:640px;">
+                <form method="POST" id="form-novo-user">
+
+                    <!-- Nome -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nome completo *</label>
                         <input type="text" name="nome" class="form-control" value="<?= h($dados['nome']) ?>" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Email *</label>
-                        <input type="email" name="email" class="form-control" value="<?= h($dados['email']) ?>" required>
-                    </div>
+
+                    <!-- Perfil -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Perfil *</label>
                         <select name="perfil" class="form-select" required id="select-perfil">
                             <option value="">-- Selecionar --</option>
-                            <?php foreach (['admin','medico','tecnico','utente'] as $p): ?>
-                                <option value="<?= $p ?>" <?= $dados['perfil'] === $p ? 'selected' : '' ?>><?= ucfirst($p) ?></option>
+                            <?php foreach (['admin'=>'Administrador','medico'=>'Médico','tecnico'=>'Técnico','utente'=>'Utente'] as $p=>$l): ?>
+                                <option value="<?= $p ?>" <?= $dados['perfil'] === $p ? 'selected' : '' ?>><?= $l ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <!-- Password gerada automaticamente -->
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email *</label>
+                        <div class="input-group">
+                            <input type="text" name="email" id="email-input" class="form-control"
+                                   value="<?= h($dados['email']) ?>" required>
+                            <span class="input-group-text text-muted" id="email-suffix" style="display:none;">@rehablink.pt</span>
+                        </div>
+                        <div class="form-text" id="email-nota" style="display:none;">
+                            <i class="fa-solid fa-circle-info me-1 text-primary"></i>
+                            O domínio @rehablink.pt é preenchido automaticamente para este perfil.
+                        </div>
+                    </div>
+
+                    <!-- Data de Nascimento + Sexo -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Data de Nascimento</label>
+                            <input type="date" name="data_nascimento" class="form-control"
+                                   max="<?= date('Y-m-d') ?>"
+                                   value="<?= h($_POST['data_nascimento'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Sexo</label>
+                            <select name="sexo" class="form-select">
+                                <option value="">-- Não especificado --</option>
+                                <?php foreach (['M'=>'Masculino','F'=>'Feminino','O'=>'Outro'] as $v=>$l): ?>
+                                    <option value="<?= $v ?>" <?= ($_POST['sexo']??'')===$v?'selected':'' ?>><?= $l ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Telemóvel -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Telemóvel</label>
+                        <input type="tel" name="telemovel" class="form-control" placeholder="Ex: 912 000 001"
+                               value="<?= h($_POST['telemovel'] ?? '') ?>">
+                    </div>
+
+                    <!-- Password -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Password temporária *</label>
                         <div class="input-group">
@@ -149,71 +216,87 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             </button>
                         </div>
                         <input type="hidden" name="password" id="senha_hidden" value="<?= h($senha_gerada) ?>">
-                        <div class="form-text" id="nota-pass">
+                        <div class="form-text">
                             <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
-                            Copie esta password antes de guardar — não poderá ser recuperada depois.
+                            Copie esta password antes de guardar.
                             <span id="nota-alterar" style="display:none;">O utilizador será obrigado a alterá-la no primeiro acesso.</span>
                         </div>
                         <div id="copiado" class="text-success small mt-1" style="display:none;"><i class="fa-solid fa-check me-1"></i>Copiado!</div>
                     </div>
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="ativo" id="ativo" <?= $dados['ativo'] ? 'checked' : '' ?>>
+                        <input class="form-check-input" type="checkbox" name="ativo" id="ativo" <?= ($dados['ativo'] ?? 1) ? 'checked' : '' ?>>
                         <label class="form-check-label" for="ativo">Conta ativa</label>
                     </div>
 
-                    <!-- Dados profissionais — visíveis só para médico/técnico -->
-                    <div id="bloco-profissional" class="card p-3 mb-3 border-primary" style="display:none;">
-                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-id-card me-2" style="color:#8B0000;"></i>Dados Profissionais</h6>
+                    <!-- Bloco Médico -->
+                    <div id="bloco-medico" class="card p-3 mb-3 border-primary" style="display:none;">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-user-doctor me-2" style="color:#8B0000;"></i>Dados Clínicos</h6>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Nº Cédula / Ordem</label>
-                                <input type="text" name="numero_ordem" class="form-control" placeholder="Ex: OM-12345" value="<?= h($prof['numero_ordem'] ?? '') ?>">
-                            </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Especialidade</label>
-                                <input type="text" name="especialidade" class="form-control" placeholder="Ex: Medicina Física e Reabilitação" value="<?= h($prof['especialidade'] ?? '') ?>">
+                                <input type="text" name="especialidade" class="form-control" placeholder="Ex: Medicina Física e Reabilitação" value="<?= h($_POST['especialidade'] ?? '') ?>">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Instituição</label>
-                                <input type="text" name="instituicao" class="form-control" placeholder="Ex: RehabLink" value="<?= h($prof['instituicao'] ?? '') ?>">
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label fw-semibold">Contacto</label>
-                                <input type="text" name="contacto" class="form-control" placeholder="Ex: 912 000 001" value="<?= h($prof['contacto'] ?? '') ?>">
+                                <input type="text" name="instituicao" class="form-control" placeholder="Ex: RehabLink" value="<?= h($_POST['instituicao'] ?? '') ?>">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seguradora — só para utentes -->
-                    <div id="bloco-seguradora" class="mb-3" style="display:none;">
-                        <label class="form-label fw-semibold">Seguradora</label>
-                        <select name="seguradora_id" class="form-select">
-                            <option value="">— Sem seguradora (Particular) —</option>
-                            <?php foreach ($seguradoras_list as $seg): ?>
-                                <option value="<?= $seg['id'] ?>"><?= h($seg['nome']) ?> (<?= $seg['tipo'] ?>)</option>
-                            <?php endforeach; ?>
-                        </select>
-                        <div class="form-text">Determina os preços automáticos nas faturas e a cobertura de saúde.</div>
-                    </div>
+                    <!-- Bloco Utente -->
+                    <div id="bloco-utente" style="display:none;">
+                        <div class="card p-3 mb-3 border-success">
+                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-address-card me-2" style="color:#198754;"></i>Dados do Utente</h6>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">NIF</label>
+                                <input type="text" name="nif" class="form-control" placeholder="Ex: 123456789" maxlength="9"
+                                       value="<?= h($_POST['nif'] ?? '') ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Morada</label>
+                                <input type="text" name="morada" class="form-control" placeholder="Ex: Rua das Flores, 25, 2º Esq"
+                                       value="<?= h($_POST['morada'] ?? '') ?>">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <label class="form-label fw-semibold">Código Postal</label>
+                                    <input type="text" name="codigo_postal" class="form-control" placeholder="Ex: 4000-001"
+                                           value="<?= h($_POST['codigo_postal'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-7 mb-3">
+                                    <label class="form-label fw-semibold">Localidade</label>
+                                    <input type="text" name="localidade" class="form-control" placeholder="Ex: Porto"
+                                           value="<?= h($_POST['localidade'] ?? '') ?>">
+                                </div>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label fw-semibold">Seguradora</label>
+                                <select name="seguradora_id" class="form-select">
+                                    <option value="">— Sem seguradora (Particular) —</option>
+                                    <?php foreach ($seguradoras_list as $seg): ?>
+                                        <option value="<?= $seg['id'] ?>" <?= ($_POST['seguradora_id']??'')==$seg['id']?'selected':'' ?>><?= h($seg['nome']) ?> (<?= $seg['tipo'] ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="form-text">Determina os preços automáticos nas faturas e a cobertura de saúde.</div>
+                            </div>
+                        </div>
 
-                    <div id="bloco-rgpd" class="alert alert-warning py-2 mb-3" style="display:none;">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="rgpd_consentimento" id="rgpd_consentimento">
-                            <label class="form-check-label small" for="rgpd_consentimento">
-                                <i class="fa-solid fa-shield-halved me-1"></i>
-                                <strong>Consentimento RGPD</strong> — Confirmo que o utente prestou consentimento informado
-                                para o tratamento dos seus dados de saúde ao abrigo do
-                                <strong>RGPD Art.&nbsp;9.º, n.º&nbsp;2, al.&nbsp;h)</strong>
-                                (cuidados de saúde e telerreabilitação).
-                            </label>
+                        <div class="alert alert-warning py-2 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="rgpd_consentimento" id="rgpd_consentimento">
+                                <label class="form-check-label small" for="rgpd_consentimento">
+                                    <i class="fa-solid fa-shield-halved me-1"></i>
+                                    <strong>Consentimento RGPD</strong> — Confirmo que o utente prestou consentimento informado
+                                    para o tratamento dos seus dados de saúde ao abrigo do
+                                    <strong>RGPD Art.&nbsp;9.º, n.º&nbsp;2, al.&nbsp;h)</strong>.
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <button type="submit" class="btn" style="background:#8B0000;color:#fff;">
-                        <i class="fa-solid fa-floppy-disk me-1"></i>Guardar
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Utilizador
                     </button>
                 </form>
             </div>
@@ -239,13 +322,46 @@ function copiarSenha() {
     });
 }
 
+const REHABLINK_SUFFIX = '@rehablink.pt';
+const PERFIS_REHABLINK = ['admin','medico','tecnico'];
+
 function atualizarBlocos() {
-    var perfil = document.getElementById('select-perfil').value;
-    document.getElementById('bloco-profissional').style.display = (perfil === 'medico' || perfil === 'tecnico') ? 'block' : 'none';
-    document.getElementById('bloco-seguradora').style.display   = perfil === 'utente' ? 'block' : 'none';
-    document.getElementById('bloco-rgpd').style.display         = perfil === 'utente' ? 'block' : 'none';
-    document.getElementById('nota-alterar').style.display       = (perfil && perfil !== 'admin') ? 'inline' : 'none';
+    const perfil   = document.getElementById('select-perfil').value;
+    const emailInp = document.getElementById('email-input');
+    const suffix   = document.getElementById('email-suffix');
+    const emailNota = document.getElementById('email-nota');
+    const isRL     = PERFIS_REHABLINK.includes(perfil);
+
+    // Email suffix logic
+    if (isRL) {
+        suffix.style.display  = '';
+        emailNota.style.display = '';
+        // Remove @rehablink.pt if it's already there (show just prefix)
+        if (emailInp.value.endsWith(REHABLINK_SUFFIX)) {
+            emailInp.value = emailInp.value.slice(0, -REHABLINK_SUFFIX.length);
+        }
+        // Remove type=email to allow just prefix
+        emailInp.type = 'text';
+    } else {
+        suffix.style.display  = 'none';
+        emailNota.style.display = 'none';
+        emailInp.type = 'email';
+    }
+
+    // Show/hide professional blocks
+    document.getElementById('bloco-medico').style.display  = perfil === 'medico'  ? 'block' : 'none';
+    document.getElementById('bloco-utente').style.display  = perfil === 'utente'  ? 'block' : 'none';
+    document.getElementById('nota-alterar').style.display  = (perfil && perfil !== 'admin') ? 'inline' : 'none';
 }
+
+// On submit: assemble full email for rehablink profiles
+document.getElementById('form-novo-user').addEventListener('submit', function() {
+    const perfil   = document.getElementById('select-perfil').value;
+    const emailInp = document.getElementById('email-input');
+    if (PERFIS_REHABLINK.includes(perfil) && emailInp.value && !emailInp.value.includes('@')) {
+        emailInp.value = emailInp.value + REHABLINK_SUFFIX;
+    }
+});
 
 document.getElementById('select-perfil').addEventListener('change', atualizarBlocos);
 atualizarBlocos();

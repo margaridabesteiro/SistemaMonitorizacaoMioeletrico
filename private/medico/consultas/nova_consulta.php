@@ -31,6 +31,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
         $db->prepare("INSERT INTO consultas (utente_id, medico_id, data_hora, tipo, motivo, modalidade, link_videochamada, estado)
                       VALUES (?,?,?,?,?,?,?,'agendada')")
            ->execute([$utente_id, $pid, $data_hora, $tipo, $motivo ?: null, $modalidade, $link]);
+        // Notificar utente
+        $uq = $db->prepare("SELECT ut.utilizador_id FROM utentes ut WHERE ut.id=?");
+        $uq->execute([$utente_id]); $utente_uid = (int)$uq->fetchColumn();
+        if ($utente_uid) {
+            $data_fmt = date('d/m/Y \à\s H:i', strtotime($data_hora));
+            notificar($utente_uid, 'sessao',
+                'Nova consulta agendada',
+                'Foi agendada uma consulta para ' . $data_fmt . '.',
+                APP_URL . '/private/utente/sessoes_consultas.php'
+            );
+        }
         redirect(APP_URL . '/private/medico/consultas/consulta.php');
     }
 }

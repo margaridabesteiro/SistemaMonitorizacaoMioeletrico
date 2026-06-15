@@ -7,6 +7,25 @@ require_once __DIR__ . '/../../../includes/header_admin.php';
 require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 
 $db = getDB();
+
+// Notificar admins sobre faturas vencidas (uma vez por dia)
+try {
+    $n_venc = (int)$db->query("SELECT COUNT(*) FROM faturas WHERE paga=0 AND data_vencimento IS NOT NULL AND data_vencimento < CURDATE()")->fetchColumn();
+    if ($n_venc > 0) {
+        $ja = (int)$db->query("SELECT COUNT(*) FROM notificacoes WHERE tipo='info' AND titulo LIKE '%vencida%' AND DATE(criado_em)=CURDATE()")->fetchColumn();
+        if (!$ja) {
+            $adm_ids = $db->query("SELECT id FROM utilizadores WHERE perfil='admin' AND ativo=1")->fetchAll();
+            foreach ($adm_ids as $a) {
+                notificar((int)$a['id'], 'info',
+                    $n_venc . ' fatura(s) vencida(s)',
+                    $n_venc . ' fatura(s) ultrapassaram a data de vencimento sem pagamento.',
+                    APP_URL . '/private/admin/faturacao/controlo_faturacao.php?estado=0'
+                );
+            }
+        }
+    }
+} catch (\Throwable $e) {}
+
 $filtro_estado  = $_GET['estado']  ?? '';
 $filtro_periodo = (int)($_GET['periodo'] ?? 30);
 $pagina_atual   = max(1, (int)($_GET['pagina'] ?? 1));

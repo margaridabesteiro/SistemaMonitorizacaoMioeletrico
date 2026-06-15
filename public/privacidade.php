@@ -15,10 +15,10 @@ require_once __DIR__ . '/../config/database.php';
     <link rel="stylesheet" href="<?= APP_URL ?>/public/assets/css/common.css">
     <style>
         body { background: #f8f9fa; }
-        .priv-header { background: #8B0000; color: #fff; padding: 48px 0 32px; }
+        .priv-header { background: #764ba2; color: #fff; padding: 48px 0 32px; }
         .priv-body   { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
-        h2 { color: #8B0000; font-size: 1.15rem; margin-top: 2rem; }
-        .badge-rgpd  { background: #8B0000; color: #fff; font-size: .75rem; padding: 3px 8px; border-radius: 4px; }
+        h2 { color: #764ba2; font-size: 1.15rem; margin-top: 2rem; }
+        .badge-rgpd  { background: #764ba2; color: #fff; font-size: .75rem; padding: 3px 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
