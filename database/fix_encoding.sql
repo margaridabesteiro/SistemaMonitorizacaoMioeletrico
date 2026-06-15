@@ -11,7 +11,6 @@ UPDATE utilizadores SET nome = 'João Rodrigues'  WHERE email = 'joao.rodrigues@
 
 -- Administradores
 UPDATE utilizadores SET nome = 'Luísa Cardoso'  WHERE email = 'luisa.cardoso@rehablink.pt';
-UPDATE utilizadores SET nome = 'Patrícia Sousa' WHERE email = 'patricia.sousa@rehablink.pt';
 
 -- Utentes
 UPDATE utilizadores SET nome = 'Gonçalo Figueiredo' WHERE email = 'goncalo.figueiredo@email.pt';

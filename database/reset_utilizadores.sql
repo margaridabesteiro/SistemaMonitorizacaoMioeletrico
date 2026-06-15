@@ -34,10 +34,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- -------------------------------------------------------------
 INSERT INTO utilizadores (nome, email, password_hash, perfil) VALUES
 ('Luísa Cardoso',    'luisa.cardoso@rehablink.pt',    '$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin'),
-('Miguel Santos',    'miguel.santos@rehablink.pt',    '$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin'),
-('Carolina Ferreira','carolina.ferreira@rehablink.pt','$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin'),
-('Nuno Costa',       'nuno.costa@rehablink.pt',       '$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin'),
-('Patrícia Sousa',   'patricia.sousa@rehablink.pt',   '$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin');
+('Miguel Santos',    'miguel.santos@rehablink.pt',    '$2y$12$9Z5xNWG79zBLWlFDsl3R0uy0n/KJNMwOucqrs9SsPThal35SoTJxq', 'admin');
 
 -- -------------------------------------------------------------
 -- 3. Utentes (utilizadores)
