@@ -18,13 +18,11 @@ if ($dados && in_array($dados['perfil'], ['medico','tecnico'], true)) {
 }
 
 // Dados RGPD (apenas para utentes)
-$rgpd_consentimentos = []; $rgpd_pedidos = [];
+$rgpd_consentimentos = [];
 if ($dados && $dados['perfil'] === 'utente') {
     try {
         $rc = $db->prepare("SELECT tipo, criado_em, detalhes FROM rgpd_consentimentos WHERE utilizador_id=? ORDER BY criado_em DESC LIMIT 10");
         $rc->execute([$id]); $rgpd_consentimentos = $rc->fetchAll();
-        $rp = $db->prepare("SELECT tipo, estado, mensagem, criado_em FROM rgpd_pedidos WHERE utilizador_id=? ORDER BY criado_em DESC LIMIT 5");
-        $rp->execute([$id]); $rgpd_pedidos = $rp->fetchAll();
     } catch (\Throwable $e) {}
 }
 if (!$dados) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
@@ -127,12 +125,12 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <select name="perfil" class="form-select" required><?php foreach(['admin','medico','tecnico','utente'] as $p):?><option value="<?=$p?>" <?=$dados['perfil']===$p?'selected':''?>><?=ucfirst($p)?></option><?php endforeach;?></select>
                     </div>
 
-                    <?php if (in_array($dados['perfil'], ['medico','tecnico'], true)): ?>
+                    <?php if ($dados['perfil'] === 'medico'): ?>
                     <div class="card p-3 mb-3 border-primary">
                         <h6 class="fw-bold mb-3"><i class="fa-solid fa-id-card me-2" style="color:#8B0000;"></i>Dados Profissionais</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Nº Cédula / Ordem</label>
+                                <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
                                 <input type="text" name="numero_ordem" class="form-control"
                                        placeholder="Ex: OM-12345"
                                        value="<?= h($prof['numero_ordem'] ?? '') ?>">
@@ -140,25 +138,33 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Especialidade</label>
                                 <input type="text" name="especialidade" class="form-control"
-                                       placeholder="Ex: Fisioterapia Mioeléctrica"
+                                       placeholder="Ex: Medicina Física e Reabilitação"
                                        value="<?= h($prof['especialidade'] ?? '') ?>">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label fw-semibold">Instituição</label>
-                                <input type="text" name="instituicao" class="form-control"
-                                       placeholder="Ex: RehabLink"
-                                       value="<?= h($prof['instituicao'] ?? '') ?>">
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label fw-semibold">Contacto</label>
-                                <input type="text" name="contacto" class="form-control"
-                                       placeholder="Ex: 912 000 001"
-                                       value="<?= h($prof['contacto'] ?? '') ?>">
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Contacto</label>
+                            <input type="text" name="contacto" class="form-control"
+                                   placeholder="Ex: 912 000 001"
+                                   value="<?= h($prof['contacto'] ?? '') ?>">
                         </div>
-                    <!-- Password para médico e técnico -->
+                    <!-- Password para médico -->
+                    <div class="row" id="password">
+                        <div class="col-12 mb-2"><hr class="my-1"><p class="small text-muted mb-1"><i class="fa-solid fa-key me-1"></i>Alterar Password (deixe vazio para manter a atual)</p></div>
+                        <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nova Password</label><input type="password" name="password" class="form-control" placeholder="Vazio = manter atual"></div>
+                        <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Confirmar Password</label><input type="password" name="password_conf" class="form-control"></div>
+                    </div>
+                    </div>
+                    <?php elseif ($dados['perfil'] === 'tecnico'): ?>
+                    <div class="card p-3 mb-3 border-primary">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-id-card me-2" style="color:#8B0000;"></i>Dados Profissionais</h6>
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Contacto</label>
+                            <input type="text" name="contacto" class="form-control"
+                                   placeholder="Ex: 912 000 001"
+                                   value="<?= h($prof['contacto'] ?? '') ?>">
+                        </div>
+                    <!-- Password para técnico -->
                     <div class="row" id="password">
                         <div class="col-12 mb-2"><hr class="my-1"><p class="small text-muted mb-1"><i class="fa-solid fa-key me-1"></i>Alterar Password (deixe vazio para manter a atual)</p></div>
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nova Password</label><input type="password" name="password" class="form-control" placeholder="Vazio = manter atual"></div>
@@ -200,45 +206,12 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php if ($dados['perfil'] === 'utente'): ?>
             <div class="card p-4 mt-4 border-warning" style="max-width:900px;">
                 <h5 class="mb-3"><i class="fa-solid fa-shield-halved me-2" style="color:#8B0000;"></i>Ferramentas RGPD — <?= h($dados['nome']) ?></h5>
-                <div class="row g-3 mb-3">
-                    <!-- Exportar dados -->
-                    <div class="col-md-4">
-                        <div class="card bg-light p-3 h-100">
-                            <h6 class="fw-bold small"><i class="fa-solid fa-download me-1 text-primary"></i>Exportar Dados (Art.&nbsp;20)</h6>
-                            <p class="small text-muted mb-2">Exportar todos os dados do utente em JSON estruturado.</p>
-                            <a href="<?= APP_URL ?>/api/admin/rgpd/exportar_dados.php?id=<?= $id ?>" class="btn btn-sm btn-primary">
-                                <i class="fa-solid fa-download me-1"></i>Exportar JSON
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Anonimizar -->
-                    <div class="col-md-4">
-                        <div class="card bg-light p-3 h-100">
-                            <h6 class="fw-bold small"><i class="fa-solid fa-user-slash me-1 text-danger"></i>Anonimizar (Art.&nbsp;17)</h6>
-                            <p class="small text-muted mb-2">Remove dados pessoais. Dados clínicos são mantidos por obrigação legal.</p>
-                            <form method="POST" action="<?= APP_URL ?>/api/admin/rgpd/anonimizar_utilizador.php"
-                                  onsubmit="return confirm('Confirma a anonimização permanente dos dados pessoais de <?= h(addslashes($dados['nome'])) ?>? Esta ação é irreversível.')">
-                                <input type="hidden" name="id" value="<?= $id ?>">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-user-slash me-1"></i>Anonimizar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- Pedidos pendentes -->
-                    <div class="col-md-4">
-                        <div class="card bg-light p-3 h-100">
-                            <h6 class="fw-bold small"><i class="fa-solid fa-inbox me-1 text-warning"></i>Pedidos RGPD</h6>
-                            <?php if (empty($rgpd_pedidos)): ?>
-                                <p class="small text-muted mb-0">Sem pedidos registados.</p>
-                            <?php else: foreach ($rgpd_pedidos as $rp): ?>
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <span class="small"><?= h(ucfirst($rp['tipo'])) ?></span>
-                                    <span class="badge bg-<?= $rp['estado']==='pendente'?'warning text-dark':($rp['estado']==='processado'?'success':'secondary') ?>"><?= h($rp['estado']) ?></span>
-                                </div>
-                            <?php endforeach; endif; ?>
-                        </div>
-                    </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold small"><i class="fa-solid fa-download me-1 text-primary"></i>Exportar Dados (Art.&nbsp;20)</h6>
+                    <p class="small text-muted mb-2">Exportar todos os dados do utente em JSON estruturado.</p>
+                    <a href="<?= APP_URL ?>/api/admin/rgpd/exportar_dados.php?id=<?= $id ?>" class="btn btn-sm btn-primary">
+                        <i class="fa-solid fa-download me-1"></i>Exportar JSON
+                    </a>
                 </div>
                 <!-- Histórico de consentimentos -->
                 <?php if (!empty($rgpd_consentimentos)): ?>

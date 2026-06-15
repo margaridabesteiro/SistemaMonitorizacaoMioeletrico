@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sexo             = trim($_POST['sexo']            ?? '') ?: null;
     $telemovel        = trim($_POST['telemovel']       ?? '') ?: null;
     $especialidade    = trim($_POST['especialidade']   ?? '') ?: null;
-    $instituicao      = trim($_POST['instituicao']     ?? '') ?: null;
+    $cedula           = trim($_POST['cedula']          ?? '') ?: null;
     $nif              = trim($_POST['nif']             ?? '') ?: null;
     $morada           = trim($_POST['morada']          ?? '') ?: null;
     $codigo_postal    = trim($_POST['codigo_postal']   ?? '') ?: null;
@@ -56,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $novo_id = (int)$db->lastInsertId();
 
             if ($dados['perfil'] === 'medico') {
-                $db->prepare('INSERT INTO profissionais (utilizador_id, especialidade, instituicao, contacto) VALUES (?,?,?,?)')
-                   ->execute([$novo_id, $especialidade, $instituicao, $telemovel]);
+                $db->prepare('INSERT INTO profissionais (utilizador_id, numero_ordem, especialidade, contacto) VALUES (?,?,?,?)')
+                   ->execute([$novo_id, $cedula, $especialidade, $telemovel]);
                 try {
                     $db->prepare('UPDATE profissionais SET data_nascimento=?, sexo=? WHERE utilizador_id=?')
                        ->execute([$data_nascimento, $sexo, $novo_id]);
@@ -112,10 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->prepare('INSERT IGNORE INTO preferencias_utilizador (utilizador_id) VALUES (?)')->execute([$novo_id]);
             registarAuditoria('CRIAR', 'Utilizador', $novo_id, 'Utilizador criado: ' . $dados['nome'] . ' (' . $dados['perfil'] . ')');
 
-            $msg_pass = $deve_alterar
-                ? "Utilizador criado. Password temporária: <strong class='font-monospace'>{$password}</strong> — comunique ao utilizador. Será obrigado a alterá-la no primeiro acesso."
-                : "Utilizador administrador criado. Password: <strong class='font-monospace'>{$password}</strong>";
-            $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => $msg_pass];
+            $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => 'Utilizador criado.'];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
         }
     }
@@ -238,8 +235,8 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                 <input type="text" name="especialidade" class="form-control" placeholder="Ex: Medicina Física e Reabilitação" value="<?= h($_POST['especialidade'] ?? '') ?>">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Instituição</label>
-                                <input type="text" name="instituicao" class="form-control" placeholder="Ex: RehabLink" value="<?= h($_POST['instituicao'] ?? '') ?>">
+                                <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
+                                <input type="text" name="cedula" class="form-control" placeholder="Ex: OM-12345" value="<?= h($_POST['cedula'] ?? '') ?>">
                             </div>
                         </div>
                     </div>

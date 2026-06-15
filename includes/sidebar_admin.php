@@ -54,7 +54,7 @@ $pa = $pagina_ativa ?? '';
             </a>
             <a href="<?= APP_URL ?>/private/admin/mensagens/conversas.php"
                class="nav-link<?= menuAdmin('mensagens_int', $pa) ?>">
-                <i class="fa-regular fa-comment-dots me-2"></i>Mensagens Internas
+                <i class="fa-regular fa-comment-dots me-2"></i>Mensagens
                 <?php
                 try {
                     $db_sb  = getDB();
