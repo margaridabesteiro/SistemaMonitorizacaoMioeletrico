@@ -52,17 +52,37 @@ if ($utid) {
             </form>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light"><tr><th>Nº Fatura</th><th>Data</th><th>Valor</th><th>Vencimento</th><th>Estado</th><th class="d-print-none">Ações</th></tr></thead>
+                    <thead class="table-light"><tr><th>Nº Fatura</th><th>Data</th><th>Valor</th><th>Vencimento</th><th>Estado</th><th>Método</th><th class="d-print-none">Ações</th></tr></thead>
                     <tbody>
-                    <?php if (empty($faturas)): ?>
-                        <tr><td colspan="6" class="text-center text-muted py-4">Sem faturas.</td></tr>
+                    <?php
+                    $metodo_labels = [
+                        'multibanco'    => 'Multibanco',
+                        'cartão'        => 'Cartão',
+                        'seguro'        => 'Seguro',
+                        'numerário'     => 'Numerário',
+                        'transferência' => 'Transferência',
+                    ];
+                    if (empty($faturas)): ?>
+                        <tr><td colspan="7" class="text-center text-muted py-4">Sem faturas.</td></tr>
                     <?php else: foreach ($faturas as $f): ?>
                         <tr>
                             <td><?= h($f['numero']) ?></td>
                             <td><?= h($f['data_emissao']) ?></td>
                             <td class="fw-bold"><?= number_format((float)$f['valor_eur'],2,',','.') ?>€</td>
                             <td><?= h($f['data_vencimento'] ?? '—') ?></td>
-                            <td><?= $f['paga'] ? '<span class="badge bg-success">Paga</span>' : '<span class="badge bg-warning text-dark">Pendente</span>' ?></td>
+                            <td>
+                                <?= $f['paga'] ? '<span class="badge bg-success">Paga</span>' : '<span class="badge bg-warning text-dark">Pendente</span>' ?>
+                                <?php if ($f['paga'] && ($f['data_pagamento'] ?? '')): ?>
+                                    <br><span class="text-muted" style="font-size:.75rem;"><?= h($f['data_pagamento']) ?></span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="small">
+                                <?php if ($f['paga'] && ($f['metodo_pagamento'] ?? '')): ?>
+                                    <?= h($metodo_labels[$f['metodo_pagamento']] ?? $f['metodo_pagamento']) ?>
+                                <?php else: ?>
+                                    <span class="text-muted">—</span>
+                                <?php endif; ?>
+                            </td>
                             <td class="d-print-none"><a href="detalhes.php?id=<?= $f['id'] ?>" class="btn btn-xs btn-outline-secondary"><i class="fa-regular fa-eye"></i></a></td>
                         </tr>
                     <?php endforeach; endif; ?>
