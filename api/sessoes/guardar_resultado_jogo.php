@@ -20,12 +20,11 @@ if (!$jogo_id) {
     echo json_encode(['ok' => false, 'erro' => 'Jogo inválido.']); exit;
 }
 
-// Garante registos base e atualiza níveis: claw=1(minimo), catch=2(medio), flappy=3(maximo)
+// Garante registos base e atualiza níveis: catch=1(medio), claw=2(minimo), flappy=3(maximo)
 $db->exec("INSERT INTO jogos (id, nome, nivel, descricao) VALUES
-    (1, 'catch_game',         'medio',  'Apanhar objetos em queda — controlo on/off'),
-    (2, 'claw_game',          'minimo', 'Garra arcade com dois thresholds de força'),
-    (3, 'flappy_trainer',     'maximo', 'Controlo proporcional de altitude por força'),
-    (4, 'prosthesis_trainer', 'maximo', 'Simulação de tarefas reais de prótese mioelétrica')
+    (1, 'catch_game',     'medio',  'Apanhar objetos em queda — controlo on/off'),
+    (2, 'claw_game',      'minimo', 'Garra arcade com dois thresholds de força'),
+    (3, 'flappy_trainer', 'maximo', 'Controlo proporcional de altitude por força')
 ON DUPLICATE KEY UPDATE nivel=VALUES(nivel)");
 
 if ($perfil === 'utente') {

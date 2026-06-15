@@ -35,6 +35,9 @@ function requireLogin(): void {
  */
 function requirePerfil(string ...$perfis): void {
     requireLogin();
+    if (!empty($_SESSION['deve_alterar_password'])) {
+        redirect(APP_URL . '/private/login/alterar_password_obrigatoria.php');
+    }
     if (!in_array($_SESSION['perfil'] ?? '', $perfis, true)) {
         http_response_code(403);
         $titulo = '403 — Acesso Negado';
@@ -61,6 +64,48 @@ function h(string $valor): string {
 function redirect(string $url): void {
     header('Location: ' . $url);
     exit;
+}
+
+/**
+ * Regista um evento de auditoria (RGPD Art. 30.º).
+ * Não lança excepções — falha silenciosa para não bloquear a operação principal.
+ *
+ * @param string   $acao        LOGIN | LOGIN_FALHOU | CRIAR | ATUALIZAR | ELIMINAR | VER | EXPORTAR
+ * @param string   $entidade    Utilizador | Utente | Sessao | Fatura | Prescricao | Exame | Dispositivo | Mensagem
+ * @param int|null $entidade_id PK do registo afectado
+ * @param string   $detalhe     Descrição legível da operação
+ */
+function registarAuditoria(
+    string $acao,
+    string $entidade    = '',
+    ?int   $entidade_id = null,
+    string $detalhe     = ''
+): void {
+    try {
+        $db = getDB();
+        $db->prepare('INSERT INTO auditoria (utilizador_id, nome, perfil, acao, entidade, entidade_id, detalhe, ip) VALUES (?,?,?,?,?,?,?,?)')
+           ->execute([
+               $_SESSION['utilizador_id'] ?? null,
+               $_SESSION['nome']          ?? null,
+               $_SESSION['perfil']        ?? null,
+               strtoupper($acao),
+               $entidade    ?: null,
+               $entidade_id ?: null,
+               $detalhe     ?: null,
+               $_SERVER['REMOTE_ADDR'] ?? null,
+           ]);
+    } catch (\Throwable $e) { /* não bloquear a operação principal */ }
+}
+
+/**
+ * Cria uma notificação interna para um utilizador.
+ * Falha silenciosamente (antes de correr a migration_notificacoes.sql).
+ */
+function notificar(int $utilizador_id, string $tipo, string $titulo, string $corpo = '', string $url = ''): void {
+    try {
+        getDB()->prepare('INSERT INTO notificacoes (utilizador_id, tipo, titulo, corpo, url) VALUES (?,?,?,?,?)')
+               ->execute([$utilizador_id, $tipo, $titulo, $corpo ?: null, $url ?: null]);
+    } catch (\Throwable $e) {}
 }
 
 /**

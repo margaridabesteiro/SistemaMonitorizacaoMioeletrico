@@ -31,6 +31,8 @@ if (!$user) {
 
 $novo_estado = $user['ativo'] ? 0 : 1;
 $db->prepare('UPDATE utilizadores SET ativo = ? WHERE id = ?')->execute([$novo_estado, $id]);
+$acao_txt = $novo_estado ? 'reativado' : 'desativado';
+registarAuditoria('ATUALIZAR', 'Utilizador', $id, 'Utilizador ID ' . $id . ' ' . $acao_txt);
 
 $_SESSION['flash'] = [
     'tipo'     => 'success',

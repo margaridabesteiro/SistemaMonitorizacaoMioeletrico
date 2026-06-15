@@ -14,6 +14,8 @@ if (!empty($_SESSION['utilizador_id'])) {
            $_SERVER['REMOTE_ADDR'],
            $_SERVER['HTTP_USER_AGENT'] ?? ''
        ]);
+    registarAuditoria('LOGOUT', 'Utilizador', $_SESSION['utilizador_id'],
+        'Logout de ' . ($_SESSION['nome'] ?? '') . ' (' . ($_SESSION['perfil'] ?? '') . ')');
 }
 
 // Destruir sessão de forma segura
