@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
-$pagina_titulo = 'Perfil do Utente'; $pagina_ativa = 'utilizadores';
+// Perfil clínico: apenas médico e técnico têm acesso — o admin gere dados administrativos, não clínicos
+requirePerfil('medico', 'tecnico');
+$pagina_titulo = 'Perfil Clínico'; $pagina_ativa = 'utentes';
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
 $db = getDB();

@@ -43,6 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                ->execute([$user['id']]);
             $db->prepare('INSERT INTO logs_acesso (utilizador_id, acao, ip, user_agent) VALUES (?,?,?,?)')
                ->execute([$user['id'], 'login', $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'] ?? '']);
+            registarAuditoria('LOGIN', 'Utilizador', $user['id'], 'Login de ' . $user['nome'] . ' (' . $user['perfil'] . ')');
+
+            // Forçar alteração de password no primeiro acesso (requer migration_deve_alterar_password.sql)
+            try {
+                $dap = $db->prepare('SELECT deve_alterar_password FROM utilizadores WHERE id=?');
+                $dap->execute([$user['id']]);
+                if ((bool)$dap->fetchColumn()) {
+                    $_SESSION['deve_alterar_password'] = 1;
+                    redirect(APP_URL . '/private/login/alterar_password_obrigatoria.php');
+                }
+            } catch (\Throwable $e) { /* coluna ainda não existe — ignorar até migração ser executada */ }
 
             $destinos = [
                 'admin'   => APP_URL . '/private/admin/index_admin.php',
@@ -56,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Registar tentativa falhada
             $db->prepare('INSERT INTO logs_acesso (utilizador_id, acao, ip, user_agent, detalhes) VALUES (NULL,?,?,?,?)')
                ->execute(['login_falhou', $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'] ?? '', $email]);
+            registarAuditoria('LOGIN_FALHOU', 'Utilizador', null, 'Tentativa de login falhada com email: ' . $email);
         }
     }
 }

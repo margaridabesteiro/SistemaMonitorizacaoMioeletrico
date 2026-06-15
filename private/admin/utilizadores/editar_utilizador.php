@@ -5,8 +5,9 @@ $pagina_titulo = 'Editar Utilizador'; $pagina_ativa = 'utilizadores';
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
 $db = getDB(); $erros = [];
-$stmt = $db->prepare('SELECT u.id, u.nome, u.email, u.perfil, u.ativo, ut.nif, ut.cobertura_saude FROM utilizadores u LEFT JOIN utentes ut ON ut.utilizador_id = u.id WHERE u.id=?');
+$stmt = $db->prepare('SELECT u.id, u.nome, u.email, u.perfil, u.ativo, ut.nif, ut.cobertura_saude, ut.seguradora_id FROM utilizadores u LEFT JOIN utentes ut ON ut.utilizador_id = u.id WHERE u.id=?');
 $stmt->execute([$id]); $dados = $stmt->fetch();
+$seguradoras = $db->query('SELECT id, nome, tipo FROM seguradoras WHERE ativa=1 ORDER BY tipo, nome')->fetchAll();
 
 // Dados profissionais (médico/técnico)
 $prof = ['numero_ordem'=>'','especialidade'=>'','instituicao'=>'','contacto'=>''];
@@ -38,13 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
     if (!in_array($dados['perfil'], ['admin','medico','tecnico','utente'], true)) $erros[] = 'Perfil inválido.';
 
-    // Password: apenas para não-utentes
-    $nova_pass = ''; $conf_pass = '';
-    if ($dados['perfil'] !== 'utente') {
-        $nova_pass = $_POST['password']      ?? '';
-        $conf_pass = $_POST['password_conf'] ?? '';
-        if ($nova_pass !== '' && strlen($nova_pass) < 8)  $erros[] = 'Password mínimo 8 caracteres.';
-        if ($nova_pass !== '' && $nova_pass !== $conf_pass) $erros[] = 'Passwords não coincidem.';
+    // Password reset
+    $nova_pass = ''; $repor = isset($_POST['repor_password']);
+    if ($repor && $dados['perfil'] !== 'utente') {
+        $nova_pass = $_POST['password'] ?? '';
+        if (strlen($nova_pass) < 8) $erros[] = 'Password inválida (mínimo 8 caracteres).';
+        // Admin: validação de confirmação manual
+        if ($dados['perfil'] === 'admin') {
+            $conf_pass = $_POST['password_conf'] ?? '';
+            if ($nova_pass !== $conf_pass) $erros[] = 'Passwords não coincidem.';
+        }
     }
 
     if (empty($erros)) {
@@ -55,18 +59,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             if ($nova_pass !== '') {
                 $hash = password_hash($nova_pass, PASSWORD_BCRYPT, ['cost'=>12]);
-                $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=?,password_hash=? WHERE id=?')
-                   ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$hash,$id]);
+                $deve_alterar = in_array($dados['perfil'], ['medico','tecnico','utente']) ? 1 : 0;
+                $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=?,password_hash=?,deve_alterar_password=? WHERE id=?')
+                   ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$hash,$deve_alterar,$id]);
             } else {
                 $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=? WHERE id=?')
                    ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$id]);
             }
             // Dados específicos de utente
             if ($dados['perfil'] === 'utente') {
-                $nif       = trim($_POST['nif']             ?? '') ?: null;
-                $cobertura = $_POST['cobertura_saude']      ?? 'SNS';
-                $db->prepare('UPDATE utentes SET nif=?, cobertura_saude=? WHERE utilizador_id=?')
-                   ->execute([$nif, $cobertura, $id]);
+                $nif         = trim($_POST['nif']          ?? '') ?: null;
+                $seg_id      = (int)($_POST['seguradora_id'] ?? 0) ?: null;
+                // Inferir cobertura_saude da seguradora
+                $cobertura = 'Particular';
+                if ($seg_id) {
+                    $st = $db->prepare('SELECT tipo FROM seguradoras WHERE id=?'); $st->execute([$seg_id]);
+                    $tipo_seg = $st->fetchColumn();
+                    if ($tipo_seg === 'SNS') $cobertura = 'SNS';
+                    elseif ($tipo_seg === 'Seguro') $cobertura = 'Seguro';
+                }
+                $db->prepare('UPDATE utentes SET nif=?, cobertura_saude=?, seguradora_id=? WHERE utilizador_id=?')
+                   ->execute([$nif, $cobertura, $seg_id, $id]);
             }
             // Dados profissionais (médico/técnico)
             if (in_array($dados['perfil'], ['medico','tecnico'], true)) {
@@ -85,7 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        ->execute([$id, $prof['numero_ordem'], $prof['especialidade'], $prof['instituicao'], $prof['contacto']]);
                 }
             }
-            $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Utilizador atualizado.'];
+            $msg = 'Utilizador atualizado.';
+            if ($nova_pass !== '' && in_array($dados['perfil'], ['medico','tecnico'], true)) {
+                $msg = "Password reposta. Nova password temporária: <strong class='font-monospace'>{$nova_pass}</strong> — comunique ao utilizador. Será obrigado a alterá-la no próximo acesso.";
+                registarAuditoria('ATUALIZAR', 'Utilizador', $id, 'Password reposta para: ' . $dados['nome'] . ' (' . $dados['perfil'] . ')');
+            } else {
+                registarAuditoria('ATUALIZAR', 'Utilizador', $id, 'Dados atualizados: ' . $dados['nome'] . ' (' . $dados['perfil'] . ')');
+            }
+            $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>$msg];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
         }
     }
@@ -138,6 +158,12 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                        value="<?= h($prof['contacto'] ?? '') ?>">
                             </div>
                         </div>
+                    <!-- Password para médico e técnico -->
+                    <div class="row" id="password">
+                        <div class="col-12 mb-2"><hr class="my-1"><p class="small text-muted mb-1"><i class="fa-solid fa-key me-1"></i>Alterar Password (deixe vazio para manter a atual)</p></div>
+                        <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nova Password</label><input type="password" name="password" class="form-control" placeholder="Vazio = manter atual"></div>
+                        <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Confirmar Password</label><input type="password" name="password_conf" class="form-control"></div>
+                    </div>
                     </div>
                     <?php elseif ($dados['perfil'] === 'utente'): ?>
                     <div class="mb-3">
@@ -145,18 +171,22 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <input type="text" name="nif" class="form-control" value="<?=h($dados['nif']??'')?>" maxlength="20">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Cobertura de Saúde</label>
-                        <select name="cobertura_saude" class="form-select">
-                            <?php foreach(['SNS','Particular','Seguro'] as $c): ?>
-                                <option value="<?=$c?>" <?=($dados['cobertura_saude']??'SNS')===$c?'selected':''?>><?=$c?></option>
+                        <label class="form-label fw-semibold">Seguradora</label>
+                        <select name="seguradora_id" class="form-select">
+                            <option value="">— Sem seguradora definida —</option>
+                            <?php foreach ($seguradoras as $seg): ?>
+                                <option value="<?= $seg['id'] ?>" <?= ($dados['seguradora_id'] ?? '') == $seg['id'] ? 'selected' : '' ?>>
+                                    <?= h($seg['nome']) ?> <span class="text-muted">(<?= $seg['tipo'] ?>)</span>
+                                </option>
                             <?php endforeach; ?>
                         </select>
-                        <div class="form-text">Faturas só são geradas para Particular e Seguro.</div>
+                        <div class="form-text">Cobertura de saúde é inferida automaticamente da seguradora. Usado para preços automáticos nas faturas.</div>
                     </div>
                     <div class="alert alert-info py-2 small">
                         <i class="fa-solid fa-lock me-1"></i> A password do utente só pode ser redefinida pelo próprio utente (RGPD — dados clínicos pertencem ao titular).
                     </div>
                     <?php else: ?>
+                    <!-- Admin: password fields -->
                     <div class="row" id="password">
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nova Password</label><input type="password" name="password" class="form-control" placeholder="Vazio = manter atual"></div>
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Confirmar Password</label><input type="password" name="password_conf" class="form-control"></div>
