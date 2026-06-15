@@ -22,24 +22,33 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuMedico('agenda', $pa) ?>">
                 <i class="fa-regular fa-calendar me-2"></i>Minha Agenda
             </a>
+            <a href="<?= APP_URL ?>/private/medico/mensagens/conversas.php"
+               class="nav-link<?= menuMedico('mensagens', $pa) ?>">
+                <i class="fa-regular fa-envelope me-2"></i>Mensagens
+                <?php
+                try {
+                    $db_sb  = getDB();
+                    $s_msg  = $db_sb->prepare("SELECT COUNT(*) FROM mensagens WHERE destinatario_id=? AND lida=0");
+                    $s_msg->execute([$_SESSION['utilizador_id'] ?? 0]);
+                    $n_msg  = (int)$s_msg->fetchColumn();
+                    if ($n_msg > 0) echo '<span class="badge bg-danger ms-auto">' . $n_msg . '</span>';
+                } catch (\Throwable $e) {}
+                ?>
+            </a>
             <a href="<?= APP_URL ?>/private/medico/prescricoes/lista_prescricoes.php"
                class="nav-link<?= menuMedico('prescricoes', $pa) ?>">
-                <i class="fa-solid fa-file-medical me-2"></i>Prescrições
+                <i class="fa-solid fa-file-medical me-2"></i>Tratamentos
             </a>
             <a href="<?= APP_URL ?>/private/medico/pacientes/gestaoUtente.php"
                class="nav-link<?= menuMedico('pacientes', $pa) ?>">
-                <i class="fa-solid fa-users me-2"></i>Pacientes
+                <i class="fa-solid fa-users me-2"></i>Relatórios
             </a>
             <a href="<?= APP_URL ?>/private/medico/exames/exames_disponiveis.php"
                class="nav-link<?= menuMedico('exames', $pa) ?>">
                 <i class="fa-solid fa-flask me-2"></i>Exames
             </a>
             <a href="<?= APP_URL ?>/private/medico/consultas/lista_pedidos_exame.php"
-               class="nav-link<?= menuMedico('exames', $pa) ?>">
+               class="nav-link<?= menuMedico('pedidos_exame', $pa) ?>">
                 <i class="fa-solid fa-flask me-2"></i>Pedidos de Exame
-            </a>
-            <a href="<?= APP_URL ?>/private/medico/exames/auditoria_exames.php"
-               class="nav-link<?= menuMedico('auditoria', $pa) ?>">
-                <i class="fa-solid fa-clipboard-check me-2"></i>Auditoria
             </a>
         </nav>

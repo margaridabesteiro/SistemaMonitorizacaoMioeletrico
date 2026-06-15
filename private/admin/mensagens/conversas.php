@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
-$pagina_titulo = 'Mensagens'; $pagina_ativa = 'mensagens';
-requirePerfil('tecnico');
+$pagina_titulo = 'Mensagens Internas'; $pagina_ativa = 'mensagens_int';
+requirePerfil('admin');
 
 $db  = getDB();
 $uid = (int)$_SESSION['utilizador_id'];
@@ -13,14 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($dest && $corpo !== '') {
         $db->prepare("INSERT INTO mensagens (remetente_id, destinatario_id, corpo) VALUES (?,?,?)")
            ->execute([$uid, $dest, $corpo]);
-        redirect(APP_URL . '/private/tecnico/mensagens/conversas.php?com=' . $dest);
+        redirect(APP_URL . '/private/admin/mensagens/conversas.php?com=' . $dest);
     }
 }
 
-// Pode comunicar com médicos e admins
 $destinatarios_validos = $db->query("
     SELECT id, nome, perfil FROM utilizadores
-    WHERE perfil IN ('medico','admin') AND ativo=1 AND id != {$uid}
+    WHERE perfil IN ('medico','tecnico','admin') AND ativo=1 AND id != {$uid}
     ORDER BY perfil, nome
 ")->fetchAll();
 
@@ -58,14 +57,14 @@ if (!$sel_nome) {
     foreach ($destinatarios_validos as $d) { if ($d['id'] == $sel) { $sel_nome = $d['nome']; break; } }
 }
 
-require_once __DIR__ . '/../../../includes/header_tecnico.php';
-require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
+require_once __DIR__ . '/../../../includes/header_admin.php';
+require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 ?>
         <main class="content">
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                <h1 class="mb-0">Mensagens</h1>
+                <h1 class="mb-0">Mensagens Internas</h1>
                 <div class="dropdown">
-                    <button class="btn btn-sm" style="background:#1a5f8a;color:#fff;" data-bs-toggle="dropdown">
+                    <button class="btn btn-sm" style="background:#8B0000;color:#fff;" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-plus me-1"></i>Nova Conversa
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -75,9 +74,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                                 <?= h($d['nome']) ?>
                             </a></li>
                         <?php endforeach; ?>
-                        <?php if (empty($destinatarios_validos)): ?>
-                            <li><span class="dropdown-item text-muted">Sem utilizadores disponíveis</span></li>
-                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
@@ -87,8 +83,8 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                     <div class="col-md-4 border-end h-100 overflow-auto">
                         <?php foreach ($conversas as $c): ?>
                         <a href="?com=<?= $c['outro_id'] ?>" class="d-flex align-items-center gap-3 p-3 text-decoration-none <?= $c['outro_id']==$sel?'bg-light':'' ?> border-bottom">
-                            <div style="width:40px;height:40px;border-radius:50%;background:#e8f0fe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <i class="fa-regular fa-user" style="color:#1a5f8a;"></i>
+                            <div style="width:40px;height:40px;border-radius:50%;background:#f3e5e5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fa-regular fa-user" style="color:#8B0000;"></i>
                             </div>
                             <div class="flex-grow-1 min-w-0">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -105,31 +101,31 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         </a>
                         <?php endforeach; ?>
                         <?php if (empty($conversas)): ?>
-                            <p class="p-3 text-muted small">Sem conversas ainda. Use "Nova Conversa".</p>
+                            <p class="p-3 text-muted small">Sem conversas internas ainda.</p>
                         <?php endif; ?>
                     </div>
 
                     <div class="col-md-8 d-flex flex-column h-100">
                         <?php if ($sel): ?>
                         <div class="p-3 border-bottom fw-semibold bg-light">
-                            <i class="fa-regular fa-user me-2" style="color:#1a5f8a;"></i><?= h($sel_nome) ?>
+                            <i class="fa-regular fa-user me-2" style="color:#8B0000;"></i><?= h($sel_nome) ?>
                         </div>
                         <div class="flex-grow-1 p-3 overflow-auto" id="msg-area">
                             <?php foreach ($msgs as $msg): ?>
                             <div class="mb-3 <?= $msg['remetente_id']==$uid?'text-end':'' ?>">
                                 <div class="d-inline-block px-3 py-2 rounded-3"
-                                     style="background:<?= $msg['remetente_id']==$uid?'#1a5f8a;color:#fff':'#f1f3f4' ?>;max-width:70%;word-break:break-word;">
+                                     style="background:<?= $msg['remetente_id']==$uid?'#8B0000;color:#fff':'#f1f3f4' ?>;max-width:70%;word-break:break-word;">
                                     <?= h($msg['corpo']) ?>
                                 </div>
                                 <div class="text-muted" style="font-size:.72rem;"><?= h(date('H:i', strtotime($msg['enviada_em']))) ?></div>
                             </div>
                             <?php endforeach; ?>
-                            <?php if (empty($msgs)): ?><p class="text-muted small">Sem mensagens ainda. Diga olá!</p><?php endif; ?>
+                            <?php if (empty($msgs)): ?><p class="text-muted small">Sem mensagens ainda.</p><?php endif; ?>
                         </div>
                         <form method="POST" class="p-3 border-top d-flex gap-2">
                             <input type="hidden" name="destinatario_id" value="<?= $sel ?>">
                             <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus required>
-                            <button type="submit" class="btn" style="background:#1a5f8a;color:#fff;"><i class="fa-solid fa-paper-plane"></i></button>
+                            <button type="submit" class="btn" style="background:#8B0000;color:#fff;"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
                         <?php else: ?>
                         <div class="d-flex align-items-center justify-content-center h-100 text-muted">
