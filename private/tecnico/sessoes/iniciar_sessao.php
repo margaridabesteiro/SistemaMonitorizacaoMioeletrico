@@ -8,13 +8,33 @@ $stmt = $db->prepare("SELECT s.*, u.nome AS paciente, d.codigo AS dispositivo FR
 $stmt->execute([$id]); $s = $stmt->fetch();
 if (!$s || $s['estado'] !== 'agendada') redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
-    if ($_POST['acao'] === 'iniciar') { $db->prepare("UPDATE sessoes SET estado='em_curso' WHERE id=?")->execute([$id]); }
-    if ($_POST['acao'] === 'concluir') {
-        $notas = trim($_POST['notas'] ?? '');
-        $db->prepare("UPDATE sessoes SET estado='concluida', notas=? WHERE id=?")->execute([$notas,$id]);
-        $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Sessão concluída.']; redirect(APP_URL . '/private/tecnico/sessoes/detalhes_sessao.php?id=' . $id);
+    if ($_POST['acao'] === 'iniciar') {
+        $db->prepare("UPDATE sessoes SET estado='em_curso' WHERE id=?")->execute([$id]);
+        registarAuditoria('ATUALIZAR', 'Sessao', $id, 'Sessão iniciada — utente: ' . ($s['paciente'] ?? ''));
     }
-    if ($_POST['acao'] === 'cancelar') { $db->prepare("UPDATE sessoes SET estado='cancelada' WHERE id=?")->execute([$id]); redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php'); }
+    if ($_POST['acao'] === 'concluir') {
+        $notas      = trim($_POST['notas']          ?? '');
+        $progressao = $_POST['progressao']          ?? null;
+        $esforco    = (int)($_POST['esforco_score'] ?? 0) ?: null;
+        $analise    = trim($_POST['analise_tecnica'] ?? '') ?: null;
+        if (!in_array($progressao, ['melhoria','estavel','regressao'], true)) $progressao = null;
+        try {
+            $db->prepare("UPDATE sessoes SET estado='concluida', notas=?, progressao=?, esforco_score=?, analise_tecnica=? WHERE id=?")
+               ->execute([$notas, $progressao, $esforco, $analise, $id]);
+        } catch (\Throwable $e) {
+            // Colunas de análise ainda não existem — guardar apenas notas
+            $db->prepare("UPDATE sessoes SET estado='concluida', notas=? WHERE id=?")->execute([$notas, $id]);
+        }
+        registarAuditoria('ATUALIZAR', 'Sessao', $id,
+            'Sessão concluída — utente: ' . ($s['paciente'] ?? '') . ' — progressão: ' . ($progressao ?? '—'));
+        $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Sessão concluída com análise de desempenho registada.'];
+        redirect(APP_URL . '/private/tecnico/sessoes/detalhes_sessao.php?id=' . $id);
+    }
+    if ($_POST['acao'] === 'cancelar') {
+        $db->prepare("UPDATE sessoes SET estado='cancelada' WHERE id=?")->execute([$id]);
+        registarAuditoria('ATUALIZAR', 'Sessao', $id, 'Sessão cancelada — utente: ' . ($s['paciente'] ?? ''));
+        redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
+    }
     // Re-fetch after state change
     $stmt->execute([$id]); $s = $stmt->fetch();
 }
@@ -42,17 +62,90 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         <form method="POST" class="d-inline"><input type="hidden" name="acao" value="iniciar"><button type="submit" class="btn btn-success"><i class="fa-solid fa-play me-1"></i>Iniciar</button></form>
                         <?php endif; ?>
                         <?php if ($s['estado'] === 'em_curso'): ?>
-                        <form method="POST" class="d-inline"><input type="hidden" name="acao" value="concluir"><input type="hidden" name="notas" id="notasHidden"><button type="submit" class="btn btn-primary" onclick="document.getElementById('notasHidden').value=document.getElementById('notasSessao').value"><i class="fa-solid fa-flag-checkered me-1"></i>Concluir</button></form>
+                        <button type="button" class="btn btn-primary" onclick="abrirAnalise()">
+                            <i class="fa-solid fa-flag-checkered me-1"></i>Concluir Sessão
+                        </button>
                         <?php endif; ?>
                         <form method="POST" class="d-inline"><input type="hidden" name="acao" value="cancelar"><button type="submit" class="btn btn-outline-danger" onclick="return confirm('Cancelar sessão?')"><i class="fa-solid fa-xmark me-1"></i>Cancelar</button></form>
                     </div>
                 </div>
             </div>
         </main>
+<!-- Modal: Análise de Desempenho -->
+<div class="modal fade" id="modalAnalise" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST">
+                <input type="hidden" name="acao" value="concluir">
+                <input type="hidden" name="notas" id="notasHidden">
+                <div class="modal-header" style="background:#1a5f8a;color:#fff;">
+                    <h5 class="modal-title mb-0"><i class="fa-solid fa-chart-bar me-2"></i>Análise de Desempenho da Sessão</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Progressão observada</label>
+                            <select name="progressao" class="form-select" required>
+                                <option value="">— Selecionar —</option>
+                                <option value="melhoria">Melhoria</option>
+                                <option value="estavel">Estável</option>
+                                <option value="regressao">Regressão</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Esforço do utente (1–5)</label>
+                            <div class="d-flex gap-2 mt-1" id="esforco-stars">
+                                <?php for ($i=1;$i<=5;$i++): ?>
+                                <button type="button" class="btn btn-outline-warning btn-sm star-btn" data-val="<?= $i ?>"
+                                        onclick="selecionarEsforco(<?= $i ?>)">
+                                    <i class="fa-regular fa-star"></i>
+                                </button>
+                                <?php endfor; ?>
+                            </div>
+                            <input type="hidden" name="esforco_score" id="esforco_val" value="">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Análise técnica</label>
+                            <textarea name="analise_tecnica" class="form-control" rows="4"
+                                      placeholder="Descreva a evolução, dificuldades observadas, recomendações para a próxima sessão..."></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Notas gerais da sessão</label>
+                            <div class="form-control bg-light" style="min-height:60px;font-size:.875rem;" id="notas_preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-flag-checkered me-1"></i>Concluir e Guardar Análise
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
         <script>
         let t=0; const el=document.getElementById('timer');
         if ('<?= $s['estado'] ?>' === 'em_curso') {
             setInterval(()=>{ t++; const m=Math.floor(t/60), s=t%60; el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }, 1000);
+        }
+
+        function abrirAnalise() {
+            const notas = document.getElementById('notasSessao').value;
+            document.getElementById('notasHidden').value  = notas;
+            document.getElementById('notas_preview').textContent = notas || '(sem notas)';
+            new bootstrap.Modal(document.getElementById('modalAnalise')).show();
+        }
+
+        function selecionarEsforco(val) {
+            document.getElementById('esforco_val').value = val;
+            document.querySelectorAll('.star-btn').forEach((btn, idx) => {
+                const i = btn.querySelector('i');
+                i.className = idx < val ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                btn.className = idx < val ? 'btn btn-warning btn-sm star-btn' : 'btn btn-outline-warning btn-sm star-btn';
+            });
         }
         </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
