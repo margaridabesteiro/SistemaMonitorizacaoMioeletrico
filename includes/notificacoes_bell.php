@@ -20,7 +20,7 @@ $_nb_icons = [
     'regressao'    => ['icon'=>'fa-triangle-exclamation', 'cor'=>'#dc3545'],
     'mensagem'     => ['icon'=>'fa-message',              'cor'=>'#198754'],
     'sessao'       => ['icon'=>'fa-calendar-check',       'cor'=>'#0dcaf0'],
-    'teleconsulta' => ['icon'=>'fa-video',                'cor'=>'#6f42c1'],
+    'videoconsulta' => ['icon'=>'fa-video',                'cor'=>'#6f42c1'],
     'info'         => ['icon'=>'fa-circle-info',          'cor'=>'#6c757d'],
 ];
 ?>

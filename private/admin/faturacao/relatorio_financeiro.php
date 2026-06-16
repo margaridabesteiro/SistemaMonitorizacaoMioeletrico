@@ -41,7 +41,9 @@ $TIPOS_LABEL = [
 ];
 $por_tipo = $db->prepare("
     SELECT COALESCE(tipo_servico,'—') AS tipo, COALESCE(SUM(valor_eur),0) AS total
-    FROM faturas WHERE paga=1 AND YEAR(data_emissao)=?
+    FROM faturas
+    WHERE paga=1 AND YEAR(data_emissao)=?
+      AND tipo_servico IN ('videoconsulta','relatorio_clinico','sessao_jogo','consulta_medica','avaliacao_funcional')
     GROUP BY tipo_servico ORDER BY total DESC
 ");
 $por_tipo->execute([$ano_atual]); $tipos = $por_tipo->fetchAll();

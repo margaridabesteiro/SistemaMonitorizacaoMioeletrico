@@ -14,8 +14,8 @@ $db = getDB();
             $stmt = $db->prepare("SELECT d.*, u.nome AS paciente FROM dispositivos d LEFT JOIN utentes ut ON ut.id = d.utente_id LEFT JOIN utilizadores u ON u.id = ut.utilizador_id WHERE d.id = ?");
             $stmt->execute([$id]); $dev = $stmt->fetch();
             if (!$dev) redirect(APP_URL . '/private/admin/dispositivos/lista_dispositivos.php');
-            $sl = $db->prepare("SELECT COUNT(*) FROM leituras_emg l JOIN sessoes s ON s.id = l.sessao_id WHERE s.dispositivo_id = ?");
-            $sl->execute([$id]); $n_leituras = (int)$sl->fetchColumn();
+            $sl = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE dispositivo_id = ?");
+            $sl->execute([$id]); $n_sessoes = (int)$sl->fetchColumn();
             ?>
             <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="lista_dispositivos.php">Dispositivos</a></li><li class="breadcrumb-item active"><?= h($dev['codigo']) ?></li></ol></nav>
             <h1 class="mb-4">Dispositivo <?= h($dev['codigo']) ?></h1>
@@ -30,7 +30,7 @@ $db = getDB();
                         <p><strong>Associado em:</strong> <?= $dev['associado_em'] ? h(substr($dev['associado_em'],0,10)) : '—' ?></p>
                         <p><strong>Último sync:</strong> <?= $dev['ultimo_sync'] ? h(substr($dev['ultimo_sync'],0,16)) : 'Nunca' ?></p>
                         <p><strong>Estado:</strong> <?= $dev['ativo'] ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-secondary">Inativo</span>' ?></p>
-                        <p><strong>Leituras EMG:</strong> <?= number_format($n_leituras) ?></p>
+                        <p><strong>Sessões registadas:</strong> <?= number_format($n_sessoes) ?></p>
                     </div>
                 </div>
             </div>

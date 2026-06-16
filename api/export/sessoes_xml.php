@@ -22,7 +22,7 @@ if ($estado && in_array($estado, ['agendada', 'em_curso', 'concluida', 'cancelad
     $where[]  = 's.estado = ?';
     $params[] = $estado;
 }
-if ($categoria && in_array($categoria, ['calibracao', 'treino', 'jogo', 'avaliacao_funcional'], true)) {
+if ($categoria && in_array($categoria, ['jogo', 'avaliacao_funcional'], true)) {
     $where[]  = 's.categoria = ?';
     $params[] = $categoria;
 }

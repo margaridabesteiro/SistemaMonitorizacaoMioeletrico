@@ -37,7 +37,7 @@ try {
             $modal    = in_array($item['modalidade'], ['video','remota'], true) ? 'Videoconsulta' : 'Presencial';
             notificar(
                 $uid,
-                'teleconsulta',
+                'videoconsulta',
                 'Consulta em breve — ' . $hora,
                 'Consulta ' . $tipo_txt . ' (' . $modal . ') com ' . $item['paciente'] . ' começa em menos de 15 minutos. [' . $marker . ']',
                 APP_URL . '/private/medico/consultas/consulta.php'

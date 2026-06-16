@@ -36,7 +36,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Categoria</label>
                             <select name="categoria" class="form-select" id="editCategoria">
-                                <?php foreach(['jogo'=>'Jogo','treino'=>'Treino','calibracao'=>'Calibração','avaliacao_funcional'=>'Avaliação Funcional'] as $v=>$l): ?>
+                                <?php foreach(['jogo'=>'Jogo','avaliacao_funcional'=>'Avaliação Funcional'] as $v=>$l): ?>
                                     <option value="<?= $v ?>" <?= ($s['categoria']===$v)?'selected':'' ?>><?= $l ?></option>
                                 <?php endforeach; ?>
                             </select>

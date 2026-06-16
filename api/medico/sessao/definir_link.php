@@ -46,13 +46,13 @@ try {
 
     // Notificar o utente se houver link
     if ($link && $sess['utente_uid']) {
-        notificar((int)$sess['utente_uid'], 'teleconsulta',
-            'Link de teleconsulta disponível',
-            'O seu médico adicionou o link para a teleconsulta. Aceda à sua Agenda.',
-            APP_URL . '/private/utente/sessoes_agendadas.php'
+        notificar((int)$sess['utente_uid'], 'videoconsulta',
+            'Link de videoconsulta disponível',
+            'O seu médico adicionou o link para a videoconsulta. Aceda à sua Agenda.',
+            APP_URL . '/private/utente/sessoes_consultas.php'
         );
     }
-    registarAuditoria('ATUALIZAR', 'Sessao', $sessao_id, 'Link teleconsulta ' . ($link ? 'adicionado' : 'removido'));
+    registarAuditoria('ATUALIZAR', 'Sessao', $sessao_id, 'Link videoconsulta ' . ($link ? 'adicionado' : 'removido'));
     echo json_encode(['ok'=>true]);
 } catch (\Throwable $e) {
     echo json_encode(['ok'=>false,'erro'=>'Erro ao guardar: '.$e->getMessage()]);

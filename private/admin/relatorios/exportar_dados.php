@@ -69,9 +69,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <select id="xmlCategoria" class="form-select form-select-sm">
                                 <option value="">Todas as categorias</option>
                                 <option value="jogo">Jogo</option>
-                                <option value="treino">Treino</option>
-                                <option value="calibracao">Calibração</option>
-                                <option value="avaliacao_funcional">Avaliação funcional</option>
+                                <option value="avaliacao_funcional">Avaliação Funcional</option>
                             </select>
                         </div>
                         <div class="d-flex gap-2 flex-wrap">
