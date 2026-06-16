@@ -33,14 +33,11 @@ $por_seg->execute([$ano_atual]); $segs = $por_seg->fetchAll();
 
 // 3. Por tipo de serviço
 $TIPOS_LABEL = [
-    'avaliacao_emg'       => 'Avaliação EMG',
-    'treino_mioeletrico'  => 'Treino Mioeléctrico',
-    'consulta_medica'     => 'Consulta Médica',
-    'sessao_biofeedback'  => 'Biofeedback EMG',
-    'avaliacao_funcional' => 'Avaliação Funcional',
-    'sessao_jogo'         => 'Sessão Jogo',
-    'teleconsulta'        => 'Teleconsulta',
+    'videoconsulta'       => 'Videoconsulta',
     'relatorio_clinico'   => 'Relatório Clínico',
+    'sessao_jogo'         => 'Sessão por Jogo de Reabilitação',
+    'consulta_medica'     => 'Consulta Médica',
+    'avaliacao_funcional' => 'Avaliação Funcional',
 ];
 $por_tipo = $db->prepare("
     SELECT COALESCE(tipo_servico,'—') AS tipo, COALESCE(SUM(valor_eur),0) AS total

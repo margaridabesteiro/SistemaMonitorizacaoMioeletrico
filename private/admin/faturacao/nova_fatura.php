@@ -5,14 +5,11 @@ requirePerfil('admin');
 $pagina_titulo = 'Nova Fatura'; $pagina_ativa = 'faturacao';
 
 $TIPOS = [
-    'avaliacao_emg'       => 'Avaliação EMG de Superfície',
-    'treino_mioeletrico'  => 'Sessão Treino Mioeléctrico',
-    'consulta_medica'     => 'Consulta Médica (Fisiatria)',
-    'sessao_biofeedback'  => 'Sessão de Biofeedback EMG',
-    'avaliacao_funcional' => 'Avaliação Funcional',
-    'sessao_jogo'         => 'Sessão por Jogo de Reabilitação',
-    'teleconsulta'        => 'Teleconsulta (Videochamada)',
+    'videoconsulta'       => 'Videoconsulta',
     'relatorio_clinico'   => 'Relatório Clínico',
+    'sessao_jogo'         => 'Sessão por Jogo de Reabilitação',
+    'consulta_medica'     => 'Consulta Médica',
+    'avaliacao_funcional' => 'Avaliação Funcional',
 ];
 
 $erros = [];
