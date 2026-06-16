@@ -319,6 +319,19 @@ CREATE TABLE IF NOT EXISTS password_resets (
   INDEX idx_utilizador (utilizador_id)
 ) ENGINE=InnoDB;
 
+-- ============================================================
+-- PASSO 15: Renomear tipos de serviço obsoletos em faturação
+-- teleconsulta → videoconsulta (renomeação de chave)
+-- Remover tipos que já não existem no sistema
+-- ============================================================
+UPDATE tabela_precos   SET tipo_servico = 'videoconsulta' WHERE tipo_servico = 'teleconsulta';
+UPDATE faturas         SET tipo_servico = 'videoconsulta' WHERE tipo_servico = 'teleconsulta';
+UPDATE fatura_linhas   SET tipo_servico = 'videoconsulta' WHERE tipo_servico = 'teleconsulta';
+
+-- Tipos removidos (EMG, biofeedback, treino): mantidos em faturas históricas mas
+-- removidos da tabela de preços para não aparecerem como opção de faturação futura
+DELETE FROM tabela_precos WHERE tipo_servico IN ('avaliacao_emg','treino_mioeletrico','sessao_biofeedback');
+
 -- =============================================================
 -- FIM DA MIGRAÇÃO
 -- Verificar resultado: SHOW TABLES; e DESCRIBE sessoes;
