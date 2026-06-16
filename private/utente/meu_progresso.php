@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 requirePerfil('utente');
-$pagina_titulo = 'O Meu Progresso'; $pagina_ativa = 'progresso';
+$pagina_titulo = 'Análise de Desempenho'; $pagina_ativa = 'progresso';
 $js_head = ['https://cdn.jsdelivr.net/npm/chart.js'];
 
 $db  = getDB();
@@ -93,10 +93,49 @@ require_once __DIR__ . '/../../includes/header_utente.php';
 require_once __DIR__ . '/../../includes/sidebar_utente.php';
 ?>
         <main class="content">
-            <div class="mb-4">
-                <h1 class="mb-1"><i class="fa-solid fa-chart-line me-2" style="color:#667eea;"></i>O Meu Progresso</h1>
-                <p class="text-muted mb-0">Acompanhe a sua evolução ao longo das sessões de reabilitação.</p>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="mb-1"><i class="fa-solid fa-clipboard-list me-2" style="color:#667eea;"></i>Análise de Desempenho</h1>
+                    <p class="text-muted mb-0">Avaliações e notas do seu técnico ao longo das sessões.</p>
+                </div>
+                <a href="<?= APP_URL ?>/private/utente/jogos_reabilitacao.php" class="btn btn-sm" style="background:#1a5f8a;color:#fff;">
+                    <i class="fa-solid fa-gamepad me-1"></i>Ir para os Jogos
+                </a>
             </div>
+
+            <!-- Análise do técnico em primeiro lugar -->
+            <?php if (!empty($analises)): ?>
+            <div class="card mb-4 p-3">
+                <h5 class="mb-3"><i class="fa-solid fa-stethoscope me-2" style="color:#1a5f8a;"></i>Notas do Técnico</h5>
+                <div class="d-flex flex-column gap-3">
+                    <?php foreach ($analises as $a): ?>
+                    <?php $p = $a['progressao'] ?? 'estavel'; ?>
+                    <div class="d-flex gap-3 p-3 rounded" style="background:#f8f9fa;border-left:3px solid <?= $prog_cor[$p] ?? '#6c757d' ?>;">
+                        <div style="flex-shrink:0;min-width:90px;">
+                            <div class="small text-muted"><?= $a['dt'] ?></div>
+                            <span class="badge" style="background:<?= $prog_cor[$p] ?? '#6c757d' ?>;font-size:.7rem;">
+                                <i class="fa-solid <?= $prog_icon[$p] ?? 'fa-minus' ?> me-1"></i><?= $prog_label[$p] ?? '—' ?>
+                            </span>
+                            <?php if ($a['esforco_score']): ?>
+                            <div class="mt-1" style="color:#ffc107;font-size:.85rem;">
+                                <?= str_repeat('★', (int)$a['esforco_score']) ?><?= str_repeat('☆', 5-(int)$a['esforco_score']) ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="small text-muted mb-1"><?= h($a['tipo']) ?> · <?= h($a['tecnico'] ?? '—') ?></div>
+                            <p class="mb-0 small"><?= nl2br(h($a['analise_tecnica'])) ?></p>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php else: ?>
+            <div class="alert alert-light text-center mb-4">
+                <i class="fa-solid fa-clipboard fa-2x mb-2 d-block opacity-25"></i>
+                O seu técnico ainda não registou análises de desempenho. Aparecem aqui após as sessões de avaliação funcional.
+            </div>
+            <?php endif; ?>
 
             <!-- KPIs -->
             <div class="row g-3 mb-4">
@@ -182,39 +221,10 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             </div>
             <?php endif; ?>
 
-            <!-- Notas do técnico -->
-            <?php if (!empty($analises)): ?>
-            <div class="card mt-4 p-3">
-                <h5 class="mb-3"><i class="fa-solid fa-clipboard-list me-2" style="color:#1a5f8a;"></i>Notas do Técnico</h5>
-                <div class="d-flex flex-column gap-3">
-                    <?php foreach ($analises as $a): ?>
-                    <?php $p = $a['progressao'] ?? 'estavel'; ?>
-                    <div class="d-flex gap-3 p-3 rounded" style="background:#f8f9fa;border-left:3px solid <?= $prog_cor[$p] ?? '#6c757d' ?>;">
-                        <div style="flex-shrink:0;">
-                            <div class="small text-muted"><?= $a['dt'] ?></div>
-                            <span class="badge" style="background:<?= $prog_cor[$p] ?? '#6c757d' ?>;font-size:.7rem;">
-                                <i class="fa-solid <?= $prog_icon[$p] ?? 'fa-minus' ?> me-1"></i><?= $prog_label[$p] ?? '—' ?>
-                            </span>
-                            <?php if ($a['esforco_score']): ?>
-                            <div class="mt-1" style="color:#ffc107;font-size:.85rem;">
-                                <?= str_repeat('★', (int)$a['esforco_score']) ?><?= str_repeat('☆', 5-(int)$a['esforco_score']) ?>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="small text-muted mb-1"><?= h($a['tipo']) ?> · <?= h($a['tecnico'] ?? '—') ?></div>
-                            <p class="mb-0 small"><?= nl2br(h($a['analise_tecnica'])) ?></p>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <?php if (empty($historico) && empty($evolucao_pct)): ?>
+            <?php if (empty($historico) && empty($evolucao_pct) && empty($analises)): ?>
             <div class="alert alert-light text-center mt-4">
                 <i class="fa-solid fa-chart-line fa-2x mb-2 d-block" style="color:#667eea;opacity:.4;"></i>
-                Ainda não tem sessões concluídas. O seu progresso aparecerá aqui após a primeira sessão.
+                Ainda não tem sessões concluídas. Os dados de desempenho aparecerão aqui após a primeira sessão.
             </div>
             <?php endif; ?>
         </main>

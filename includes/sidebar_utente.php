@@ -40,11 +40,7 @@ $pa = $pagina_ativa ?? '';
                 } catch (\Throwable $e) {}
                 ?>
             </a>
-            <a href="<?= APP_URL ?>/private/utente/exames.php"
-               class="nav-link<?= menuUtente('exames', $pa) ?>">
-                <i class="fa-solid fa-flask me-2"></i>Os Meus Exames
-            </a>
-            <a href="<?= APP_URL ?>/private/utente/pagamentos.php"
+<a href="<?= APP_URL ?>/private/utente/pagamentos.php"
                class="nav-link<?= menuUtente('pagamentos', $pa) ?>">
                 <i class="fa-solid fa-credit-card me-2"></i>Pagamentos
             </a>
