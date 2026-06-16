@@ -46,7 +46,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <select name="dispositivo_id" class="form-select" required>
                             <option value="">— Selecionar —</option>
                             <?php foreach($dispositivos as $d): ?>
-                                <option value="<?= $d['id'] ?>" <?= $d['id']===$pre_disp?'selected':'' ?>><?= h($d['codigo']) ?> (<?= h($d['tipo']) ?>)</option>
+                                <option value="<?= $d['id'] ?>" <?= $d['id']===$pre_disp?'selected':'' ?>><?= h($d['codigo']) ?></option>
                             <?php endforeach; ?>
                         </select>
                         <?php if(empty($dispositivos)): ?><div class="form-text text-warning">Sem dispositivos disponíveis.</div><?php endif; ?>
