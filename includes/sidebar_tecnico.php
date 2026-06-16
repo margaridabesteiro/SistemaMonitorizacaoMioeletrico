@@ -33,4 +33,8 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuTecnico('relatorios', $pa) ?>">
                 <i class="fa-regular fa-file-lines me-2"></i>Relatórios
             </a>
+            <a href="<?= APP_URL ?>/private/tecnico/dispositivos/lista_dispositivos.php"
+               class="nav-link<?= menuTecnico('dispositivos', $pa) ?>">
+                <i class="fa-solid fa-microchip me-2"></i>Dispositivos
+            </a>
         </nav>

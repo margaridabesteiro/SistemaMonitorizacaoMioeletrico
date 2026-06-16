@@ -27,8 +27,7 @@ if ($sel) {
     // Dados base
     $su = $db->prepare("
         SELECT u.nome, u.email, ut.diagnostico, ut.cobertura_saude, ut.nif,
-               s.nome AS seguradora, um.nome AS medico_nome,
-               ut.criado_em
+               s.nome AS seguradora, um.nome AS medico_nome
         FROM utentes ut
         JOIN utilizadores u ON u.id=ut.utilizador_id
         LEFT JOIN seguradoras s ON s.id=ut.seguradora_id
@@ -262,9 +261,29 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
         </main>
 <style>
 @media print {
+    @page { size: A4 portrait; margin: 1.2cm; }
+
     .sidebar, .topbar, .d-print-none { display:none !important; }
-    .content { margin:0 !important; padding:0 !important; }
-    .card { box-shadow:none !important; border:1px solid #ccc !important; }
+
+    /* Eliminar margens do layout com sidebar */
+    body, html { margin:0 !important; padding:0 !important; width:100% !important; }
+    .wrapper { display:block !important; }
+    .content { margin:0 !important; padding:0 !important; width:100% !important; max-width:100% !important; }
+
+    /* Tabelas: ocupar largura total e nunca cortar */
+    table { width:100% !important; table-layout:fixed !important; border-collapse:collapse !important; font-size:9pt !important; }
+    th, td { word-break:break-word !important; overflow-wrap:break-word !important; padding:4px 6px !important; border:1px solid #ccc !important; }
+    thead { background:#f0f0f0 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+    /* Cards */
+    .card { box-shadow:none !important; border:1px solid #ccc !important; page-break-inside:avoid; }
+    .row { display:flex !important; flex-wrap:wrap !important; }
+
+    /* Badges: forçar cor de fundo na impressão */
+    .badge { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; border:1px solid #999 !important; }
+
+    /* Evitar cortes de página no meio de secções */
+    h5 { page-break-after:avoid; }
 }
 </style>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

@@ -72,11 +72,11 @@ if ($pid) {
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <strong>Alertas Clínicos</strong>
                     <span class="badge bg-white text-danger ms-1"><?= count($alertas_clinicos) ?></span>
-                    <small class="ms-auto opacity-75">Últimos 7 dias · RMS baixo ou tendência de regressão</small>
+                    <small class="ms-auto opacity-75">Últimos 7 dias · Regressão ou % &lt; 50</small>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Paciente</th><th>Sessão</th><th>% Final</th><th>Tendência</th><th>RMS (µV)</th></tr></thead>
+                        <thead class="table-light"><tr><th>Paciente</th><th>Sessão</th><th>% Final</th><th>Tendência</th></tr></thead>
                         <tbody>
                         <?php foreach ($alertas_clinicos as $al): ?>
                             <tr>
@@ -84,7 +84,6 @@ if ($pid) {
                                 <td><a href="sessoes/detalhes_sessao.php?id=<?= $al['sessao_id'] ?>" class="text-decoration-none"><?= h($al['quando']) ?></a></td>
                                 <td><?= $al['percentagem_final'] !== null ? '<span class="text-danger fw-bold">'.number_format((float)$al['percentagem_final'],1).'%</span>' : '—' ?></td>
                                 <td><?= $al['tendencia'] === 'regressao' ? '<span class="badge bg-danger"><i class="fa-solid fa-arrow-trend-down me-1"></i>Regressão</span>' : '<span class="badge bg-secondary">'.$al['tendencia'].'</span>' ?></td>
-                                <td><?= $al['rms_uv'] !== null ? number_format((float)$al['rms_uv'],1).' µV' : '—' ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

@@ -68,7 +68,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                     <button class="btn btn-sm" style="background:#1a5f8a;color:#fff;" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-plus me-1"></i>Nova Conversa
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-end" style="max-height:300px;overflow-y:auto;">
                         <?php foreach ($destinatarios_validos as $d): ?>
                             <li><a class="dropdown-item" href="?com=<?= $d['id'] ?>">
                                 <span class="badge bg-secondary me-1"><?= h(ucfirst($d['perfil'])) ?></span>

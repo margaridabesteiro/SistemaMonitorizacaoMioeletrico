@@ -108,9 +108,6 @@ $tend_cores   = ['melhoria' => 'text-success', 'estavel' => 'text-secondary', 'r
                         <h6 class="fw-bold mb-3">Informação Clínica</h6>
                         <p><strong>Diagnóstico:</strong><br><small class="text-muted"><?= h($pac['diagnostico'] ?? '—') ?></small></p>
                         <p><strong>Email:</strong> <?= h($pac['email']) ?></p>
-                        <?php if ($pac['categoria_clinica']): ?>
-                            <p><strong>Categoria:</strong> <?= h(str_replace('_', ' ', $pac['categoria_clinica'])) ?></p>
-                        <?php endif; ?>
                         <?php if ($pac['membro_afetado']): ?>
                             <p class="mb-0"><strong>Membro:</strong> <?= h(str_replace('_', ' ', $pac['membro_afetado'])) ?></p>
                         <?php endif; ?>
