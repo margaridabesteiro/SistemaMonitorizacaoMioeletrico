@@ -16,13 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     $duracao       = (int)($_POST['duracao']        ?? 45);
     $objetivo      = trim($_POST['objetivo_sessao'] ?? '');
     $notas         = trim($_POST['notas']           ?? '');
-    $modalidade    = $_POST['modalidade']           ?? 'presencial';
-    $link          = trim($_POST['link_videochamada'] ?? '') ?: null;
     $disp_id       = (int)($_POST['dispositivo_id'] ?? 0) ?: null;
+
+    // Modalidade e link só fazem sentido em avaliação funcional
+    if ($categoria === 'avaliacao_funcional') {
+        $modalidade = $_POST['modalidade'] ?? 'presencial';
+        $link       = trim($_POST['link_videochamada'] ?? '') ?: null;
+    } else {
+        $modalidade = 'presencial';
+        $link       = null;
+    }
 
     if (!$utente_id) $erros[] = 'Selecione um paciente.';
     if ($data_hora === '') $erros[] = 'Data/Hora obrigatória.';
-    if ($modalidade === 'remota' && !$link) $erros[] = 'Link de videochamada obrigatório para sessão remota.';
+    elseif (strtotime($data_hora) < strtotime(date('Y-m-d'))) $erros[] = 'A data não pode ser no passado.';
+    if ($categoria === 'avaliacao_funcional' && $modalidade === 'remota' && !$link) $erros[] = 'Link de videochamada obrigatório para avaliação funcional remota.';
 
     if (empty($erros)) {
         $db->prepare('INSERT INTO sessoes (utente_id,tecnico_id,dispositivo_id,data_hora,duracao_min,categoria,jogo_id,objetivo_sessao,modalidade,link_videochamada,estado,notas)
@@ -64,7 +72,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Categoria</label>
                             <select name="categoria" class="form-select" id="selectCategoria">
-                                <?php foreach(['jogo'=>'Jogo','treino'=>'Treino','calibracao'=>'Calibração','avaliacao_funcional'=>'Avaliação Funcional'] as $v=>$l): ?>
+                                <?php foreach(['jogo'=>'Jogo','avaliacao_funcional'=>'Avaliação Funcional'] as $v=>$l): ?>
                                     <option value="<?= $v ?>" <?= (($_POST['categoria']??'jogo')===$v)?'selected':'' ?>><?= $l ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -89,7 +97,9 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Data / Hora <span class="text-danger">*</span></label>
-                            <input type="datetime-local" name="data_hora" class="form-control" required value="<?= h($_POST['data_hora'] ?? '') ?>">
+                            <input type="datetime-local" name="data_hora" class="form-control" required
+                                   min="<?= date('Y-m-d') ?>T00:00"
+                                   value="<?= h($_POST['data_hora'] ?? '') ?>">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-semibold">Duração (min)</label>
@@ -104,23 +114,24 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Modalidade</label>
-                        <div class="d-flex gap-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="modalidade" id="modPresencial" value="presencial" <?= (($_POST['modalidade']??'presencial')==='presencial')?'checked':'' ?>>
-                                <label class="form-check-label" for="modPresencial"><i class="fa-solid fa-hospital me-1"></i>Presencial</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="modalidade" id="modRemota" value="remota" <?= (($_POST['modalidade']??'')==='remota')?'checked':'' ?>>
-                                <label class="form-check-label" for="modRemota"><i class="fa-solid fa-video me-1"></i>Remota</label>
+                    <div id="modalidadeSection" style="display:none;">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Modalidade</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="modalidade" id="modPresencial" value="presencial" <?= (($_POST['modalidade']??'presencial')==='presencial')?'checked':'' ?>>
+                                    <label class="form-check-label" for="modPresencial"><i class="fa-solid fa-hospital me-1"></i>Presencial</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="modalidade" id="modRemota" value="remota" <?= (($_POST['modalidade']??'')==='remota')?'checked':'' ?>>
+                                    <label class="form-check-label" for="modRemota"><i class="fa-solid fa-video me-1"></i>Remota (videochamada)</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3" id="linkVideoRow" style="display:none;">
-                        <label class="form-label fw-semibold">Link Videochamada <span class="text-danger">*</span></label>
-                        <input type="url" name="link_videochamada" class="form-control" placeholder="https://meet.google.com/..." value="<?= h($_POST['link_videochamada'] ?? '') ?>">
+                        <div class="mb-3" id="linkVideoRow" style="display:none;">
+                            <label class="form-label fw-semibold">Link Videochamada <span class="text-danger">*</span></label>
+                            <input type="url" name="link_videochamada" class="form-control" placeholder="https://meet.jit.si/..." value="<?= h($_POST['link_videochamada'] ?? '') ?>">
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -139,21 +150,23 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
         </main>
         <script>
-        // Mostrar/ocultar campo de link conforme modalidade
         function toggleLink() {
-            const remota = document.getElementById('modRemota').checked;
+            var remota = document.getElementById('modRemota').checked;
             document.getElementById('linkVideoRow').style.display = remota ? 'block' : 'none';
         }
         document.getElementById('modPresencial').addEventListener('change', toggleLink);
         document.getElementById('modRemota').addEventListener('change', toggleLink);
-        toggleLink();
 
-        // Mostrar/ocultar dropdown de jogo conforme categoria
-        function toggleJogo() {
-            const cat = document.getElementById('selectCategoria').value;
-            document.getElementById('jogoRow').style.display = cat === 'jogo' ? 'block' : 'none';
+        function toggleCategoria() {
+            var cat = document.getElementById('selectCategoria').value;
+            var eJogo = cat === 'jogo';
+            // Jogo: mostrar dropdown de jogo, ocultar modalidade
+            document.getElementById('jogoRow').style.display = eJogo ? 'block' : 'none';
+            document.getElementById('modalidadeSection').style.display = eJogo ? 'none' : 'block';
+            if (eJogo) document.getElementById('linkVideoRow').style.display = 'none';
+            else toggleLink();
         }
-        document.getElementById('selectCategoria').addEventListener('change', toggleJogo);
-        toggleJogo();
+        document.getElementById('selectCategoria').addEventListener('change', toggleCategoria);
+        toggleCategoria();
         </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

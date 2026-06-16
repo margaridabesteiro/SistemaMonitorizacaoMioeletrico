@@ -57,12 +57,14 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                     <div class="card p-3 mb-3"><h5>Notas da Sessão</h5>
                         <textarea class="form-control mt-2" id="notasSessao" rows="5" placeholder="Observações durante a sessão..."><?= h($s['notas'] ?? '') ?></textarea>
                     </div>
-                    <div class="d-flex gap-2">
-                        <?php if ($s['estado'] === 'agendada'): ?>
-                        <form method="POST" class="d-inline"><input type="hidden" name="acao" value="iniciar"><button type="submit" class="btn btn-success"><i class="fa-solid fa-play me-1"></i>Iniciar</button></form>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <?php if ($s['categoria']==='avaliacao_funcional' && $s['modalidade']==='remota' && !empty($s['link_videochamada'])): ?>
+                        <a href="<?= h($s['link_videochamada']) ?>" target="_blank" rel="noopener" class="btn btn-primary">
+                            <i class="fa-solid fa-video me-1"></i>Entrar na Videochamada
+                        </a>
                         <?php endif; ?>
                         <?php if ($s['estado'] === 'em_curso'): ?>
-                        <button type="button" class="btn btn-primary" onclick="abrirAnalise()">
+                        <button type="button" class="btn btn-success" onclick="abrirAnalise()">
                             <i class="fa-solid fa-flag-checkered me-1"></i>Concluir Sessão
                         </button>
                         <?php endif; ?>

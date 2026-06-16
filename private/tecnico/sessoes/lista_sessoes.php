@@ -45,6 +45,7 @@ $total_paginas  = (int)ceil($total_registos / $por_pagina);
 
 $stmt = $db->prepare("
     SELECT s.id, s.data_hora, s.duracao_min, s.categoria, s.estado,
+           s.modalidade, s.link_videochamada,
            u.nome AS paciente, j.nome AS jogo, j.nivel AS jogo_nivel,
            d.codigo AS dispositivo
     FROM sessoes s
@@ -135,10 +136,13 @@ $cores_estado = [
                                        class="btn btn-xs btn-outline-primary me-1" title="Detalhes">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
-                                    <?php if ($s['estado'] === 'agendada'): ?>
-                                    <a href="iniciar_sessao.php?id=<?= $s['id'] ?>"
-                                       class="btn btn-xs btn-outline-success" title="Iniciar">
-                                        <i class="fa-solid fa-play"></i>
+                                    <?php if ($s['categoria'] === 'avaliacao_funcional'
+                                              && $s['modalidade'] === 'remota'
+                                              && !empty($s['link_videochamada'])
+                                              && $s['estado'] === 'agendada'): ?>
+                                    <a href="<?= h($s['link_videochamada']) ?>" target="_blank" rel="noopener"
+                                       class="btn btn-xs btn-outline-success" title="Entrar na videoconsulta">
+                                        <i class="fa-solid fa-video"></i>
                                     </a>
                                     <?php endif; ?>
                                 </td>
