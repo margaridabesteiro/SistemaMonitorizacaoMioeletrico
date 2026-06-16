@@ -6,8 +6,9 @@ $pagina_titulo = 'Relatório Financeiro'; $pagina_ativa = 'relatorio_fin';
 $db = getDB();
 
 $ano_atual = (int)($_GET['ano'] ?? date('Y'));
-$anos = $db->query("SELECT DISTINCT YEAR(data_emissao) AS ano FROM faturas ORDER BY ano DESC")->fetchAll(PDO::FETCH_COLUMN);
-if (empty($anos)) $anos = [date('Y')];
+$anos_db = $db->query("SELECT DISTINCT YEAR(data_emissao) AS ano FROM faturas")->fetchAll(PDO::FETCH_COLUMN);
+$anos = array_values(array_unique(array_merge([2026, 2025, 2024], array_map('intval', $anos_db))));
+rsort($anos);
 
 // 1. Receita mensal (pagas)
 $mensal = $db->prepare("
@@ -83,13 +84,12 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Relatório Financeiro</h1>
                 <form method="GET" class="d-flex gap-2 align-items-center">
-                    <label class="mb-0 me-1 small">Ano:</label>
-                    <select name="ano" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+                    <label class="mb-0 me-1 fw-semibold">Ano:</label>
+                    <select name="ano" class="form-select fw-bold w-auto" style="font-size:1.1rem;min-width:90px;" onchange="this.form.submit()">
                         <?php foreach ($anos as $a): ?>
                             <option value="<?= $a ?>" <?= $a==$ano_atual?'selected':'' ?>><?= $a ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <a href="controlo_faturacao.php" class="btn btn-sm btn-outline-secondary">Faturação</a>
                 </form>
             </div>
 

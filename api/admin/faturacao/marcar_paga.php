@@ -3,9 +3,10 @@ require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 requirePerfil('admin');
 
-$num    = trim($_POST['num'] ?? '');
+$num    = trim($_POST['num'] ?? '') ?: trim($_GET['num'] ?? '');
 $metodo = $_POST['metodo_pagamento'] ?? null;
 $data   = $_POST['data_pagamento']   ?? null;
+$origem = $_POST['_origem'] ?? '';
 
 $metodos_validos = ['multibanco','cartão','seguro','numerário','transferência'];
 if (!$metodo || !in_array($metodo, $metodos_validos, true)) {
@@ -21,5 +22,8 @@ if ($num) {
        ->execute([$metodo, $data, $num]);
     registarAuditoria('ATUALIZAR', 'Fatura', null, 'Fatura ' . $num . ' marcada como paga via ' . $metodo . ' em ' . $data);
     $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Fatura marcada como paga.'];
+}
+if ($origem === 'fatura' && $num) {
+    redirect(APP_URL . '/private/admin/faturacao/fatura.php?num=' . urlencode($num));
 }
 redirect(APP_URL . '/private/admin/faturacao/controlo_faturacao.php');

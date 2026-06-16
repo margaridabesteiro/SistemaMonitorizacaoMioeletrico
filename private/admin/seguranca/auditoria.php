@@ -186,12 +186,11 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                 <th style="width:130px;">Ação</th>
                                 <th style="width:110px;">Entidade</th>
                                 <th style="max-width:300px;">Detalhe</th>
-                                <th style="width:110px;">IP</th>
                             </tr>
                         </thead>
                         <tbody id="tabela-auditoria">
                         <?php if (empty($registos)): ?>
-                            <tr><td colspan="7" class="text-center text-muted py-4">Sem registos para os filtros seleccionados.</td></tr>
+                            <tr><td colspan="6" class="text-center text-muted py-4">Sem registos para os filtros seleccionados.</td></tr>
                         <?php else: foreach ($registos as $i => $r):
                             $estilo = $acao_styles[$r['acao']] ?? ['bg'=>'#f1f5f9','txt'=>'#475569','label'=>$r['acao']];
                             $pCor   = $perfil_cores[$r['perfil'] ?? ''] ?? 'secondary';
@@ -211,10 +210,9 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                 </td>
                                 <td class="small text-muted"><?= h($r['entidade'] ?? '—') ?></td>
                                 <td class="small text-truncate" style="max-width:300px;"><?= h($r['detalhe'] ?? '—') ?></td>
-                                <td class="font-monospace small text-muted"><?= h($r['ip'] ?? '—') ?></td>
                             </tr>
                             <tr id="detalhe-<?= $i ?>" style="display:none;background:#f8f9fa;">
-                                <td colspan="7" class="ps-4 py-2">
+                                <td colspan="6" class="ps-4 py-2">
                                     <div class="row g-3 small">
                                         <div class="col-auto">
                                             <span class="text-muted">ID registo:</span>

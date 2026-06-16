@@ -21,7 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dados['email']   = trim($_POST['email']   ?? '');
     $dados['perfil']  = $_POST['perfil']       ?? '';
     $dados['ativo']   = isset($_POST['ativo']) ? 1 : 0;
-    $password         = $_POST['password']     ?? '';
+
+    if ($dados['perfil'] === 'utente') {
+        $password     = $_POST['password'] ?? '';
+        $senha_gerada = $password;
+    } else {
+        $password = 'Rehablink2026!';
+    }
 
     $data_nascimento  = trim($_POST['data_nascimento'] ?? '') ?: null;
     $sexo             = trim($_POST['sexo']            ?? '') ?: null;
@@ -33,14 +39,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigo_postal    = trim($_POST['codigo_postal']   ?? '') ?: null;
     $localidade       = trim($_POST['localidade']      ?? '') ?: null;
 
+    // Normalizar prefixo Dr. para médicos (evita "Dr. Dr.")
+    if ($dados['perfil'] === 'medico') {
+        $nome_limpo = preg_replace('/^(Dr\.\s+)+/u', '', $dados['nome']);
+        $dados['nome'] = 'Dr. ' . $nome_limpo;
+    }
     if ($dados['nome'] === '')  $erros[] = 'O nome é obrigatório.';
     if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
     if (!in_array($dados['perfil'], ['admin','medico','tecnico','utente'], true)) $erros[] = 'Perfil inválido.';
-    if (strlen($password) < 8) $erros[] = 'Password inválida (mínimo 8 caracteres).';
+    if ($dados['perfil'] === 'utente' && strlen($password) < 8) $erros[] = 'Password inválida (mínimo 8 caracteres).';
     if ($dados['perfil'] === 'utente' && empty($_POST['rgpd_consentimento'])) $erros[] = 'É obrigatório confirmar o consentimento RGPD do utente.';
     if ($data_nascimento && $data_nascimento > date('Y-m-d')) $erros[] = 'Data de nascimento não pode ser futura.';
-
-    $senha_gerada = $password;
+    if ($telemovel !== null && !preg_match('/^\d{9}$/', $telemovel)) $erros[] = 'O contacto deve ter exatamente 9 dígitos.';
+    if ($dados['perfil'] === 'medico' && $cedula !== null && !preg_match('/^\d{5}$/', $cedula)) $erros[] = 'O número de cédula profissional deve ter exatamente 5 dígitos.';
 
     if (empty($erros)) {
         $db = getDB();
@@ -49,8 +60,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($existe->fetch()) {
             $erros[] = 'Já existe um utilizador com esse email.';
         } else {
+            // Unicidade: telemóvel (cross-perfil)
+            if ($telemovel !== null) {
+                $tel_dup = false;
+                try { $s = $db->prepare("SELECT 1 FROM profissionais WHERE contacto = ? LIMIT 1"); $s->execute([$telemovel]); if ($s->fetch()) $tel_dup = true; } catch (\Throwable $e) {}
+                if (!$tel_dup) { try { $s = $db->prepare("SELECT 1 FROM utentes WHERE telemovel = ? LIMIT 1"); $s->execute([$telemovel]); if ($s->fetch()) $tel_dup = true; } catch (\Throwable $e) {} }
+                if ($tel_dup) $erros[] = 'Este número de telemóvel já está registado noutro utilizador.';
+            }
+            // Unicidade: NIF
+            if ($dados['perfil'] === 'utente' && $nif !== null) {
+                $s = $db->prepare("SELECT 1 FROM utentes WHERE nif = ? LIMIT 1");
+                $s->execute([$nif]);
+                if ($s->fetch()) $erros[] = 'Este NIF já está registado noutro utente.';
+            }
+
+            if (empty($erros)) {
             $hash         = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-            $deve_alterar = in_array($dados['perfil'], ['medico','tecnico','utente']) ? 1 : 0;
+            $deve_alterar = $dados['perfil'] === 'utente' ? 1 : 0;
             $stmt = $db->prepare('INSERT INTO utilizadores (nome, email, password_hash, deve_alterar_password, perfil, ativo) VALUES (?,?,?,?,?,?)');
             $stmt->execute([$dados['nome'], $dados['email'], $hash, $deve_alterar, $dados['perfil'], $dados['ativo']]);
             $novo_id = (int)$db->lastInsertId();
@@ -93,9 +119,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $db->prepare('UPDATE utentes SET telemovel=? WHERE id=?')->execute([$telemovel, $utente_row_id]);
                     } catch (\Throwable $e) {}
                 }
-                $medico = $db->query("SELECT p.id FROM profissionais p JOIN utilizadores u ON u.id=p.utilizador_id WHERE u.perfil='medico' AND u.ativo=1 ORDER BY (SELECT COUNT(*) FROM utentes WHERE medico_id=p.id) ASC, RAND() LIMIT 1")->fetch();
+                $medico = $db->query("SELECT p.id, p.utilizador_id FROM profissionais p JOIN utilizadores u ON u.id=p.utilizador_id WHERE u.perfil='medico' AND u.ativo=1 ORDER BY (SELECT COUNT(*) FROM utentes WHERE medico_id=p.id) ASC, RAND() LIMIT 1")->fetch();
                 if ($medico) {
                     $db->prepare('UPDATE utentes SET medico_id=? WHERE utilizador_id=?')->execute([$medico['id'], $novo_id]);
+                    notificar(
+                        (int)$medico['utilizador_id'],
+                        'info',
+                        'Novo utente atribuído',
+                        'O utente ' . $dados['nome'] . ' foi-lhe atribuído para acompanhamento.',
+                        APP_URL . '/private/medico/consultas/consulta.php'
+                    );
+                }
+                $tecnico = $db->query("SELECT p.id, p.utilizador_id FROM profissionais p JOIN utilizadores u ON u.id=p.utilizador_id WHERE u.perfil='tecnico' AND u.ativo=1 ORDER BY (SELECT COUNT(*) FROM utentes WHERE tecnico_id=p.id) ASC, RAND() LIMIT 1")->fetch();
+                if ($tecnico) {
+                    $db->prepare('UPDATE utentes SET tecnico_id=? WHERE utilizador_id=?')->execute([$tecnico['id'], $novo_id]);
+                    notificar(
+                        (int)$tecnico['utilizador_id'],
+                        'info',
+                        'Novo utente atribuído',
+                        'O utente ' . $dados['nome'] . ' foi-lhe atribuído para acompanhamento.',
+                        APP_URL . '/private/tecnico/index_F.php'
+                    );
                 }
                 try {
                     $db->prepare('INSERT INTO rgpd_consentimentos (utilizador_id, tipo, registado_por, ip, detalhes) VALUES (?,?,?,?,?)')
@@ -114,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => 'Utilizador criado.'];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
+            } // end unicidade
         }
     }
 }
@@ -195,12 +240,16 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <!-- Telemóvel -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Telemóvel</label>
-                        <input type="tel" name="telemovel" class="form-control" placeholder="Ex: 912 000 001"
+                        <input type="tel" name="telemovel" class="form-control" placeholder="Ex: 912000001"
+                               pattern="[0-9]{9}" maxlength="9" minlength="9"
+                               title="Introduza exatamente 9 dígitos, sem espaços"
+                               oninput="this.value=this.value.replace(/\D/g,'')"
                                value="<?= h($_POST['telemovel'] ?? '') ?>">
+                        <div class="form-text">Exatamente 9 dígitos, sem espaços.</div>
                     </div>
 
-                    <!-- Password -->
-                    <div class="mb-3">
+                    <!-- Password (utente: temporária gerada; outros: Rehablink2026! fixa) -->
+                    <div id="bloco-password" class="mb-3">
                         <label class="form-label fw-semibold">Password temporária *</label>
                         <div class="input-group">
                             <input type="text" id="senha_visivel" class="form-control font-monospace fw-bold"
@@ -216,9 +265,14 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                         <div class="form-text">
                             <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
                             Copie esta password antes de guardar.
-                            <span id="nota-alterar" style="display:none;">O utilizador será obrigado a alterá-la no primeiro acesso.</span>
+                            <span id="nota-alterar" style="display:none;">O utente será obrigado a alterá-la no primeiro acesso.</span>
                         </div>
                         <div id="copiado" class="text-success small mt-1" style="display:none;"><i class="fa-solid fa-check me-1"></i>Copiado!</div>
+                    </div>
+                    <div id="bloco-password-padrao" class="mb-3 alert alert-secondary py-2 small" style="display:none;">
+                        <i class="fa-solid fa-key me-1"></i>
+                        Palavra-passe padrão: <strong class="font-monospace">Rehablink2026!</strong>
+                        Só o administrador pode repô-la.
                     </div>
 
                     <div class="form-check mb-3">
@@ -236,7 +290,11 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
-                                <input type="text" name="cedula" class="form-control" placeholder="Ex: 12345" value="<?= h($_POST['cedula'] ?? '') ?>">
+                                <input type="text" name="cedula" class="form-control" placeholder="Ex: 12345"
+                                       pattern="[0-9]{5}" maxlength="5" minlength="5"
+                                       title="Introduza exatamente 5 dígitos"
+                                       oninput="this.value=this.value.replace(/\D/g,'')"
+                                       value="<?= h($_POST['cedula'] ?? '') ?>">
                             </div>
                         </div>
                     </div>
@@ -328,6 +386,14 @@ function atualizarBlocos() {
     const suffix   = document.getElementById('email-suffix');
     const emailNota = document.getElementById('email-nota');
     const isRL     = PERFIS_REHABLINK.includes(perfil);
+    const nomeInp  = document.querySelector('input[name="nome"]');
+
+    // Prefixo Dr. para médicos
+    if (perfil === 'medico') {
+        if (!nomeInp.value.startsWith('Dr. ')) nomeInp.value = 'Dr. ' + nomeInp.value;
+    } else {
+        if (nomeInp.value.startsWith('Dr. ')) nomeInp.value = nomeInp.value.slice(4);
+    }
 
     // Email suffix logic
     if (isRL) {
@@ -348,7 +414,18 @@ function atualizarBlocos() {
     // Show/hide professional blocks
     document.getElementById('bloco-medico').style.display  = perfil === 'medico'  ? 'block' : 'none';
     document.getElementById('bloco-utente').style.display  = perfil === 'utente'  ? 'block' : 'none';
-    document.getElementById('nota-alterar').style.display  = (perfil && perfil !== 'admin') ? 'inline' : 'none';
+    document.getElementById('nota-alterar').style.display  = perfil === 'utente'  ? 'inline' : 'none';
+
+    // Password: utente tem temporária gerada; outros têm Rehablink2026! fixa
+    const blocoPass       = document.getElementById('bloco-password');
+    const blocoPassPadrao = document.getElementById('bloco-password-padrao');
+    if (perfil === 'utente' || perfil === '') {
+        blocoPass.style.display       = 'block';
+        blocoPassPadrao.style.display = 'none';
+    } else {
+        blocoPass.style.display       = 'none';
+        blocoPassPadrao.style.display = 'block';
+    }
 }
 
 // On submit: assemble full email for rehablink profiles

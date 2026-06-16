@@ -424,10 +424,9 @@ INSERT IGNORE INTO dispositivos (codigo, tipo, firmware_versao, estado, ativo) V
 
 -- 4 Jogos de reabilitação
 INSERT IGNORE INTO jogos (nome, nivel, descricao) VALUES
-    ('catch_game',         'minimo', 'Apanhar objetos em queda — controlo on/off'),
-    ('claw_game',          'minimo', 'Garra arcade com dois thresholds de força'),
-    ('flappy_trainer',     'medio',  'Controlo proporcional de altitude por força'),
-    ('prosthesis_trainer', 'maximo', 'Simulação de tarefas reais de prótese mioelétrica');
+    ('catch_game',     'minimo', 'Apanhar objetos em queda — controlo on/off'),
+    ('claw_game',      'minimo', 'Garra arcade com dois thresholds de força'),
+    ('flappy_trainer', 'medio',  'Controlo proporcional de altitude por força');
 
 -- Preferências padrão para todos os utilizadores
 INSERT IGNORE INTO preferencias_utilizador (utilizador_id)

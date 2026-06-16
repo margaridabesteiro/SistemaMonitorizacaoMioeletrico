@@ -35,34 +35,33 @@ foreach ($perfil_labels as $key => $label) {
     $logins_data[]   = (int)($logins_perfil_raw[$key] ?? 0);
 }
 
-// Gráfico 3 — Pacientes atendidos por médico (parte de utilizadores para incluir todos)
-$s = $db->prepare("
-    SELECT u.nome, COUNT(DISTINCT c.utente_id) as total
-    FROM utilizadores u
-    LEFT JOIN profissionais p ON p.utilizador_id = u.id
-    LEFT JOIN consultas c ON c.medico_id = p.id AND c.data_hora >= DATE_SUB(NOW(), INTERVAL ? DAY)
-    WHERE u.perfil = 'medico' AND u.ativo = 1
-    GROUP BY u.id, u.nome
-    ORDER BY total DESC, u.nome ASC
-");
-$s->execute([$periodo]); $pacientes_medico = $s->fetchAll();
-
-// Tabela — Utentes atribuídos por médico (sempre atualizado, sem filtro de período)
-$s = $db->query("
-    SELECT u.nome AS medico_nome,
-           COUNT(ut.id) AS total_utentes,
-           GROUP_CONCAT(um.nome ORDER BY um.nome SEPARATOR '|') AS utentes_nomes
-    FROM utilizadores u
-    LEFT JOIN profissionais p ON p.utilizador_id = u.id
+// Utentes por Médico
+$utentes_por_medico = $db->query("
+    SELECT u_med.nome AS medico, u_med.ativo AS medico_ativo,
+           COUNT(ut.id) AS total,
+           GROUP_CONCAT(u_ut.nome ORDER BY u_ut.nome SEPARATOR '||') AS nomes_utentes
+    FROM profissionais p
+    JOIN utilizadores u_med ON u_med.id = p.utilizador_id AND u_med.perfil = 'medico'
     LEFT JOIN utentes ut ON ut.medico_id = p.id
-    LEFT JOIN utilizadores um ON um.id = ut.utilizador_id AND um.ativo = 1
-    WHERE u.perfil = 'medico' AND u.ativo = 1
-    GROUP BY u.id, u.nome
-    ORDER BY total_utentes DESC, u.nome ASC
-");
-$utentes_por_medico = $s->fetchAll();
+    LEFT JOIN utilizadores u_ut ON u_ut.id = ut.utilizador_id AND u_ut.email NOT LIKE 'anonimizado_%'
+    GROUP BY p.id, u_med.nome, u_med.ativo
+    ORDER BY u_med.nome
+")->fetchAll();
 
-// Gráfico 4 — Faturação (agrupada por dia ou mês consoante o período)
+// Utentes por Técnico
+$utentes_por_tecnico = $db->query("
+    SELECT u_tec.nome AS tecnico, u_tec.ativo AS tecnico_ativo,
+           COUNT(ut.id) AS total,
+           GROUP_CONCAT(u_ut.nome ORDER BY u_ut.nome SEPARATOR '||') AS nomes_utentes
+    FROM profissionais p
+    JOIN utilizadores u_tec ON u_tec.id = p.utilizador_id AND u_tec.perfil = 'tecnico'
+    LEFT JOIN utentes ut ON ut.tecnico_id = p.id
+    LEFT JOIN utilizadores u_ut ON u_ut.id = ut.utilizador_id AND u_ut.email NOT LIKE 'anonimizado_%'
+    GROUP BY p.id, u_tec.nome, u_tec.ativo
+    ORDER BY u_tec.nome
+")->fetchAll();
+
+// Gráfico 3 — Faturação (agrupada por dia ou mês consoante o período)
 $fat_formato  = $periodo <= 30 ? '%d/%m' : '%m/%Y';
 $s = $db->prepare("
     SELECT DATE_FORMAT(data_emissao, '$fat_formato') as label, COALESCE(SUM(valor_eur),0) as total
@@ -100,19 +99,11 @@ $s->execute([$periodo]); $faturacao_mensal = $s->fetchAll();
                 <canvas id="chartSessoes" height="80"></canvas>
             </div>
 
-            <!-- Logins por perfil + Pacientes por médico -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-5">
-                    <div class="card p-3 h-100">
-                        <h5 class="mb-3">Logins por Perfil (últimos <?= $periodo ?> dias)</h5>
-                        <canvas id="chartLogins"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="card p-3 h-100">
-                        <h5 class="mb-3">Pacientes Atendidos por Médico (últimos <?= $periodo ?> dias)</h5>
-                        <canvas id="chartMedicos" height="120"></canvas>
-                    </div>
+            <!-- Logins por perfil -->
+            <div class="card p-3 mb-4">
+                <h5 class="mb-3">Logins por Perfil (últimos <?= $periodo ?> dias)</h5>
+                <div style="max-width:320px;margin:0 auto;">
+                    <canvas id="chartLogins"></canvas>
                 </div>
             </div>
 
@@ -122,43 +113,72 @@ $s->execute([$periodo]); $faturacao_mensal = $s->fetchAll();
                 <canvas id="chartFaturacao" height="80"></canvas>
             </div>
 
-            <!-- Utentes por médico -->
-            <div class="card p-3 mb-4">
-                <h5 class="mb-1">Utentes Atribuídos por Médico</h5>
-                <p class="small text-muted mb-3">Estado atual — atualizado automaticamente quando um utente é adicionado ou reatribuído.</p>
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Médico</th>
-                                <th class="text-center" style="width:80px;">Total</th>
-                                <th>Utentes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php if (empty($utentes_por_medico)): ?>
-                            <tr><td colspan="3" class="text-center text-muted py-3">Sem médicos registados.</td></tr>
-                        <?php else: foreach ($utentes_por_medico as $row): ?>
-                            <tr>
-                                <td class="fw-semibold"><?= h($row['medico_nome']) ?></td>
-                                <td class="text-center">
-                                    <span class="badge bg-<?= $row['total_utentes'] > 0 ? 'primary' : 'secondary' ?>">
-                                        <?= $row['total_utentes'] ?>
-                                    </span>
-                                </td>
-                                <td class="small text-muted">
-                                    <?php if ($row['utentes_nomes']): ?>
-                                        <?= h(implode(', ', explode('|', $row['utentes_nomes']))) ?>
-                                    <?php else: ?>
-                                        <em>Sem utentes atribuídos</em>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; endif; ?>
-                        </tbody>
-                    </table>
+            <!-- Tabelas: Utentes por Médico e Técnico -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <h5 class="mb-3"><i class="fa-solid fa-user-doctor me-2" style="color:#8B0000;"></i>Utentes por Médico</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr><th>Médico</th><th class="text-center" style="width:60px;">Total</th><th>Utentes</th></tr>
+                                </thead>
+                                <tbody>
+                                <?php if (empty($utentes_por_medico)): ?>
+                                    <tr><td colspan="3" class="text-center text-muted py-3">Sem dados.</td></tr>
+                                <?php else: foreach ($utentes_por_medico as $row): ?>
+                                    <tr>
+                                        <td>
+                                            <?= h($row['medico']) ?>
+                                            <?php if (!$row['medico_ativo']): ?><span class="badge bg-secondary ms-1" style="font-size:.65rem;">inativo</span><?php endif; ?>
+                                        </td>
+                                        <td class="text-center fw-bold"><?= (int)$row['total'] ?></td>
+                                        <td class="small text-muted">
+                                            <?php
+                                            $nomes = $row['nomes_utentes'] ? explode('||', $row['nomes_utentes']) : [];
+                                            echo $nomes ? h(implode(', ', $nomes)) : '—';
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <h5 class="mb-3"><i class="fa-solid fa-user-nurse me-2" style="color:#8B0000;"></i>Utentes por Técnico</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr><th>Técnico</th><th class="text-center" style="width:60px;">Total</th><th>Utentes</th></tr>
+                                </thead>
+                                <tbody>
+                                <?php if (empty($utentes_por_tecnico)): ?>
+                                    <tr><td colspan="3" class="text-center text-muted py-3">Sem dados.</td></tr>
+                                <?php else: foreach ($utentes_por_tecnico as $row): ?>
+                                    <tr>
+                                        <td>
+                                            <?= h($row['tecnico']) ?>
+                                            <?php if (!$row['tecnico_ativo']): ?><span class="badge bg-secondary ms-1" style="font-size:.65rem;">inativo</span><?php endif; ?>
+                                        </td>
+                                        <td class="text-center fw-bold"><?= (int)$row['total'] ?></td>
+                                        <td class="small text-muted">
+                                            <?php
+                                            $nomes = $row['nomes_utentes'] ? explode('||', $row['nomes_utentes']) : [];
+                                            echo $nomes ? h(implode(', ', $nomes)) : '—';
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -195,16 +215,6 @@ $s->execute([$periodo]); $faturacao_mensal = $s->fetchAll();
             }
         });
         document.getElementById('chartLogins').style.cursor = 'pointer';
-
-        // Pacientes por médico
-        new Chart(document.getElementById('chartMedicos'), {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode(array_column($pacientes_medico, 'nome')) ?>,
-                datasets: [{ label: 'Pacientes', data: <?= json_encode(array_column($pacientes_medico, 'total')) ?>, backgroundColor: 'rgba(237,137,54,0.8)' }]
-            },
-            options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } } }
-        });
 
         // Faturação mensal
         new Chart(document.getElementById('chartFaturacao'), {

@@ -83,4 +83,33 @@ function notMarcarTodas(){
         const t=el.querySelector('.fw-semibold'); if(t){t.classList.remove('fw-semibold');t.classList.add('text-muted');}
     });
 }
+// Polling: atualiza badge a cada 30s sem precisar de refresh
+(function(){
+    var _notUrl = '<?= APP_URL ?>/api/notificacoes/contar.php';
+    setInterval(function(){
+        fetch(_notUrl, {credentials:'same-origin'})
+            .then(function(r){ return r.json(); })
+            .then(function(d){
+                var n = d.count || 0;
+                var sino = document.getElementById('dropdown-sino');
+                if (!sino) return;
+                var btn = sino.querySelector('button');
+                var badge = document.getElementById('not-badge');
+                if (n > 0) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.id = 'not-badge';
+                        badge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+                        badge.style.cssText = 'font-size:.6rem;padding:.2em .4em;';
+                        btn.appendChild(badge);
+                    }
+                    badge.textContent = Math.min(n, 99);
+                    badge.style.display = '';
+                } else if (badge) {
+                    badge.style.display = 'none';
+                }
+            })
+            .catch(function(){});
+    }, 30000);
+})();
 </script>

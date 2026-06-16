@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($dados['nome'] === '') $erros[] = 'Nome obrigatório.';
     if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
     if (!in_array($dados['perfil'], ['admin','medico','tecnico','utente'], true)) $erros[] = 'Perfil inválido.';
+    $numero_ordem_novo = trim($_POST['numero_ordem'] ?? '') ?: null;
+    if ($dados['perfil'] === 'medico' && $numero_ordem_novo !== null && !preg_match('/^\d{5}$/', $numero_ordem_novo)) $erros[] = 'O número de cédula profissional deve ter exatamente 5 dígitos.';
 
     // Password reset
     $nova_pass = ''; $repor = isset($_POST['repor_password']);
@@ -55,11 +57,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($existe->fetch()) {
             $erros[] = 'Email já em uso.';
         } else {
+            // Unicidade: telemóvel (cross-perfil, excluindo o próprio utilizador)
+            $contacto_novo = trim($_POST['contacto'] ?? '') ?: null;
+            if ($contacto_novo !== null) {
+                $tel_dup = false;
+                try { $s = $db->prepare("SELECT 1 FROM profissionais WHERE contacto = ? AND utilizador_id != ? LIMIT 1"); $s->execute([$contacto_novo, $id]); if ($s->fetch()) $tel_dup = true; } catch (\Throwable $e) {}
+                if (!$tel_dup) { try { $s = $db->prepare("SELECT 1 FROM utentes WHERE telemovel = ? AND utilizador_id != ? LIMIT 1"); $s->execute([$contacto_novo, $id]); if ($s->fetch()) $tel_dup = true; } catch (\Throwable $e) {} }
+                if ($tel_dup) $erros[] = 'Este número de telemóvel já está registado noutro utilizador.';
+            }
+            // Unicidade: NIF (utentes, excluindo o próprio)
+            if ($dados['perfil'] === 'utente') {
+                $nif_novo = trim($_POST['nif'] ?? '') ?: null;
+                if ($nif_novo !== null) {
+                    $s = $db->prepare("SELECT 1 FROM utentes WHERE nif = ? AND utilizador_id != ? LIMIT 1");
+                    $s->execute([$nif_novo, $id]);
+                    if ($s->fetch()) $erros[] = 'Este NIF já está registado noutro utente.';
+                }
+            }
+
+            if (empty($erros)) {
             if ($nova_pass !== '') {
                 $hash = password_hash($nova_pass, PASSWORD_BCRYPT, ['cost'=>12]);
-                $deve_alterar = in_array($dados['perfil'], ['medico','tecnico','utente']) ? 1 : 0;
-                $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=?,password_hash=?,deve_alterar_password=? WHERE id=?')
-                   ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$hash,$deve_alterar,$id]);
+                $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=?,password_hash=?,deve_alterar_password=0 WHERE id=?')
+                   ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$hash,$id]);
             } else {
                 $db->prepare('UPDATE utilizadores SET nome=?,email=?,perfil=?,ativo=? WHERE id=?')
                    ->execute([$dados['nome'],$dados['email'],$dados['perfil'],$dados['ativo'],$id]);
@@ -97,14 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $msg = 'Utilizador atualizado.';
-            if ($nova_pass !== '' && in_array($dados['perfil'], ['medico','tecnico'], true)) {
-                $msg = "Password reposta. Nova password temporária: <strong class='font-monospace'>{$nova_pass}</strong> — comunique ao utilizador. Será obrigado a alterá-la no próximo acesso.";
+            if ($nova_pass !== '' && in_array($dados['perfil'], ['medico','tecnico','admin'], true)) {
+                $msg = "Password reposta. Nova password: <strong class='font-monospace'>{$nova_pass}</strong> — comunique ao utilizador.";
                 registarAuditoria('ATUALIZAR', 'Utilizador', $id, 'Password reposta para: ' . $dados['nome'] . ' (' . $dados['perfil'] . ')');
             } else {
                 registarAuditoria('ATUALIZAR', 'Utilizador', $id, 'Dados atualizados: ' . $dados['nome'] . ' (' . $dados['perfil'] . ')');
             }
             $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>$msg];
             redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');
+            } // end unicidade
         }
     }
 }
@@ -133,6 +154,9 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                 <label class="form-label fw-semibold">Nº de Cédula Profissional</label>
                                 <input type="text" name="numero_ordem" class="form-control"
                                        placeholder="Ex: 12345"
+                                       pattern="[0-9]{5}" maxlength="5" minlength="5"
+                                       title="Introduza exatamente 5 dígitos"
+                                       oninput="this.value=this.value.replace(/\D/g,'')"
                                        value="<?= h($prof['numero_ordem'] ?? '') ?>">
                             </div>
                             <div class="col-md-6 mb-3">

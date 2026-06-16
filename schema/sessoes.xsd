@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Elemento raiz -->
+  <xs:element name="rehablink">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="sessoes" type="SessoesType"/>
+      </xs:sequence>
+      <xs:attribute name="exportado_em" type="xs:dateTime" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Lista de sessões -->
+  <xs:complexType name="SessoesType">
+    <xs:sequence>
+      <xs:element name="sessao" type="SessaoType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="total" type="xs:nonNegativeInteger" use="required"/>
+  </xs:complexType>
+
+  <!-- Sessão individual -->
+  <xs:complexType name="SessaoType">
+    <xs:sequence>
+      <xs:element name="data_hora"   type="xs:dateTime"/>
+      <xs:element name="categoria">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="calibracao"/>
+            <xs:enumeration value="treino"/>
+            <xs:enumeration value="jogo"/>
+            <xs:enumeration value="avaliacao_funcional"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="modalidade">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="presencial"/>
+            <xs:enumeration value="remota"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="duracao_min" type="xs:nonNegativeInteger" minOccurs="0"/>
+      <xs:element name="estado">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="agendada"/>
+            <xs:enumeration value="em_curso"/>
+            <xs:enumeration value="concluida"/>
+            <xs:enumeration value="cancelada"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="utente"   type="UtenteType"/>
+      <xs:element name="tecnico"  type="TecnicoType"/>
+      <xs:element name="jogo"     type="xs:string"  minOccurs="0"/>
+      <xs:element name="metricas" type="MetricasType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+  </xs:complexType>
+
+  <!-- Dados clínicos do utente (sem dados pessoais sensíveis) -->
+  <xs:complexType name="UtenteType">
+    <xs:sequence>
+      <xs:element name="nome" type="xs:string"/>
+      <xs:element name="categoria_clinica" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="avc"/>
+            <xs:enumeration value="amputacao_ms"/>
+            <xs:enumeration value="amputacao_mi"/>
+            <xs:enumeration value="lesao_medular"/>
+            <xs:enumeration value="lesao_nervosa_periferica"/>
+            <xs:enumeration value="paralisia_cerebral"/>
+            <xs:enumeration value="outro"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="membro_afetado" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mao_esquerda"/>
+            <xs:enumeration value="mao_direita"/>
+            <xs:enumeration value="ambas"/>
+            <xs:enumeration value="perna_esquerda"/>
+            <xs:enumeration value="perna_direita"/>
+            <xs:enumeration value="outro"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="fase_tratamento">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="avaliacao"/>
+            <xs:enumeration value="ativo"/>
+            <xs:enumeration value="manutencao"/>
+            <xs:enumeration value="alta"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Técnico responsável pela sessão -->
+  <xs:complexType name="TecnicoType">
+    <xs:sequence>
+      <xs:element name="nome"          type="xs:string"/>
+      <xs:element name="especialidade" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Métricas do jogo de reabilitação -->
+  <xs:complexType name="MetricasType">
+    <xs:sequence>
+      <xs:element name="score"              type="xs:integer"          minOccurs="0"/>
+      <xs:element name="percentagem_final"  type="xs:decimal"          minOccurs="0"/>
+      <xs:element name="passou_nivel"       type="xs:boolean"/>
+      <xs:element name="tendencia" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="melhoria"/>
+            <xs:enumeration value="estavel"/>
+            <xs:enumeration value="regressao"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="n_tentativas" type="xs:nonNegativeInteger"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

@@ -40,6 +40,10 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuAdmin('relatorios', $pa) ?>">
                 <i class="fa-regular fa-file-lines me-2"></i>Relatórios
             </a>
+            <a href="<?= APP_URL ?>/private/admin/relatorios/atribuicoes.php"
+               class="nav-link<?= menuAdmin('atribuicoes', $pa) ?>" style="padding-left:2.2rem;font-size:.88rem;">
+                <i class="fa-solid fa-arrows-left-right-to-line me-2"></i>Atribuições
+            </a>
             <a href="<?= APP_URL ?>/private/admin/fluxo_clinico/confirmar_tarefas.php"
                class="nav-link<?= menuAdmin('fluxo_clinico', $pa) ?>">
                 <i class="fa-solid fa-clipboard-list me-2"></i>Fluxo Clínico

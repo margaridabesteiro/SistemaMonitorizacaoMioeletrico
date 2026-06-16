@@ -29,10 +29,9 @@ CREATE TABLE IF NOT EXISTS jogos (
 ) ENGINE=InnoDB;
 
 INSERT IGNORE INTO jogos (nome, nivel, descricao) VALUES
-  ('catch_game',         'minimo', 'Apanhar objetos em queda — controlo on/off'),
-  ('claw_game',          'minimo', 'Garra arcade com dois thresholds de força'),
-  ('flappy_trainer',     'medio',  'Controlo proporcional de altitude por força'),
-  ('prosthesis_trainer', 'maximo', 'Simulação de tarefas reais de prótese mioelétrica');
+  ('catch_game',     'minimo', 'Apanhar objetos em queda — controlo on/off'),
+  ('claw_game',      'minimo', 'Garra arcade com dois thresholds de força'),
+  ('flappy_trainer', 'medio',  'Controlo proporcional de altitude por força');
 
 -- ============================================================
 -- PASSO 3: Alterar tabela utentes — campos clínicos

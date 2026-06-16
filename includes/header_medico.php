@@ -114,3 +114,11 @@ $_prof_hdr = $_stmt_hdr->fetch() ?: [];
     </div>
 
     <div class="wrapper">
+<script>
+(function(){
+    var _cpUrl = '<?= APP_URL ?>/api/medico/check_proximas.php';
+    function _checkProx(){ fetch(_cpUrl,{credentials:'same-origin'}).catch(function(){}); }
+    _checkProx();
+    setInterval(_checkProx, 120000);
+})();
+</script>

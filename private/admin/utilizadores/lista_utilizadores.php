@@ -14,13 +14,14 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 $db = getDB();
 
 // --- Filtros e paginação ---
-$pesquisa     = trim($_GET['q']      ?? '');
+$pesquisa      = trim($_GET['q']      ?? '');
 $filtro_perfil = $_GET['perfil']     ?? '';
+$filtro_ativo  = $_GET['ativo']      ?? '';
 $pagina_atual  = max(1, (int)($_GET['pagina'] ?? 1));
 $por_pagina    = 15;
 $offset        = ($pagina_atual - 1) * $por_pagina;
 
-$where  = 'WHERE 1=1';
+$where  = "WHERE email NOT LIKE 'anonimizado\\_%@eliminado.rehablink'";
 $params = [];
 
 if ($pesquisa !== '') {
@@ -31,6 +32,11 @@ if ($pesquisa !== '') {
 if (in_array($filtro_perfil, ['admin','medico','tecnico','utente'], true)) {
     $where   .= ' AND perfil = ?';
     $params[] = $filtro_perfil;
+}
+if ($filtro_ativo === '1') {
+    $where .= ' AND ativo = 1';
+} elseif ($filtro_ativo === '0') {
+    $where .= ' AND ativo = 0';
 }
 
 $total = $db->prepare("SELECT COUNT(*) FROM utilizadores $where");
@@ -72,7 +78,7 @@ unset($_SESSION['flash']);
                            placeholder="Pesquisar por nome ou email..."
                            value="<?= h($pesquisa) ?>">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select name="perfil" class="form-select form-select-sm">
                         <option value="">Todos os perfis</option>
                         <?php foreach (['admin','medico','tecnico','utente'] as $p): ?>
@@ -82,7 +88,14 @@ unset($_SESSION['flash']);
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select name="ativo" class="form-select form-select-sm">
+                        <option value=""  <?= $filtro_ativo === ''  ? 'selected' : '' ?>>Todos</option>
+                        <option value="1" <?= $filtro_ativo === '1' ? 'selected' : '' ?>>Ativos</option>
+                        <option value="0" <?= $filtro_ativo === '0' ? 'selected' : '' ?>>Inativos</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <button type="submit" class="btn btn-sm btn-secondary w-100">Filtrar</button>
                 </div>
             </form>
@@ -148,7 +161,7 @@ unset($_SESSION['flash']);
                     <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
                         <li class="page-item <?= $i === $pagina_atual ? 'active' : '' ?>">
                             <a class="page-link"
-                               href="?pagina=<?= $i ?>&q=<?= urlencode($pesquisa) ?>&perfil=<?= urlencode($filtro_perfil) ?>">
+                               href="?pagina=<?= $i ?>&q=<?= urlencode($pesquisa) ?>&perfil=<?= urlencode($filtro_perfil) ?>&ativo=<?= urlencode($filtro_ativo) ?>">
                                 <?= $i ?>
                             </a>
                         </li>
