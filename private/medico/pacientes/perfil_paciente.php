@@ -2,10 +2,6 @@
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 requirePerfil('medico');
-$pagina_titulo = 'Perfil do Paciente'; $pagina_ativa = 'pacientes';
-$js_head = ['https://cdn.jsdelivr.net/npm/chart.js'];
-require_once __DIR__ . '/../../../includes/header_medico.php';
-require_once __DIR__ . '/../../../includes/sidebar_medico.php';
 
 $db  = getDB();
 $uid = (int)$_SESSION['utilizador_id'];
@@ -34,6 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_acao'] ?? '') === 'edit_c
     $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Informação clínica atualizada.'];
     redirect(APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $id);
 }
+
+$pagina_titulo = 'Perfil do Paciente'; $pagina_ativa = 'pacientes';
+$js_head = ['https://cdn.jsdelivr.net/npm/chart.js'];
+require_once __DIR__ . '/../../../includes/header_medico.php';
+require_once __DIR__ . '/../../../includes/sidebar_medico.php';
 
 $stmt = $db->prepare("
     SELECT ut.*, u.nome, u.email
@@ -86,8 +87,6 @@ try {
 } catch (\Throwable $e) {}
 $s = $db->prepare("SELECT COUNT(*) FROM consultas WHERE utente_id=? AND medico_id=?");
 $s->execute([$id, $pid]); $n_consultas = (int)$s->fetchColumn();
-$s = $db->prepare("SELECT COUNT(*) FROM pedidos_exame pe JOIN consultas c ON c.id=pe.consulta_id WHERE c.utente_id=? AND pe.estado='pendente'");
-$s->execute([$id]); $n_exames = (int)$s->fetchColumn();
 
 // Evolução percentagem_final ao longo das sessões concluídas
 $evolucao = $db->query("
@@ -112,14 +111,6 @@ $consultas = $db->prepare("
 ");
 $consultas->execute([$id, $pid]); $consultas = $consultas->fetchAll();
 
-// Medicação ativa
-$medicacao = $db->query("
-    SELECT medicamento, dosagem, posologia, data_inicio, data_fim
-    FROM prescricoes_medicacao
-    WHERE utente_id = $id AND ativa = 1
-    ORDER BY data_inicio DESC
-    LIMIT 5
-")->fetchAll();
 
 $fase_labels = ['avaliacao' => 'Avaliação', 'ativo' => 'Ativo', 'manutencao' => 'Manutenção', 'alta' => 'Alta'];
 $fase_cores  = ['avaliacao' => 'secondary', 'ativo' => 'primary', 'manutencao' => 'info', 'alta' => 'success'];
@@ -152,28 +143,16 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
 
             <!-- Métricas rápidas -->
             <div class="row g-3 mb-4">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card text-center p-3">
                         <div class="fs-2 fw-bold text-success"><?= $n_sessoes ?></div>
                         <div class="text-muted small">Sessões Realizadas</div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card text-center p-3">
                         <div class="fs-2 fw-bold text-primary"><?= $n_consultas ?></div>
                         <div class="text-muted small">Consultas</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center p-3 <?= $n_exames > 0 ? 'border-warning' : '' ?>">
-                        <div class="fs-2 fw-bold text-warning"><?= $n_exames ?></div>
-                        <div class="text-muted small">Exames Pendentes</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center p-3">
-                        <div class="fs-2 fw-bold text-secondary"><?= count($medicacao) ?></div>
-                        <div class="text-muted small">Medicações Ativas</div>
                     </div>
                 </div>
             </div>
@@ -227,9 +206,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <p class="mb-1"><strong>Diagnóstico:</strong> <span class="text-muted"><?= h($pac['diagnostico'] ?? '—') ?></span></p>
-                        <?php if ($pac['categoria_clinica']): ?>
-                            <p class="mb-1"><strong>Categoria:</strong> <?= h(str_replace('_', ' ', $pac['categoria_clinica'])) ?></p>
-                        <?php endif; ?>
                     </div>
                     <div class="col-md-6">
                         <?php if ($pac['membro_afetado']): ?>
@@ -277,7 +253,7 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
 
             <div class="row g-3">
                 <!-- Últimas consultas -->
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card p-3 h-100">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="mb-0">Últimas Consultas</h5>
@@ -302,31 +278,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                     </div>
                 </div>
 
-                <!-- Medicação ativa -->
-                <div class="col-md-6">
-                    <div class="card p-3 h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="mb-0">Medicação Ativa</h5>
-                            <a href="../consultas/lista_pedidos_exame.php?utente=<?= $id ?>" class="btn btn-xs btn-outline-secondary">Exames</a>
-                        </div>
-                        <?php if (empty($medicacao)): ?>
-                            <p class="text-muted small">Sem medicação ativa.</p>
-                        <?php else: ?>
-                            <table class="table table-sm">
-                                <thead><tr><th>Medicamento</th><th>Dosagem</th><th>Fim</th></tr></thead>
-                                <tbody>
-                                <?php foreach ($medicacao as $m): ?>
-                                    <tr>
-                                        <td><?= h($m['medicamento']) ?></td>
-                                        <td><?= h($m['dosagem']) ?></td>
-                                        <td><?= $m['data_fim'] ? h($m['data_fim']) : '<span class="text-muted">Contínuo</span>' ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        <?php endif; ?>
-                    </div>
-                </div>
             </div>
 
             <!-- Sessões do paciente (Feature 7 + 10) -->

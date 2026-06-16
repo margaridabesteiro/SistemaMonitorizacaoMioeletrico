@@ -43,10 +43,12 @@ $dia_semana_inicio = (int)date('N', $primeiro_dia); // 1=Seg, 7=Dom
 $total_dias   = (int)date('t', $primeiro_dia);
 
 $pagina_titulo = 'Minha Agenda'; $pagina_ativa = 'agenda';
+$flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 require_once __DIR__ . '/../../../includes/header_medico.php';
 require_once __DIR__ . '/../../../includes/sidebar_medico.php';
 ?>
         <main class="content">
+            <?php if ($flash): ?><div class="alert alert-<?= h($flash['tipo']) ?> alert-dismissible py-2 mb-3"><?= h($flash['mensagem']) ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div><?php endif; ?>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Minha Agenda</h1>
                 <a href="nova_consulta.php" class="btn btn-sm" style="background:#8B0000;color:#fff;">

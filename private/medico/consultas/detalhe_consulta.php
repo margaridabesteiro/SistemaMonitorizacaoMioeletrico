@@ -15,14 +15,6 @@ $stmt = $db->prepare("SELECT c.*, u.nome AS paciente, ut.id AS utente_id FROM co
 $stmt->execute([$id, $pid]); $c = $stmt->fetch();
 if (!$c) redirect(APP_URL . '/private/medico/consultas/consulta.php');
 
-// Medicação prescrita nesta consulta
-$medicacao = $db->prepare("SELECT * FROM prescricoes_medicacao WHERE consulta_id=?");
-$medicacao->execute([$id]); $medicacao = $medicacao->fetchAll();
-
-// Exames pedidos nesta consulta
-$exames = $db->prepare("SELECT * FROM pedidos_exame WHERE consulta_id=?");
-$exames->execute([$id]); $exames = $exames->fetchAll();
-
 $tipo_badge = ['inicial'=>'info','rotina'=>'secondary','alta'=>'success','urgente'=>'danger'];
 $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 require_once __DIR__ . '/../../../includes/header_medico.php';
@@ -63,57 +55,5 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
                 <?php if ($c['notas']): ?><p class="mb-0 mt-2"><strong>Notas:</strong> <span class="text-muted"><?=h($c['notas'])?></span></p><?php endif; ?>
             </div>
 
-            <!-- Medicação -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0"><i class="fa-solid fa-pills me-2 text-primary"></i>Medicação Prescrita</h5>
-                <a href="nova_prescricao_medicacao.php?consulta_id=<?=$id?>&utente_id=<?=$c['utente_id']?>" class="btn btn-xs btn-outline-primary"><i class="fa-solid fa-plus me-1"></i>Adicionar</a>
-            </div>
-            <?php if(empty($medicacao)): ?>
-                <p class="text-muted small mb-4">Sem medicação prescrita nesta consulta.</p>
-            <?php else: ?>
-            <div class="card mb-4"><div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                    <thead class="table-light"><tr><th>Medicamento</th><th>Dosagem</th><th>Posologia</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead>
-                    <tbody>
-                    <?php foreach($medicacao as $m): ?>
-                        <tr>
-                            <td><?=h($m['medicamento'])?></td>
-                            <td><?=h($m['dosagem'])?></td>
-                            <td><small><?=h($m['posologia'])?></small></td>
-                            <td><?=h($m['data_inicio'])?></td>
-                            <td><?=$m['data_fim']?h($m['data_fim']):'Contínuo'?></td>
-                            <td><?=$m['ativa']?'<span class="badge bg-success">Ativa</span>':'<span class="badge bg-secondary">Inativa</span>'?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div></div>
-            <?php endif; ?>
-
-            <!-- Exames -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0"><i class="fa-solid fa-flask me-2 text-warning"></i>Exames Pedidos</h5>
-                <a href="novo_pedido_exame.php?consulta_id=<?=$id?>&utente_id=<?=$c['utente_id']?>" class="btn btn-xs btn-outline-warning"><i class="fa-solid fa-plus me-1"></i>Pedir Exame</a>
-            </div>
-            <?php if(empty($exames)): ?>
-                <p class="text-muted small">Sem exames pedidos nesta consulta.</p>
-            <?php else: ?>
-            <div class="card"><div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                    <thead class="table-light"><tr><th>Exame</th><th>Categoria</th><th>Urgência</th><th>Estado</th><th>Resultado</th></tr></thead>
-                    <tbody>
-                    <?php foreach($exames as $e): ?>
-                        <tr>
-                            <td><?=h($e['tipo_exame'])?></td>
-                            <td><?=h(ucfirst($e['categoria']))?></td>
-                            <td><span class="badge bg-<?=$e['urgencia']==='urgente'?'danger':'secondary'?>"><?=h(ucfirst($e['urgencia']))?></span></td>
-                            <td><span class="badge bg-<?=['pendente'=>'warning text-dark','realizado'=>'success','cancelado'=>'danger'][$e['estado']]??'secondary'?>"><?=h(ucfirst($e['estado']))?></span></td>
-                            <td><small><?=h(substr($e['resultado']??'—',0,60))?></small></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div></div>
-            <?php endif; ?>
         </main>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

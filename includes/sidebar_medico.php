@@ -43,12 +43,8 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuMedico('pacientes', $pa) ?>">
                 <i class="fa-solid fa-users me-2"></i>Relatórios
             </a>
-            <a href="<?= APP_URL ?>/private/medico/exames/exames_disponiveis.php"
-               class="nav-link<?= menuMedico('exames', $pa) ?>">
-                <i class="fa-solid fa-flask me-2"></i>Exames
-            </a>
-            <a href="<?= APP_URL ?>/private/medico/consultas/lista_pedidos_exame.php"
-               class="nav-link<?= menuMedico('pedidos_exame', $pa) ?>">
-                <i class="fa-solid fa-flask me-2"></i>Pedidos de Exame
+            <a href="<?= APP_URL ?>/private/medico/perfil.php"
+               class="nav-link<?= menuMedico('perfil', $pa) ?>">
+                <i class="fa-regular fa-user me-2"></i>Meu Perfil
             </a>
         </nav>

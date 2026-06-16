@@ -17,32 +17,45 @@ if ($pid) {
 $erro = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
     $utente_id  = (int)($_POST['utente_id']        ?? 0);
-    $data_hora  = trim($_POST['data_hora']          ?? '');
+    $data_str   = trim($_POST['data_consulta']      ?? '');
+    $hora_str   = trim($_POST['hora_consulta']      ?? '');
+    $data_hora  = ($data_str && $hora_str) ? $data_str . ' ' . $hora_str . ':00' : '';
     $tipo       = $_POST['tipo_consulta']           ?? 'rotina';
     $motivo     = trim($_POST['motivo']             ?? '');
     $modalidade = $_POST['modalidade']              ?? 'presencial';
     $link       = trim($_POST['link_videochamada']  ?? '') ?: null;
 
     if (!$utente_id || !$data_hora) {
-        $erro = 'Preencha o paciente e a data/hora.';
+        $erro = 'Preencha o paciente, a data e o horário.';
     } elseif ($modalidade === 'video' && !$link) {
         $erro = 'Link de videochamada obrigatório para consulta por vídeo.';
     } else {
         $db->prepare("INSERT INTO consultas (utente_id, medico_id, data_hora, tipo, motivo, modalidade, link_videochamada, estado)
                       VALUES (?,?,?,?,?,?,?,'agendada')")
            ->execute([$utente_id, $pid, $data_hora, $tipo, $motivo ?: null, $modalidade, $link]);
-        // Notificar utente
-        $uq = $db->prepare("SELECT ut.utilizador_id FROM utentes ut WHERE ut.id=?");
-        $uq->execute([$utente_id]); $utente_uid = (int)$uq->fetchColumn();
+        // Notificar utente e médico
+        $uq = $db->prepare("SELECT ut.utilizador_id, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?");
+        $uq->execute([$utente_id]); $urow = $uq->fetch();
+        $utente_uid  = (int)($urow['utilizador_id'] ?? 0);
+        $utente_nome = $urow['nome'] ?? 'utente';
+        $data_fmt    = date('d/m/Y \à\s H:i', strtotime($data_hora));
         if ($utente_uid) {
-            $data_fmt = date('d/m/Y \à\s H:i', strtotime($data_hora));
             notificar($utente_uid, 'sessao',
                 'Nova consulta agendada',
                 'Foi agendada uma consulta para ' . $data_fmt . '.',
                 APP_URL . '/private/utente/sessoes_consultas.php'
             );
         }
-        redirect(APP_URL . '/private/medico/consultas/consulta.php');
+        // Notificar o próprio médico para preencher o relatório após a consulta
+        notificar($uid, 'info',
+            'Relatório a preencher',
+            'Após a consulta com ' . $utente_nome . ' em ' . $data_fmt . ', lembre-se de preencher o relatório clínico do utente.',
+            APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $utente_id
+        );
+        $mes_agenda = date('n', strtotime($data_hora));
+        $ano_agenda = date('Y', strtotime($data_hora));
+        $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => 'Consulta agendada para ' . date('d/m/Y \à\s H:i', strtotime($data_hora)) . '.'];
+        redirect(APP_URL . '/private/medico/consultas/agenda.php?mes=' . $mes_agenda . '&ano=' . $ano_agenda);
     }
 }
 
@@ -84,8 +97,19 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Data e Hora <span class="text-danger">*</span></label>
-                        <input type="datetime-local" name="data_hora" class="form-control" required
-                               value="<?= h($_POST['data_hora'] ?? '') ?>" min="<?= date('Y-m-d\TH:i') ?>">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <input type="date" name="data_consulta" id="data_consulta" class="form-control" required
+                                       value="<?= h($_POST['data_consulta'] ?? date('Y-m-d')) ?>"
+                                       min="<?= date('Y-m-d') ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <select name="hora_consulta" id="hora_consulta" class="form-select" required>
+                                    <option value="">— Selecionar hora —</option>
+                                </select>
+                                <div class="form-text text-muted small" id="horario_info"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Modalidade</label>
@@ -124,5 +148,61 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
         document.getElementById('modPresencial').addEventListener('change', toggleVideo);
         document.getElementById('modVideo').addEventListener('change', toggleVideo);
         toggleVideo();
+
+        // Slots de horário: Seg-Sex 08:00-19:30 (clínica até 20h), Sáb 09:00-12:30 (até 13h), Dom fechado
+        const SLOTS = {
+            semana: { inicio: [8, 0],  fim: [20, 0] },
+            sabado: { inicio: [9, 0],  fim: [13, 0] },
+        };
+        const horaSelect  = document.getElementById('hora_consulta');
+        const dataInput   = document.getElementById('data_consulta');
+        const infoDiv     = document.getElementById('horario_info');
+        const valorAnterior = <?= json_encode($_POST['hora_consulta'] ?? '') ?>;
+
+        function gerarSlots(date) {
+            const dow = date.getDay(); // 0=Dom, 6=Sáb
+            horaSelect.innerHTML = '<option value="">— Selecionar hora —</option>';
+            if (dow === 0) {
+                infoDiv.textContent = 'Clínica encerrada ao Domingo.';
+                horaSelect.disabled = true;
+                return;
+            }
+            horaSelect.disabled = false;
+            const conf = (dow === 6) ? SLOTS.sabado : SLOTS.semana;
+            const hoje = new Date();
+            const eHoje = date.toDateString() === hoje.toDateString();
+            let horaAtual = hoje.getHours() * 60 + hoje.getMinutes();
+            let [h0, m0] = conf.inicio;
+            let [hf, mf] = conf.fim;
+            let slot = h0 * 60 + m0;
+            const fim  = hf * 60 + mf;
+            while (slot < fim) {
+                const hh = String(Math.floor(slot / 60)).padStart(2, '0');
+                const mm = String(slot % 60).padStart(2, '0');
+                const val = hh + ':' + mm;
+                if (!eHoje || slot > horaAtual) {
+                    const opt = document.createElement('option');
+                    opt.value = val;
+                    opt.textContent = val;
+                    if (val === valorAnterior) opt.selected = true;
+                    horaSelect.appendChild(opt);
+                }
+                slot += 30;
+            }
+            infoDiv.textContent = dow === 6
+                ? 'Sábado: 9h–13h (intervalos de 30 min)'
+                : '2ª a 6ª: 8h–20h (intervalos de 30 min)';
+        }
+
+        function onDataChange() {
+            const val = dataInput.value;
+            if (!val) { horaSelect.innerHTML = '<option value="">— Selecionar hora —</option>'; return; }
+            // Usar Date sem conversão de fuso: parse manual para evitar off-by-one
+            const [y, m, d] = val.split('-').map(Number);
+            gerarSlots(new Date(y, m - 1, d));
+        }
+
+        dataInput.addEventListener('change', onDataChange);
+        onDataChange();
         </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>

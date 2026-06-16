@@ -40,7 +40,7 @@ if ($prof_id) {
 $proximas = [];
 if ($prof_id) {
     $s = $db->prepare('
-        SELECT c.data_hora, c.motivo, c.estado, c.tipo, c.modalidade, c.link_videochamada,
+        SELECT c.data_hora, c.estado, c.tipo, c.modalidade, c.link_videochamada,
                u.nome AS paciente
         FROM consultas c
         JOIN utentes ut ON ut.id=c.utente_id
@@ -99,8 +99,7 @@ if ($prof_id) {
             <div class="card border-danger mb-4">
                 <div class="card-header bg-danger text-white py-2 d-flex align-items-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <strong>Alertas Clínicos — Pacientes</strong>
-                    <span class="badge bg-white text-danger ms-1"><?= count($alertas_clinicos) ?></span>
+                    <strong>Alertas Clínicos</strong>
                     <small class="ms-auto opacity-75">Últimos 7 dias · Regressão ou % &lt; 50</small>
                 </div>
                 <div class="card-body p-0">
@@ -135,19 +134,13 @@ if ($prof_id) {
             <?php endif; ?>
 
             <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <div class="card text-center p-3">
-                        <div class="fs-2 fw-bold text-danger"><?= $n_pacientes ?></div>
-                        <div class="text-muted small">Pacientes</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card text-center p-3">
                         <div class="fs-2 fw-bold text-primary"><?= $n_consultas ?></div>
                         <div class="text-muted small">Consultas Hoje</div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card text-center p-3">
                         <div class="fs-2 fw-bold text-success"><?= $n_programas ?></div>
                         <div class="text-muted small">Programas Ativos</div>
@@ -161,14 +154,13 @@ if ($prof_id) {
                     <p class="text-muted">Sem consultas agendadas.</p>
                 <?php else: ?>
                     <table class="table table-sm table-hover">
-                        <thead><tr><th>Data/Hora</th><th>Paciente</th><th>Tipo</th><th>Motivo</th><th>Modalidade</th></tr></thead>
+                        <thead><tr><th>Data/Hora</th><th>Paciente</th><th>Tipo</th><th>Modalidade</th></tr></thead>
                         <tbody>
                         <?php foreach ($proximas as $c): ?>
                             <tr>
                                 <td><?= h(substr($c['data_hora'],0,16)) ?></td>
                                 <td><?= h($c['paciente']) ?></td>
                                 <td><span class="badge bg-<?= $tipo_badge[$c['tipo']] ?? 'secondary' ?>"><?= h(ucfirst($c['tipo'])) ?></span></td>
-                                <td><small><?= h($c['motivo'] ?? '—') ?></small></td>
                                 <td>
                                     <?php if ($c['modalidade']==='video' && $c['link_videochamada']): ?>
                                         <a href="<?= h($c['link_videochamada']) ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fa-solid fa-video me-1"></i>Vídeo</a>
