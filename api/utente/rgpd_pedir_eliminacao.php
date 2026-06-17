@@ -1,5 +1,5 @@
 <?php
-// RGPD Art. 17 — Direito a ser esquecido: utente submete pedido de eliminação
+// RGPD Art. 17 — direito a ser esquecido
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 requirePerfil('utente');
@@ -13,7 +13,6 @@ $db  = getDB();
 $msg = trim($_POST['mensagem'] ?? '');
 
 try {
-    // Verificar se já há um pedido pendente
     $existe = $db->prepare("SELECT id FROM rgpd_pedidos WHERE utilizador_id=? AND tipo='eliminacao' AND estado='pendente'");
     $existe->execute([$uid]);
     if ($existe->fetch()) {

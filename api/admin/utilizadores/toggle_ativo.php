@@ -1,7 +1,4 @@
 <?php
-// api/admin/utilizadores/toggle_ativo.php
-// Ativa/desativa um utilizador — chamada via link, requer sessão admin
-
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 
@@ -14,7 +11,6 @@ if ($id <= 0) {
 
 $db = getDB();
 
-// Não permitir desativar a própria conta
 if ($id === (int)$_SESSION['utilizador_id']) {
     $_SESSION['flash'] = ['tipo' => 'warning', 'mensagem' => 'Não pode desativar a sua própria conta.'];
     redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php');

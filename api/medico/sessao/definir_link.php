@@ -9,7 +9,6 @@ $link      = trim($_POST['link'] ?? '');
 
 if (!$sessao_id) { echo json_encode(['ok'=>false,'erro'=>'ID inválido']); exit; }
 
-// Validar que o link é uma URL ou string vazia
 if ($link !== '' && !filter_var($link, FILTER_VALIDATE_URL)) {
     echo json_encode(['ok'=>false,'erro'=>'URL inválido']); exit;
 }
@@ -17,7 +16,6 @@ if ($link !== '' && !filter_var($link, FILTER_VALIDATE_URL)) {
 $db  = getDB();
 $uid = (int)$_SESSION['utilizador_id'];
 
-// Confirmar que a sessão é de um utente do médico
 $stmt = $db->prepare("
     SELECT s.id, ut.utilizador_id AS utente_uid FROM sessoes s
     JOIN utentes ut ON ut.id = s.utente_id
@@ -27,7 +25,7 @@ $stmt = $db->prepare("
 $stmt->execute([$sessao_id, $uid]);
 $sess = $stmt->fetch();
 
-// Fallback: accept if médico matches via utente→medico
+// fallback: médico ligado via utente em vez de via sessão
 if (!$sess) {
     $stmt2 = $db->prepare("
         SELECT s.id, ut.utilizador_id AS utente_uid FROM sessoes s
@@ -44,7 +42,6 @@ if (!$sess) { echo json_encode(['ok'=>false,'erro'=>'Acesso negado']); exit; }
 try {
     $db->prepare("UPDATE sessoes SET link_videochamada=? WHERE id=?")->execute([$link ?: null, $sessao_id]);
 
-    // Notificar o utente se houver link
     if ($link && $sess['utente_uid']) {
         notificar((int)$sess['utente_uid'], 'videoconsulta',
             'Link de videoconsulta disponível',

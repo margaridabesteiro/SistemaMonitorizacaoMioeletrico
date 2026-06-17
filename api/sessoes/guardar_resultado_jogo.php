@@ -1,6 +1,4 @@
 <?php
-// api/sessoes/guardar_resultado_jogo.php
-// Regista o resultado de um jogo na BD (sessao + metricas_sessao)
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 
@@ -20,7 +18,7 @@ if (!$jogo_id) {
     echo json_encode(['ok' => false, 'erro' => 'Jogo inválido.']); exit;
 }
 
-// Garante registos base e atualiza níveis: catch=1(medio), claw=2(minimo), flappy=3(maximo)
+// inicializa jogos base com nível se ainda não existirem
 $db->exec("INSERT INTO jogos (id, nome, nivel, descricao) VALUES
     (1, 'catch_game',     'medio',  'Apanhar objetos em queda — controlo on/off'),
     (2, 'claw_game',      'minimo', 'Garra arcade com dois thresholds de força'),

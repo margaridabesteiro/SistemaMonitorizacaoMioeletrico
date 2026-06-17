@@ -1,5 +1,4 @@
 <?php
-// Admin: exportar todos os dados de um utilizador (portabilidade / auditoria)
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 requirePerfil('admin');
@@ -36,7 +35,6 @@ $export = [
     'base_legal'       => 'RGPD Art. 20 — Portabilidade / Resposta a pedido do titular',
 ];
 
-// Registar a exportação admin
 try {
     $db->prepare('INSERT INTO rgpd_consentimentos (utilizador_id, tipo, registado_por, ip, detalhes) VALUES (?,?,?,?,?)')
        ->execute([$id, 'exportacao', $_SESSION['utilizador_id'], $_SERVER['REMOTE_ADDR'] ?? null, 'Exportação pelo administrador']);

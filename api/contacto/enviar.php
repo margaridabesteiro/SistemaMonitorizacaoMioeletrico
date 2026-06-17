@@ -1,8 +1,4 @@
 <?php
-/**
- * API pública — recebe o formulário de contacto da página principal
- * Método: POST (JSON ou form-data)
- */
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 

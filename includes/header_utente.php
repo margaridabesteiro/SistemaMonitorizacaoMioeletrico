@@ -60,7 +60,6 @@ $nome_utente = h($_SESSION['nome'] ?? 'Utente');
     </header>
     <div class="wrapper">
 <script>
-// Verifica sessões/consultas próximas a cada 2 min e envia notificação ao utente
 (function(){
     var _cpUrl = '<?= APP_URL ?>/api/utente/check_proximas.php';
     function _checkProx(){ fetch(_cpUrl,{credentials:'same-origin'}).catch(function(){}); }

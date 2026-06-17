@@ -1,7 +1,4 @@
 <?php
-// api/auth/logout.php
-// Termina a sessão e redireciona para login
-
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 
@@ -18,7 +15,6 @@ if (!empty($_SESSION['utilizador_id'])) {
         'Logout de ' . ($_SESSION['nome'] ?? '') . ' (' . ($_SESSION['perfil'] ?? '') . ')');
 }
 
-// Destruir sessão de forma segura
 $_SESSION = [];
 if (ini_get('session.use_cookies')) {
     $params = session_get_cookie_params();

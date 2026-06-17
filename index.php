@@ -2,7 +2,7 @@
 require_once __DIR__ . '/config/app.php';
 require_once __DIR__ . '/config/database.php';
 
-// Redirecionar utilizadores já autenticados (exceto pré-visualização do backoffice)
+// ?preview permite ao admin ver o backoffice sem ser redirecionado
 if (!empty($_SESSION['utilizador_id']) && empty($_GET['preview'])) {
     $destinos = [
         'admin'   => APP_URL . '/private/admin/index_admin.php',
@@ -13,14 +13,11 @@ if (!empty($_SESSION['utilizador_id']) && empty($_GET['preview'])) {
     redirect($destinos[$_SESSION['perfil']] ?? APP_URL . '/private/login/login.php');
 }
 
-// Carregar todo o conteúdo editável da BD
 $db = getDB();
 $c  = $db->query('SELECT chave, valor FROM backoffice_conteudo')->fetchAll(PDO::FETCH_KEY_PAIR);
 
-// Seguros — lista separada por vírgulas
 $seguros_lista = array_filter(array_map('trim', explode(',', $c['seguros'] ?? 'Multicare,AdvanceCare,Médis,Allianz,SNS,Fidelidade,Lusitânia,Ageas,Real Vida,Generali')));
 
-// Serviços
 $servicos = [];
 for ($i = 1; $i <= 6; $i++) {
     $servicos[] = [
@@ -30,7 +27,6 @@ for ($i = 1; $i <= 6; $i++) {
     ];
 }
 
-// Unidades
 $unidades = [];
 for ($i = 1; $i <= 4; $i++) {
     $unidades[] = [

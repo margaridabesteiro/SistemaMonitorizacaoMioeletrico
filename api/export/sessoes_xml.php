@@ -1,5 +1,4 @@
 <?php
-// api/export/sessoes_xml.php
 // Exporta sessões de reabilitação em XML e valida contra o XSD (DOMDocument nativo)
 // Acesso: admin e médico
 
