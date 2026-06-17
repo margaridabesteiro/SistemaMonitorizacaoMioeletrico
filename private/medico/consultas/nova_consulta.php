@@ -52,6 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
             'Após a consulta com ' . $utente_nome . ' em ' . $data_fmt . ', lembre-se de preencher o relatório clínico do utente.',
             APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $utente_id
         );
+        // Notificar administrador para faturação
+        try {
+            $tipo_labels = ['rotina'=>'Rotina','inicial'=>'Inicial','alta'=>'de Alta','urgente'=>'Urgente'];
+            $modal_label = $modalidade === 'video' ? 'Videoconsulta' : 'Presencial';
+            $aq = $db->query("SELECT id FROM utilizadores WHERE perfil='admin' AND ativo=1");
+            foreach ($aq->fetchAll() as $adm) {
+                notificar((int)$adm['id'], 'info',
+                    'Nova consulta agendada — ' . $utente_nome,
+                    'Consulta ' . ($tipo_labels[$tipo] ?? $tipo) . ' (' . $modal_label . ') agendada para ' . $utente_nome . ' em ' . $data_fmt . '. Registar fatura?',
+                    APP_URL . '/private/admin/faturacao/nova_fatura.php'
+                );
+            }
+        } catch (\Throwable $e) {}
         $mes_agenda = date('n', strtotime($data_hora));
         $ano_agenda = date('Y', strtotime($data_hora));
         $_SESSION['flash'] = ['tipo' => 'success', 'mensagem' => 'Consulta agendada para ' . date('d/m/Y \à\s H:i', strtotime($data_hora)) . '.'];

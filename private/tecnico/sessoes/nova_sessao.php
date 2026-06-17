@@ -36,6 +36,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
         $db->prepare('INSERT INTO sessoes (utente_id,tecnico_id,dispositivo_id,data_hora,duracao_min,categoria,jogo_id,objetivo_sessao,modalidade,link_videochamada,estado,notas)
                       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
            ->execute([$utente_id,$pid,$disp_id,$data_hora,$duracao,$categoria,$jogo_id,$objetivo,$modalidade,$link,'agendada',$notas]);
+        // Notificar administrador para faturação
+        try {
+            $uq2 = $db->prepare("SELECT u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?");
+            $uq2->execute([$utente_id]); $uname = $uq2->fetchColumn() ?: 'utente';
+            $jnome = '';
+            if ($jogo_id) {
+                $jq = $db->prepare("SELECT nome FROM jogos WHERE id=?");
+                $jq->execute([$jogo_id]); $jnome = $jq->fetchColumn() ?: '';
+            }
+            $cat_label = $categoria === 'jogo'
+                ? 'Jogo de Reabilitação' . ($jnome ? ' — ' . $jnome : '')
+                : 'Avaliação Funcional';
+            $data_fmt2 = date('d/m/Y \à\s H:i', strtotime($data_hora));
+            $aq = $db->query("SELECT id FROM utilizadores WHERE perfil='admin' AND ativo=1");
+            foreach ($aq->fetchAll() as $adm) {
+                notificar((int)$adm['id'], 'sessao',
+                    'Nova sessão agendada — ' . $uname,
+                    $cat_label . ' agendada para ' . $uname . ' em ' . $data_fmt2 . '. Registar fatura?',
+                    APP_URL . '/private/admin/faturacao/nova_fatura.php'
+                );
+            }
+        } catch (\Throwable $e) {}
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Sessão agendada.'];
         redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
     }

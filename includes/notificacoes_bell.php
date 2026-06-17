@@ -37,7 +37,7 @@ $_nb_icons = [
         </span>
         <?php endif; ?>
     </button>
-    <div class="dropdown-menu dropdown-menu-end p-0 shadow-lg" style="min-width:300px;max-width:360px;max-height:480px;overflow-y:auto;">
+    <div class="dropdown-menu dropdown-menu-end p-0 shadow-lg" style="min-width:360px;max-width:460px;max-height:560px;overflow-y:auto;">
         <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom sticky-top">
             <strong style="font-size:.85rem;">Notificações</strong>
             <button type="button" class="btn btn-link btn-sm p-0 text-muted" style="font-size:.75rem;" onclick="notMarcarTodas()">
@@ -57,7 +57,7 @@ $_nb_icons = [
             <div class="min-w-0 flex-grow-1">
                 <div class="<?= !$_nb['lida'] ? 'fw-semibold' : 'text-muted' ?>" style="font-size:.8rem;color:inherit;"><?= h($_nb['titulo']) ?></div>
                 <?php if ($_nb['corpo']): ?>
-                <div class="text-muted" style="font-size:.73rem;"><?= h(mb_substr($_nb['corpo'],0,72)) ?><?= mb_strlen($_nb['corpo'])>72?'…':'' ?></div>
+                <div class="text-muted" style="font-size:.73rem;white-space:normal;word-break:break-word;"><?= h($_nb['corpo']) ?></div>
                 <?php endif; ?>
                 <div class="text-muted" style="font-size:.68rem;"><?= date('d/m H:i', strtotime($_nb['criado_em'])) ?></div>
             </div>
