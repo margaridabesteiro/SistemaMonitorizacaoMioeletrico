@@ -64,7 +64,25 @@ if ($utid) {
     } catch (\Throwable $e) {}
 }
 
-// Ultimas análises com texto do técnico
+// Análises globais de desempenho registadas pelo técnico
+$analises_globais = [];
+if ($utid) {
+    try {
+        $s = $db->prepare("
+            SELECT ad.data_analise AS dt, ad.texto AS analise_tecnica,
+                   ad.progressao_geral AS progressao, u.nome AS tecnico
+            FROM analises_desempenho ad
+            JOIN profissionais p ON p.id = ad.tecnico_id
+            JOIN utilizadores u ON u.id = p.utilizador_id
+            WHERE ad.utente_id = ?
+            ORDER BY ad.data_analise DESC, ad.criado_em DESC
+            LIMIT 10
+        ");
+        $s->execute([$utid]); $analises_globais = $s->fetchAll();
+    } catch (\Throwable $e) {}
+}
+
+// Notas de análise técnica por sessão
 $analises = [];
 if ($utid) {
     try {
@@ -103,10 +121,38 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                 </a>
             </div>
 
-            <!-- Análise do técnico em primeiro lugar -->
+            <!-- Análises globais de desempenho do técnico -->
+            <?php if (!empty($analises_globais)): ?>
+            <div class="card mb-4 p-3" style="border-left:4px solid #1a5f8a;">
+                <h5 class="mb-3"><i class="fa-solid fa-clipboard-list me-2" style="color:#1a5f8a;"></i>Análises de Desempenho do Técnico</h5>
+                <div class="d-flex flex-column gap-3">
+                    <?php foreach ($analises_globais as $a): ?>
+                    <?php $p = $a['progressao'] ?? 'estavel'; ?>
+                    <div class="p-3 rounded" style="background:#f8f9fa;border-left:3px solid <?= $prog_cor[$p] ?? '#6c757d' ?>;">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="badge" style="background:<?= $prog_cor[$p] ?? '#6c757d' ?>;font-size:.75rem;">
+                                    <i class="fa-solid <?= $prog_icon[$p] ?? 'fa-minus' ?> me-1"></i><?= $prog_label[$p] ?? '—' ?>
+                                </span>
+                                <small class="text-muted ms-2">
+                                    <?= h(is_string($a['dt']) && strlen($a['dt']) === 10
+                                        ? date('d/m/Y', strtotime($a['dt']))
+                                        : $a['dt']) ?>
+                                </small>
+                            </div>
+                            <small class="text-muted"><?= h($a['tecnico'] ?? '—') ?></small>
+                        </div>
+                        <p class="mb-0 small" style="white-space:pre-wrap;"><?= h($a['analise_tecnica']) ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Notas por sessão -->
             <?php if (!empty($analises)): ?>
             <div class="card mb-4 p-3">
-                <h5 class="mb-3"><i class="fa-solid fa-stethoscope me-2" style="color:#1a5f8a;"></i>Notas do Técnico</h5>
+                <h5 class="mb-3"><i class="fa-solid fa-stethoscope me-2" style="color:#1a5f8a;"></i>Notas por Sessão</h5>
                 <div class="d-flex flex-column gap-3">
                     <?php foreach ($analises as $a): ?>
                     <?php $p = $a['progressao'] ?? 'estavel'; ?>
@@ -130,10 +176,12 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                     <?php endforeach; ?>
                 </div>
             </div>
-            <?php else: ?>
+            <?php endif; ?>
+
+            <?php if (empty($analises_globais) && empty($analises)): ?>
             <div class="alert alert-light text-center mb-4">
                 <i class="fa-solid fa-clipboard fa-2x mb-2 d-block opacity-25"></i>
-                O seu técnico ainda não registou análises de desempenho. Aparecem aqui após as sessões de avaliação funcional.
+                O seu técnico ainda não registou análises de desempenho.
             </div>
             <?php endif; ?>
 
@@ -221,7 +269,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             </div>
             <?php endif; ?>
 
-            <?php if (empty($historico) && empty($evolucao_pct) && empty($analises)): ?>
+            <?php if (empty($historico) && empty($evolucao_pct) && empty($analises) && empty($analises_globais)): ?>
             <div class="alert alert-light text-center mt-4">
                 <i class="fa-solid fa-chart-line fa-2x mb-2 d-block" style="color:#667eea;opacity:.4;"></i>
                 Ainda não tem sessões concluídas. Os dados de desempenho aparecerão aqui após a primeira sessão.

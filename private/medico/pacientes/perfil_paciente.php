@@ -120,6 +120,21 @@ $consultas = $db->prepare("
 ");
 $consultas->execute([$id, $pid]); $consultas = $consultas->fetchAll();
 
+// Análises de desempenho do técnico
+$analises_desemp_med = [];
+try {
+    $sad = $db->prepare("
+        SELECT ad.data_analise, ad.texto, ad.progressao_geral, u.nome AS tecnico_nome
+        FROM analises_desempenho ad
+        JOIN profissionais p ON p.id = ad.tecnico_id
+        JOIN utilizadores u ON u.id = p.utilizador_id
+        WHERE ad.utente_id = ?
+        ORDER BY ad.data_analise DESC
+        LIMIT 10
+    ");
+    $sad->execute([$id]); $analises_desemp_med = $sad->fetchAll();
+} catch (\Throwable $e) { $analises_desemp_med = []; }
+
 // Programas de tratamento deste médico para este utente
 $programas_trat = [];
 try {
@@ -333,6 +348,34 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                     <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- Análises de Desempenho do Técnico -->
+            <?php if (!empty($analises_desemp_med)):
+                $apc_m = ['melhoria'=>'#198754','estavel'=>'#6c757d','regressao'=>'#dc3545'];
+                $api_m = ['melhoria'=>'fa-arrow-trend-up','estavel'=>'fa-minus','regressao'=>'fa-arrow-trend-down'];
+                $apl_m = ['melhoria'=>'Melhoria','estavel'=>'Estável','regressao'=>'Regressão'];
+            ?>
+            <div class="card p-3 mt-4 mb-0">
+                <h5 class="mb-3"><i class="fa-solid fa-clipboard-list me-2" style="color:#8B0000;"></i>Análises de Desempenho do Técnico</h5>
+                <div class="d-flex flex-column gap-3">
+                <?php foreach ($analises_desemp_med as $a): ?>
+                    <?php $pg = $a['progressao_geral'] ?? 'estavel'; ?>
+                    <div class="p-3 rounded" style="background:#f8f9fa;border-left:3px solid <?= $apc_m[$pg] ?? '#6c757d' ?>;">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="badge me-2" style="background:<?= $apc_m[$pg] ?? '#6c757d' ?>;">
+                                    <i class="fa-solid <?= $api_m[$pg] ?? 'fa-minus' ?> me-1"></i><?= $apl_m[$pg] ?? '—' ?>
+                                </span>
+                                <small class="text-muted"><?= h(date('d/m/Y', strtotime($a['data_analise']))) ?></small>
+                            </div>
+                            <small class="text-muted"><?= h($a['tecnico_nome']) ?></small>
+                        </div>
+                        <p class="mb-0 small" style="white-space:pre-wrap;"><?= h($a['texto']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+                </div>
             </div>
             <?php endif; ?>
 
