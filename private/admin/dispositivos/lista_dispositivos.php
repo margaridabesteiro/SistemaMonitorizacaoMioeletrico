@@ -36,11 +36,21 @@ $total_disp  = (int)$db->query('SELECT COUNT(*) FROM dispositivos')->fetchColumn
 $emprestados = (int)$db->query("SELECT COUNT(*) FROM dispositivos WHERE estado='emprestado'")->fetchColumn();
 $offline_3d  = (int)$db->query("SELECT COUNT(*) FROM dispositivos WHERE ativo=1 AND (ultimo_sync IS NULL OR ultimo_sync < DATE_SUB(NOW(), INTERVAL 3 DAY))")->fetchColumn();
 
-// Utente atual via emprestimos_dispositivos
+// Utente atual via emprestimos_dispositivos + estado efetivo baseado em sessões
 $stmt = $db->query("
     SELECT d.*,
            u.nome AS paciente,
-           e.data_entrega
+           e.data_entrega,
+           (SELECT s.data_hora FROM sessoes s
+            WHERE s.dispositivo_id = d.id
+              AND s.estado IN ('agendada','em_curso')
+              AND DATE(s.data_hora) = CURDATE()
+            ORDER BY s.data_hora ASC LIMIT 1) AS sessao_hoje,
+           (SELECT s.data_hora FROM sessoes s
+            WHERE s.dispositivo_id = d.id
+              AND s.estado IN ('agendada','em_curso')
+              AND DATE(s.data_hora) > CURDATE()
+            ORDER BY s.data_hora ASC LIMIT 1) AS proxima_sessao
     FROM dispositivos d
     LEFT JOIN emprestimos_dispositivos e ON e.dispositivo_id=d.id AND e.data_devolucao IS NULL
     LEFT JOIN utentes ut ON ut.id=e.utente_id
@@ -52,6 +62,8 @@ $dispositivos = $stmt->fetchAll();
 $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 $estado_badge = [
     'disponivel'  => 'success',
+    'em_sessao'   => 'warning text-dark',
+    'agendado'    => 'info text-dark',
     'emprestado'  => 'primary',
     'manutencao'  => 'warning',
     'avariado'    => 'danger',
@@ -78,10 +90,27 @@ $estado_badge = [
                     <thead class="table-light"><tr><th>Código</th><th>Estado</th><th>Utente Atual</th><th>Último Sync</th></tr></thead>
                     <tbody>
                     <?php if(empty($dispositivos)): ?><tr><td colspan="5" class="text-center text-muted py-4">Sem dispositivos.</td></tr>
-                    <?php else: foreach($dispositivos as $d): ?>
+                    <?php else: foreach($dispositivos as $d):
+                        $estado_ef   = $d['estado'];
+                        $badge_extra = '';
+                        if ($d['estado'] === 'disponivel') {
+                            if (!empty($d['sessao_hoje'])) {
+                                $estado_ef   = 'em_sessao';
+                                $badge_extra = ' · ' . date('H:i', strtotime($d['sessao_hoje']));
+                            } elseif (!empty($d['proxima_sessao'])) {
+                                $estado_ef   = 'agendado';
+                                $badge_extra = ' · ' . date('d/m', strtotime($d['proxima_sessao']));
+                            }
+                        }
+                        $label_ef = match($estado_ef) {
+                            'em_sessao' => 'Em sessão',
+                            'agendado'  => 'Agendado',
+                            default     => ucfirst($d['estado'])
+                        };
+                    ?>
                         <tr>
                             <td><strong><?= h($d['codigo']) ?></strong></td>
-                            <td><span class="badge bg-<?= $estado_badge[$d['estado']] ?? 'secondary' ?>"><?= h(ucfirst($d['estado'])) ?></span></td>
+                            <td><span class="badge bg-<?= $estado_badge[$estado_ef] ?? 'secondary' ?>"><?= $label_ef . h($badge_extra) ?></span></td>
                             <td><?= $d['paciente'] ? h($d['paciente']) : '<span class="text-muted">—</span>' ?></td>
                             <td><?= $d['ultimo_sync'] ? h(substr($d['ultimo_sync'],0,16)) : '<span class="text-muted">Nunca</span>' ?></td>
                         </tr>
