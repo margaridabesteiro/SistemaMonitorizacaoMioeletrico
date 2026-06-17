@@ -22,21 +22,40 @@ $utente = $stmt->fetch();
 $utente_id       = $utente ? (int)$utente['id'] : 0;
 $cobertura_saude = $utente['cobertura_saude'] ?? 'SNS';
 
-// Próximas sessões
-$proximas_sessoes = [];
+// Próximas sessões + consultas (combinadas)
+$proximas_items = [];
 if ($utente_id) {
-    $stmt = $db->prepare('
-        SELECT s.data_hora, s.categoria, s.estado,
-               u.nome AS tecnico
-        FROM sessoes s
-        JOIN profissionais p ON p.id = s.tecnico_id
-        JOIN utilizadores u ON u.id = p.utilizador_id
-        WHERE s.utente_id = ? AND s.data_hora >= NOW() AND s.estado = "agendada"
-        ORDER BY s.data_hora ASC
-        LIMIT 3
-    ');
-    $stmt->execute([$utente_id]);
-    $proximas_sessoes = $stmt->fetchAll();
+    $proximas_items = [];
+    try {
+        $s1 = $db->prepare("
+            SELECT s.data_hora, s.estado, s.modalidade,
+                   COALESCE(j.nome, s.categoria, 'Sessão de Treino') AS titulo,
+                   u.nome AS profissional, 'sessao' AS tipo_item
+            FROM sessoes s
+            LEFT JOIN jogos j ON j.id = s.jogo_id
+            LEFT JOIN profissionais p ON p.id = s.tecnico_id
+            LEFT JOIN utilizadores u ON u.id = p.utilizador_id
+            WHERE s.utente_id = ? AND s.estado NOT IN ('cancelada','concluida')
+            ORDER BY s.data_hora ASC LIMIT 5
+        ");
+        $s1->execute([$utente_id]); $r1 = $s1->fetchAll();
+
+        $s2 = $db->prepare("
+            SELECT c.data_hora, c.estado, c.modalidade,
+                   COALESCE(c.tipo, 'Consulta Médica') AS titulo,
+                   u.nome AS profissional, 'consulta' AS tipo_item
+            FROM consultas c
+            LEFT JOIN profissionais p ON p.id = c.medico_id
+            LEFT JOIN utilizadores u ON u.id = p.utilizador_id
+            WHERE c.utente_id = ? AND c.estado NOT IN ('cancelada','realizada')
+            ORDER BY c.data_hora ASC LIMIT 5
+        ");
+        $s2->execute([$utente_id]); $r2 = $s2->fetchAll();
+
+        $proximas_items = array_merge($r1, $r2);
+        usort($proximas_items, fn($a, $b) => strtotime($a['data_hora']) <=> strtotime($b['data_hora']));
+        $proximas_items = array_slice($proximas_items, 0, 5);
+    } catch (\Throwable $e) {}
 }
 
 // Total de sessões concluídas
@@ -92,8 +111,8 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                 </div>
                 <div class="col-md-3">
                     <div class="card text-center p-3">
-                        <div class="fs-2 fw-bold text-primary"><?= count($proximas_sessoes) ?></div>
-                        <div class="text-muted small">Próximas Sessões</div>
+                        <div class="fs-2 fw-bold text-primary"><?= count($proximas_items) ?></div>
+                        <div class="text-muted small">Próximas Marcações</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -112,26 +131,50 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                 <?php endif; ?>
             </div>
 
-            <!-- Próximas sessões -->
+            <!-- Próximas sessões + consultas -->
             <div class="card p-3 mb-4">
-                <h5 class="mb-3">Próximas Sessões de Treino</h5>
-                <?php if (empty($proximas_sessoes)): ?>
-                    <p class="text-muted">Não tem sessões agendadas.</p>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Sessões / Consultas</h5>
+                    <a href="sessoes_consultas.php" class="btn btn-sm btn-outline-secondary">Ver todas</a>
+                </div>
+                <?php if (empty($proximas_items)): ?>
+                    <p class="text-muted small">Não tem sessões ou consultas marcadas.</p>
                 <?php else: ?>
-                    <table class="table table-sm table-hover">
-                        <thead><tr><th>Data/Hora</th><th>Tipo</th><th>Técnico</th></tr></thead>
+                    <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr><th>Tipo</th><th>Profissional</th><th>Data / Hora</th><th>Modalidade</th><th>Estado</th></tr>
+                        </thead>
                         <tbody>
-                        <?php foreach ($proximas_sessoes as $s): ?>
+                        <?php foreach ($proximas_items as $item):
+                            $e_sessao = $item['tipo_item'] === 'sessao';
+                            $e_video  = in_array($item['modalidade'], ['video','remota'], true);
+                            $cor_tipo = $e_sessao ? '#667eea' : '#8B0000';
+                            $estado_cores = ['agendada'=>'primary','em_curso'=>'info text-dark','concluida'=>'success','cancelada'=>'secondary'];
+                        ?>
                             <tr>
-                                <td><?= h(substr($s['data_hora'],0,16)) ?></td>
-                                <td><?= h($s['categoria'] ?? '—') ?></td>
-                                <td><?= h($s['tecnico']) ?></td>
+                                <td>
+                                    <span class="badge" style="background:<?= $cor_tipo ?>;">
+                                        <i class="fa-solid <?= $e_sessao ? 'fa-dumbbell' : 'fa-stethoscope' ?> me-1"></i>
+                                        <?= $e_sessao ? h($item['titulo']) : 'Consulta' ?>
+                                    </span>
+                                </td>
+                                <td class="small"><?= h($item['profissional'] ?? '—') ?></td>
+                                <td class="small text-nowrap"><?= h(date('d/m/Y H:i', strtotime($item['data_hora']))) ?></td>
+                                <td>
+                                    <?php if ($e_video): ?>
+                                        <span class="badge bg-primary"><i class="fa-solid fa-video me-1"></i>Remota</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-secondary"><i class="fa-solid fa-hospital me-1"></i>Presencial</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><span class="badge bg-<?= $estado_cores[$item['estado']] ?? 'secondary' ?>"><?= h(ucfirst($item['estado'])) ?></span></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+                    </div>
                 <?php endif; ?>
-                <a href="sessoes_agendadas.php" class="btn btn-sm btn-outline-secondary mt-2">Ver todas</a>
             </div>
 
             <!-- Atalhos rápidos -->
