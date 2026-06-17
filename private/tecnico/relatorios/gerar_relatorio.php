@@ -55,12 +55,13 @@ if ($sel) {
     // Prescrições / tratamentos
     try {
         $sp = $db->prepare("
-            SELECT p.data_prescricao, p.descricao, p.estado, p.notas,
+            SELECT pt.data_prescricao, pt.objetivos_clinicos, pt.membro_afetado,
+                   pt.num_sessoes_prescritas, pt.data_validade, pt.observacoes, pt.ativa,
                    u.nome AS prescrito_por
-            FROM prescricoes p
-            JOIN profissionais pr ON pr.id=p.medico_id
-            JOIN utilizadores u ON u.id=pr.utilizador_id
-            WHERE p.utente_id=? ORDER BY p.data_prescricao DESC
+            FROM programas_tratamento pt
+            JOIN profissionais pr ON pr.id = pt.medico_id
+            JOIN utilizadores u ON u.id = pr.utilizador_id
+            WHERE pt.utente_id=? ORDER BY pt.data_prescricao DESC
         ");
         $sp->execute([$sel]); $prescricoes = $sp->fetchAll();
     } catch (\Throwable $e) { $prescricoes = []; }
@@ -195,15 +196,21 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 <h5 class="mb-3"><i class="fa-solid fa-file-medical me-2" style="color:#1a5f8a;"></i>Tratamentos Prescritos</h5>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Data</th><th>Descrição</th><th>Prescrito por</th><th>Estado</th></tr></thead>
+                        <thead class="table-light"><tr><th>Data</th><th>Objetivos Clínicos</th><th>Membro</th><th>Sessões</th><th>Validade</th><th>Médico</th><th>Estado</th></tr></thead>
                         <tbody>
                         <?php foreach ($prescricoes as $p): ?>
                         <tr>
                             <td class="small"><?= h(date('d/m/Y', strtotime($p['data_prescricao']))) ?></td>
-                            <td class="small"><?= h($p['descricao'] ?? '—') ?></td>
+                            <td class="small"><?= h($p['objetivos_clinicos'] ?? '—') ?></td>
+                            <td class="small"><?= h($p['membro_afetado'] ? str_replace('_', ' ', $p['membro_afetado']) : '—') ?></td>
+                            <td class="small"><?= h($p['num_sessoes_prescritas'] ?? '—') ?></td>
+                            <td class="small"><?= $p['data_validade'] ? h(date('d/m/Y', strtotime($p['data_validade']))) : '—' ?></td>
                             <td class="small"><?= h($p['prescrito_por'] ?? '—') ?></td>
-                            <td><span class="badge bg-<?= $p['estado']==='ativo'?'success':'secondary' ?>"><?= h(ucfirst($p['estado'])) ?></span></td>
+                            <td><span class="badge bg-<?= $p['ativa'] ? 'success' : 'secondary' ?>"><?= $p['ativa'] ? 'Ativo' : 'Inativo' ?></span></td>
                         </tr>
+                        <?php if (!empty($p['observacoes'])): ?>
+                        <tr class="table-light"><td colspan="7" class="small text-muted ps-3"><i class="fa-solid fa-note-sticky me-1"></i><?= h($p['observacoes']) ?></td></tr>
+                        <?php endif; ?>
                         <?php endforeach; ?>
                         </tbody>
                     </table>

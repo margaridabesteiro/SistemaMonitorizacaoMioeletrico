@@ -120,6 +120,18 @@ $consultas = $db->prepare("
 ");
 $consultas->execute([$id, $pid]); $consultas = $consultas->fetchAll();
 
+// Programas de tratamento deste médico para este utente
+$programas_trat = [];
+try {
+    $spt = $db->prepare("
+        SELECT pt.data_prescricao, pt.objetivos_clinicos, pt.membro_afetado,
+               pt.num_sessoes_prescritas, pt.data_validade, pt.observacoes, pt.ativa
+        FROM programas_tratamento pt
+        WHERE pt.utente_id = ? AND pt.medico_id = ?
+        ORDER BY pt.ativa DESC, pt.data_prescricao DESC
+    ");
+    $spt->execute([$id, $pid]); $programas_trat = $spt->fetchAll();
+} catch (\Throwable $e) { $programas_trat = []; }
 
 $fase_labels = ['avaliacao' => 'Avaliação', 'ativo' => 'Ativo', 'manutencao' => 'Manutenção', 'alta' => 'Alta'];
 $fase_cores  = ['avaliacao' => 'secondary', 'ativo' => 'primary', 'manutencao' => 'info', 'alta' => 'success'];
@@ -288,6 +300,41 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 </div>
 
             </div>
+
+            <!-- Programas de Tratamento -->
+            <?php if (!empty($programas_trat)): ?>
+            <div class="card p-3 mt-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fa-solid fa-file-medical me-2" style="color:#8B0000;"></i>Programas de Tratamento</h5>
+                    <a href="<?= APP_URL ?>/private/medico/prescricoes/nova_prescricao.php" class="btn btn-sm" style="background:#8B0000;color:#fff;">
+                        <i class="fa-solid fa-plus me-1"></i>Novo Programa
+                    </a>
+                </div>
+                <?php foreach ($programas_trat as $pt): ?>
+                <div class="border rounded p-3 mb-3 <?= $pt['ativa'] ? 'border-success' : 'border-secondary' ?>">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-<?= $pt['ativa'] ? 'success' : 'secondary' ?>"><?= $pt['ativa'] ? 'Ativo' : 'Inativo' ?></span>
+                        <div class="text-end">
+                            <small class="text-muted">Prescrito em <?= h(date('d/m/Y', strtotime($pt['data_prescricao']))) ?></small>
+                            <?php if ($pt['data_validade']): ?>
+                            <br><small class="text-muted">Válido até <?= h(date('d/m/Y', strtotime($pt['data_validade']))) ?></small>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos']) ?></p>
+                    <?php if ($pt['membro_afetado']): ?>
+                    <p class="mb-1 small"><strong>Membro:</strong> <?= h(str_replace('_', ' ', $pt['membro_afetado'])) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pt['num_sessoes_prescritas']): ?>
+                    <p class="mb-1 small"><strong>Sessões prescritas:</strong> <?= h($pt['num_sessoes_prescritas']) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pt['observacoes']): ?>
+                    <p class="mb-0 small text-muted fst-italic"><?= h($pt['observacoes']) ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
 
             <!-- Sessões do paciente (Feature 7 + 10) -->
             <?php

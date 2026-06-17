@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
                 notificar((int)$tecnico_uid, 'prescricao',
                     'Nova prescrição de tratamento',
                     'O Dr. ' . ($_SESSION['nome'] ?? '') . ' criou um novo programa. Verifique e agende as sessões.',
-                    APP_URL . '/private/tecnico/relatorios/gerar_relatorio.php'
+                    APP_URL . '/private/tecnico/pacientes/perfil_paciente.php?id=' . $utente_id
                 );
             }
         } catch (\Throwable $e) {}

@@ -73,6 +73,21 @@ foreach ($jogos_utente as $jogo) {
     }
 }
 
+$programas = [];
+try {
+    $sp = $db->prepare("
+        SELECT pt.data_prescricao, pt.objetivos_clinicos, pt.membro_afetado,
+               pt.num_sessoes_prescritas, pt.data_validade, pt.observacoes, pt.ativa,
+               u.nome AS medico_nome
+        FROM programas_tratamento pt
+        JOIN profissionais pf ON pf.id = pt.medico_id
+        JOIN utilizadores u ON u.id = pf.utilizador_id
+        WHERE pt.utente_id = ?
+        ORDER BY pt.ativa DESC, pt.data_prescricao DESC
+    ");
+    $sp->execute([$id]); $programas = $sp->fetchAll();
+} catch (\Throwable $e) { $programas = []; }
+
 $fase_labels  = ['avaliacao' => 'Avaliação', 'ativo' => 'Ativo', 'manutencao' => 'Manutenção', 'alta' => 'Alta'];
 $fase_cores   = ['avaliacao' => 'secondary', 'ativo' => 'primary', 'manutencao' => 'info', 'alta' => 'success'];
 $nivel_badges = ['minimo' => 'success', 'medio' => 'warning', 'maximo' => 'danger'];
@@ -181,6 +196,36 @@ $tend_cores   = ['melhoria' => 'text-success', 'estavel' => 'text-secondary', 'r
                 </table>
                 <a href="historico_paciente.php?id=<?= $id ?>" class="btn btn-sm btn-outline-secondary mt-2">Ver histórico completo</a>
             </div>
+
+            <!-- Programas de Tratamento -->
+            <?php if (!empty($programas)): ?>
+            <div class="card p-3 mt-4">
+                <h5 class="mb-3"><i class="fa-solid fa-file-medical me-2" style="color:#1a5f8a;"></i>Programas de Tratamento</h5>
+                <?php foreach ($programas as $pt): ?>
+                <div class="border rounded p-3 mb-3 <?= $pt['ativa'] ? 'border-success' : 'border-secondary' ?>">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="badge bg-<?= $pt['ativa'] ? 'success' : 'secondary' ?> me-2"><?= $pt['ativa'] ? 'Ativo' : 'Inativo' ?></span>
+                            <small class="text-muted">Prescrito em <?= h(date('d/m/Y', strtotime($pt['data_prescricao']))) ?> por <?= h($pt['medico_nome']) ?></small>
+                        </div>
+                        <?php if ($pt['data_validade']): ?>
+                        <small class="text-muted">Válido até <?= h(date('d/m/Y', strtotime($pt['data_validade']))) ?></small>
+                        <?php endif; ?>
+                    </div>
+                    <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos']) ?></p>
+                    <?php if ($pt['membro_afetado']): ?>
+                    <p class="mb-1 small"><strong>Membro:</strong> <?= h(str_replace('_', ' ', $pt['membro_afetado'])) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pt['num_sessoes_prescritas']): ?>
+                    <p class="mb-1 small"><strong>Sessões prescritas:</strong> <?= h($pt['num_sessoes_prescritas']) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pt['observacoes']): ?>
+                    <p class="mb-0 small text-muted fst-italic"><?= h($pt['observacoes']) ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </main>
 
 <?php if (!empty($chart_datasets)):
