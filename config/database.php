@@ -1,18 +1,12 @@
 <?php
-// config/database.php
-// Configuração da ligação à base de dados MySQL — XAMPP
-// Caminho: C:\xampp\htdocs\sistema_mioeletrico\SistemaMonitorizacaoMioeletrico\config\database.php
-
-define('DB_HOST',    'localhost');
-define('DB_USER',    'root');       // Utilizador padrão do XAMPP
-define('DB_PASS',    '');           // Password vazia por padrão no XAMPP
-define('DB_NAME',    'sistema_mioeletrico');
+// Em produção: definir DB_HOST, DB_USER, DB_PASS, DB_NAME como variáveis de ambiente
+// Ex: no Apache (httpd.conf): SetEnv DB_USER rehablink  SetEnv DB_PASS s3nh@S3gura
+define('DB_HOST',    getenv('DB_HOST') ?: 'localhost');
+define('DB_USER',    getenv('DB_USER') ?: 'root');
+define('DB_PASS',    getenv('DB_PASS') ?: '');
+define('DB_NAME',    getenv('DB_NAME') ?: 'sistema_mioeletrico');
 define('DB_CHARSET', 'utf8mb4');
 
-/**
- * Retorna uma ligação PDO à base de dados.
- * Usa padrão Singleton para evitar múltiplas ligações por pedido.
- */
 function getDB(): PDO {
     static $pdo = null;
 

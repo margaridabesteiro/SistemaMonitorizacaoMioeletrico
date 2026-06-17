@@ -1,0 +1,11 @@
+# Credenciais e configuração local
+.env
+config/env.local.php
+
+# XAMPP / sistema operativo
+Thumbs.db
+.DS_Store
+
+# Uploads e ficheiros gerados
+public/uploads/
+database/csrf_patch.py
