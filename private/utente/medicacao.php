@@ -60,7 +60,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                     <small class="text-muted">Válido até <?= h(date('d/m/Y', strtotime($pt['data_validade']))) ?></small>
                     <?php endif; ?>
                 </div>
-                <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos']) ?></p>
+                <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos'] ?? '—') ?></p>
                 <?php if ($pt['membro_afetado']): ?>
                 <p class="mb-1 small"><strong>Membro:</strong> <?= h(str_replace('_', ' ', $pt['membro_afetado'])) ?></p>
                 <?php endif; ?>

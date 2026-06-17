@@ -321,7 +321,7 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                             <?php endif; ?>
                         </div>
                     </div>
-                    <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos']) ?></p>
+                    <p class="mb-1"><strong>Objetivos:</strong> <?= h($pt['objetivos_clinicos'] ?? '—') ?></p>
                     <?php if ($pt['membro_afetado']): ?>
                     <p class="mb-1 small"><strong>Membro:</strong> <?= h(str_replace('_', ' ', $pt['membro_afetado'])) ?></p>
                     <?php endif; ?>
