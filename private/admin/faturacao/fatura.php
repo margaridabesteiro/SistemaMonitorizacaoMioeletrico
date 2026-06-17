@@ -115,7 +115,8 @@ try {
 <div class="modal fade" id="modalPagamento" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form method="POST" action="<?= APP_URL ?>/api/admin/faturacao/marcar_paga.php">
+            <form method="POST" action="<?= APP_URL ?>
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">/api/admin/faturacao/marcar_paga.php">
                 <input type="hidden" name="num" value="<?= h($f['numero']) ?>">
                 <input type="hidden" name="_origem" value="fatura">
                 <div class="modal-header py-2">

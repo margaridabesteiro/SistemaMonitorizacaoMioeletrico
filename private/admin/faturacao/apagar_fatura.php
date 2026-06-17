@@ -27,6 +27,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <p class="mb-0"><strong>Estado:</strong> <?= $f['paga']?'Paga':'Pendente' ?></p>
                 </div>
                 <form method="POST" class="d-flex gap-3 justify-content-center">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <a href="controlo_faturacao.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i>Cancelar</a>
                     <button type="submit" name="confirmar" class="btn btn-danger"><i class="fa-regular fa-trash-can me-1"></i>Eliminar</button>
                 </form>

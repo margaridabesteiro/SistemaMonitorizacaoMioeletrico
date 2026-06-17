@@ -9,6 +9,7 @@ $stmt->execute([$id]); $s = $stmt->fetch();
 if (!$s) redirect(APP_URL . '/private/tecnico/sessoes/lista_sessoes.php');
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $categoria = trim($_POST['categoria'] ?? 'jogo');
     $jogo_id   = (int)($_POST['jogo_id'] ?? 0) ?: null;
     $duracao   = (int)($_POST['duracao'] ?? 45);
@@ -31,6 +32,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             <h1 class="mb-4">Editar Sessão #<?= $id ?></h1>
             <div class="card p-4" style="max-width:600px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="mb-3"><label class="form-label">Paciente</label><input type="text" class="form-control" value="<?= h($s['paciente']) ?>" disabled></div>
                     <div class="row">
                         <div class="col-md-6 mb-3">

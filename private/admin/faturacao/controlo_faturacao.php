@@ -216,6 +216,7 @@ $metodo_labels = [
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                         <input type="hidden" name="_acao" value="inativar">
                                         <input type="hidden" name="num" value="<?= h($f['numero']) ?>">
                                         <button type="submit" class="btn btn-xs btn-outline-secondary" title="Inativar" onclick="return confirm('Inativar fatura <?= h(addslashes($f['numero'])) ?>?')">
@@ -224,6 +225,7 @@ $metodo_labels = [
                                     </form>
                                 <?php else: ?>
                                     <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                         <input type="hidden" name="_acao" value="reativar">
                                         <input type="hidden" name="num" value="<?= h($f['numero']) ?>">
                                         <button type="submit" class="btn btn-xs btn-outline-success" title="Reativar">
@@ -274,7 +276,8 @@ $metodo_labels = [
 <div class="modal fade" id="modalPagamento" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form method="POST" action="<?= APP_URL ?>/api/admin/faturacao/marcar_paga.php">
+            <form method="POST" action="<?= APP_URL ?>
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">/api/admin/faturacao/marcar_paga.php">
                 <input type="hidden" name="num" id="mp_num">
                 <div class="modal-header py-2">
                     <h6 class="modal-title">Registar Pagamento</h6>

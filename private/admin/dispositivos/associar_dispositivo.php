@@ -12,6 +12,7 @@ $proximo_num = $ultimo_cod ? ((int)ltrim(substr($ultimo_cod, 4), '0') ?: 0) + 1 
 $proximo_codigo = 'EMG-' . str_pad($proximo_num, 4, '0', STR_PAD_LEFT);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $codigo = trim($_POST['codigo'] ?? '');
     $notas  = trim($_POST['notas']  ?? '') ?: null;
 
@@ -39,6 +40,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php if (!empty($erros)): ?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
             <div class="card p-4" style="max-width:560px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Código <span class="text-danger">*</span></label>
                         <input type="text" name="codigo" class="form-control" required value="<?= h($_POST['codigo'] ?? $proximo_codigo) ?>">

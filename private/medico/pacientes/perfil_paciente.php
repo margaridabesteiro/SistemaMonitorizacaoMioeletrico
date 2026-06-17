@@ -75,7 +75,6 @@ $tecnicos_lista = $db->query("
 $s = $db->prepare("SELECT COUNT(*) FROM sessoes WHERE utente_id=? AND estado='concluida'");
 $s->execute([$id]); $n_sessoes = (int)$s->fetchColumn();
 
-// Sessões do utente para o médico ver (Feature 7)
 $sessoes_medico = [];
 try {
     $sq = $db->prepare("
@@ -97,7 +96,6 @@ try {
 $s = $db->prepare("SELECT COUNT(*) FROM consultas WHERE utente_id=? AND medico_id=?");
 $s->execute([$id, $pid]); $n_consultas = (int)$s->fetchColumn();
 
-// Evolução percentagem_final ao longo das sessões concluídas
 $evolucao = $db->query("
     SELECT DATE_FORMAT(s.data_hora, '%d/%m/%Y') AS data,
            ROUND(m.percentagem_final, 1) AS pct,
@@ -177,7 +175,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 </div>
             </div>
 
-            <!-- Métricas rápidas -->
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <div class="card text-center p-3">
@@ -193,7 +190,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 </div>
             </div>
 
-            <!-- Equipa de Tratamento -->
             <div class="card p-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h6 class="fw-bold mb-0"><i class="fa-solid fa-user-doctor me-2" style="color:#8B0000;"></i>Equipa de Tratamento</h6>
@@ -215,6 +211,7 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                         </button>
                         <div class="collapse mt-2" id="formTecnico">
                             <form method="POST" class="d-flex gap-2 align-items-center">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                 <input type="hidden" name="_acao" value="assign_tecnico">
                                 <select name="tecnico_id" class="form-select form-select-sm" style="max-width:250px;">
                                     <option value="">— Sem técnico —</option>
@@ -231,7 +228,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 </div>
             </div>
 
-            <!-- Info clínica -->
             <div class="card p-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h6 class="fw-bold mb-0"><i class="fa-solid fa-stethoscope me-2" style="color:#8B0000;"></i>Informação Clínica</h6>
@@ -258,6 +254,7 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 <div class="collapse" id="formClinica">
                     <hr class="my-2">
                     <form method="POST" class="row g-2">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                         <input type="hidden" name="_acao" value="edit_clinica">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold small">Diagnóstico</label>
@@ -279,7 +276,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
                 </div>
             </div>
 
-            <!-- Gráfico de evolução -->
             <?php if (!empty($evolucao)): ?>
             <div class="card p-3 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-chart-line me-2" style="color:#8B0000;"></i>Evolução nas Sessões de Treino</h5>
@@ -288,7 +284,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
             <?php endif; ?>
 
             <div class="row g-3">
-                <!-- Últimas consultas -->
                 <div class="col-12">
                     <div class="card p-3 h-100">
                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -379,7 +374,6 @@ $tipo_badge  = ['inicial' => 'info', 'rotina' => 'secondary', 'alta' => 'success
             </div>
             <?php endif; ?>
 
-            <!-- Sessões do paciente (Feature 7 + 10) -->
             <?php
             $prog_cor_m   = ['melhoria'=>'#198754','estavel'=>'#6c757d','regressao'=>'#dc3545'];
             $prog_icon_m  = ['melhoria'=>'fa-arrow-trend-up','estavel'=>'fa-minus','regressao'=>'fa-arrow-trend-down'];

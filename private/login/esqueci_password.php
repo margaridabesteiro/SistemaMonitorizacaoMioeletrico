@@ -9,6 +9,7 @@ if (!empty($_SESSION['utilizador_id'])) {
 $mensagem = ''; $tipo_msg = 'info';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $email = trim($_POST['email'] ?? '');
     $db    = getDB();
     $stmt  = $db->prepare("SELECT id, nome, perfil FROM utilizadores WHERE email=? AND ativo=1 LIMIT 1");
@@ -67,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="login.php" class="btn btn-outline-secondary w-100">Voltar ao Login</a>
         <?php else: ?>
         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
             <div class="mb-3">
                 <label class="form-label fw-semibold">Email da sua conta</label>
                 <input type="email" name="email" class="form-control" placeholder="email@exemplo.pt" required autofocus>

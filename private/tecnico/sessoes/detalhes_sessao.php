@@ -109,7 +109,6 @@ $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
 
 
             <?php if ($s['categoria'] === 'avaliacao_funcional'): ?>
-            <!-- Comentários do relatório de avaliação funcional -->
             <div class="card p-3 mt-3">
                 <h5 class="mb-3"><i class="fa-solid fa-file-medical me-2" style="color:#1a5f8a;"></i>Relatório da Avaliação Funcional</h5>
                 <?php if (!empty($s['analise_tecnica'])): ?>
@@ -120,6 +119,7 @@ $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
                 <p class="text-muted small mb-3">Ainda não foram escritos comentários para esta avaliação.</p>
                 <?php endif; ?>
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <input type="hidden" name="_acao" value="save_comentario">
                     <div class="mb-2">
                         <label class="form-label fw-semibold">Comentários / Observações</label>

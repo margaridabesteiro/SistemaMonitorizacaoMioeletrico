@@ -8,6 +8,7 @@ $stmt = $db->prepare('SELECT * FROM programas_tratamento WHERE id=?'); $stmt->ex
 if (!$p) redirect(APP_URL . '/private/medico/prescricoes/lista_prescricoes.php');
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $data_v    = $_POST['data_validade']          ?: null;
     $num_s     = (int)($_POST['num_sessoes_prescritas'] ?? 0) ?: null;
     $membro    = $_POST['membro_afetado']          ?: null;
@@ -36,6 +37,7 @@ $membro_labels = ['mao_esquerda'=>'Mão esquerda','mao_direita'=>'Mão direita',
             <?php if (!empty($erros)): ?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
             <div class="card p-4" style="max-width:700px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Membro Afetado</label>

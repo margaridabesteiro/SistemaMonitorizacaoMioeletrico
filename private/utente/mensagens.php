@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $sel) {
                     </div>
                     <?php if ($sel): ?>
                     <form method="POST" class="p-3 border-top d-flex gap-2">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                         <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus>
                         <button type="submit" class="btn" style="background:#667eea;color:#fff;"><i class="fa-solid fa-paper-plane"></i></button>
                     </form>

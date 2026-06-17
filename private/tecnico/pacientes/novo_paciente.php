@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../config/database.php';
 $pagina_titulo = 'Novo Paciente'; $pagina_ativa = 'pacientes';
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $db = getDB(); $uid = (int)$_SESSION['utilizador_id'];
     $stmt = $db->prepare('SELECT id FROM profissionais WHERE utilizador_id=?'); $stmt->execute([$uid]); $pid = (int)$stmt->fetchColumn();
     $nome = trim($_POST['nome'] ?? ''); $email = trim($_POST['email'] ?? '');
@@ -33,6 +34,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             <?php if (!empty($erros)): ?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
             <div class="card p-4" style="max-width:700px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <h5 class="mb-3">Informação Pessoal</h5>
                     <div class="row">
                         <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nome *</label><input type="text" name="nome" class="form-control" required></div>

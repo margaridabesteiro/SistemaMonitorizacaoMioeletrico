@@ -13,6 +13,7 @@ $stmt->execute([$uid]); $pid = (int)($stmt->fetchColumn() ?: 0);
 $erros = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $disp_id   = (int)($_POST['dispositivo_id']          ?? 0);
     $utente_id = (int)($_POST['utente_id']               ?? 0);
     $devolucao = trim($_POST['data_prevista_devolucao']   ?? '') ?: null;
@@ -72,6 +73,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             <?php else: ?>
             <div class="card p-4" style="max-width:600px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Dispositivo <span class="text-danger">*</span></label>
                         <select name="dispositivo_id" class="form-select" required>

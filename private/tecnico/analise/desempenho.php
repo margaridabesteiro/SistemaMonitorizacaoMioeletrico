@@ -124,10 +124,10 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
 
             <?php if ($sel): ?>
 
-            <!-- Formulário: Nova Análise -->
             <div class="card p-4 mb-4" style="border-left:4px solid #1a5f8a;">
                 <h5 class="mb-3"><i class="fa-solid fa-pen-to-square me-2" style="color:#1a5f8a;"></i>Registar Análise de Desempenho</h5>
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <input type="hidden" name="_acao" value="nova_analise">
                     <input type="hidden" name="utente_id" value="<?= $sel ?>">
                     <div class="mb-3">
@@ -164,7 +164,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 </form>
             </div>
 
-            <!-- Histórico de Análises -->
             <?php if (!empty($analises_hist)): ?>
             <div class="card p-4 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-clock-rotate-left me-2" style="color:#1a5f8a;"></i>Análises Registadas</h5>
@@ -188,7 +187,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <?php endif; ?>
 
-            <!-- Gráfico e tabela de métricas -->
             <?php if (!empty($dados)): ?>
             <div class="card p-3 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-chart-line me-2" style="color:#667eea;"></i>Evolução de Precisão</h5>

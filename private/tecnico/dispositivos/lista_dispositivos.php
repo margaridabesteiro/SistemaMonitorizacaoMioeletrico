@@ -150,6 +150,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                                     </a>
                                 <?php elseif (in_array($d['estado'], ['avariado','danificado','perdido'], true)): ?>
                                     <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                         <input type="hidden" name="_acao" value="disponivel">
                                         <input type="hidden" name="disp_id" value="<?= $d['id'] ?>">
                                         <button type="submit" class="btn btn-xs btn-outline-success"

@@ -4,6 +4,7 @@ require_once __DIR__.'/../../../config/database.php';
 $pagina_titulo='Registo de Profissional'; $pagina_ativa='profissionais';
 $er=[]; $d=['perfil'=>'','nome'=>'','email'=>'','especialidade'=>'','instituicao'=>'','contacto'=>''];
 if($_SERVER['REQUEST_METHOD']==='POST'){
+    csrfVerify();
   foreach($d as $k=>$v) $d[$k]=trim($_POST[$k]??'');
   $pw=$_POST['password']??''; $cf=$_POST['password_conf']??'';
   if($d['nome']==='') $er[]='Nome obrigatório.';
@@ -32,6 +33,7 @@ require_once __DIR__.'/../../../includes/sidebar_admin.php';
 <div class="d-flex align-items-center gap-3 mb-4"><a href="gestao_PS.php" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i>Voltar</a><h1 class="mb-0">Registo de Profissional</h1></div>
 <?php if(!empty($er)):?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($er as $e):?><li><?=h($e)?></li><?php endforeach;?></ul></div><?php endif;?>
 <div class="card p-4" style="max-width:650px;"><form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
   <div class="row">
     <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Tipo *</label><select name="perfil" class="form-select" required><option value="">--</option><?php foreach(['medico','tecnico','admin'] as $p):?><option value="<?=$p?>" <?=($d['perfil']===$p)?'selected':''?>><?=ucfirst($p)?></option><?php endforeach;?></select></div>
     <div class="col-md-6 mb-3"><label class="form-label fw-semibold">Nome *</label><input type="text" name="nome" class="form-control" value="<?=h($d['nome'])?>" required></div>

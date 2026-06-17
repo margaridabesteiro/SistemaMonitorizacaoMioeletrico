@@ -1,7 +1,4 @@
 <?php
-// private/utente/index_utente.php
-// Dashboard do utente (paciente)
-
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 
@@ -22,7 +19,6 @@ $utente = $stmt->fetch();
 $utente_id       = $utente ? (int)$utente['id'] : 0;
 $cobertura_saude = $utente['cobertura_saude'] ?? 'SNS';
 
-// Próximas sessões + consultas (combinadas)
 $proximas_items = [];
 if ($utente_id) {
     $proximas_items = [];
@@ -58,7 +54,6 @@ if ($utente_id) {
     } catch (\Throwable $e) {}
 }
 
-// Total de sessões concluídas
 $total_sessoes = 0;
 if ($utente_id) {
     $stmt = $db->prepare('SELECT COUNT(*) FROM sessoes WHERE utente_id = ? AND estado = "concluida"');
@@ -66,7 +61,6 @@ if ($utente_id) {
     $total_sessoes = (int)$stmt->fetchColumn();
 }
 
-// Faturas em aberto (apenas para Particular e Seguro)
 $faturas_abertas = 0;
 if ($utente_id && $cobertura_saude !== 'SNS') {
     $stmt = $db->prepare('SELECT COUNT(*) FROM faturas WHERE utente_id = ? AND paga = 0');
@@ -74,14 +68,12 @@ if ($utente_id && $cobertura_saude !== 'SNS') {
     $faturas_abertas = (int)$stmt->fetchColumn();
 }
 
-// Próxima sessão/consulta com videochamada (≤ 30 min)
 $video_link = null;
 if ($utente_id) {
     $sv = $db->prepare("SELECT link_videochamada FROM sessoes WHERE utente_id=? AND modalidade='remota' AND link_videochamada IS NOT NULL AND data_hora BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 30 MINUTE) AND estado='agendada' ORDER BY data_hora LIMIT 1");
     $sv->execute([$utente_id]); $video_link = $sv->fetchColumn() ?: null;
 }
 
-// Mensagens não lidas
 $stmt = $db->prepare('SELECT COUNT(*) FROM mensagens WHERE destinatario_id = ? AND lida = 0');
 $stmt->execute([$utilizador_id]);
 $mensagens_nao_lidas = (int)$stmt->fetchColumn();
@@ -101,7 +93,6 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
             </div>
             <?php endif; ?>
 
-            <!-- Métricas rápidas -->
             <div class="row g-3 mb-4">
                 <div class="col-md-3">
                     <div class="card text-center p-3">
@@ -131,7 +122,6 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                 <?php endif; ?>
             </div>
 
-            <!-- Próximas sessões + consultas -->
             <div class="card p-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="mb-0">Sessões / Consultas</h5>
@@ -177,7 +167,6 @@ $mensagens_nao_lidas = (int)$stmt->fetchColumn();
                 <?php endif; ?>
             </div>
 
-            <!-- Atalhos rápidos -->
             <div class="row g-3">
                 <div class="col-md-4">
                     <a href="jogos_reabilitacao.php" class="card p-3 text-decoration-none text-dark d-block text-center">

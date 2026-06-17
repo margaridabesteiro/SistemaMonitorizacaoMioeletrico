@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $dados['nome']    = trim($_POST['nome']    ?? '');
     $dados['email']   = trim($_POST['email']   ?? '');
     $dados['perfil']  = $_POST['perfil']       ?? '';
@@ -186,6 +187,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 
             <div class="card p-4" style="max-width:640px;">
                 <form method="POST" id="form-novo-user">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
 
                     <!-- Nome -->
                     <div class="mb-3">

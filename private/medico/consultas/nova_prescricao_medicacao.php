@@ -41,6 +41,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
             <?php if(!empty($erros)):?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e):?><li><?=h($e)?></li><?php endforeach;?></ul></div><?php endif;?>
             <div class="card p-4" style="max-width:640px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <input type="hidden" name="consulta_id" value="<?=$consulta_id?>">
                     <input type="hidden" name="utente_id"   value="<?=$utente_id?>">
                     <div class="row">

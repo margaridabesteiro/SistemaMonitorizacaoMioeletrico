@@ -14,6 +14,7 @@ $TIPOS = [
 
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $utente_id    = (int)($_POST['utente_id'] ?? 0);
     $data_emissao = date('Y-m-d');
     $data_venc    = trim($_POST['data_vencimento'] ?? '') ?: null;
@@ -118,6 +119,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
 
             <div class="card p-4" style="max-width:760px;">
                 <form method="POST" id="formFatura" onsubmit="return prepareSubmit()">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <input type="hidden" name="linhas_json" id="linhas_json">
 
                     <!-- Utente -->

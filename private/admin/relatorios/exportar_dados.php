@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 $pagina_titulo = 'Exportar Dados'; $pagina_ativa = 'relatorios';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     require_once __DIR__ . '/../../../config/app.php';
     require_once __DIR__ . '/../../../config/database.php';
     requirePerfil('admin');
@@ -36,6 +37,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <div class="card p-4 h-100">
                         <h5 class="mb-3"><i class="fa-solid fa-file-csv me-2 text-secondary"></i>Exportar CSV</h5>
                         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                             <div class="mb-3"><label class="form-label fw-semibold">Tipo de Dados</label>
                                 <select name="tipo" class="form-select">
                                     <option value="utilizadores">Utilizadores</option>

@@ -1,5 +1,4 @@
 <?php
-// private/admin/index_admin.php
 // Dashboard administrativo — exemplo de página PHP completa com includes
 
 require_once __DIR__ . '/../../config/app.php';

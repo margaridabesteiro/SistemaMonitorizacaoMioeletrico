@@ -12,6 +12,7 @@ if (!$emp) redirect(APP_URL . '/private/admin/dispositivos/emprestimos.php');
 
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $estado_dev = $_POST['estado_devolucao'] ?? 'bom';
     $data_dev   = trim($_POST['data_devolucao'] ?? date('Y-m-d H:i:s'));
     $notas      = trim($_POST['notas'] ?? '') ?: null;
@@ -38,6 +39,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php if (!empty($erros)): ?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
             <div class="card p-4" style="max-width:500px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Estado na Devolução</label>
                         <div class="d-flex gap-3">

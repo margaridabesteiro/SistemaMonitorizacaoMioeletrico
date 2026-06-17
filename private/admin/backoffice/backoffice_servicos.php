@@ -6,6 +6,7 @@ $pagina_titulo = 'Backoffice - Serviços'; $pagina_ativa = 'backoffice';
 $db = getDB();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $s = $db->prepare("INSERT INTO backoffice_conteudo (chave,valor) VALUES (?,?) ON DUPLICATE KEY UPDATE valor=?");
     for ($i = 1; $i <= 6; $i++) {
         foreach (['titulo','icone','desc'] as $campo) {
@@ -41,6 +42,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php if ($flash): ?><div class="alert alert-<?= h($flash['tipo']) ?> py-2"><?= h($flash['mensagem']) ?></div><?php endif; ?>
 
             <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <!-- Serviços -->
                 <div class="card p-4 mb-4">
                     <h5 class="fw-bold mb-3" style="color:#8B0000;"><i class="fa-solid fa-stethoscope me-2"></i>Os Nossos Serviços (6 cartões)</h5>

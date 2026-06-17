@@ -27,7 +27,6 @@ if ($utid) {
     } catch (\Throwable $e) {}
 }
 
-// Histórico de sessões para gráfico de progressão (últimas 20)
 $historico = [];
 if ($utid) {
     try {
@@ -45,7 +44,6 @@ if ($utid) {
     } catch (\Throwable $e) {}
 }
 
-// Evolução percentagem final nos jogos (últimas 15 sessões com métricas)
 $evolucao_pct = [];
 if ($utid) {
     try {
@@ -64,7 +62,6 @@ if ($utid) {
     } catch (\Throwable $e) {}
 }
 
-// Análises globais de desempenho registadas pelo técnico
 $analises_globais = [];
 if ($utid) {
     try {
@@ -82,7 +79,6 @@ if ($utid) {
     } catch (\Throwable $e) {}
 }
 
-// Notas de análise técnica por sessão
 $analises = [];
 if ($utid) {
     try {
@@ -121,7 +117,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                 </a>
             </div>
 
-            <!-- Análises globais de desempenho do técnico -->
             <?php if (!empty($analises_globais)): ?>
             <div class="card mb-4 p-3" style="border-left:4px solid #1a5f8a;">
                 <h5 class="mb-3"><i class="fa-solid fa-clipboard-list me-2" style="color:#1a5f8a;"></i>Análises de Desempenho do Técnico</h5>
@@ -149,7 +144,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             </div>
             <?php endif; ?>
 
-            <!-- Notas por sessão -->
             <?php if (!empty($analises)): ?>
             <div class="card mb-4 p-3">
                 <h5 class="mb-3"><i class="fa-solid fa-stethoscope me-2" style="color:#1a5f8a;"></i>Notas por Sessão</h5>
@@ -185,7 +179,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             </div>
             <?php endif; ?>
 
-            <!-- KPIs -->
             <div class="row g-3 mb-4">
                 <div class="col-6 col-md-3">
                     <div class="card text-center p-3">
@@ -226,7 +219,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             </div>
 
             <div class="row g-4">
-                <!-- Gráfico de desempenho nos jogos -->
                 <?php if (!empty($evolucao_pct)): ?>
                 <div class="col-md-7">
                     <div class="card p-3 h-100">
@@ -236,7 +228,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                 </div>
                 <?php endif; ?>
 
-                <!-- Gráfico de esforço por sessão -->
                 <?php if (!empty($historico) && count(array_filter(array_column($historico,'esforco_score'))) > 0): ?>
                 <div class="col-md-<?= !empty($evolucao_pct) ? '5' : '12' ?>">
                     <div class="card p-3 h-100">
@@ -247,7 +238,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                 <?php endif; ?>
             </div>
 
-            <!-- Progressão por sessão (últimas 20) -->
             <?php if (!empty($historico)): ?>
             <div class="card mt-4 p-3">
                 <h5 class="mb-3"><i class="fa-solid fa-list-check me-2" style="color:#667eea;"></i>Histórico de Progressão</h5>
@@ -278,7 +268,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
         </main>
 
 <?php
-// Chart.js data
 $lbl_pct  = json_encode(array_column($evolucao_pct, 'dt'));
 $data_pct = json_encode(array_map('floatval', array_column($evolucao_pct, 'pct')));
 $lbl_esf  = json_encode(array_column($historico, 'dt'));

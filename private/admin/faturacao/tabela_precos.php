@@ -15,6 +15,7 @@ $TIPOS = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $action = $_POST['action'] ?? '';
 
     if ($action === 'save_seguradora') {
@@ -113,6 +114,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <input type="hidden" name="action" value="save_preco">
                 <input type="hidden" name="tipo_servico" id="mp_tipo">
                 <input type="hidden" name="seg_id" id="mp_seg_id">

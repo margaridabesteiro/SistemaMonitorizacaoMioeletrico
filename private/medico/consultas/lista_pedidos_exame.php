@@ -75,6 +75,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
         <div class="modal fade" id="modalResultado" tabindex="-1">
             <div class="modal-dialog"><div class="modal-content">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="modal-header" style="background:#8B0000;"><h5 class="modal-title text-white">Registar Resultado</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                     <div class="modal-body">
                         <input type="hidden" name="exame_id" id="modalExameId">

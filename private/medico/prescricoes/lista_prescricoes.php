@@ -61,6 +61,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
                                 <a href="detalhes_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-primary" title="Ver"><i class="fa-regular fa-eye"></i></a>
                                 <a href="editar_prescricao.php?id=<?= $p['id'] ?>" class="btn btn-xs btn-outline-secondary" title="Editar"><i class="fa-regular fa-pen-to-square"></i></a>
                                 <form method="POST" class="d-inline m-0">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="toggle_id" value="<?= $p['id'] ?>">
                                     <button type="submit" class="btn btn-xs <?= $p['ativa'] ? 'btn-outline-warning' : 'btn-outline-success' ?>" title="<?= $p['ativa'] ? 'Inativar' : 'Ativar' ?>">
                                         <i class="fa-solid <?= $p['ativa'] ? 'fa-ban' : 'fa-circle-check' ?>"></i>

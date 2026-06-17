@@ -117,6 +117,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             <?php if (!empty($erros)): ?><div class="alert alert-danger"><ul class="mb-0"><?php foreach($erros as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
             <div class="card p-4" style="max-width:700px;">
                 <form method="POST" id="formSessao">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Paciente <span class="text-danger">*</span></label>

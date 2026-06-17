@@ -1,5 +1,4 @@
 <?php
-// private/login/login.php
 // Página de autenticação — suporta login por email + password
 
 require_once __DIR__ . '/../../config/app.php';
@@ -19,6 +18,7 @@ if (!empty($_SESSION['utilizador_id'])) {
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $email    = trim($_POST['email']    ?? '');
     $password = trim($_POST['password'] ?? '');
 
@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
             <div class="mb-3">
                 <label class="form-label fw-semibold">Email</label>
                 <input type="email" name="email" class="form-control"

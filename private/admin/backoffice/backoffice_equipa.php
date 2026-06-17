@@ -9,6 +9,7 @@ $upload_dir = APP_ROOT . '/public/assets/img/medicos/';
 if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $action  = $_POST['action']          ?? '';
     $prof_id = (int)($_POST['profissional_id'] ?? 0);
     $util_id = (int)($_POST['utilizador_id']   ?? 0);
@@ -110,6 +111,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                     <?php endif; ?>
 
                                     <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                         <input type="hidden" name="action" value="salvar">
                                         <input type="hidden" name="profissional_id" value="<?= $m['prof_id'] ?>">
                                         <input type="hidden" name="utilizador_id"   value="<?= $m['util_id'] ?>">
@@ -127,6 +129,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                                     </form>
 
                                     <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                         <input type="hidden" name="action" value="toggle">
                                         <input type="hidden" name="utilizador_id"   value="<?= $m['util_id'] ?>">
                                         <input type="hidden" name="profissional_id" value="<?= $m['prof_id'] ?>">

@@ -30,6 +30,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <p class="mb-0"><strong>Perfil:</strong> <?= h($user['perfil']) ?></p>
                 </div>
                 <form method="POST" class="d-flex gap-3 justify-content-center">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <a href="gestao_PS.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i>Cancelar</a>
                     <button type="submit" name="confirmar" class="btn btn-danger"><i class="fa-solid fa-ban me-1"></i>Desativar</button>
                 </form>

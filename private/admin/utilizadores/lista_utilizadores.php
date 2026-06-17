@@ -1,5 +1,4 @@
 <?php
-// private/admin/utilizadores/lista_utilizadores.php
 // Listagem de utilizadores com pesquisa, filtro por perfil e paginação
 
 require_once __DIR__ . '/../../../config/app.php';

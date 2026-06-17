@@ -20,7 +20,6 @@ else { $pacientes = []; }
 
 $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
 
-// Dados clínicos completos do utente selecionado
 $utente = $sessoes_hist = $prescricoes = $exames = $medicacoes = $analises = null;
 
 if ($sel) {
@@ -131,7 +130,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <?php else: ?>
 
-            <!-- Cabeçalho do relatório -->
             <div class="card p-4 mb-4" style="border-left:4px solid #1a5f8a;">
                 <div class="row align-items-center">
                     <div class="col-md-8">
@@ -158,7 +156,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 <?php endif; ?>
             </div>
 
-            <!-- KPIs rápidos -->
             <?php
             $n_sess = count($sessoes_hist ?? []);
             $n_conc = count(array_filter($sessoes_hist ?? [], fn($s) => $s['estado'] === 'concluida'));
@@ -172,7 +169,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 <div class="col-6 col-md-3"><div class="card p-3 text-center"><div class="fs-3 fw-bold"><?= count($prescricoes ?? []) ?></div><div class="small text-muted">Tratamentos</div></div></div>
             </div>
 
-            <!-- Histórico de Sessões -->
             <div class="card p-4 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-dumbbell me-2" style="color:#1a5f8a;"></i>Histórico de Sessões</h5>
                 <?php if (empty($sessoes_hist)): ?>
@@ -204,7 +200,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 <?php endif; ?>
             </div>
 
-            <!-- Tratamentos / Prescrições -->
             <?php if (!empty($prescricoes)): ?>
             <div class="card p-4 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-file-medical me-2" style="color:#1a5f8a;"></i>Tratamentos Prescritos</h5>
@@ -233,7 +228,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 </div>
             </div>
 
-            <!-- Modal Tratamento -->
             <div class="modal fade" id="modalTratamento" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -274,7 +268,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </script>
             <?php endif; ?>
 
-            <!-- Análises de Desempenho -->
             <?php if (!empty($analises_desemp)):
                 $apc = ['melhoria'=>'#198754','estavel'=>'#6c757d','regressao'=>'#dc3545'];
                 $api = ['melhoria'=>'fa-arrow-trend-up','estavel'=>'fa-minus','regressao'=>'fa-arrow-trend-down'];
@@ -302,7 +295,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <?php endif; ?>
 
-            <!-- Exames -->
             <?php if (!empty($exames)): ?>
             <div class="card p-4 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-flask me-2" style="color:#1a5f8a;"></i>Exames</h5>
@@ -324,7 +316,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <?php endif; ?>
 
-            <!-- Medicação -->
             <?php if (!empty($medicacoes)): ?>
             <div class="card p-4 mb-4">
                 <h5 class="mb-3"><i class="fa-solid fa-pills me-2" style="color:#1a5f8a;"></i>Medicação</h5>
@@ -356,24 +347,19 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
 
     .sidebar, .topbar, .d-print-none { display:none !important; }
 
-    /* Eliminar margens do layout com sidebar */
     body, html { margin:0 !important; padding:0 !important; width:100% !important; }
     .wrapper { display:block !important; }
     .content { margin:0 !important; padding:0 !important; width:100% !important; max-width:100% !important; }
 
-    /* Tabelas: ocupar largura total e nunca cortar */
     table { width:100% !important; table-layout:fixed !important; border-collapse:collapse !important; font-size:9pt !important; }
     th, td { word-break:break-word !important; overflow-wrap:break-word !important; padding:4px 6px !important; border:1px solid #ccc !important; }
     thead { background:#f0f0f0 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 
-    /* Cards */
     .card { box-shadow:none !important; border:1px solid #ccc !important; page-break-inside:avoid; }
     .row { display:flex !important; flex-wrap:wrap !important; }
 
-    /* Badges: forçar cor de fundo na impressão */
     .badge { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; border:1px solid #999 !important; }
 
-    /* Evitar cortes de página no meio de secções */
     h5 { page-break-after:avoid; }
 }
 </style>

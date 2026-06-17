@@ -68,7 +68,8 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                             <i class="fa-solid fa-flag-checkered me-1"></i>Concluir Sessão
                         </button>
                         <?php endif; ?>
-                        <form method="POST" class="d-inline"><input type="hidden" name="acao" value="cancelar"><button type="submit" class="btn btn-outline-danger" onclick="return confirm('Cancelar sessão?')"><i class="fa-solid fa-xmark me-1"></i>Cancelar</button></form>
+                        <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>"><input type="hidden" name="acao" value="cancelar"><button type="submit" class="btn btn-outline-danger" onclick="return confirm('Cancelar sessão?')"><i class="fa-solid fa-xmark me-1"></i>Cancelar</button></form>
                     </div>
                 </div>
             </div>
@@ -78,6 +79,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <input type="hidden" name="acao" value="concluir">
                 <input type="hidden" name="notas" id="notasHidden">
                 <div class="modal-header" style="background:#1a5f8a;color:#fff;">

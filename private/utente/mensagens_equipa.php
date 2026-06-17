@@ -29,6 +29,7 @@ $dest_ids = array_column($destinatarios, 'id');
 
 // Enviar mensagem
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $dest  = (int)($_POST['destinatario_id'] ?? 0);
     $corpo = trim($_POST['corpo'] ?? '');
     if ($dest && $corpo !== '' && in_array($dest, $dest_ids, true)) {
@@ -157,6 +158,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                             <?php endforeach; ?>
                         </div>
                         <form method="POST" class="p-3 border-top d-flex gap-2">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                             <input type="hidden" name="destinatario_id" value="<?= $sel ?>">
                             <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus required>
                             <button type="submit" class="btn" style="background:#667eea;color:#fff;">

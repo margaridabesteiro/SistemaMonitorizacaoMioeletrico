@@ -9,6 +9,7 @@ $uid = (int)$_SESSION['utilizador_id'];
 
 // Enviar mensagem
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $dest  = (int)($_POST['destinatario_id'] ?? 0);
     $corpo = trim($_POST['corpo'] ?? '');
     if ($dest && $corpo !== '') {
@@ -147,6 +148,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
                             <?php endforeach; ?>
                         </div>
                         <form method="POST" style="padding:14px 16px;border-top:1px solid #dee2e6;display:flex;gap:8px;background:#fff;">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                             <input type="hidden" name="destinatario_id" value="<?= $sel ?>">
                             <input type="text" name="corpo" class="form-control" placeholder="Escrever mensagem..." autofocus required
                                    style="border-radius:24px;padding:8px 16px;">

@@ -1,5 +1,4 @@
 <?php
-// private/tecnico/sessoes/lista_sessoes.php
 // Lista de sessões de treino geridas pelo técnico
 
 require_once __DIR__ . '/../../../config/app.php';

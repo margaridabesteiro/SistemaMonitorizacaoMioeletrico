@@ -59,6 +59,7 @@ if (!$erro && $_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php else: ?>
         <p class="text-muted small mb-3">A definir nova password para <strong><?= h($reset['email']) ?></strong></p>
         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
             <div class="mb-3">
                 <label class="form-label fw-semibold">Nova Password</label>
                 <input type="password" name="password_nova" class="form-control" placeholder="Mínimo 8 caracteres" required minlength="8" autofocus>

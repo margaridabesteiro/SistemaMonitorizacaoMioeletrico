@@ -7,6 +7,7 @@ $db = getDB();
 
 // Ações do administrador
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $acao   = $_POST['acao']   ?? '';
     $tipo   = $_POST['tipo']   ?? '';
     $item_id = (int)($_POST['id'] ?? 0);
@@ -160,6 +161,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <td><?= $s['modalidade']==='remota'?'<span class="badge bg-primary">Remota</span>':'<span class="badge bg-secondary">Presencial</span>' ?></td>
                             <td class="d-flex gap-1">
                                 <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="acao" value="aprovar">
                                     <input type="hidden" name="tipo" value="sessao">
                                     <input type="hidden" name="id" value="<?= $s['id'] ?>">
@@ -190,12 +192,14 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <td class="small"><?= h(mb_substr($p['descricao']??'—',0,60)) ?></td>
                             <td class="d-flex gap-1">
                                 <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="acao" value="aprovar">
                                     <input type="hidden" name="tipo" value="prescricao">
                                     <input type="hidden" name="id" value="<?= $p['id'] ?>">
                                     <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check"></i></button>
                                 </form>
                                 <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="acao" value="rejeitar">
                                     <input type="hidden" name="tipo" value="prescricao">
                                     <input type="hidden" name="id" value="<?= $p['id'] ?>">
@@ -226,12 +230,14 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                             <td class="small"><?= h($e['tipo_exame'] ?? '—') ?></td>
                             <td class="d-flex gap-1">
                                 <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="acao" value="aprovar">
                                     <input type="hidden" name="tipo" value="pedido_exame">
                                     <input type="hidden" name="id" value="<?= $e['id'] ?>">
                                     <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check"></i></button>
                                 </form>
                                 <form method="POST" class="d-inline">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                                     <input type="hidden" name="acao" value="rejeitar">
                                     <input type="hidden" name="tipo" value="pedido_exame">
                                     <input type="hidden" name="id" value="<?= $e['id'] ?>">

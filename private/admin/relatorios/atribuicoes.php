@@ -9,6 +9,7 @@ $db = getDB();
 
 // --- POST: guardar alterações ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $medicos_post  = $_POST['medico_id']  ?? [];
     $tecnicos_post = $_POST['tecnico_id'] ?? [];
     $ids = array_unique(array_merge(array_keys($medicos_post), array_keys($tecnicos_post)));
@@ -136,6 +137,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                 <div class="card p-4 text-center text-muted">Sem utentes registados.</div>
             <?php else: ?>
             <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <div class="card">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 align-middle">

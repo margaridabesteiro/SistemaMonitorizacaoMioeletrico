@@ -20,6 +20,7 @@ $metodo_labels = [
 
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $valor        = (float)str_replace(',','.',($_POST['valor'] ?? '0'));
     $data_emissao = $_POST['data_emissao'] ?? $f['data_emissao'];
     $data_venc    = $_POST['data_vencimento'] ?: null;
@@ -53,6 +54,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php endif; ?>
             <div class="card p-4" style="max-width:560px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Valor (€) *</label>

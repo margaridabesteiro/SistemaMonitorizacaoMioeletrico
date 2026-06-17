@@ -1,5 +1,4 @@
 <?php
-// private/medico/exames/exames_disponiveis.php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 requirePerfil('medico');
@@ -80,6 +79,7 @@ require_once __DIR__ . '/../../../includes/sidebar_medico.php';
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                         <div class="modal-header">
                             <h5 class="modal-title">Prescrever Exame — <span id="modalTitulo"></span></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

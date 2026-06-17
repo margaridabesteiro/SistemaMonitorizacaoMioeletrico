@@ -1,5 +1,4 @@
 <?php
-// private/utente/perfil.php
 // Perfil pessoal do utente — ver e editar dados
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
@@ -26,6 +25,7 @@ $erro    = '';
 
 // --- Processar formulário de atualização ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
 
     $acao = $_POST['acao'] ?? '';
 
@@ -144,6 +144,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                     <div class="card p-4">
                         <h5 class="mb-3"><i class="fa-solid fa-lock me-2"></i>Alterar Password</h5>
                         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                             <input type="hidden" name="acao" value="password">
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Password atual</label>

@@ -16,6 +16,7 @@ if (!$prefs) {
 
 $flash = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $notif_email   = isset($_POST['notif_email'])   ? 1 : 0;
     $notif_sessao  = isset($_POST['notif_inicio_sessao']) ? 1 : 0;
     $db->prepare('UPDATE preferencias_utilizador SET notif_email=?, notif_inicio_sessao=? WHERE utilizador_id=?')
@@ -33,6 +34,7 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
             <?php if ($flash): ?><div class="alert alert-<?= h($flash['tipo']) ?> py-2"><?= h($flash['mensagem']) ?></div><?php endif; ?>
             <div class="card p-4" style="max-width:500px;">
                 <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                     <h5 class="mb-3">Notificações</h5>
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" name="notif_email" id="notifEmail" <?= $prefs['notif_email'] ? 'checked' : '' ?>>

@@ -1,5 +1,4 @@
 <?php
-// private/tecnico/pacientes/lista_pacientes.php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
 requirePerfil('tecnico');

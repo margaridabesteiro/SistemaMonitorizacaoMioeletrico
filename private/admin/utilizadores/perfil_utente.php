@@ -18,6 +18,7 @@ if (!$d) redirect(APP_URL . '/private/admin/utilizadores/lista_utilizadores.php'
 
 $flash = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $cobertura = $_POST['cobertura_saude'] ?? 'SNS';
     $fase      = $_POST['fase_tratamento'] ?? 'avaliacao';
     $cat       = $_POST['categoria_clinica'] ?: null;
@@ -60,6 +61,7 @@ $membro_labels=['mao_esquerda'=>'Mão esquerda','mao_direita'=>'Mão direita','a
                     <div class="card p-4">
                         <h6 class="fw-bold mb-3">Dados Clínicos (Admin)</h6>
                         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Cobertura de Saúde</label>

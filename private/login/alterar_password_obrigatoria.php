@@ -21,6 +21,7 @@ if (empty($_SESSION['deve_alterar_password'])) {
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $nova     = $_POST['nova_password']      ?? '';
     $confirma = $_POST['confirma_password']  ?? '';
 
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="small text-muted">Olá, <strong><?= h($_SESSION['nome']) ?></strong>. Escolha uma password segura com pelo menos 8 caracteres.</p>
 
         <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
             <div class="mb-3">
                 <label class="form-label fw-semibold">Nova Password</label>
                 <div class="input-group">

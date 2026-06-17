@@ -7,6 +7,7 @@ $db = getDB();
 
 // Gravar alterações
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrfVerify();
     $chaves = ['hero_titulo','hero_subtitulo','hero_descricao',
                'hero_stat1_num','hero_stat1_label',
                'hero_stat2_num','hero_stat2_label',
@@ -38,6 +39,7 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             <?php if ($flash): ?><div class="alert alert-<?= h($flash['tipo']) ?> py-2"><?= h($flash['mensagem']) ?></div><?php endif; ?>
 
             <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <!-- Hero -->
                 <div class="card p-4 mb-4">
                     <h5 class="fw-bold mb-3" style="color:#8B0000;"><i class="fa-solid fa-star me-2"></i>Secção Hero (topo da página)</h5>

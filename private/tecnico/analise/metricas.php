@@ -19,7 +19,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             ?>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Métricas Avançadas</h1>
-                <a href="<?= APP_URL ?>/api/sessoes/leituras.php?sessao_id=0" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-download me-1"></i>Exportar</a>
             </div>
             <form method="GET" class="row g-2 mb-4">
                 <div class="col-md-4"><select name="utente_id" class="form-select" onchange="this.form.submit()">
