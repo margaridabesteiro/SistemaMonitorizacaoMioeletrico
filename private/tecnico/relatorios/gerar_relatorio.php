@@ -196,26 +196,68 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                 <h5 class="mb-3"><i class="fa-solid fa-file-medical me-2" style="color:#1a5f8a;"></i>Tratamentos Prescritos</h5>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Data</th><th>Objetivos Clínicos</th><th>Membro</th><th>Sessões</th><th>Validade</th><th>Médico</th><th>Estado</th></tr></thead>
+                        <thead class="table-light"><tr><th>Data</th><th>Objetivos Clínicos</th><th>Médico</th><th>Estado</th><th class="d-print-none"></th></tr></thead>
                         <tbody>
-                        <?php foreach ($prescricoes as $p): ?>
+                        <?php foreach ($prescricoes as $idx => $p): ?>
                         <tr>
-                            <td class="small"><?= h(date('d/m/Y', strtotime($p['data_prescricao']))) ?></td>
-                            <td class="small"><?= h($p['objetivos_clinicos'] ?? '—') ?></td>
-                            <td class="small"><?= h($p['membro_afetado'] ? str_replace('_', ' ', $p['membro_afetado']) : '—') ?></td>
-                            <td class="small"><?= h($p['num_sessoes_prescritas'] ?? '—') ?></td>
-                            <td class="small"><?= $p['data_validade'] ? h(date('d/m/Y', strtotime($p['data_validade']))) : '—' ?></td>
+                            <td class="small text-nowrap"><?= h(date('d/m/Y', strtotime($p['data_prescricao']))) ?></td>
+                            <td class="small"><?= h(mb_substr($p['objetivos_clinicos'] ?? '—', 0, 60)) ?><?= mb_strlen($p['objetivos_clinicos'] ?? '') > 60 ? '…' : '' ?></td>
                             <td class="small"><?= h($p['prescrito_por'] ?? '—') ?></td>
                             <td><span class="badge bg-<?= $p['ativa'] ? 'success' : 'secondary' ?>"><?= $p['ativa'] ? 'Ativo' : 'Inativo' ?></span></td>
+                            <td class="d-print-none">
+                                <button type="button" class="btn btn-xs btn-outline-primary"
+                                    data-bs-toggle="modal" data-bs-target="#modalTratamento"
+                                    onclick="verTratamento(<?= $idx ?>)"
+                                    title="Ver detalhes">
+                                    <i class="fa-solid fa-eye me-1"></i>Ver
+                                </button>
+                            </td>
                         </tr>
-                        <?php if (!empty($p['observacoes'])): ?>
-                        <tr class="table-light"><td colspan="7" class="small text-muted ps-3"><i class="fa-solid fa-note-sticky me-1"></i><?= h($p['observacoes']) ?></td></tr>
-                        <?php endif; ?>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- Modal Tratamento -->
+            <div class="modal fade" id="modalTratamento" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background:#1a5f8a;color:#fff;">
+                            <h5 class="modal-title mb-0"><i class="fa-solid fa-file-medical me-2"></i>Detalhes do Tratamento</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <dl class="row mb-0" id="modalTratamentoBody"></dl>
+                        </div>
+                        <div class="modal-footer py-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+            var _tratamentos = <?= json_encode(array_values($prescricoes), JSON_UNESCAPED_UNICODE) ?>;
+            function verTratamento(idx) {
+                var p = _tratamentos[idx];
+                var rows = [
+                    ['Médico prescritor', p.prescrito_por || '—'],
+                    ['Data de prescrição', p.data_prescricao ? p.data_prescricao.substring(0,10).split('-').reverse().join('/') : '—'],
+                    ['Data de validade', p.data_validade ? p.data_validade.substring(0,10).split('-').reverse().join('/') : '—'],
+                    ['Membro afetado', p.membro_afetado ? p.membro_afetado.replace(/_/g,' ') : '—'],
+                    ['Sessões prescritas', p.num_sessoes_prescritas || '—'],
+                    ['Estado', p.ativa ? 'Ativo' : 'Inativo'],
+                    ['Objetivos clínicos', p.objetivos_clinicos || '—'],
+                    ['Observações', p.observacoes || '—'],
+                ];
+                var html = '';
+                rows.forEach(function(r) {
+                    html += '<dt class="col-sm-4 text-muted small">' + r[0] + '</dt>'
+                          + '<dd class="col-sm-8 small" style="white-space:pre-wrap;">' + r[1] + '</dd>';
+                });
+                document.getElementById('modalTratamentoBody').innerHTML = html;
+            }
+            </script>
             <?php endif; ?>
 
             <!-- Exames -->
