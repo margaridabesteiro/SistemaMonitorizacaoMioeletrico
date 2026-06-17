@@ -31,7 +31,17 @@ $avariados   = (int)$db->query("SELECT COUNT(*) FROM dispositivos WHERE estado I
 $dispositivos = $db->query("
     SELECT d.*,
            u.nome AS paciente,
-           e.data_entrega, e.id AS emp_id
+           e.data_entrega, e.id AS emp_id,
+           (SELECT s.data_hora FROM sessoes s
+            WHERE s.dispositivo_id = d.id
+              AND s.estado IN ('agendada','em_curso')
+              AND DATE(s.data_hora) = CURDATE()
+            ORDER BY s.data_hora ASC LIMIT 1) AS sessao_hoje,
+           (SELECT s.data_hora FROM sessoes s
+            WHERE s.dispositivo_id = d.id
+              AND s.estado IN ('agendada','em_curso')
+              AND DATE(s.data_hora) > CURDATE()
+            ORDER BY s.data_hora ASC LIMIT 1) AS proxima_sessao
     FROM dispositivos d
     LEFT JOIN emprestimos_dispositivos e ON e.dispositivo_id=d.id AND e.data_devolucao IS NULL
     LEFT JOIN utentes ut ON ut.id=e.utente_id
@@ -41,13 +51,15 @@ $dispositivos = $db->query("
 
 $flash = $_SESSION['flash'] ?? null; unset($_SESSION['flash']);
 $estado_badge = [
-    'disponivel' => 'success',
-    'emprestado' => 'primary',
-    'manutencao' => 'warning text-dark',
-    'avariado'   => 'danger',
-    'danificado' => 'danger',
-    'perdido'    => 'dark',
-    'abatido'    => 'secondary',
+    'disponivel'   => 'success',
+    'em_sessao'    => 'warning text-dark',
+    'agendado'     => 'info text-dark',
+    'emprestado'   => 'primary',
+    'manutencao'   => 'warning text-dark',
+    'avariado'     => 'danger',
+    'danificado'   => 'danger',
+    'perdido'      => 'dark',
+    'abatido'      => 'secondary',
 ];
 
 require_once __DIR__ . '/../../../includes/header_tecnico.php';
@@ -95,18 +107,42 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                     <tbody>
                     <?php if (empty($dispositivos)): ?>
                         <tr><td colspan="5" class="text-center text-muted py-4">Sem dispositivos registados.</td></tr>
-                    <?php else: foreach ($dispositivos as $d): ?>
+                    <?php else: foreach ($dispositivos as $d):
+                        // Determinar estado efetivo (sessão sobrepõe estado da BD se "disponivel")
+                        $estado_ef = $d['estado'];
+                        $badge_extra = '';
+                        if ($d['estado'] === 'disponivel') {
+                            if (!empty($d['sessao_hoje'])) {
+                                $estado_ef  = 'em_sessao';
+                                $badge_extra = ' · ' . date('H:i', strtotime($d['sessao_hoje']));
+                            } elseif (!empty($d['proxima_sessao'])) {
+                                $estado_ef  = 'agendado';
+                                $badge_extra = ' · ' . date('d/m', strtotime($d['proxima_sessao']));
+                            }
+                        }
+                    ?>
                         <tr>
                             <td><strong><?= h($d['codigo']) ?></strong></td>
-                            <td><span class="badge bg-<?= $estado_badge[$d['estado']] ?? 'secondary' ?>"><?= h(ucfirst($d['estado'])) ?></span></td>
+                            <td>
+                                <?php $label = match($estado_ef) {
+                                    'em_sessao' => 'Em sessão',
+                                    'agendado'  => 'Agendado',
+                                    default     => ucfirst($d['estado'])
+                                }; ?>
+                                <span class="badge bg-<?= $estado_badge[$estado_ef] ?? 'secondary' ?>">
+                                    <?= $label . h($badge_extra) ?>
+                                </span>
+                            </td>
                             <td><?= $d['paciente'] ? h($d['paciente']) : '<span class="text-muted">—</span>' ?></td>
                             <td class="small text-muted"><?= $d['ultimo_sync'] ? h(substr($d['ultimo_sync'],0,16)) : 'Nunca' ?></td>
                             <td>
-                                <?php if ($d['estado'] === 'disponivel'): ?>
+                                <?php if ($d['estado'] === 'disponivel' && $estado_ef === 'disponivel'): ?>
                                     <a href="novo_emprestimo.php?disp=<?= $d['id'] ?>"
                                        class="btn btn-xs btn-outline-success" title="Emprestar">
                                         <i class="fa-solid fa-arrow-right-from-bracket me-1"></i>Emprestar
                                     </a>
+                                <?php elseif ($d['estado'] === 'disponivel' && in_array($estado_ef, ['em_sessao','agendado'])): ?>
+                                    <span class="text-muted small"><i class="fa-solid fa-lock me-1"></i>Ocupado</span>
                                 <?php elseif ($d['estado'] === 'emprestado' && $d['emp_id']): ?>
                                     <a href="devolver_dispositivo.php?emp=<?= $d['emp_id'] ?>"
                                        class="btn btn-xs btn-outline-warning" title="Registar devolução">

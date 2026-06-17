@@ -68,8 +68,21 @@ if ($pid) {
     $s = $db->prepare("SELECT ut.id, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.tecnico_id=? ORDER BY u.nome");
     $s->execute([$pid]); $utentes = $s->fetchAll();
 }
-$jogos       = $db->query("SELECT id, nome, nivel FROM jogos WHERE ativo=1 ORDER BY FIELD(nivel,'minimo','medio','maximo'), nome")->fetchAll();
+$jogos        = $db->query("SELECT id, nome, nivel FROM jogos WHERE ativo=1 ORDER BY FIELD(nivel,'minimo','medio','maximo'), nome")->fetchAll();
 $dispositivos = $db->query("SELECT id, codigo FROM dispositivos WHERE ativo=1 ORDER BY codigo")->fetchAll();
+
+// Mapear dispositivos já reservados por data (sessões agendadas/em curso)
+$sessoes_disp = $db->query("
+    SELECT dispositivo_id, DATE_FORMAT(data_hora,'%Y-%m-%d') AS data
+    FROM sessoes
+    WHERE dispositivo_id IS NOT NULL
+      AND estado IN ('agendada','em_curso')
+      AND data_hora >= CURDATE()
+")->fetchAll();
+$disp_ocupados = [];
+foreach ($sessoes_disp as $sd) {
+    $disp_ocupados[$sd['data']][] = (int)$sd['dispositivo_id'];
+}
 $utente_pre  = (int)($_GET['utente_id'] ?? 0);
 
 $pagina_titulo = 'Nova Sessão'; $pagina_ativa = 'sessoes';
@@ -129,10 +142,15 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-semibold">Dispositivo</label>
-                            <select name="dispositivo_id" class="form-select">
+                            <select name="dispositivo_id" class="form-select" id="selectDispositivo">
                                 <option value="">Nenhum</option>
-                                <?php foreach($dispositivos as $d): ?><option value="<?= $d['id'] ?>"><?= h($d['codigo']) ?></option><?php endforeach; ?>
+                                <?php foreach($dispositivos as $d): ?>
+                                <option value="<?= $d['id'] ?>" data-codigo="<?= h($d['codigo']) ?>"><?= h($d['codigo']) ?></option>
+                                <?php endforeach; ?>
                             </select>
+                            <div id="dispAviso" class="form-text text-warning d-none">
+                                <i class="fa-solid fa-triangle-exclamation me-1"></i>Este dispositivo já tem sessão neste dia.
+                            </div>
                         </div>
                     </div>
 
@@ -182,7 +200,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
         function toggleCategoria() {
             var cat = document.getElementById('selectCategoria').value;
             var eJogo = cat === 'jogo';
-            // Jogo: mostrar dropdown de jogo, ocultar modalidade
             document.getElementById('jogoRow').style.display = eJogo ? 'block' : 'none';
             document.getElementById('modalidadeSection').style.display = eJogo ? 'none' : 'block';
             if (eJogo) document.getElementById('linkVideoRow').style.display = 'none';
@@ -190,5 +207,32 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
         }
         document.getElementById('selectCategoria').addEventListener('change', toggleCategoria);
         toggleCategoria();
+
+        // Bloqueio de dispositivos já reservados no dia selecionado
+        var _dispOcupados = <?= json_encode($disp_ocupados, JSON_UNESCAPED_UNICODE) ?>;
+        var _dataHoraInput = document.querySelector('input[name="data_hora"]');
+        var _selectDisp    = document.getElementById('selectDispositivo');
+        var _dispAviso     = document.getElementById('dispAviso');
+
+        function atualizarDispositivosOcupados() {
+            var dt   = _dataHoraInput.value;
+            var data = dt ? dt.split('T')[0] : '';
+            var ocupados = (data && _dispOcupados[data]) ? _dispOcupados[data] : [];
+            Array.from(_selectDisp.options).forEach(function(opt) {
+                if (!opt.value) return;
+                var dispId  = parseInt(opt.value);
+                var ocupado = ocupados.indexOf(dispId) !== -1;
+                var codigo  = opt.dataset.codigo || opt.textContent.replace(/ \(.*\)$/, '');
+                opt.disabled    = ocupado;
+                opt.textContent = ocupado ? codigo + ' (ocupado neste dia)' : codigo;
+            });
+            // Aviso se o dispositivo selecionado ficou ocupado
+            var sel = parseInt(_selectDisp.value);
+            _dispAviso.classList.toggle('d-none', !(sel && ocupados.indexOf(sel) !== -1));
+        }
+
+        _dataHoraInput.addEventListener('change', atualizarDispositivosOcupados);
+        _selectDisp.addEventListener('change', atualizarDispositivosOcupados);
+        atualizarDispositivosOcupados();
         </script>
 <?php require_once __DIR__ . '/../../../includes/footer.php'; ?>
