@@ -27,6 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_acao'] ?? '') === 'edit_c
     $db->prepare('UPDATE utentes SET diagnostico=?, observacoes=? WHERE id=? AND medico_id=?')
        ->execute([$diagnostico, $observacoes, $id, $pid]);
     registarAuditoria('ATUALIZAR', 'Utente', $id, 'Informação clínica atualizada pelo médico');
+
+    $nq = $db->prepare("SELECT u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?");
+    $nq->execute([$id]); $utente_nome = $nq->fetchColumn() ?: 'utente';
+    notificar($uid, 'prescricao',
+        'Ir para Tratamentos',
+        'Relatório clínico de ' . $utente_nome . ' atualizado. Verifique e complete os tratamentos prescritos.',
+        APP_URL . '/private/medico/prescricoes/lista_prescricoes.php'
+    );
+
     $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Informação clínica atualizada.'];
     redirect(APP_URL . '/private/medico/pacientes/perfil_paciente.php?id=' . $id);
 }
