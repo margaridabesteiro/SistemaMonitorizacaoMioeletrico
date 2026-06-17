@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Pode comunicar com médicos e admins
 $destinatarios_validos = $db->query("
     SELECT id, nome, perfil FROM utilizadores
-    WHERE perfil IN ('medico','admin') AND ativo=1 AND id != {$uid}
+    WHERE perfil IN ('medico','admin','utente') AND ativo=1 AND id != {$uid}
     ORDER BY perfil, nome
 ")->fetchAll();
 
