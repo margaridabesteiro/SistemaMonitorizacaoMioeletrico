@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'info',
                     'Novo utente atribuído',
                     'O utente ' . $nome_utente . ' foi-lhe atribuído para acompanhamento.',
-                    APP_URL . '/private/tecnico/index_F.php'
+                    APP_URL . '/private/tecnico/pacientes/lista_pacientes.php'
                 );
             }
         }
