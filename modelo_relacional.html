@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<title>Modelo Relacional — sistema_mioeletrico</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:11px;background:#f0f2f5;}
+#toolbar{display:flex;align-items:center;gap:12px;padding:8px 14px;background:#1a3a6b;color:white;flex-wrap:wrap;}
+#toolbar strong{font-size:13px;}
+.legend{display:flex;gap:14px;font-size:10px;}
+.leg{display:flex;align-items:center;gap:4px;}
+.leg-dot{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.3);}
+.btn-bar{margin-left:auto;display:flex;gap:6px;}
+.btn-bar button{background:rgba(255,255,255,.2);color:white;border:1px solid rgba(255,255,255,.4);padding:3px 10px;border-radius:3px;cursor:pointer;font-size:11px;}
+.btn-bar button:hover{background:rgba(255,255,255,.35);}
+#wrap{overflow:auto;padding:12px;background:#e8ecf1;min-height:calc(100vh - 56px);}
+#canvas{position:relative;transform-origin:top left;}
+svg#lines{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;}
+.tbl{position:absolute;border-radius:4px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.22);background:white;}
+.tbl-hdr{padding:4px 8px;font-weight:bold;font-size:10px;color:white;white-space:nowrap;letter-spacing:.3px;}
+.tbl-row{padding:2px 7px;border-top:1px solid #eee;white-space:nowrap;font-size:9.5px;}
+.pk{background:#fffde7;color:#6d4c00;font-weight:bold;}
+.fk{background:#e8f4fd;color:#1a5f8a;}
+.normal{color:#333;}
+@media print{
+  #toolbar .btn-bar{display:none;}
+  body{background:white;}
+  #wrap{overflow:visible;padding:0;}
+  #canvas{transform:scale(0.76);transform-origin:top left;}
+}
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <strong>Modelo Relacional — sistema_mioeletrico (25 tabelas)</strong>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:#fffde7;"></div>Chave primária</div>
+    <div class="leg"><div class="leg-dot" style="background:#e8f4fd;"></div>Chave estrangeira</div>
+    <div class="leg"><span style="color:#aab;font-weight:bold;">──▶</span> Relação FK</div>
+  </div>
+  <div class="btn-bar">
+    <button onclick="zoom(1.15)">Zoom ＋</button>
+    <button onclick="zoom(1/1.15)">Zoom －</button>
+    <button onclick="resetZoom()">Reset</button>
+    <button onclick="window.print()" style="background:#c62828;">🖨 Imprimir / PDF</button>
+  </div>
+</div>
+<div id="wrap"><div id="canvas"><svg id="lines"></svg></div></div>
+
+<script>
+const W=175, RH=18, HH=26;
+function th(cols){return HH+cols.length*RH;}
+
+const TABLES=[
+  // col 1 — utilizadores + segurança
+  ['utilizadores',10,10,'#1a3a6b',['🔑 id','nome','email','perfil','ativo','password_hash','deve_alterar_password','criado_em','ultimo_login']],
+  ['logs_acesso',10,210,'#546e7a',['🔑 id','→ utilizador_id','acao','ip','criado_em']],
+  ['password_resets',10,322,'#546e7a',['🔑 id','→ utilizador_id','token','expira_em','usado']],
+  ['preferencias_utilizador',10,434,'#546e7a',['→ utilizador_id','notif_email','idioma','atualizado_em']],
+  ['contactos',10,542,'#546e7a',['🔑 id','nome','email','assunto','mensagem','lida']],
+  ['backoffice_conteudo',10,686,'#546e7a',['🔑 chave','valor','atualizado']],
+
+  // col 2 — comunicação e RGPD
+  ['notificacoes',197,10,'#6a1b9a',['🔑 id','→ utilizador_id','tipo','titulo','corpo','url','lida']],
+  ['mensagens',197,170,'#6a1b9a',['🔑 id','→ remetente_id','→ destinatario_id','assunto','corpo','lida','tipo']],
+  ['rgpd_pedidos',197,330,'#6a1b9a',['🔑 id','→ utilizador_id','tipo','estado','mensagem','resposta']],
+  ['rgpd_consentimentos',197,474,'#6a1b9a',['🔑 id','→ utilizador_id','tipo','ip','detalhes']],
+  ['auditoria',197,588,'#6a1b9a',['🔑 id','→ utilizador_id','nome','acao','entidade','detalhe','criado_em']],
+
+  // col 3 — profissionais + utentes
+  ['profissionais',384,10,'#1565c0',['🔑 id','→ utilizador_id','numero_ordem','especialidade','foto_path','legenda']],
+  ['utentes',384,150,'#2e7d32',['🔑 id','→ utilizador_id','→ medico_id','→ tecnico_id','→ seguradora_id','nif','diagnostico','cobertura_saude','fase_tratamento','membro_afetado','data_alta']],
+
+  // col 4 — clínico
+  ['sessoes',571,10,'#2e7d32',['🔑 id','→ utente_id','→ tecnico_id','→ dispositivo_id','→ jogo_id','data_hora','duracao_min','categoria','estado','modalidade','estado_sync']],
+  ['metricas_sessao',571,252,'#2e7d32',['🔑→ sessao_id','percentagem_final','score_jogo','passou_nivel','n_tentativas','tendencia']],
+  ['consultas',571,396,'#2e7d32',['🔑 id','→ utente_id','→ medico_id','data_hora','tipo','modalidade','estado','evolucao']],
+  ['programas_tratamento',571,574,'#2e7d32',['🔑 id','→ utente_id','→ medico_id','data_prescricao','num_sessoes_prescritas','objetivos_clinicos','membro_afetado','ativa']],
+  ['analises_desempenho',571,752,'#2e7d32',['🔑 id','→ utente_id','→ tecnico_id','data_analise','texto','progressao_geral']],
+
+  // col 5 — dispositivos e jogos
+  ['jogos',758,10,'#bf360c',['🔑 id','nome','nivel','descricao','forca_ref_n','ativo']],
+  ['dispositivos',758,150,'#bf360c',['🔑 id','codigo','tipo','firmware_versao','estado','token_api','ultimo_sync','ativo']],
+  ['emprestimos_dispositivos',758,330,'#bf360c',['🔑 id','→ dispositivo_id','→ utente_id','→ tecnico_id','data_entrega','data_devolucao','estado_entrega','notas']],
+
+  // col 6 — faturação
+  ['seguradoras',945,10,'#7b1221',['🔑 id','nome','tipo','ativa']],
+  ['tabela_precos',945,106,'#7b1221',['🔑 id','→ seguradora_id','tipo_servico','preco_eur']],
+  ['faturas',945,200,'#7b1221',['🔑 id','numero','→ utente_id','→ sessao_id','→ seguradora_id','valor_eur','paga','metodo_pagamento','data_emissao','data_vencimento','ativo']],
+  ['fatura_linhas',945,444,'#7b1221',['🔑 id','→ fatura_id','descricao','quantidade','preco_unit','total_linha']],
+];
+
+const RELS=[
+  ['utilizadores','profissionais'],
+  ['utilizadores','utentes'],
+  ['utilizadores','notificacoes'],
+  ['utilizadores','mensagens'],
+  ['utilizadores','rgpd_pedidos'],
+  ['utilizadores','rgpd_consentimentos'],
+  ['utilizadores','auditoria'],
+  ['utilizadores','logs_acesso'],
+  ['utilizadores','password_resets'],
+  ['utilizadores','preferencias_utilizador'],
+  ['profissionais','utentes'],
+  ['profissionais','sessoes'],
+  ['profissionais','consultas'],
+  ['profissionais','programas_tratamento'],
+  ['profissionais','analises_desempenho'],
+  ['profissionais','emprestimos_dispositivos'],
+  ['utentes','sessoes'],
+  ['utentes','consultas'],
+  ['utentes','programas_tratamento'],
+  ['utentes','analises_desempenho'],
+  ['utentes','faturas'],
+  ['utentes','emprestimos_dispositivos'],
+  ['utentes','seguradoras'],
+  ['sessoes','metricas_sessao'],
+  ['sessoes','jogos'],
+  ['sessoes','dispositivos'],
+  ['sessoes','faturas'],
+  ['seguradoras','tabela_precos'],
+  ['seguradoras','faturas'],
+  ['faturas','fatura_linhas'],
+  ['dispositivos','emprestimos_dispositivos'],
+];
+
+function getRect(id){
+  const t=TABLES.find(t=>t[0]===id);
+  if(!t)return null;
+  return{x:t[1],y:t[2],w:W,h:th(t[4])};
+}
+
+function edgePts(aid,bid){
+  const a=getRect(aid),b=getRect(bid);
+  if(!a||!b)return null;
+  if(a.x+a.w+4<b.x) return{x1:a.x+a.w,y1:a.y+a.h/2,x2:b.x,y2:b.y+b.h/2,dir:'h'};
+  if(b.x+b.w+4<a.x) return{x1:a.x,y1:a.y+a.h/2,x2:b.x+b.w,y2:b.y+b.h/2,dir:'h'};
+  if(a.y+a.h+2<b.y) return{x1:a.x+a.w/2,y1:a.y+a.h,x2:b.x+b.w/2,y2:b.y,dir:'v'};
+  return{x1:a.x+a.w/2,y1:a.y,x2:b.x+b.w/2,y2:b.y+b.h,dir:'v'};
+}
+
+let scale=1;
+function zoom(f){scale=Math.max(0.3,Math.min(2.5,scale*f));document.getElementById('canvas').style.transform=`scale(${scale})`;}
+function resetZoom(){scale=1;document.getElementById('canvas').style.transform='';}
+
+window.addEventListener('load',()=>{
+  const canvas=document.getElementById('canvas');
+  const svg=document.getElementById('lines');
+  const ns='http://www.w3.org/2000/svg';
+
+  TABLES.forEach(([id,x,y,color,cols])=>{
+    const h=th(cols);
+    const div=document.createElement('div');
+    div.className='tbl';
+    div.style.cssText=`left:${x}px;top:${y}px;width:${W}px;border:2px solid ${color};`;
+    let html=`<div class="tbl-hdr" style="background:${color}">${id}</div>`;
+    cols.forEach(col=>{
+      const isPK=col.startsWith('🔑')&&!col.includes('→');
+      const isFK=col.includes('→');
+      const cls=isPK?'pk':isFK?'fk':'normal';
+      html+=`<div class="tbl-row ${cls}">${col}</div>`;
+    });
+    div.innerHTML=html;
+    canvas.appendChild(div);
+  });
+
+  let mw=0,mh=0;
+  TABLES.forEach(([id,x,y,,cols])=>{
+    mw=Math.max(mw,x+W+14);
+    mh=Math.max(mh,y+th(cols)+14);
+  });
+  canvas.style.width=mw+'px';
+  canvas.style.height=mh+'px';
+  svg.setAttribute('width',mw);
+  svg.setAttribute('height',mh);
+  svg.setAttribute('viewBox',`0 0 ${mw} ${mh}`);
+
+  const defs=document.createElementNS(ns,'defs');
+  defs.innerHTML=`<marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#99a"/></marker>`;
+  svg.appendChild(defs);
+
+  RELS.forEach(([a,b])=>{
+    const p=edgePts(a,b);
+    if(!p)return;
+    const{x1,y1,x2,y2,dir}=p;
+    const el=document.createElementNS(ns,'path');
+    let d;
+    if(dir==='h'){const mx=(x1+x2)/2;d=`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;}
+    else{const my=(y1+y2)/2;d=`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;}
+    el.setAttribute('d',d);
+    el.setAttribute('stroke','#aab');
+    el.setAttribute('stroke-width','1.4');
+    el.setAttribute('fill','none');
+    el.setAttribute('marker-end','url(#arr)');
+    svg.appendChild(el);
+  });
+});
+</script>
+</body>
+</html>
