@@ -63,6 +63,8 @@ if ($filtro_estado === 'pagas') {
     $where_parts[] = "f.ativo = 1 AND f.paga = 0 AND f.data_vencimento IS NOT NULL AND f.data_vencimento < CURDATE()";
 } elseif ($filtro_estado === 'inativas') {
     $where_parts[] = "f.ativo = 0";
+} elseif ($filtro_estado === 'inativas_vencidas') {
+    $where_parts[] = "(f.ativo = 0 OR (f.ativo = 1 AND f.paga = 0 AND f.data_vencimento IS NOT NULL AND f.data_vencimento < CURDATE()))";
 }
 // "Todas" — sem filtro de estado: mostra tudo
 
@@ -145,7 +147,8 @@ $metodo_labels = [
                         <option value="pagas"    <?= $filtro_estado==='pagas'     ?'selected':'' ?>>Paga</option>
                         <option value="pendente" <?= $filtro_estado==='pendente'  ?'selected':'' ?>>Pendente</option>
                         <option value="vencida"  <?= $filtro_estado==='vencida'   ?'selected':'' ?>>Vencida</option>
-                        <option value="inativas" <?= $filtro_estado==='inativas'  ?'selected':'' ?>>Inativa</option>
+                        <option value="inativas"         <?= $filtro_estado==='inativas'         ?'selected':'' ?>>Inativa</option>
+                        <option value="inativas_vencidas" <?= $filtro_estado==='inativas_vencidas'?'selected':'' ?>>Inativas e Vencidas</option>
                     </select>
                 </div>
                 <div class="col-md-2">

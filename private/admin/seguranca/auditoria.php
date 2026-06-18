@@ -63,7 +63,7 @@ $f_acao     = trim($_GET['acao']     ?? '');
 $f_de       = trim($_GET['de']       ?? '');
 $f_ate      = trim($_GET['ate']      ?? '');
 $pagina     = max(1, (int)($_GET['pagina'] ?? 1));
-$por_pagina = 50;
+$por_pagina = 15;
 $offset     = ($pagina - 1) * $por_pagina;
 
 $where = 'WHERE 1=1'; $params = [];
