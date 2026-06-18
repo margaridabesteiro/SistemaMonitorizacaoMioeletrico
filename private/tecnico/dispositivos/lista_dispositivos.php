@@ -142,7 +142,7 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                                         <i class="fa-solid fa-arrow-right-from-bracket me-1"></i>Emprestar
                                     </a>
                                 <?php elseif ($d['estado'] === 'disponivel' && in_array($estado_ef, ['em_sessao','agendado'])): ?>
-                                    <span class="text-muted small"><i class="fa-solid fa-lock me-1"></i>Ocupado</span>
+                                    <span class="text-muted small">—</span>
                                 <?php elseif ($d['estado'] === 'emprestado' && $d['emp_id']): ?>
                                     <a href="devolver_dispositivo.php?emp=<?= $d['emp_id'] ?>"
                                        class="btn btn-xs btn-outline-warning" title="Registar devolução">

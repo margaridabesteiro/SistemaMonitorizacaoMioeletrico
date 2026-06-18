@@ -238,26 +238,6 @@ require_once __DIR__ . '/../../includes/sidebar_utente.php';
                 <?php endif; ?>
             </div>
 
-            <?php if (!empty($historico)): ?>
-            <div class="card mt-4 p-3">
-                <h5 class="mb-3"><i class="fa-solid fa-list-check me-2" style="color:#667eea;"></i>Histórico de Progressão</h5>
-                <div class="d-flex flex-wrap gap-2">
-                    <?php foreach ($historico as $h): ?>
-                    <?php $p = $h['progressao'] ?? 'estavel'; ?>
-                    <div class="d-flex align-items-center gap-1 px-2 py-1 rounded"
-                         style="background:<?= $prog_cor[$p] ?? '#6c757d' ?>18;border:1px solid <?= $prog_cor[$p] ?? '#6c757d' ?>40;">
-                        <i class="fa-solid <?= $prog_icon[$p] ?? 'fa-minus' ?>" style="color:<?= $prog_cor[$p] ?? '#6c757d' ?>;font-size:.75rem;"></i>
-                        <span style="font-size:.75rem;font-weight:600;"><?= $h['dt'] ?></span>
-                        <?php if ($h['esforco_score']): ?>
-                        <span style="font-size:.7rem;color:#ffc107;">
-                            <?= str_repeat('★', (int)$h['esforco_score']) ?>
-                        </span>
-                        <?php endif; ?>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
 
             <?php if (empty($historico) && empty($evolucao_pct) && empty($analises) && empty($analises_globais)): ?>
             <div class="alert alert-light text-center mt-4">

@@ -29,6 +29,10 @@ $pa = $pagina_ativa ?? '';
                class="nav-link<?= menuUtente('jogos', $pa) ?>">
                 <i class="fa-solid fa-gamepad me-2"></i>Jogos de Reabilitação
             </a>
+            <a href="<?= APP_URL ?>/private/utente/meu_progresso.php"
+               class="nav-link<?= menuUtente('progresso', $pa) ?>">
+                <i class="fa-solid fa-chart-line me-2"></i>O Meu Progresso
+            </a>
             <a href="<?= APP_URL ?>/private/utente/mensagens_equipa.php"
                class="nav-link<?= menuUtente('mensagens_equipa', $pa) ?>">
                 <i class="fa-regular fa-comments me-2"></i>Equipa de Tratamento

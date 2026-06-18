@@ -49,11 +49,11 @@ $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
-                        <tr><th>Data</th><th>Jogo</th><th>Técnico</th><th>Estado</th><th>Resultado</th><th>Tendência</th><th>Nível</th></tr>
+                        <tr><th>Data</th><th>Jogo</th><th>Técnico</th><th>Estado</th><th>Resultado</th><th>Tendência</th></tr>
                     </thead>
                     <tbody>
                     <?php if (empty($sessoes)): ?>
-                        <tr><td colspan="7" class="text-center text-muted py-4">Sem sessões.</td></tr>
+                        <tr><td colspan="6" class="text-center text-muted py-4">Sem sessões.</td></tr>
                     <?php else: foreach ($sessoes as $s): ?>
                         <tr>
                             <td><?= h(substr($s['data_hora'],0,10)) ?></td>
@@ -80,7 +80,6 @@ $nivel_colors = ['minimo'=>'success','medio'=>'warning','maximo'=>'danger'];
                                     </span>
                                 <?php else: ?><span class="text-muted">—</span><?php endif; ?>
                             </td>
-                            <td><?= $s['n_tentativas'] ?? '—' ?></td>
                         </tr>
                     <?php endforeach; endif; ?>
                     </tbody>
