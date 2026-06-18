@@ -46,6 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pid) {
                 );
             }
         } catch (\Throwable $e) {}
+        // Notificar admins para emitir fatura do programa de tratamento
+        try {
+            $uq = $db->prepare("SELECT u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?");
+            $uq->execute([$utente_id]); $utente_nome = $uq->fetchColumn() ?: 'utente';
+            $aq = $db->query("SELECT id FROM utilizadores WHERE perfil='admin' AND ativo=1");
+            foreach ($aq->fetchAll() as $adm) {
+                notificar((int)$adm['id'], 'info',
+                    'Novo programa de tratamento — ' . $utente_nome,
+                    'O Dr. ' . ($_SESSION['nome'] ?? '') . ' criou um programa de tratamento para ' . $utente_nome . '. Registar fatura?',
+                    APP_URL . '/private/admin/faturacao/nova_fatura.php'
+                );
+            }
+        } catch (\Throwable $e) {}
         $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Programa de tratamento criado.'];
         redirect(APP_URL . '/private/medico/prescricoes/lista_prescricoes.php');
     }
