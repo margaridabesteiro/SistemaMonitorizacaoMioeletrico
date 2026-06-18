@@ -16,9 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             match ($tipo) {
                 'prescricao' => $db->prepare("UPDATE prescricoes SET estado='ativo', aprovado_admin=1 WHERE id=?")->execute([$item_id]),
-                'pedido_exame' => $db->prepare("UPDATE pedidos_exame SET estado='aprovado' WHERE id=?")->execute([$item_id]),
-                'sessao' => $db->prepare("UPDATE sessoes SET estado='agendada' WHERE id=? AND estado='pendente'")->execute([$item_id]),
-                default => null,
+                'sessao'     => $db->prepare("UPDATE sessoes SET estado='agendada' WHERE id=? AND estado='pendente'")->execute([$item_id]),
+                default      => null,
             };
             $_SESSION['flash'] = ['tipo'=>'success','mensagem'=>'Item aprovado.'];
         } catch (\Throwable $e) {
@@ -27,9 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($item_id && $acao === 'rejeitar') {
         try {
             match ($tipo) {
-                'prescricao'   => $db->prepare("UPDATE prescricoes SET estado='cancelado' WHERE id=?")->execute([$item_id]),
-                'pedido_exame' => $db->prepare("UPDATE pedidos_exame SET estado='rejeitado' WHERE id=?")->execute([$item_id]),
-                default        => null,
+                'prescricao' => $db->prepare("UPDATE prescricoes SET estado='cancelado' WHERE id=?")->execute([$item_id]),
+                default      => null,
             };
             $_SESSION['flash'] = ['tipo'=>'warning','mensagem'=>'Item rejeitado.'];
         } catch (\Throwable $e) {}
@@ -71,21 +69,6 @@ try {
     ")->fetchAll();
 } catch (\Throwable $e) {}
 
-// --- Pedidos de exame pendentes ---
-$exames_pendentes = [];
-try {
-    $exames_pendentes = $db->query("
-        SELECT pe.id, pe.data_pedido, pe.tipo_exame, pe.observacoes,
-               u_ut.nome AS utente, u_med.nome AS medico
-        FROM pedidos_exame pe
-        JOIN utentes ut ON ut.id=pe.utente_id
-        JOIN utilizadores u_ut ON u_ut.id=ut.utilizador_id
-        LEFT JOIN profissionais pr ON pr.id=pe.medico_id
-        LEFT JOIN utilizadores u_med ON u_med.id=pr.utilizador_id
-        WHERE pe.estado IN ('pendente','aguarda_aprovacao')
-        ORDER BY pe.data_pedido DESC
-    ")->fetchAll();
-} catch (\Throwable $e) {}
 
 // --- Sessões recentemente concluídas (visão geral) ---
 $sessoes_recentes = [];
@@ -129,12 +112,6 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
                     <div class="card p-3 text-center border-<?= count($prescricoes_pendentes)?'danger':'light' ?>">
                         <div class="fs-3 fw-bold text-danger"><?= count($prescricoes_pendentes) ?></div>
                         <div class="small text-muted">Tratamentos por aprovar</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card p-3 text-center border-<?= count($exames_pendentes)?'primary':'light' ?>">
-                        <div class="fs-3 fw-bold text-primary"><?= count($exames_pendentes) ?></div>
-                        <div class="small text-muted">Exames a aprovar</div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -214,45 +191,8 @@ require_once __DIR__ . '/../../../includes/sidebar_admin.php';
             </div>
             <?php endif; ?>
 
-            <!-- Exames por aprovar -->
-            <?php if (!empty($exames_pendentes)): ?>
-            <div class="card p-4 mb-4 border-primary">
-                <h5 class="mb-3"><i class="fa-solid fa-flask me-2 text-primary"></i>Pedidos de Exame Pendentes</h5>
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Data</th><th>Utente</th><th>Médico</th><th>Tipo</th><th>Ação</th></tr></thead>
-                        <tbody>
-                        <?php foreach ($exames_pendentes as $e): ?>
-                        <tr>
-                            <td><?= h(date('d/m/Y', strtotime($e['data_pedido']))) ?></td>
-                            <td><?= h($e['utente']) ?></td>
-                            <td><?= h($e['medico'] ?? '—') ?></td>
-                            <td class="small"><?= h($e['tipo_exame'] ?? '—') ?></td>
-                            <td class="d-flex gap-1">
-                                <form method="POST" class="d-inline">
-    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-                                    <input type="hidden" name="acao" value="aprovar">
-                                    <input type="hidden" name="tipo" value="pedido_exame">
-                                    <input type="hidden" name="id" value="<?= $e['id'] ?>">
-                                    <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check"></i></button>
-                                </form>
-                                <form method="POST" class="d-inline">
-    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-                                    <input type="hidden" name="acao" value="rejeitar">
-                                    <input type="hidden" name="tipo" value="pedido_exame">
-                                    <input type="hidden" name="id" value="<?= $e['id'] ?>">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-xmark"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php endif; ?>
 
-            <?php if (empty($sessoes_pendentes) && empty($prescricoes_pendentes) && empty($exames_pendentes)): ?>
+            <?php if (empty($sessoes_pendentes) && empty($prescricoes_pendentes)): ?>
             <div class="alert alert-success">
                 <i class="fa-solid fa-circle-check me-2"></i>Sem itens pendentes de aprovação.
             </div>

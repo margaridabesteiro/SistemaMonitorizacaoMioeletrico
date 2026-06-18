@@ -20,7 +20,7 @@ else { $pacientes = []; }
 
 $sel = (int)($_GET['utente_id'] ?? ($pacientes[0]['id'] ?? 0));
 
-$utente = $sessoes_hist = $prescricoes = $exames = $medicacoes = $analises = null;
+$utente = $sessoes_hist = $prescricoes = $analises = null;
 
 if ($sel) {
     // Dados base
@@ -64,26 +64,6 @@ if ($sel) {
         ");
         $sp->execute([$sel]); $prescricoes = $sp->fetchAll();
     } catch (\Throwable $e) { $prescricoes = []; }
-
-    // Exames
-    try {
-        $se = $db->prepare("
-            SELECT pe.data_pedido, pe.tipo_exame, pe.resultado, pe.estado, pe.observacoes
-            FROM pedidos_exame pe
-            WHERE pe.utente_id=? ORDER BY pe.data_pedido DESC
-        ");
-        $se->execute([$sel]); $exames = $se->fetchAll();
-    } catch (\Throwable $e) { $exames = []; }
-
-    // Medicação
-    try {
-        $sm = $db->prepare("
-            SELECT m.nome_medicamento, m.dosagem, m.frequencia, m.data_inicio, m.data_fim, m.ativo
-            FROM medicacoes m
-            WHERE m.utente_id=? ORDER BY m.ativo DESC, m.data_inicio DESC
-        ");
-        $sm->execute([$sel]); $medicacoes = $sm->fetchAll();
-    } catch (\Throwable $e) { $medicacoes = []; }
 
     // Análises de desempenho globais
     $analises_desemp = [];
@@ -295,49 +275,6 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
             </div>
             <?php endif; ?>
 
-            <?php if (!empty($exames)): ?>
-            <div class="card p-4 mb-4">
-                <h5 class="mb-3"><i class="fa-solid fa-flask me-2" style="color:#1a5f8a;"></i>Exames</h5>
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Data</th><th>Tipo</th><th>Estado</th><th>Resultado</th></tr></thead>
-                        <tbody>
-                        <?php foreach ($exames as $e): ?>
-                        <tr>
-                            <td class="small"><?= h(date('d/m/Y', strtotime($e['data_pedido']))) ?></td>
-                            <td class="small"><?= h($e['tipo_exame'] ?? '—') ?></td>
-                            <td><span class="badge bg-<?= $e['estado']==='concluido'?'success':'warning text-dark' ?>"><?= h(ucfirst($e['estado'] ?? '—')) ?></span></td>
-                            <td class="small"><?= h($e['resultado'] ?? '—') ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <?php if (!empty($medicacoes)): ?>
-            <div class="card p-4 mb-4">
-                <h5 class="mb-3"><i class="fa-solid fa-pills me-2" style="color:#1a5f8a;"></i>Medicação</h5>
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover mb-0">
-                        <thead class="table-light"><tr><th>Medicamento</th><th>Dosagem</th><th>Frequência</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead>
-                        <tbody>
-                        <?php foreach ($medicacoes as $m): ?>
-                        <tr>
-                            <td class="small fw-semibold"><?= h($m['nome_medicamento'] ?? '—') ?></td>
-                            <td class="small"><?= h($m['dosagem'] ?? '—') ?></td>
-                            <td class="small"><?= h($m['frequencia'] ?? '—') ?></td>
-                            <td class="small"><?= $m['data_inicio'] ? h(date('d/m/Y', strtotime($m['data_inicio']))) : '—' ?></td>
-                            <td class="small"><?= $m['data_fim']   ? h(date('d/m/Y', strtotime($m['data_fim'])))   : '—' ?></td>
-                            <td><span class="badge bg-<?= $m['ativo']?'success':'secondary' ?>"><?= $m['ativo']?'Ativo':'Inativo' ?></span></td>
-                        </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php endif; ?>
 
             <?php endif; ?>
         </main>
