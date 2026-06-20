@@ -1,18 +1,25 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['paciente_id'])) {
+    $_SESSION['tecnico_paciente_id'] = (int)$_POST['paciente_id'];
+    redirect(APP_URL . '/private/tecnico/pacientes/historico_paciente.php');
+}
+$db = getDB();
+$id = (int)($_SESSION['tecnico_paciente_id'] ?? 0);
+if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
+
 $pagina_titulo = 'Histórico Paciente'; $pagina_ativa = 'pacientes';
 require_once __DIR__ . '/../../../includes/header_tecnico.php';
 require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
-$db = getDB(); $id = (int)($_GET['id'] ?? 0);
-if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 $stmt = $db->prepare("SELECT ut.*, u.nome FROM utentes ut JOIN utilizadores u ON u.id=ut.utilizador_id WHERE ut.id=?"); $stmt->execute([$id]); $pac = $stmt->fetch();
 if (!$pac) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 $sessoes = $db->prepare("SELECT s.*, m.score_jogo, m.percentagem_final FROM sessoes s LEFT JOIN metricas_sessao m ON m.sessao_id=s.id WHERE s.utente_id=? ORDER BY s.data_hora DESC LIMIT 50");
 $sessoes->execute([$id]); $sessoes = $sessoes->fetchAll();
 ?>
         <main class="content">
-            <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="lista_pacientes.php">Pacientes</a></li><li class="breadcrumb-item"><a href="perfil_paciente.php?id=<?= $id ?>"><?= h($pac['nome']) ?></a></li><li class="breadcrumb-item active">Histórico</li></ol></nav>
+            <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="lista_pacientes.php">Pacientes</a></li><li class="breadcrumb-item"><a href="perfil_paciente.php"><?= h($pac['nome']) ?></a></li><li class="breadcrumb-item active">Histórico</li></ol></nav>
             <h1 class="mb-4">Histórico — <?= h($pac['nome']) ?></h1>
             <div class="card"><div class="table-responsive">
                 <table class="table table-hover mb-0">

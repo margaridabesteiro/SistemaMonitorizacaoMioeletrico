@@ -1,14 +1,19 @@
 <?php
 require_once __DIR__ . '/../../../config/app.php';
 require_once __DIR__ . '/../../../config/database.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['paciente_id'])) {
+    $_SESSION['tecnico_paciente_id'] = (int)$_POST['paciente_id'];
+    redirect(APP_URL . '/private/tecnico/pacientes/perfil_paciente.php');
+}
+$db = getDB();
+$id = (int)($_SESSION['tecnico_paciente_id'] ?? 0);
+if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
+
 $pagina_titulo = 'Perfil Paciente'; $pagina_ativa = 'pacientes';
 $js_head = ['https://cdn.jsdelivr.net/npm/chart.js'];
 require_once __DIR__ . '/../../../includes/header_tecnico.php';
 require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
-
-$db = getDB();
-$id = (int)($_GET['id'] ?? 0);
-if (!$id) redirect(APP_URL . '/private/tecnico/pacientes/lista_pacientes.php');
 
 $stmt = $db->prepare("
     SELECT ut.*, u.nome, u.email,

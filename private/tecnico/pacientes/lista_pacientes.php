@@ -104,15 +104,19 @@ require_once __DIR__ . '/../../../includes/sidebar_tecnico.php';
                             <td><small><?= h(substr($p['diagnostico'] ?? '—', 0, 50)) ?></small></td>
                             <td><span class="badge bg-success"><?= $p['n_sessoes'] ?></span></td>
                             <td><span class="badge bg-primary"><?= $p['n_agendadas'] ?></span></td>
-                            <td>
-                                <a href="perfil_paciente.php?id=<?= $p['id'] ?>"
-                                   class="btn btn-xs btn-outline-primary me-1" title="Ver perfil">
-                                    <i class="fa-regular fa-eye"></i>
-                                </a>
-                                <a href="historico_paciente.php?id=<?= $p['id'] ?>"
-                                   class="btn btn-xs btn-outline-secondary" title="Histórico">
-                                    <i class="fa-solid fa-clock-rotate-left"></i>
-                                </a>
+                            <td class="d-flex gap-1">
+                                <form method="POST" action="perfil_paciente.php" class="d-inline">
+                                    <input type="hidden" name="paciente_id" value="<?= $p['id'] ?>">
+                                    <button type="submit" class="btn btn-xs btn-outline-primary" title="Ver perfil">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </form>
+                                <form method="POST" action="historico_paciente.php" class="d-inline">
+                                    <input type="hidden" name="paciente_id" value="<?= $p['id'] ?>">
+                                    <button type="submit" class="btn btn-xs btn-outline-secondary" title="Histórico">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; endif; ?>
