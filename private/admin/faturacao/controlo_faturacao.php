@@ -279,8 +279,8 @@ $metodo_labels = [
 <div class="modal fade" id="modalPagamento" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form method="POST" action="<?= APP_URL ?>
-    <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">/api/admin/faturacao/marcar_paga.php">
+            <form method="POST" action="<?= APP_URL ?>/api/admin/faturacao/marcar_paga.php">
+                <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <input type="hidden" name="num" id="mp_num">
                 <div class="modal-header py-2">
                     <h6 class="modal-title">Registar Pagamento</h6>
